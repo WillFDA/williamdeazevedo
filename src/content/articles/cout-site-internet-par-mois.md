@@ -7,7 +7,7 @@ draft: true
 tags: ["site vitrine", "budget"]
 image:
   src: "/articles/cout-site-internet-par-mois/cover.webp"
-  alt: ""
+  alt: "Un calendrier avec la même échéance chaque mois, relié à un site internet et à un relevé de quatre postes de dépenses récurrentes, à côté d’une pile de pièces."
 ---
 
 Le coût mensuel d’un site internet ne se limite pas à son hébergement. Il peut comprendre le renouvellement du domaine, des outils payants, la maintenance et des interventions sur les contenus. Pour connaître votre budget, partez des factures et des engagements prévus au contrat, puis ramenez les dépenses annuelles au mois. Un prix affiché « par mois » n’est pas forcément prélevé chaque mois.
