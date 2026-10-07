@@ -125,6 +125,7 @@ const serviceJsonLd = {
     url: canonicalUrl.href,
     provider: {
         "@type": "Person",
+        "@id": new URL("/#person", siteUrl).href,
         name: "William De Azevedo",
         url: new URL("/", siteUrl).href,
     },
