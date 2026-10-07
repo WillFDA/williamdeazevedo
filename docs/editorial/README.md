@@ -38,6 +38,7 @@ La requête ajoutée dans cette PR n’a pas de mesure : OpenSEO a renvoyé `INS
 | mentions-legales-site-internet-professionnel | mentions légales site internet professionnel |    non mesuré | Checklist éditoriale par statut et fonctionnalités ; demande OpenSEO non validée         |
 | fiche-google-my-business-artisan | fiche google my business | 5400 (KD 22) | Créer, valider, compléter la fiche et la relier au site d’artisan ; variantes : fiche établissement google 2900, fiche google business 1300, créer fiche google my business 590 (OpenSEO, 7 octobre 2026) |
 | widget-avis-google | widget avis google | 110 (KD 0) | Lien, citation ou widget, sous l’angle performance et RGPD ; variantes : widget avis google gratuit 50, plugin avis google wordpress 40 (OpenSEO, 7 octobre 2026) |
+| changer-prestataire-web | changer de prestataire web | non mesuré | Passation et reprise de site, orientée conversion vers la refonte ; variante couverte : transférer nom de domaine 260 (KD 24) (OpenSEO, 7 octobre 2026) |
 
 ## Vérification avant fusion
 

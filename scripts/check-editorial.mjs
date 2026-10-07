@@ -20,6 +20,7 @@ const slugs = [
   "mentions-legales-site-internet-professionnel",
   "fiche-google-my-business-artisan",
   "widget-avis-google",
+  "changer-prestataire-web",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
