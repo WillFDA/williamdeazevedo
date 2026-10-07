@@ -29,7 +29,7 @@ interface Props {
 
 const { article } = Astro.props;
 const { Content, headings } = await render(article);
-const { author, description, image, pubDate, tags, title, updatedDate } =
+const { author, description, image, pubDate, seoTitle, tags, title, updatedDate } =
     article.data;
 const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 
@@ -108,7 +108,7 @@ const getTagIcon = (tag: string) => {
 ---
 
 <Layout
-    title={`${title} - William De Azevedo`}
+    title={`${seoTitle ?? title} - William De Azevedo`}
     description={description}
     image={image?.src}
     imageAlt={image?.alt}

@@ -100,7 +100,10 @@ const breadcrumbJsonLd = {
 };
 ---
 
-<Layout title={`${title} - William De Azevedo`} description={description}>
+<Layout
+    title={`${title} - William De Azevedo`}
+    description={project.seoDescription ?? description}
+>
     <ReadingProgress />
 
     <script

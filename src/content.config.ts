@@ -11,6 +11,7 @@ const articles = defineCollection({
   }),
   schema: z.object({
     title: z.string(),
+    seoTitle: z.string().optional(),
     description: z.string(),
     // `pubDate` doubles as the scheduled release date: an article is not
     // rendered (and gets no page) until this date is reached. See

@@ -48,6 +48,7 @@ export type ServiceTimelinePoint = {
 export type Service = {
   capabilities?: ServiceCapability[];
   description: string;
+  seoDescription?: string;
   diagnostic?: ServiceDiagnostic;
   eyebrow: string;
   faq: {
@@ -90,6 +91,8 @@ export const services: Service[] = [
     seoTitle: "Création de site vitrine freelance - William De Azevedo",
     description:
       "Création de sites vitrines rapides, accessibles et pensés pour rassurer avant le premier contact. Accompagnement design, contenu, SEO technique et développement front-end.",
+    seoDescription:
+      "Création de site vitrine rapide et accessible, pensé pour rassurer et faciliter le contact. Parlons de votre projet.",
     eyebrow: "Site vitrine freelance",
     h1: "Création de sites vitrines qui rassurent avant le premier contact",
     heroPillPhrases: ["sites vitrines", "premier contact"],
@@ -222,7 +225,7 @@ export const services: Service[] = [
     rootPath: "/refonte-site-internet/",
     navLabel: "Refonte site internet",
     title: "Refonte de site internet",
-    seoTitle: "Refonte de site internet rapide et soignée - William De Azevedo",
+    seoTitle: "Refonte de site internet freelance - William De Azevedo",
     description:
       "Refonte de site internet pour clarifier votre offre, moderniser votre interface et améliorer performance, SEO technique et conversion.",
     eyebrow: "Refonte web",
@@ -597,6 +600,8 @@ export const services: Service[] = [
     seoTitle: "Création de site internet professionnel - William De Azevedo",
     description:
       "Création de site internet professionnel pour indépendants, petites structures et équipes produit : stratégie, design, développement front-end, performance, accessibilité et SEO technique.",
+    seoDescription:
+      "Création de site professionnel pour indépendants et petites structures : stratégie, design, développement et SEO technique. Parlons de votre projet.",
     eyebrow: "Site professionnel",
     h1: "Création de site internet professionnel pour transformer une présence en support de confiance",
     heroPillPhrases: ["site internet professionnel", "support de confiance"],
