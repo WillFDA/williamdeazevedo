@@ -36,6 +36,7 @@ La requête ajoutée dans cette PR n’a pas de mesure : OpenSEO a renvoyé `INS
 | tester-accessibilite-site-web                | test accessibilité site web                  |           140 | Premiers tests, distincts d'un audit de conformité                                       |
 | referencement-chatgpt                        | référencement chatgpt                        |           210 | Conditions et limites de visibilité, aucune garantie de citation                         |
 | mentions-legales-site-internet-professionnel | mentions légales site internet professionnel |    non mesuré | Checklist éditoriale par statut et fonctionnalités ; demande OpenSEO non validée         |
+| fiche-google-my-business-artisan | fiche google my business | 5400 (KD 22) | Créer, valider, compléter la fiche et la relier au site d’artisan ; variantes : fiche établissement google 2900, fiche google business 1300, créer fiche google my business 590 (OpenSEO, 7 octobre 2026) |
 
 ## Vérification avant fusion
 
