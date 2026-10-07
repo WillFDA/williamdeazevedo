@@ -1,0 +1,93 @@
+---
+const options = [
+  {
+    title: "Je veux partager quelques retours reçus directement.",
+    answer:
+      "Présentez-les comme des témoignages sélectionnés, avec le contexte utile. Faites approuver la citation et son niveau d’identification par la personne concernée. Ne les présentez pas comme la totalité des avis.",
+  },
+  {
+    title: "Je veux renvoyer vers les avis de ma fiche Google.",
+    answer:
+      "Un lien visible vers la fiche garde le visiteur près de la source et ne nécessite pas de flux tiers. Si vous choisissez un widget, affichez clairement la source et vérifiez son fonctionnement, son affichage mobile, son accessibilité et les requêtes externes qu’il déclenche.",
+  },
+  {
+    title: "Je veux recueillir des avis directement sur mon site.",
+    answer:
+      "Prévoyez d’abord les règles de collecte, de vérification, de modération, de classement et d’information. Un espace où les internautes publient des avis n’est pas seulement un bloc de témoignages : vérifiez les obligations qui s’appliquent à votre dispositif.",
+  },
+  {
+    title: "Je veux obtenir des étoiles dans les résultats Google.",
+    answer:
+      "Ne choisissez pas un widget ou des données structurées avec cette promesse. Google ne garantit pas l’affichage d’un résultat enrichi. Si une entreprise contrôle les avis la concernant, ses pages balisées en `LocalBusiness` ou `Organization` ne sont pas éligibles aux étoiles, y compris lorsque les avis sont intégrés depuis une plateforme tierce.",
+  },
+];
+---
+
+<section class="review-format-guide" aria-label="Choisir comment présenter les avis clients">
+  <p class="guide-intro">Ouvrez la situation qui correspond à votre besoin :</p>
+  <div class="guide-options">
+    {options.map((option, index) => (
+      <details class="guide-option" open={index === 0}>
+        <summary>{option.title}</summary>
+        <p>{option.answer}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .review-format-guide {
+    margin-block: 2rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 1rem;
+    background: var(--color-snow-50);
+  }
+
+  .review-format-guide .guide-intro {
+    margin: 0 0 0.75rem;
+    color: var(--color-gray-900);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .review-format-guide .guide-options {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .review-format-guide .guide-option {
+    min-width: 0;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.7rem;
+    background: var(--color-snow-50);
+  }
+
+  .review-format-guide summary {
+    display: list-item;
+    padding: 0.85rem 1rem;
+    color: var(--color-gray-900);
+    font-size: 0.925rem;
+    font-weight: 500;
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  .review-format-guide summary:focus-visible {
+    border-radius: 0.65rem;
+    outline: 2px solid var(--color-blue-500);
+    outline-offset: 2px;
+  }
+
+  .review-format-guide .guide-option[open] summary {
+    border-bottom: 1px solid var(--color-gray-100);
+  }
+
+  .review-format-guide .guide-option > p {
+    margin: 0;
+    padding: 0.75rem 1rem 1rem;
+    color: var(--color-gray-600);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+</style>
