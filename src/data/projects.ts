@@ -44,6 +44,7 @@ export type Project = {
     label: string;
   }[];
   summary: string;
+  seoDescription?: string;
   title: string;
 };
 
@@ -61,6 +62,8 @@ export const projects: Project[] = [
     },
     summary:
       "Site vitrine administrable pour un studio d'accompagnement graphique, avec portfolio, articles, témoignages, pages prestations, SEO technique et formulaire de contact sécurisé.",
+    seoDescription:
+      "Site vitrine administrable pour Persistance Studio : portfolio, prestations, témoignages et publication d’articles avec un CMS.",
     tags: [
       { icon: "window-paintbrush", label: "Identité forte" },
       { icon: "window-layout", label: "CMS" },
@@ -101,6 +104,8 @@ export const projects: Project[] = [
     },
     summary:
       "Site vitrine one-page pour une entreprise de maîtrise d'oeuvre à Rennes, pensé pour clarifier l'offre, rassurer une cible B2B et faciliter la prise de contact via un formulaire sécurisé.",
+    seoDescription:
+      "Site vitrine pour Le Fellic, entreprise de maîtrise d’œuvre à Rennes : offre claire, preuves B2B et formulaire de contact sécurisé.",
     tags: [
       { icon: "window-layout", label: "One-page" },
       { icon: "globe", label: "B2B local" },
@@ -141,6 +146,8 @@ export const projects: Project[] = [
     },
     summary:
       "SaaS de génération de lettres de motivation par IA, développé en solo avec une architecture produit complète, authentification, base de données et intégration multi-modèles.",
+    seoDescription:
+      "Découvrez Motivai, un SaaS développé en solo pour générer des lettres de motivation avec l’IA, du prototype à un produit complet.",
     tags: [
       { icon: "sparkle", label: "Produit IA" },
       { icon: "window-pointer", label: "SaaS" },

@@ -1,5 +1,6 @@
 ---
 title: "Tester l’accessibilité d’un site web : un premier contrôle concret"
+seoTitle: "Tester l’accessibilité d’un site web"
 description: "Clavier, formulaires, contrastes, zoom : repérez les obstacles de votre site et distinguez un contrôle rapide d’un véritable audit d’accessibilité."
 pubDate: 2026-09-28
 author: "William De Azevedo"

@@ -171,7 +171,7 @@ const breadcrumbJsonLd = {
 
 <Layout
     title={service.seoTitle}
-    description={service.description}
+    description={service.seoDescription ?? service.description}
     canonicalPath={canonicalPath}
 >
     <script
