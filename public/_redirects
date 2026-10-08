@@ -1,0 +1,14 @@
+# Cloudflare Workers applique ce fichier aux assets statiques (copié dans dist/_redirects).
+# Les règles passent avant le html_handling "auto-trailing-slash" de Workers,
+# qui redirige sinon /about vers /about/ en 307 (temporaire).
+
+# Ancienne section blog, encore vue en 404 dans Search Console.
+/blog /articles/ 301
+# Seul article de l'ancien blog Next (content/mon-premier-post.mdx, renommé en
+# src/content/articles/premier-side-project-motivai.mdx). Avant la règle splat.
+/blog/mon-premier-post /articles/premier-side-project-motivai/ 301
+/blog/mon-premier-post/ /articles/premier-side-project-motivai/ 301
+/blog/* /articles/ 301
+
+# Barre finale : redirection permanente au lieu du 307 automatique.
+/about /about/ 301

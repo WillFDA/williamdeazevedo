@@ -42,9 +42,12 @@ const phoneValue = String(import.meta.env.PUBLIC_PHONE_HREF ?? phoneDisplay)
     .replaceAll(/[^\d+]/g, "");
 const phoneHref = phoneValue ? `tel:${phoneValue}` : "";
 
+const personId = new URL("/#person", siteUrl).href;
+
 const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": personId,
     name: "William De Azevedo",
     url: siteUrl.href,
     image: new URL("/pictures/william-low.png", siteUrl).href,
@@ -76,6 +79,21 @@ const personJsonLd = {
         "@type": "Organization",
         name: "William De Azevedo — Développeur freelance",
     },
+};
+
+// Nom du site pour Google : publié uniquement sur la page d'accueil et relié
+// au nœud Person ci-dessus par son @id (pas de second bloc Person).
+const isHomePage = canonicalUrl.pathname === "/";
+const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": new URL("/#website", siteUrl).href,
+    name: siteName,
+    alternateName: "williamdeazevedo.fr",
+    url: new URL("/", siteUrl).href,
+    inLanguage: "fr-FR",
+    publisher: { "@id": personId },
+    about: { "@id": personId },
 };
 ---
 
@@ -152,6 +170,15 @@ const personJsonLd = {
             is:inline
             set:html={JSON.stringify(personJsonLd)}
         />
+        {
+            isHomePage && (
+                <script
+                    type="application/ld+json"
+                    is:inline
+                    set:html={JSON.stringify(websiteJsonLd)}
+                />
+            )
+        }
         <title>{title}</title>
     </head>
     <body class="min-h-screen min-w-0 flex flex-col">
