@@ -36,6 +36,7 @@ La requête ajoutée dans cette PR n’a pas de mesure : OpenSEO a renvoyé `INS
 | tester-accessibilite-site-web                | test accessibilité site web                  |           140 | Premiers tests, distincts d'un audit de conformité                                       |
 | referencement-chatgpt                        | référencement chatgpt                        |           210 | Conditions et limites de visibilité, aucune garantie de citation                         |
 | mentions-legales-site-internet-professionnel | mentions légales site internet professionnel |    non mesuré | Checklist éditoriale par statut et fonctionnalités ; demande OpenSEO non validée         |
+| audit-seo                                    | audit seo                                    |         1 600 | Méthode d’auto-audit d’un site vitrine en une heure ; secondaire « audit seo technique » (480) |
 
 ## Vérification avant fusion
 
