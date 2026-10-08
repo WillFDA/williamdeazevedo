@@ -1,0 +1,59 @@
+---
+const modes = [
+  {
+    situation: "Vous recevez des clients sur place",
+    example: "Atelier ou showroom ouvert aux horaires annoncés.",
+    address: "Adresse affichée",
+    zone: "Pas de zone desservie à ajouter",
+    addressShown: true,
+    zoneShown: false,
+  },
+  {
+    situation: "Vous vous déplacez uniquement chez vos clients",
+    example: "Plombier ou électricien qui travaille depuis son domicile.",
+    address: "Adresse masquée",
+    zone: "Zone desservie indiquée",
+    addressShown: false,
+    zoneShown: true,
+  },
+  {
+    situation: "Vous faites les deux",
+    example: "Menuisier qui reçoit sur rendez-vous à l’atelier et pose chez ses clients.",
+    address: "Adresse affichée, si le public y est réellement accueilli",
+    zone: "Zone desservie indiquée",
+    addressShown: true,
+    zoneShown: true,
+  },
+];
+---
+
+<div class="address-mode-guide">
+  <p class="mode-kicker">Quelle configuration pour votre fiche ?</p>
+  <ul class="mode-list">
+    {modes.map((mode) => (
+      <li class="mode-card">
+        <p class="mode-situation">{mode.situation}</p>
+        <p class="mode-example">{mode.example}</p>
+        <p class="mode-settings">
+          <span class:list={["mode-tag", { "mode-tag--muted": !mode.addressShown }]}>{mode.address}</span>
+          <span class:list={["mode-tag", { "mode-tag--muted": !mode.zoneShown }]}>{mode.zone}</span>
+        </p>
+      </li>
+    ))}
+  </ul>
+  <p class="mode-footnote">Dans tous les cas : une fiche par établissement, pas une fiche par commune desservie. Le réglage de l’adresse sur Google ne décide pas des informations à publier dans les mentions légales du site.</p>
+</div>
+
+<style>
+  .address-mode-guide { padding: clamp(1.25rem, 4vw, 2rem); border: 1px solid var(--color-gray-200); border-radius: 1rem; background: var(--color-snow-50); color: var(--color-gray-600); }
+  .address-mode-guide .mode-kicker { margin: 0 0 1rem; color: var(--color-blue-500); font-size: .75rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  .address-mode-guide .mode-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 0; padding: 0; list-style: none; }
+  .address-mode-guide .mode-card { display: flex; flex-direction: column; margin: 0; padding: 1rem; border-radius: .75rem; background: var(--color-surface-100); }
+  .address-mode-guide .mode-situation { margin: 0; color: var(--color-gray-900); font-weight: 500; line-height: 1.4; }
+  .address-mode-guide .mode-example { margin: .4rem 0 1rem; font-size: .8125rem; line-height: 1.55; color: var(--color-gray-500); }
+  .address-mode-guide .mode-settings { display: flex; flex-direction: column; gap: .4rem; margin: auto 0 0; }
+  .mode-tag { padding: .3rem .65rem; border-radius: .5rem; background: var(--color-blue-50); color: var(--color-blue-700); font-size: .8125rem; line-height: 1.4; }
+  .mode-tag--muted { background: var(--color-snow-50); color: var(--color-gray-700); box-shadow: inset 0 0 0 1px var(--color-gray-200); }
+  .address-mode-guide .mode-footnote { margin: 1rem 0 0; font-size: .8125rem; line-height: 1.6; }
+  @media (max-width: 640px) { .address-mode-guide .mode-list { grid-template-columns: minmax(0, 1fr); } }
+</style>
