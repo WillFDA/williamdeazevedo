@@ -42,6 +42,8 @@ const [articleTitleStart, articleTitleEnd = ""] = shouldSplitArticleTitle
     : [title, ""];
 
 const siteUrl = Astro.site ?? new URL(Astro.url.origin);
+// Même @id que le nœud Person du Layout, pour que Google relie les entités.
+const personId = new URL("/#person", siteUrl).href;
 const canonicalUrl = new URL(`/articles/${article.id}/`, siteUrl);
 const ogImage = new URL(image?.src ?? "/pictures/william-low.png", siteUrl);
 
@@ -59,11 +61,13 @@ const jsonLd = {
     keywords: tags,
     author: {
         "@type": "Person",
+        ...(author === "William De Azevedo" && { "@id": personId }),
         name: author,
         url: siteUrl.href,
     },
     publisher: {
         "@type": "Person",
+        ...(author === "William De Azevedo" && { "@id": personId }),
         name: author,
         url: siteUrl.href,
     },
