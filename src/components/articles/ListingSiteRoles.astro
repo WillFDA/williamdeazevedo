@@ -1,0 +1,66 @@
+---
+const roles = [
+  {
+    number: "01",
+    title: "Fiche d’établissement",
+    purpose: "Donner des repères rapides",
+    items: ["Nom et activité principale", "Téléphone et horaires", "Zone desservie ou adresse", "Lien vers le site"],
+    action: "Le prospect décide vite : appeler, demander un itinéraire ou continuer à chercher.",
+  },
+  {
+    number: "02",
+    title: "Site internet",
+    purpose: "Détailler et rassurer",
+    items: ["Travaux acceptés et limites", "Réalisations réelles et légendées", "Étapes d’un devis", "Moyens de contact disponibles"],
+    action: "Le prospect comprend votre offre avant de vous solliciter.",
+  },
+];
+const shared = ["Nom", "Téléphone", "Horaires", "Prestations principales", "Zone desservie"];
+---
+
+<div class="listing-site-roles">
+  <p class="roles-kicker">Deux supports, une même entreprise</p>
+  <div class="roles-grid">
+    {roles.map((role) => (
+      <div class="roles-card">
+        <p class="roles-head">
+          <span class="roles-number" aria-hidden="true">{role.number}</span>
+          <span>
+            <strong>{role.title}</strong>
+            <span class="roles-purpose">{role.purpose}</span>
+          </span>
+        </p>
+        <ul>
+          {role.items.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="roles-action">{role.action}</p>
+      </div>
+    ))}
+  </div>
+  <div class="roles-shared">
+    <p>À garder identique sur les deux supports</p>
+    <ul>
+      {shared.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .listing-site-roles { padding: clamp(1.25rem, 4vw, 2rem); border: 1px solid var(--color-gray-200); border-radius: 1rem; background: var(--color-snow-50); color: var(--color-gray-600); }
+  .listing-site-roles .roles-kicker { margin: 0 0 1rem; color: var(--color-blue-500); font-size: .75rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  .roles-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .roles-card { display: flex; flex-direction: column; padding: 1rem; border-radius: .75rem; background: var(--color-surface-100); }
+  .listing-site-roles .roles-head { display: flex; align-items: flex-start; gap: .75rem; margin: 0; line-height: 1.35; }
+  .roles-head strong { display: block; color: var(--color-gray-900); font-weight: 500; }
+  .roles-purpose { display: block; margin-top: .15rem; font-size: .8125rem; color: var(--color-gray-500); }
+  .roles-number { flex: none; display: grid; place-items: center; width: 1.9rem; height: 1.9rem; border-radius: .5rem; background: var(--color-blue-50); color: var(--color-blue-600); font-size: .75rem; font-variant-numeric: tabular-nums; }
+  .listing-site-roles .roles-card ul { display: grid; gap: .4rem; margin: 1rem 0; padding: 0; list-style: none; font-size: .9375rem; line-height: 1.5; }
+  .listing-site-roles .roles-card li { position: relative; margin: 0; padding-left: 1.1rem; }
+  .roles-card li::before { content: ""; position: absolute; top: .6em; left: .1rem; width: .35rem; height: .35rem; border-radius: 999px; background: var(--color-blue-300); }
+  .listing-site-roles .roles-action { margin: auto 0 0; padding-top: .85rem; border-top: 1px solid var(--color-gray-200); font-size: .875rem; line-height: 1.55; color: var(--color-gray-700); }
+  .roles-shared { margin-top: .75rem; padding: .85rem 1rem; border-radius: .75rem; background: var(--color-blue-50); }
+  .listing-site-roles .roles-shared p { margin: 0 0 .6rem; color: var(--color-blue-600); font-size: .75rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+  .listing-site-roles .roles-shared ul { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+  .listing-site-roles .roles-shared li { margin: 0; padding: .3rem .7rem; border-radius: 999px; background: var(--color-snow-50); color: var(--color-gray-900); font-size: .8125rem; line-height: 1.4; }
+  @media (max-width: 560px) { .roles-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

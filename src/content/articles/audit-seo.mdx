@@ -1,0 +1,183 @@
+---
+title: "Audit SEO d’un site vitrine : la méthode pour le faire soi-même"
+seoTitle: "Audit SEO d’un site vitrine en 1 heure"
+description: "Audit SEO d’un site vitrine : indexation, titles, vitesse, contenus, liens et IA. La méthode pas à pas avec des outils gratuits, et quand payer."
+pubDate: 2026-10-08
+author: "William De Azevedo"
+draft: false
+tags: ["SEO", "site vitrine", "tpe"]
+image:
+  src: "/articles/audit-seo/cover.webp"
+  alt: "Quatre cartes résument les étapes de l’audit : indexation (page indexée, détectée non indexée, redirection 301), titres (aperçu d’un résultat Google et title de 55 caractères sur 60), vitesse (jauge et barres LCP, INP, CLS) et IA (réponse citant votre site comme source)."
+---
+
+import PreparationChecklist from "../../components/articles/PreparationChecklist.astro";
+
+**Un audit SEO vérifie trois choses : que Google peut trouver et indexer vos pages, que chaque page répond à une recherche précise, et que d’autres sites vous recommandent.** Pour un site vitrine de moins de 30 pages, un premier audit se fait en une heure avec Google Search Console et PageSpeed Insights. Faites appel à un professionnel quand des pages restent non indexées, que le site est lent sur mobile, ou avant une refonte.
+
+Ce guide suit l’ordre dans lequel je contrôle un site vitrine. Chaque étape tient en quelques minutes, utilise des outils gratuits et se termine par une décision simple : c’est bon, c’est à corriger, ou c’est à confier à quelqu’un. À la fin, je vous montre ce que cet audit a donné sur mon propre site.
+
+## Un audit SEO, c’est quoi (et ce qu’il ne fait pas)
+
+Un audit SEO est un état des lieux. Il ne fait pas monter un site dans Google à lui seul : il liste ce qui empêche vos pages d’être trouvées, comprises ou choisies, puis classe ces problèmes par importance. La valeur d’un audit se mesure aux corrections qui suivent, pas au nombre de pages du rapport.
+
+On distingue souvent deux niveaux. L’audit SEO technique regarde si les robots de Google peuvent explorer et indexer le site : sitemap, fichier robots.txt, redirections, URL canoniques, vitesse. L’audit de contenu regarde si chaque page répond à une recherche réelle, avec un title clair et un texte utile. Sur un site vitrine, les deux se font ensemble, parce que le site est petit.
+
+Un audit ne garantit pas non plus une position. Google ne promet rien, même à un site techniquement parfait. Ce qu’un audit vous apporte, c’est la certitude de ne pas perdre de visites pour une raison évitable.
+
+## Les 3 outils gratuits : Search Console, PageSpeed Insights, la commande site:
+
+**Google Search Console** est l’outil central. Il montre les pages indexées et celles qui ne le sont pas, les recherches qui affichent votre site et la position moyenne de chaque page. Si le site n’y est pas encore déclaré, commencez par là : la validation du domaine prend quelques minutes, mais les données mettent plusieurs jours à apparaître.
+
+**PageSpeed Insights** mesure la vitesse d’une page sur mobile et sur ordinateur. Il affiche, quand le site a assez de visites, les données réelles des utilisateurs de Chrome, et toujours un test de laboratoire avec des pistes d’amélioration. Il s’utilise sans compte sur [pagespeed.web.dev](https://pagespeed.web.dev/).
+
+**La commande `site:`** se tape directement dans Google, par exemple `site:votre-site.fr`. Elle donne un aperçu rapide des pages que Google connaît. Google précise dans sa [documentation sur l’opérateur site:](https://developers.google.com/search/docs/monitor-debug/search-operators/all-search-site?hl=fr) que ce résultat n’est pas exhaustif : servez-vous-en pour repérer une page oubliée ou une ancienne adresse encore visible, pas pour compter vos pages.
+
+Il existe aussi des outils d’exploration, gratuits ou payants, qui parcourent tout le site comme un robot. Ils sont pratiques à partir de quelques dizaines de pages. Pour un site vitrine, les trois outils ci-dessus suffisent pour un premier passage.
+
+## Étape 1 : Google voit-il vos pages ?
+
+C’est l’étape la plus importante : une page non indexée n’apparaîtra dans aucun résultat, quelle que soit la qualité de son texte.
+
+Dans Search Console, ouvrez le rapport **Indexation des pages**. Il sépare les pages indexées de celles qui ne le sont pas, avec une raison pour chacune. Deux statuts reviennent souvent sur les petits sites. « Explorée, actuellement non indexée » signifie que Google a lu la page sans la retenir pour l’instant. « Détectée, actuellement non indexée » signifie qu’il connaît l’adresse mais ne l’a pas encore explorée. Le [rapport d’indexation des pages](https://support.google.com/webmasters/answer/7440203?hl=fr) détaille chaque statut.
+
+Vérifiez ensuite, dans l’ordre :
+
+- **le sitemap** : déclaré dans Search Console, lu sans erreur, et contenant uniquement les pages que vous voulez voir dans Google ;
+- **le fichier robots.txt** : ouvrez `votre-site.fr/robots.txt` et vérifiez qu’aucune ligne `Disallow` ne bloque une page importante ;
+- **l’URL canonique** : avec l’[outil d’inspection d’URL](https://support.google.com/webmasters/answer/9012289?hl=fr), regardez si la page canonique choisie par Google est bien celle que vous avez déclarée ;
+- **les erreurs 404** : une page supprimée doit renvoyer une vraie erreur 404, et une page déplacée doit rediriger vers sa nouvelle adresse ;
+- **les redirections 301** : une ancienne adresse encore visible dans Google doit rediriger vers la nouvelle avec une redirection permanente (301), pas temporaire (302 ou 307).
+
+Ce dernier point compte surtout après une refonte. Google explique dans sa page sur les [redirections et la recherche Google](https://developers.google.com/search/docs/crawling-indexing/301-redirects?hl=fr) qu’une redirection permanente affiche la nouvelle adresse dans les résultats, alors qu’une redirection temporaire conserve l’ancienne.
+
+**Que faire si une page reste non indexée ?** Demandez l’indexation depuis l’outil d’inspection d’URL, puis ajoutez des liens vers cette page depuis vos pages les plus importantes. Une page isolée, que rien ne relie au reste du site, est souvent la dernière explorée.
+
+## Étape 2 : titles, metas et titres
+
+Le title est le texte cliquable affiché dans Google. C’est souvent la première chose que votre futur client lit de vous. Pour chaque page, vérifiez :
+
+- qu’il est **unique** : deux pages avec le même title se font concurrence ;
+- qu’il dit **ce que fait la page**, avec les mots que vos clients tapent : « Création de site vitrine pour artisan » plutôt que « Accueil » ;
+- qu’il reste **assez court** pour ne pas être coupé, soit environ 60 caractères, nom du site compris.
+
+Google recommande des titles [descriptifs, concis et propres à chaque page](https://developers.google.com/search/docs/appearance/title-link?hl=fr). Faites de même pour la meta description : elle n’influence pas directement la position, mais Google l’utilise souvent comme texte sous le titre. Une phrase qui résume la page et donne envie de cliquer suffit. Le guide [Comment rédiger des meta descriptions](https://developers.google.com/search/docs/appearance/snippet?hl=fr) donne des exemples.
+
+Enfin, ouvrez chaque page et regardez sa structure : un seul titre principal (H1) qui reprend le sujet, puis des intertitres (H2) qui découpent le contenu. Un texte bien découpé se lit mieux, pour un visiteur comme pour un moteur.
+
+## Étape 3 : vitesse et mobile (Core Web Vitals simplement)
+
+La majorité des visites d’un site vitrine se fait sur téléphone. Lancez PageSpeed Insights sur la page d’accueil et sur votre page de service principale, onglet mobile.
+
+Les Core Web Vitals sont trois mesures définies par Google. Les seuils ci-dessous sont ceux de la page [Web Vitals de web.dev](https://web.dev/articles/vitals?hl=fr) :
+
+| Mesure | Ce qu’elle mesure | Bon résultat |
+| --- | --- | --- |
+| LCP (Largest Contentful Paint) | Le temps d’affichage du plus gros élément visible | 2,5 secondes ou moins |
+| INP (Interaction to Next Paint) | La réactivité quand on touche un bouton ou un menu | 200 millisecondes ou moins |
+| CLS (Cumulative Layout Shift) | Les décalages de contenu pendant le chargement | 0,1 ou moins |
+
+Si le rapport affiche « Évaluation des Core Web Vitals : Réussie », la vitesse n’est pas votre priorité. Si une mesure est en orange ou en rouge, lisez les recommandations : sur un site vitrine, les coupables habituels sont des images trop lourdes, des polices chargées depuis plusieurs services ou un widget externe (chat, avis, carte) qui bloque l’affichage.
+
+Testez aussi le site sur votre propre téléphone, en 4G. Les boutons sont-ils assez grands ? Le numéro de téléphone est-il cliquable ? Le formulaire se remplit-il sans zoomer ? Aucun outil ne remplace ce test de deux minutes.
+
+## Étape 4 : une page, une recherche
+
+Chaque page importante doit répondre à une recherche précise. Une page « Services » qui liste dix prestations en trois lignes chacune ne répond bien à aucune.
+
+Dans Search Console, ouvrez le rapport **Performances**, cochez « Position moyenne » et regardez l’onglet **Requêtes**. Filtrez sur le pays où vous travaillez : des impressions venues d’autres pays peuvent fausser la position moyenne. Repérez ensuite les recherches où votre site apparaît entre la 5e et la 20e position. Ce sont vos meilleures opportunités : Google considère déjà la page comme pertinente, mais elle n’est pas assez convaincante pour la première page.
+
+Pour chacune, ouvrez la page qui se positionne et demandez-vous :
+
+- le mot-clé apparaît-il dans le title et le titre principal ?
+- la page répond-elle à la question dès les premières lignes ?
+- un concurrent mieux placé donne-t-il des informations que vous ne donnez pas (prix indicatif, délais, zone d’intervention, exemples) ?
+
+Vérifiez aussi l’inverse : deux de vos pages qui apparaissent sur la même recherche. Dans ce cas, choisissez celle qui doit répondre et faites un lien vers elle depuis l’autre.
+
+## Étape 5 : popularité, liens entrants et fiche Google
+
+Google tient compte des autres sites qui parlent de vous. Dans Search Console, le rapport **Liens** montre les principaux sites qui pointent vers le vôtre. Pour un site vitrine, quelques liens locaux et sectoriels valent mieux que des dizaines de liens sans rapport : annuaire de votre chambre de métiers, fédération professionnelle, fournisseurs, partenaires, presse locale.
+
+Si vous avez une clientèle locale, votre [fiche Google](/articles/fiche-google-my-business-artisan/) (Google Business Profile) fait partie de l’audit. Vérifiez que le nom, l’adresse, le téléphone et les horaires sont identiques sur la fiche et sur le site, que la catégorie principale correspond à votre métier, et que le lien vers le site pointe vers la bonne page. Les avis récents et les réponses que vous y apportez comptent aussi.
+
+N’achetez pas de liens. Google le considère comme du spam, et un site vitrine a beaucoup plus à perdre qu’à gagner.
+
+## Étape 6 : être lisible par ChatGPT et les IA
+
+Vos clients posent aussi leurs questions à ChatGPT, Perplexity ou aux Aperçus IA de Google. La bonne nouvelle : ce qui marche pour Google marche en grande partie pour ces outils. Google indique dans sa page [Fonctionnalités d’IA et votre site Web](https://developers.google.com/search/docs/appearance/ai-features?hl=fr) qu’une page doit être indexée et affichable avec un extrait pour être citée dans les Aperçus IA, sans exigence technique supplémentaire.
+
+Trois vérifications concrètes :
+
+- **les robots de recherche des IA ne sont pas bloqués**. OpenAI distingue, dans sa [documentation sur ses robots](https://platform.openai.com/docs/bots), OAI-SearchBot (qui alimente la recherche de ChatGPT) et GPTBot (qui collecte des contenus pour entraîner ses modèles). Bloquer GPTBot n’empêche pas d’être cité ; bloquer OAI-SearchBot retire vos pages des réponses de recherche de ChatGPT. Regardez votre robots.txt, mais aussi les réglages de votre hébergeur ou de votre pare-feu, qui peuvent bloquer certains robots sans que vous le sachiez ;
+- **les réponses sont directes** : une question en intertitre, une réponse claire dans les deux premières phrases, puis le détail. C’est le format que les IA reprennent le plus facilement ;
+- **les données structurées décrivent votre activité** : nom, métier, zone, coordonnées. Le [test des résultats enrichis](https://search.google.com/test/rich-results) de Google vérifie qu’elles sont lues sans erreur.
+
+## Exemple réel : l’audit de mon propre site
+
+J’ai appliqué cette méthode à williamdeazevedo.fr, un site de 19 pages. Voici ce qui était en ordre, et ce que j’ai trouvé.
+
+**Ce qui allait bien.** Le sitemap listait les bonnes pages, le fichier robots.txt ne bloquait rien d’important, une adresse inexistante renvoyait bien une erreur 404 et chaque page déclarait la bonne URL canonique.
+
+**Ce que j’ai trouvé, et où en est chaque correction :**
+
+- **des titles et des metas trop longs**, coupés dans Google. Je les ai raccourcis ;
+- **deux articles « Détectée, actuellement non indexée »**, dont mon guide pour [tester l’accessibilité d’un site web](/articles/tester-accessibilite-site-web/). La correction : demander l’indexation et ajouter des liens vers ces articles depuis les pages de service ;
+- **d’anciennes adresses encore connues de Google** : `/blog` renvoyait une erreur 404 et `/about` une redirection temporaire. Elles redirigent désormais en permanence (301) vers les bonnes pages ;
+- **des données structurées incomplètes** : le site décrivait bien la personne, mais pas le site lui-même, et le fil d’Ariane manquait sur deux pages. J’ai ajouté la description du site ; le fil d’Ariane reste à compléter ;
+- **une page d’accueil plus lourde que nécessaire**, à cause d’icônes répétées dans le code. Rien de bloquant, mais c’est noté pour la prochaine optimisation.
+
+**Deux leçons inattendues.** D’abord, la position moyenne sur mon propre nom paraissait mauvaise dans Search Console. En filtrant sur la France, le site était en réalité premier : des impressions venues d’autres pays faussaient la moyenne. Ensuite, côté IA, un test avec les noms des robots a montré que ceux de la recherche de ChatGPT, Claude et Perplexity accédaient bien au site, alors que les robots d’entraînement (GPTBot, ClaudeBot) étaient bloqués par le pare-feu de l’hébergeur. Ce n’est pas gênant pour être cité, mais c’est un réglage à connaître et à choisir en connaissance de cause. C’est exactement le genre de détail qu’un audit sert à faire remonter.
+
+## Audit gratuit, outil ou prestataire : quand payer
+
+| Option | Pour qui | Limite |
+| --- | --- | --- |
+| Faire l’audit soi-même | Site de moins de 30 pages, une heure devant soi | Vous voyez les problèmes, pas toujours comment les corriger |
+| Outil d’audit automatique | Site plus grand, besoin d’un suivi régulier | Une liste d’alertes à trier, sans priorités adaptées à votre activité |
+| Prestataire | Pages non indexées malgré vos corrections, site lent, refonte en vue | Un coût, à comparer au manque à gagner |
+
+Les plateformes de freelances et les agences affichent des prix très variables pour un audit, selon la taille du site et le niveau de détail. Avant de payer, demandez ce que contient le livrable : une liste de problèmes classés par priorité, avec la correction attendue pour chacun, vaut plus qu’un long rapport généré par un outil.
+
+Faites appel à un professionnel dans trois cas : des pages importantes restent non indexées après vos corrections, le site est lent sur mobile et vous ne savez pas pourquoi, ou vous préparez une refonte. Dans ce dernier cas, l’audit sert à ne pas perdre ce qui fonctionne : je le fais systématiquement avant une [refonte de site internet](/refonte-site-internet/). Mes autres [services](/services/) et mes [tarifs](/tarifs/) détaillent ce qui est compris.
+
+<PreparationChecklist
+  legend="Votre audit SEO en une heure"
+  note="Cette liste reste sur cette page : aucune réponse n’est enregistrée ni transmise."
+  countLabel="points vérifiés"
+  doneLabel="Audit terminé !"
+  items={[
+    "Le site est déclaré dans Search Console et le sitemap est lu sans erreur.",
+    "Aucune page importante n’apparaît dans les pages non indexées.",
+    "Le robots.txt ne bloque aucune page utile, ni les robots de recherche des IA.",
+    "Les anciennes adresses redirigent en 301 vers les nouvelles.",
+    "Chaque page a un title unique d’environ 60 caractères au plus et une meta description.",
+    "La page d’accueil et la page de service principale ont des Core Web Vitals au vert sur mobile.",
+    "Les requêtes en position 5 à 20 ont été relevées, avec la page à améliorer pour chacune.",
+    "La fiche Google et le site affichent les mêmes coordonnées.",
+  ]}
+/>
+
+## Questions fréquentes
+
+### Combien de temps dure un audit SEO ?
+
+Pour un site vitrine de moins de 30 pages, comptez une heure pour un premier audit avec les outils gratuits. Corriger les problèmes trouvés prend ensuite plus ou moins de temps selon leur nature : réécrire des titles se fait en une matinée, résoudre un problème d’indexation peut demander plusieurs semaines d’observation.
+
+### Quelle différence entre un audit SEO et un audit SEO technique ?
+
+L’audit SEO technique se limite à ce que voient les robots : exploration, indexation, redirections, vitesse, données structurées. Un audit SEO complet ajoute les contenus (chaque page répond-elle à une recherche ?) et la popularité (liens entrants, fiche Google). Sur un petit site, faire l’un sans l’autre laisse souvent le vrai problème de côté.
+
+### Un outil gratuit suffit-il ?
+
+Pour un site vitrine, oui dans la plupart des cas. Search Console et PageSpeed Insights donnent les informations qui comptent le plus, directement depuis Google. Un outil payant devient utile pour un site de plusieurs centaines de pages ou pour suivre des positions dans le temps.
+
+### À quelle fréquence faire un audit SEO ?
+
+Un audit complet par an suffit pour un site vitrine stable. Jetez un œil au rapport d’indexation de Search Console une fois par mois, et refaites un audit après chaque changement important : nouvelles pages, changement d’adresse, nouvel hébergeur.
+
+### Faut-il faire un audit SEO avant une refonte ?
+
+Oui. L’audit identifie les pages qui reçoivent déjà des visites depuis Google et les adresses à rediriger. Sans cette liste, une refonte peut faire perdre en quelques jours des positions gagnées en plusieurs années. Pour comprendre ce qu’un budget de site change à ces sujets, voyez aussi la différence entre [un site à 600 euros et un site à 2 000 euros](/articles/site-600-euros-vs-site-2000-euros/).
+
+Si votre audit montre que le site actuel ne tient plus, une [création de site vitrine](/creation-site-vitrine/) pensée pour le référencement dès le départ coûte souvent moins cher que des corrections successives.

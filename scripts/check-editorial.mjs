@@ -18,6 +18,10 @@ const slugs = [
   "tester-accessibilite-site-web",
   "referencement-chatgpt",
   "mentions-legales-site-internet-professionnel",
+  "fiche-google-my-business-artisan",
+  "widget-avis-google",
+  "changer-prestataire-web",
+  "audit-seo",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
