@@ -77,7 +77,7 @@ Les Core Web Vitals sont trois mesures définies par Google. Les seuils ci-desso
 | INP (Interaction to Next Paint) | La réactivité quand on touche un bouton ou un menu | 200 millisecondes ou moins |
 | CLS (Cumulative Layout Shift) | Les décalages de contenu pendant le chargement | 0,1 ou moins |
 
-Si le rapport affiche « Données réelles » en vert, la vitesse n’est pas votre priorité. Si une mesure est en orange ou en rouge, lisez les recommandations : sur un site vitrine, les coupables habituels sont des images trop lourdes, des polices chargées depuis plusieurs services ou un widget externe (chat, avis, carte) qui bloque l’affichage.
+Si le rapport affiche « Évaluation des Core Web Vitals : Réussie », la vitesse n’est pas votre priorité. Si une mesure est en orange ou en rouge, lisez les recommandations : sur un site vitrine, les coupables habituels sont des images trop lourdes, des polices chargées depuis plusieurs services ou un widget externe (chat, avis, carte) qui bloque l’affichage.
 
 Testez aussi le site sur votre propre téléphone, en 4G. Les boutons sont-ils assez grands ? Le numéro de téléphone est-il cliquable ? Le formulaire se remplit-il sans zoomer ? Aucun outil ne remplace ce test de deux minutes.
 
@@ -99,7 +99,7 @@ Vérifiez aussi l’inverse : deux de vos pages qui apparaissent sur la même re
 
 Google tient compte des autres sites qui parlent de vous. Dans Search Console, le rapport **Liens** montre les principaux sites qui pointent vers le vôtre. Pour un site vitrine, quelques liens locaux et sectoriels valent mieux que des dizaines de liens sans rapport : annuaire de votre chambre de métiers, fédération professionnelle, fournisseurs, partenaires, presse locale.
 
-Si vous avez une clientèle locale, votre fiche Google (Google Business Profile) fait partie de l’audit. Vérifiez que le nom, l’adresse, le téléphone et les horaires sont identiques sur la fiche et sur le site, que la catégorie principale correspond à votre métier, et que le lien vers le site pointe vers la bonne page. Les avis récents et les réponses que vous y apportez comptent aussi.
+Si vous avez une clientèle locale, votre [fiche Google](/articles/fiche-google-my-business-artisan/) (Google Business Profile) fait partie de l’audit. Vérifiez que le nom, l’adresse, le téléphone et les horaires sont identiques sur la fiche et sur le site, que la catégorie principale correspond à votre métier, et que le lien vers le site pointe vers la bonne page. Les avis récents et les réponses que vous y apportez comptent aussi.
 
 N’achetez pas de liens. Google le considère comme du spam, et un site vitrine a beaucoup plus à perdre qu’à gagner.
 
@@ -109,7 +109,7 @@ Vos clients posent aussi leurs questions à ChatGPT, Perplexity ou aux Aperçus 
 
 Trois vérifications concrètes :
 
-- **les robots de recherche des IA ne sont pas bloqués**. OpenAI distingue, dans sa [documentation sur ses robots](https://platform.openai.com/docs/bots), OAI-SearchBot (qui alimente la recherche de ChatGPT) et GPTBot (qui collecte des contenus pour entraîner ses modèles). Bloquer GPTBot n’empêche pas d’être cité ; bloquer OAI-SearchBot, si. Regardez votre robots.txt, mais aussi les réglages de votre hébergeur ou de votre pare-feu, qui peuvent bloquer certains robots sans que vous le sachiez ;
+- **les robots de recherche des IA ne sont pas bloqués**. OpenAI distingue, dans sa [documentation sur ses robots](https://platform.openai.com/docs/bots), OAI-SearchBot (qui alimente la recherche de ChatGPT) et GPTBot (qui collecte des contenus pour entraîner ses modèles). Bloquer GPTBot n’empêche pas d’être cité ; bloquer OAI-SearchBot retire vos pages des réponses de recherche de ChatGPT. Regardez votre robots.txt, mais aussi les réglages de votre hébergeur ou de votre pare-feu, qui peuvent bloquer certains robots sans que vous le sachiez ;
 - **les réponses sont directes** : une question en intertitre, une réponse claire dans les deux premières phrases, puis le détail. C’est le format que les IA reprennent le plus facilement ;
 - **les données structurées décrivent votre activité** : nom, métier, zone, coordonnées. Le [test des résultats enrichis](https://search.google.com/test/rich-results) de Google vérifie qu’elles sont lues sans erreur.
 
@@ -119,12 +119,12 @@ J’ai appliqué cette méthode à williamdeazevedo.fr, un site de 19 pages. Voi
 
 **Ce qui allait bien.** Le sitemap listait les bonnes pages, le fichier robots.txt ne bloquait rien d’important, une adresse inexistante renvoyait bien une erreur 404 et chaque page déclarait la bonne URL canonique.
 
-**Ce que j’ai trouvé, avec la correction prévue pour chaque point :**
+**Ce que j’ai trouvé, et où en est chaque correction :**
 
 - **des titles et des metas trop longs**, coupés dans Google. Je les ai raccourcis ;
 - **deux articles « Détectée, actuellement non indexée »**, dont mon guide pour [tester l’accessibilité d’un site web](/articles/tester-accessibilite-site-web/). La correction : demander l’indexation et ajouter des liens vers ces articles depuis les pages de service ;
-- **d’anciennes adresses encore connues de Google** : `/blog` renvoyait une erreur 404 et `/about` une redirection temporaire. La correction : des redirections permanentes (301) vers les bonnes pages ;
-- **des données structurées incomplètes** : le site décrivait bien la personne, mais pas le site lui-même, et le fil d’Ariane manquait sur deux pages. La correction : compléter ces données ;
+- **d’anciennes adresses encore connues de Google** : `/blog` renvoyait une erreur 404 et `/about` une redirection temporaire. Elles redirigent désormais en permanence (301) vers les bonnes pages ;
+- **des données structurées incomplètes** : le site décrivait bien la personne, mais pas le site lui-même, et le fil d’Ariane manquait sur deux pages. J’ai ajouté la description du site ; le fil d’Ariane reste à compléter ;
 - **une page d’accueil plus lourde que nécessaire**, à cause d’icônes répétées dans le code. Rien de bloquant, mais c’est noté pour la prochaine optimisation.
 
 **Deux leçons inattendues.** D’abord, la position moyenne sur mon propre nom paraissait mauvaise dans Search Console. En filtrant sur la France, le site était en réalité premier : des impressions venues d’autres pays faussaient la moyenne. Ensuite, côté IA, un test avec les noms des robots a montré que ceux de la recherche de ChatGPT, Claude et Perplexity accédaient bien au site, alors que les robots d’entraînement (GPTBot, ClaudeBot) étaient bloqués par le pare-feu de l’hébergeur. Ce n’est pas gênant pour être cité, mais c’est un réglage à connaître et à choisir en connaissance de cause. C’est exactement le genre de détail qu’un audit sert à faire remonter.
