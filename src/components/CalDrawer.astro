@@ -132,6 +132,11 @@ const calLink = String(
             callback: (event) => {
                 const booking = event.detail?.data ?? {};
 
+                // Google Tag Manager : conversion prise de rendez-vous.
+                const w = window as Window & { dataLayer?: unknown[] };
+                w.dataLayer = w.dataLayer || [];
+                w.dataLayer.push({ event: "prise_rdv" });
+
                 trackAnalytics("cal_booking_success", {
                     cal_link: calLink,
                     event_type_id: String(booking.eventTypeId ?? ""),
