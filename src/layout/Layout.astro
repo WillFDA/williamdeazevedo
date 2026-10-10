@@ -23,8 +23,8 @@ interface Props {
 }
 
 const {
-    title = "William De Azevedo - Développeur front-end freelance",
-    description = "Développeur front-end freelance orienté design et produit, je rends les sites plus clairs, rapides, accessibles et crédibles.",
+    title = "Création de site vitrine et refonte - William De Azevedo",
+    description = "Développeur web freelance à Achères (78) : création de site vitrine et refonte de site internet clairs, rapides et accessibles, en Île-de-France et à distance.",
     image = "/pictures/william-low.png",
     imageAlt = "William De Azevedo, développeur front-end freelance",
     canonicalPath,
@@ -43,6 +43,7 @@ const phoneValue = String(import.meta.env.PUBLIC_PHONE_HREF ?? phoneDisplay)
 const phoneHref = phoneValue ? `tel:${phoneValue}` : "";
 
 const personId = new URL("/#person", siteUrl).href;
+const businessId = new URL("/#business", siteUrl).href;
 
 const personJsonLd = {
     "@context": "https://schema.org",
@@ -72,13 +73,39 @@ const personJsonLd = {
     ],
     address: {
         "@type": "PostalAddress",
+        addressLocality: "Achères",
+        postalCode: "78260",
         addressRegion: "Île-de-France",
         addressCountry: "FR",
     },
-    worksFor: {
-        "@type": "Organization",
-        name: "William De Azevedo — Développeur freelance",
+    worksFor: { "@id": businessId },
+};
+
+// Activité locale (ProfessionalService) : uniquement des faits vérifiables.
+// Pas d'horaires ni de note : rien de publié ne les justifie.
+const businessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": businessId,
+    name: "William De Azevedo — Développeur web freelance",
+    url: siteUrl.href,
+    image: new URL("/pictures/william-low.png", siteUrl).href,
+    description:
+        "Création de site vitrine, refonte de site internet et SEO technique pour indépendants, artisans et TPE.",
+    founder: { "@id": personId },
+    address: {
+        "@type": "PostalAddress",
+        addressLocality: "Achères",
+        postalCode: "78260",
+        addressRegion: "Île-de-France",
+        addressCountry: "FR",
     },
+    areaServed: [
+        { "@type": "AdministrativeArea", name: "Yvelines" },
+        { "@type": "AdministrativeArea", name: "Île-de-France" },
+        { "@type": "Country", name: "France" },
+    ],
+    ...(phoneValue ? { telephone: phoneValue } : {}),
 };
 
 // Nom du site pour Google : publié uniquement sur la page d'accueil et relié
@@ -176,6 +203,15 @@ const websiteJsonLd = {
                     type="application/ld+json"
                     is:inline
                     set:html={JSON.stringify(websiteJsonLd)}
+                />
+            )
+        }
+        {
+            isHomePage && (
+                <script
+                    type="application/ld+json"
+                    is:inline
+                    set:html={JSON.stringify(businessJsonLd)}
                 />
             )
         }

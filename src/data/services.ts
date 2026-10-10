@@ -92,7 +92,7 @@ export const services: Service[] = [
     description:
       "Création de sites vitrines rapides, accessibles et pensés pour rassurer avant le premier contact. Accompagnement design, contenu, SEO technique et développement front-end.",
     seoDescription:
-      "Création de site vitrine rapide et accessible, pensé pour rassurer et faciliter le contact. Parlons de votre projet.",
+      "Création de site vitrine sur mesure par un freelance basé dans les Yvelines : rapide, accessible et pensé pour rassurer vos prospects et générer des contacts.",
     eyebrow: "Site vitrine freelance",
     h1: "Création de sites vitrines qui rassurent avant le premier contact",
     heroPillPhrases: ["sites vitrines", "premier contact"],

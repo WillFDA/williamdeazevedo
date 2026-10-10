@@ -121,12 +121,16 @@ const serviceJsonLd = {
     name: service.title,
     serviceType: service.serviceType,
     description: service.description,
-    areaServed: "France",
+    areaServed: [
+        { "@type": "AdministrativeArea", name: "Yvelines" },
+        { "@type": "AdministrativeArea", name: "Île-de-France" },
+        { "@type": "Country", name: "France" },
+    ],
     url: canonicalUrl.href,
     provider: {
-        "@type": "Person",
-        "@id": new URL("/#person", siteUrl).href,
-        name: "William De Azevedo",
+        "@type": "ProfessionalService",
+        "@id": new URL("/#business", siteUrl).href,
+        name: "William De Azevedo — Développeur web freelance",
         url: new URL("/", siteUrl).href,
     },
 };
