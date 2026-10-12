@@ -22,6 +22,7 @@ const slugs = [
   "widget-avis-google",
   "changer-prestataire-web",
   "audit-seo",
+  "landing-page",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
