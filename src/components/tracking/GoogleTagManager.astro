@@ -21,23 +21,25 @@ const GTM_ID = "GTM-TCZVQQ29";
             analytics_storage: "denied",
             wait_for_update: 500,
         });
-    }
 
-    /*
-     * EMPLACEMENT BANNIÈRE DE CONSENTEMENT (à brancher)
-     * ---------------------------------------------------
-     * Quand l'utilisateur fait son choix, l'outil de consentement doit appeler :
-     *
-     *   gtag("consent", "update", {
-     *       ad_storage: "granted" | "denied",
-     *       ad_user_data: "granted" | "denied",
-     *       ad_personalization: "granted" | "denied",
-     *       analytics_storage: "granted" | "denied",
-     *   });
-     *
-     * Le choix doit être mémorisé (cookie/localStorage) et ré-appliqué via
-     * "consent update" à chaque chargement, juste après ce bloc.
-     */
+        // Ré-applique le choix mémorisé par CookieBanner.astro (même clé, même
+        // durée de 6 mois) avant le chargement de GTM.
+        try {
+            var stored = JSON.parse(localStorage.getItem("wui-consent") || "null");
+            if (
+                stored &&
+                stored.value === "granted" &&
+                Date.now() < new Date(stored.at).setMonth(new Date(stored.at).getMonth() + 6)
+            ) {
+                gtag("consent", "update", {
+                    ad_storage: "granted",
+                    ad_user_data: "granted",
+                    ad_personalization: "granted",
+                    analytics_storage: "granted",
+                });
+            }
+        } catch (error) {}
+    }
 </script>
 
 {/* 2. Snippet GTM, protégé contre un double chargement avec le ClientRouter. */}
