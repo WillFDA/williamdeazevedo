@@ -685,7 +685,7 @@ export const services: Service[] = [
       "choix des pages utiles et des communes ou secteurs à mettre en avant",
       "design responsive et mise en valeur des visuels",
       "développement, formulaire, performance et SEO technique",
-      "mise en ligne, vérifications sur mobile et cohérence avec votre fiche Google",
+      "mise en ligne, vérifications sur mobile, cohérence avec votre fiche Google et prise en main",
     ],
     proof: {
       projectId: "le-fellic",
