@@ -324,6 +324,16 @@ const breadcrumbJsonLd = {
                         detailsLabel="Lire l'étude de cas"
                         siteLabel="Voir le site"
                     />
+                    {service.proof.article && (
+                        <p class="mt-6 text-base font-normal leading-relaxed text-gray-600">
+                            <a
+                                class="underline underline-offset-4 hover:text-gray-900"
+                                href={service.proof.article.href}
+                            >
+                                {service.proof.article.label}
+                            </a>
+                        </p>
+                    )}
                 </section>
             )
         }
