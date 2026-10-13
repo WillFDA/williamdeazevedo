@@ -10,6 +10,7 @@ import ProblemComparison from "../components/ProblemComparison.astro";
 import ProjectShowcase from "../components/ProjectShowcase.astro";
 import TestimonialsSection from "../components/TestimonialsSection.astro";
 import GoogleReviewsBadge from "../components/GoogleReviewsBadge.astro";
+import { getDisplayableGoogleReviews } from "@/data/googleReviews";
 import ArrowRight from "../components/icons/nucleo/arrow-right-fill.svg";
 import SearchContent from "../components/icons/nucleo/search-content-2-fill.svg";
 import { Image } from "astro:assets";
@@ -138,6 +139,7 @@ const expertiseItems = [
 ] as const;
 
 const displayedTestimonials = getPublishedTestimonials();
+const hasGoogleReviews = getDisplayableGoogleReviews() !== null;
 ---
 
 <Layout>
@@ -145,9 +147,13 @@ const displayedTestimonials = getPublishedTestimonials();
         class="mx-auto flex w-full min-w-0 max-w-5xl flex-col gap-6 px-2 sm:px-4"
         data-section-reveal="false"
     >
-        <div data-hero-eyebrow>
-            <GoogleReviewsBadge location="hero" />
-        </div>
+        {
+            hasGoogleReviews && (
+                <div data-hero-eyebrow>
+                    <GoogleReviewsBadge location="hero" />
+                </div>
+            )
+        }
         <AnimatedHeading
             class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl"
             parts={heroTitleParts}
