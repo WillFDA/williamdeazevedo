@@ -1,14 +1,28 @@
 ---
+import CalButton from "@/components/CalButton.astro";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import FadeRevealOnScroll from "@/components/animations/FadeRevealOnScroll.astro";
 import DiagnosticCta from "@/components/DiagnosticCta.astro";
 import ProjectListItem from "@/components/realisations/ProjectListItem.astro";
 import { projects } from "@/data/projects";
+import AnimatedHeading from "@/components/ui/AnimatedHeading.astro";
+import WaveText from "@/components/ui/WaveText.astro";
 import Layout from "@/layout/Layout.astro";
 
 export const prerender = true;
 
 const [featuredProject, ...secondaryProjects] = projects;
+
+// Même hero que les pages services (SeoServicePage) : titre animé avec
+// mots-clés en pastilles, sous-titre, CTA principal et lien secondaire.
+const heroTitleParts = [
+    { text: "Des" },
+    { pill: true, text: "projets" },
+    { text: "pensés" },
+    { text: "pour" },
+    { text: "inspirer" },
+    { pill: true, text: "confiance" },
+];
 
 const realisationsDiagnosticTitleParts = [
     { text: "Vous" },
@@ -32,18 +46,41 @@ const realisationsDiagnosticTitleParts = [
 >
     <div class="flex w-full flex-col gap-16 py-12 md:gap-20 md:py-16">
         <section class="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 md:gap-20">
-            <FadeReveal delay={0.1}>
-                <div class="mx-auto flex max-w-5xl flex-col items-center gap-5 text-center">
-                    <h1 class="page-heading">
-                        Des projets pensés pour inspirer confiance
-                    </h1>
-                    <p class="page-subheading max-w-sm sm:max-w-2xl">
+            <section
+                class="mx-auto flex w-full min-w-0 max-w-5xl flex-col items-center gap-6 text-center"
+                data-section-reveal="false"
+            >
+                <AnimatedHeading
+                    class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl"
+                    parts={heroTitleParts}
+                />
+                <FadeReveal delay={0.32}>
+                    <p class="page-subheading max-w-sm sm:max-w-lg">
                         Chaque réalisation part d'un doute concret : clarifier une
                         offre, moderniser une expérience et guider plus naturellement
                         vers le contact.
                     </p>
-                </div>
-            </FadeReveal>
+                </FadeReveal>
+                <FadeReveal class="w-full sm:w-auto" delay={0.44}>
+                    <div class="mt-3 flex w-full flex-col items-center gap-3 sm:mt-4 sm:w-auto sm:flex-row">
+                        <CalButton
+                            class="w-full rounded-xl text-base font-normal sm:w-auto"
+                            label="Parlons de votre projet"
+                            location="realisations-hero"
+                        />
+                        <a
+                            class="realisations-secondary-button flex min-h-14 w-full max-w-full items-center justify-center rounded-xl px-8 py-3 text-base font-normal sm:w-auto sm:px-10"
+                            href="/services/"
+                        >
+                            <WaveText
+                                class="relative z-10"
+                                text="Voir les services"
+                                trigger="parent"
+                            />
+                        </a>
+                    </div>
+                </FadeReveal>
+            </section>
 
             {
                 featuredProject && (
@@ -74,3 +111,43 @@ const realisationsDiagnosticTitleParts = [
         }
     </div>
 </Layout>
+
+<style>
+    /* Même rendu que le bouton secondaire du hero des pages services
+       (.service-method-button dans SeoServicePage.astro). */
+    .realisations-secondary-button {
+        color: var(--color-coffee-300);
+        isolation: isolate;
+        overflow: hidden;
+        position: relative;
+        text-decoration: none;
+        z-index: 0;
+    }
+
+    .realisations-secondary-button::before {
+        background: var(--color-gray-100);
+        border-radius: inherit;
+        content: "";
+        inset: 0;
+        position: absolute;
+        transform: scale(1);
+        transition: transform 520ms
+            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
+        z-index: 0;
+    }
+
+    .realisations-secondary-button:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 3px;
+    }
+
+    .realisations-secondary-button:focus-visible::before {
+        transform: scale(0.95);
+    }
+
+    @media (hover: hover) {
+        .realisations-secondary-button:hover::before {
+            transform: scale(0.95);
+        }
+    }
+</style>
