@@ -6,6 +6,7 @@ import BoltSpeed from "@/components/icons/nucleo/bolt-speed-fill.svg";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
+import ServiceCallout from "@/components/articles/ServiceCallout.astro";
 import Sparkle from "@/components/icons/nucleo/sparkle-3-fill.svg";
 import Star from "@/components/icons/nucleo/star-fill.svg";
 import TableOfContents from "@/components/TableOfContents.astro";
@@ -227,6 +228,7 @@ const getTagIcon = (tag: string) => {
                 <div class="article-prose min-w-0">
                     <Content />
                 </div>
+                <ServiceCallout articleId={article.id} />
             </FadeReveal>
 
             <aside class="article-toc-column order-first lg:order-none">

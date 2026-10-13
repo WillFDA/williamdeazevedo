@@ -1,0 +1,77 @@
+---
+import { getVisibleArticles } from "@/lib/articles";
+import { serviceReadings } from "@/data/serviceArticles";
+
+interface Props {
+    serviceSlug: string;
+}
+
+const { serviceSlug } = Astro.props;
+const reading = serviceReadings[serviceSlug];
+const MAX_ITEMS = 3;
+const MIN_ITEMS = 2;
+
+const visible = reading ? await getVisibleArticles() : [];
+const byId = new Map(visible.map((article) => [article.id, article]));
+const picked = (reading?.articles ?? [])
+    .map((id) => byId.get(id))
+    .filter((article) => article !== undefined)
+    .slice(0, MAX_ITEMS);
+
+if (reading && picked.length < MIN_ITEMS) {
+    for (const article of visible) {
+        if (picked.length >= MIN_ITEMS) break;
+        if (picked.includes(article)) continue;
+        if (article.data.tags.some((tag) => reading.fallbackTags.includes(tag))) {
+            picked.push(article);
+        }
+    }
+}
+
+const headingId = `${serviceSlug}-reading`;
+---
+
+{
+    picked.length >= MIN_ITEMS && (
+        <section
+            class="flex flex-col gap-8"
+            aria-labelledby={headingId}
+        >
+            <div class="flex flex-col gap-3 text-center">
+                <h2 class="section-heading" id={headingId}>
+                    À lire avant de vous lancer
+                </h2>
+                <p class="section-subheading">
+                    Quelques articles pour préparer votre projet et poser les
+                    bonnes questions.
+                </p>
+            </div>
+            <ul class="grid gap-6 md:grid-cols-3">
+                {picked.map((article) => (
+                    <li>
+                        <a
+                            class="group flex h-full flex-col rounded-xl bg-snow-50 p-4 text-gray-900 no-underline ring-1 ring-snow-600 transition-colors hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                            href={`/articles/${article.id}/`}
+                        >
+                            {article.data.image && (
+                                <img
+                                    class="mb-4 aspect-video w-full rounded-lg object-cover"
+                                    src={article.data.image.src}
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            )}
+                            <h3 class="text-lg font-normal leading-snug text-gray-900">
+                                {article.data.title}
+                            </h3>
+                            <p class="mt-2 line-clamp-3 text-sm font-normal leading-6 text-gray-600">
+                                {article.data.description}
+                            </p>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    )
+}
