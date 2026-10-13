@@ -316,6 +316,34 @@ const breadcrumbJsonLd = {
         }
 
         {
+            service.localArea && (
+                <section
+                    class="grid gap-6 md:grid-cols-[0.95fr_1.05fr] md:items-start md:gap-12"
+                    aria-labelledby={`${service.slug}-local-area`}
+                >
+                    <div class="flex flex-col gap-4">
+                        <h2
+                            class="section-heading text-left"
+                            id={`${service.slug}-local-area`}
+                        >
+                            {service.localArea.title}
+                        </h2>
+                        <p class="text-base font-normal leading-relaxed text-gray-600">
+                            {service.localArea.description}
+                        </p>
+                    </div>
+                    <ul class="flex flex-wrap gap-3">
+                        {service.localArea.places.map((place) => (
+                            <li class="rounded-xl bg-gray-100 px-4 py-3 text-base font-normal leading-relaxed text-gray-800 ring-1 ring-gray-200">
+                                {place}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )
+        }
+
+        {
             project && (
                 <section>
                     <ProjectListItem

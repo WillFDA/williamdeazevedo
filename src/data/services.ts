@@ -45,8 +45,15 @@ export type ServiceTimelinePoint = {
   tone: ServiceCapabilityTone;
 };
 
+export type ServiceLocalArea = {
+  description: string;
+  places: string[];
+  title: string;
+};
+
 export type Service = {
   capabilities?: ServiceCapability[];
+  localArea?: ServiceLocalArea;
   description: string;
   seoDescription?: string;
   diagnostic?: ServiceDiagnostic;
@@ -589,6 +596,126 @@ export const services: Service[] = [
         question: "Puis-je ajouter des réalisations plus tard ?",
         answer:
           "Oui, si le périmètre prévoit un site administrable. Sinon, on peut garder une structure prête à évoluer avec des ajouts ponctuels.",
+      },
+    ],
+  },
+  {
+    slug: "creation-site-internet-yvelines",
+    rootPath: "/creation-site-internet-yvelines/",
+    navLabel: "Site internet Yvelines (78)",
+    title: "Création de site internet dans les Yvelines (78)",
+    seoTitle: "Création de site internet Yvelines (78) - William De Azevedo",
+    description:
+      "Création de site internet dans les Yvelines (78) par un développeur web freelance basé à Achères : site vitrine rapide, mobile et rassurant, rendez-vous sur place ou en visio.",
+    seoDescription:
+      "Création de site internet dans les Yvelines (78) par un freelance basé à Achères : site vitrine rapide et rassurant, rendez-vous sur place ou en visio.",
+    eyebrow: "Yvelines (78)",
+    h1: "Création de site internet dans les Yvelines, depuis Achères",
+    heroPillPhrases: ["Yvelines", "Achères"],
+    intro:
+      "Je suis développeur web freelance à Achères. Je crée des sites vitrines clairs et rapides pour les indépendants, artisans et TPE des Yvelines, avec un seul interlocuteur du premier échange à la mise en ligne.",
+    capabilities: [
+      { icon: "web", label: "Site vitrine", tone: "blue" },
+      { icon: "refonte", label: "Refonte", tone: "cyan" },
+      { icon: "search", label: "SEO local", tone: "sky" },
+      { icon: "touch", label: "Mobile & accessibilité", tone: "teal" },
+      { icon: "form", label: "Demande de devis", tone: "pink" },
+      { icon: "performance", label: "Chargement rapide", tone: "green" },
+      { icon: "deploy", label: "Mise en ligne", tone: "orange" },
+    ],
+    serviceType: "Création de site internet",
+    localArea: {
+      title: "Où j'interviens",
+      description:
+        "Je travaille depuis Achères. Le premier échange se fait en visio ou par téléphone, et je peux me déplacer pour un rendez-vous dans les communes proches.",
+      places: [
+        "Achères (base)",
+        "Poissy",
+        "Saint-Germain-en-Laye",
+        "Conflans-Sainte-Honorine",
+        "les Yvelines (78)",
+      ],
+    },
+    problem: {
+      title: "Un site local doit rassurer avant le premier appel",
+      items: [
+        "dire clairement ce que vous faites et où vous intervenez",
+        "montrer des preuves concrètes de votre travail",
+        "être rapide et lisible sur mobile, là où vos clients vous cherchent",
+        "rendre l'appel ou la demande de devis évidente",
+        "poser une base SEO locale propre, sans promesse de classement",
+      ],
+    },
+    diagnostic: {
+      title: "Ce qu'un site local doit rendre évident",
+      description:
+        "On part de votre activité et de votre zone pour construire un site qui donne envie de vous appeler.",
+      beforeItems: [
+        "votre zone d'intervention n'apparaît nulle part clairement",
+        "vos réalisations ou vos preuves sont absentes ou difficiles à trouver",
+        "le site est lent ou pénible sur mobile",
+        "le visiteur ne sait pas comment vous joindre rapidement",
+        "la base SEO locale ne donne pas de signaux clairs",
+      ],
+      afterItems: [
+        "une activité et une zone d'intervention comprises en quelques secondes",
+        "des réalisations et des preuves placées au bon endroit",
+        "un site rapide et confortable sur mobile",
+        "un appel, un formulaire ou une prise de rendez-vous visible",
+        "une base SEO locale propre dès la mise en ligne",
+        "un seul interlocuteur, de l'échange à la mise en ligne",
+      ],
+    },
+    fit: [
+      "vous êtes indépendant, artisan ou dirigeant d'une TPE dans les Yvelines",
+      "vous préférez un interlocuteur proche que vous pouvez rencontrer",
+      "vous n'avez pas encore de site, ou votre site actuel ne vous ressemble plus",
+      "vos clients vous trouvent surtout par recommandation et veulent vérifier votre sérieux",
+    ],
+    included: [
+      "premier échange en visio, par téléphone ou sur place",
+      "cadrage de l'activité, des prestations et de la zone d'intervention",
+      "structure des pages utiles et parcours de contact",
+      "design responsive et mise en valeur de vos réalisations",
+      "SEO technique initial et structure locale propre",
+      "mise en ligne, vérifications sur mobile et prise en main",
+    ],
+    steps: [
+      "échange sur votre activité, en visio ou sur place",
+      "structure des pages, des appels à l'action et de la zone d'intervention",
+      "design responsive et mise en valeur des visuels",
+      "développement, formulaire, performance et SEO technique",
+      "mise en ligne, tests mobile et prise en main",
+    ],
+    proof: {
+      projectId: "le-fellic",
+      text: "Le Fellic montre comment un site compact peut présenter un métier, rassurer et faciliter la prise de contact.",
+    },
+    relatedServices: [
+      "creation-site-internet-artisan",
+      "creation-site-vitrine",
+      "refonte-site-internet",
+    ],
+    faq: [
+      {
+        question: "Faut-il se rencontrer pour lancer le projet ?",
+        answer:
+          "Non, ce n'est pas obligatoire. Le premier échange se fait souvent en visio ou par téléphone. Si vous préférez un rendez-vous en personne, je peux me déplacer autour d'Achères.",
+      },
+      {
+        question: "Travaillez-vous uniquement dans les Yvelines ?",
+        answer:
+          "Non. Je suis basé à Achères et je travaille aussi à distance partout en France. La proximité est surtout utile si vous aimez échanger en face à face.",
+      },
+      {
+        question: "Le SEO local est-il inclus ?",
+        answer:
+          "J'intègre les bases : structure des pages, titres, descriptions, performance et zone d'intervention. Une fiche Google Business Profile bien remplie compte aussi beaucoup pour être trouvé localement.",
+      },
+      {
+        question: "Combien coûte un site internet ?",
+        answer:
+          "Cela dépend du nombre de pages, du contenu à produire et des fonctionnalités. La page tarifs donne les repères de départ, et l'appel découverte permet de cadrer un devis précis.",
       },
     ],
   },
