@@ -1,0 +1,43 @@
+---
+import Star from "./icons/nucleo/star-fill.svg";
+import ArrowUpRight from "./icons/nucleo/arrow-up-right-fill.svg";
+import { getDisplayableGoogleReviews } from "@/data/googleReviews";
+
+interface Props {
+    class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+// Rien n'est rendu tant que la note réelle n'est pas renseignée.
+const reviews = getDisplayableGoogleReviews();
+const ratingLabel = reviews
+    ? reviews.rating.toLocaleString("fr-FR", {
+          maximumFractionDigits: 1,
+          minimumFractionDigits: Number.isInteger(reviews.rating) ? 0 : 1,
+      })
+    : "";
+const countLabel = reviews
+    ? `${reviews.reviewCount} avis Google`
+    : "";
+---
+
+{
+    reviews && (
+        <div class:list={["flex justify-center", className]}>
+            <a
+                class="inline-flex items-center gap-3 rounded-full bg-snow-50 px-5 py-3 text-base font-normal text-gray-800 no-underline ring-1 ring-snow-600 transition-colors hover:bg-gray-100"
+                href={reviews.profileUrl}
+                rel="noopener"
+                target="_blank"
+                aria-label={`Note Google : ${ratingLabel} sur 5, ${countLabel}. Voir la fiche Google (nouvel onglet)`}
+            >
+                <Star class="size-4 text-amber-500" aria-hidden="true" />
+                <span aria-hidden="true">
+                    <strong class="font-medium">{ratingLabel}/5</strong>
+                    <span class="text-gray-600"> · {countLabel}</span>
+                </span>
+                <ArrowUpRight class="size-4 text-gray-500" aria-hidden="true" />
+            </a>
+        </div>
+    )
+}

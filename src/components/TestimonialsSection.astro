@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Carousel from "./Carousel.astro";
+import GoogleReviewsBadge from "./GoogleReviewsBadge.astro";
 import { getPublishedTestimonials } from "@/lib/testimonials";
 
 const testimonials = getPublishedTestimonials();
@@ -60,6 +61,7 @@ const testimonials = getPublishedTestimonials();
                     ))}
                 </Carousel>
             </div>
+            <GoogleReviewsBadge class="mt-8" />
         </section>
     )
 }
