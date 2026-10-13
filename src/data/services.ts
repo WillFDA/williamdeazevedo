@@ -29,6 +29,16 @@ export type ServiceCapability = {
   tone: ServiceCapabilityTone;
 };
 
+export type ServiceSection = {
+  items?: string[];
+  link?: {
+    href: string;
+    label: string;
+  };
+  paragraphs: string[];
+  title: string;
+};
+
 export type ServiceDiagnostic = {
   afterItems: string[];
   afterLabel?: string;
@@ -43,16 +53,6 @@ export type ServiceTimelinePoint = {
   icon: ServiceCapabilityIcon;
   title: string;
   tone: ServiceCapabilityTone;
-};
-
-export type ServiceSection = {
-  items?: string[];
-  link?: {
-    href: string;
-    label: string;
-  };
-  paragraphs: string[];
-  title: string;
 };
 
 export type Service = {
