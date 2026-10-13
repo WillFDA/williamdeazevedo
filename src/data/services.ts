@@ -828,7 +828,7 @@ export const services: Service[] = [
           "Quelques questions aident à trancher :",
         ],
         items: [
-          "Un logiciel existant couvre-t-il l'essentiel de votre besoin, même avec quelques compromis ?",
+          "Les logiciels existants vous obligent-ils à des contournements permanents ?",
           "Ressaisissez-vous les mêmes informations dans plusieurs outils ou tableurs ?",
           "Votre équipe garde-t-elle des habitudes papier parce qu'aucun outil ne colle au terrain ?",
           "Le besoin est-il assez stable pour justifier un outil construit pour vous ?",
@@ -850,7 +850,7 @@ export const services: Service[] = [
       {
         title: "Budget et délais",
         paragraphs: [
-          "Un développement web sur mesure est chiffré sur devis : le prix dépend surtout des écrans, des états, des rôles, des données et des intégrations. Un cadrage est possible dès 900 € HT, et le planning est défini après lecture du périmètre.",
+          "Un développement web sur mesure est chiffré sur devis : le prix dépend surtout du nombre d'écrans, des types d'utilisateurs, des données à gérer et des outils à connecter. Un cadrage est possible dès 900 € HT, et le planning est défini après lecture du périmètre.",
         ],
         link: {
           href: "/tarifs/",
