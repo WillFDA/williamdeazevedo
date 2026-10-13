@@ -3,58 +3,79 @@ import CalButton from "./CalButton.astro";
 import ServiceTimelineScroll from "./ServiceTimelineScroll.astro";
 import type { ServiceTimelinePoint } from "@/data/services";
 
-// ⚠️ À VALIDER PAR WILLIAM avant mise en ligne : les délais entre crochets
-// sont des emplacements, aucun délai n'a encore été confirmé.
-const steps: ServiceTimelinePoint[] = [
+type ProcessStep = Omit<ServiceTimelinePoint, "description"> & {
+    description: string;
+    /**
+     * À VALIDER PAR WILLIAM : délai propre à l'étape, affiché seulement une
+     * fois renseigné (ex. « sous 48 h »). Doit rester dans la fourchette
+     * globale « 10 jours à 5 semaines » de PricingPreview.
+     */
+    delay: string | null;
+};
+
+const steps: ProcessStep[] = [
     {
         title: "On échange",
         description:
-            "Un appel pour comprendre votre activité, vos clients et ce que le site doit provoquer. Délai : [à valider par William].",
+            "Un appel de 15 minutes pour comprendre votre activité, vos clients et ce que le site doit provoquer.",
+        delay: null,
         icon: "search",
         tone: "sky",
     },
     {
         title: "Cadrage et devis",
         description:
-            "Pages, contenus, fonctionnalités et budget sont posés par écrit avant de commencer. Délai : [à valider par William].",
+            "Pages, contenus, fonctionnalités et budget sont posés par écrit avant de commencer.",
+        delay: null,
         icon: "ux",
         tone: "violet",
     },
     {
         title: "Conception et développement",
         description:
-            "Design, contenus et développement, avec des points de validation réguliers. Délai : [à valider par William].",
+            "Design, contenus et développement, avec des points de validation réguliers.",
+        delay: null,
         icon: "refonte",
         tone: "cyan",
     },
     {
-        title: "Mise en ligne et suivi",
+        title: "Mise en ligne",
         description:
-            "Mise en ligne vérifiée sur mobile, Search Console, mesure des conversions et point de suivi à 30 jours.",
+            "Vérifications sur mobile, mise en ligne, Search Console et mesure des conversions configurées.",
+        delay: null,
         icon: "deploy",
         tone: "orange",
     },
 ];
 
-// Engagements : uniquement ce que le site affirme déjà ailleurs, sauf mention
-// « à valider ».
+const timelineItems: ServiceTimelinePoint[] = steps.map(
+    ({ delay, description, ...step }) => ({
+        ...step,
+        description: delay ? `${description} Délai : ${delay}.` : description,
+    }),
+);
+
+// Engagements : chacun est déjà affirmé ailleurs sur le site.
+// - Interlocuteur unique : PricingComparison (« Interlocuteur unique ») et FAQ.
+// - Suivi à 30 jours : offres site de services.ts (« point de suivi à 30 jours »).
+// - Domaine à votre nom : tarifs.astro (« Ces postes restent à votre nom »).
 const commitments = [
     {
         title: "Un seul interlocuteur",
-        text: "Vous échangez avec moi du premier appel à la mise en ligne, sans intermédiaire.",
+        text: "Vous échangez avec moi du premier appel à la mise en ligne.",
     },
     {
         title: "Un point de suivi à 30 jours",
-        text: "Après la mise en ligne, on regarde ensemble Search Console et les demandes reçues.",
+        text: "Après la mise en ligne de votre site, on regarde ensemble Search Console et les demandes reçues.",
     },
     {
-        title: "Le site et le nom de domaine sont à vous",
-        text: "[À valider par William] Le nom de domaine est enregistré à votre nom et vous gardez vos accès.",
+        title: "Votre domaine reste à votre nom",
+        text: "Nom de domaine, hébergement et outils restent à votre nom : vous gardez la main dessus.",
     },
 ];
-const title = "Comment se déroule un projet";
+const title = "Comment se déroule un projet de site";
 const description =
-    "Quatre étapes claires, pour savoir à quoi vous attendre avant de vous lancer.";
+    "Création ou refonte : quatre étapes claires, livrées en 10 jours à 5 semaines selon le périmètre.";
 ---
 
 <section
@@ -69,26 +90,34 @@ const description =
     <ServiceTimelineScroll
         description={description}
         id="home-process-timeline"
-        items={steps}
+        items={timelineItems}
         layout="center"
         showHeader={false}
-        title={title}
+        title="Les quatre étapes du projet"
     />
 
-    <ul class="grid gap-4 md:grid-cols-3" aria-label="Mes engagements">
-        {
-            commitments.map((item) => (
-                <li class="rounded-xl bg-snow-50 p-6 ring-1 ring-snow-600">
-                    <h3 class="text-xl font-normal leading-tight text-gray-900">
-                        {item.title}
-                    </h3>
-                    <p class="mt-3 text-base font-normal leading-relaxed text-gray-600">
-                        {item.text}
-                    </p>
-                </li>
-            ))
-        }
-    </ul>
+    <div class="flex flex-col gap-6">
+        <h3
+            class="text-center text-2xl font-normal leading-tight text-gray-900"
+            id="home-commitments-title"
+        >
+            Mes engagements
+        </h3>
+        <ul class="grid gap-4 md:grid-cols-3" aria-labelledby="home-commitments-title">
+            {
+                commitments.map((item) => (
+                    <li class="rounded-xl bg-snow-50 p-6 ring-1 ring-snow-600">
+                        <h4 class="text-xl font-normal leading-tight text-gray-900">
+                            {item.title}
+                        </h4>
+                        <p class="mt-3 text-base font-normal leading-relaxed text-gray-600">
+                            {item.text}
+                        </p>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
 
     <div class="flex justify-center">
         <CalButton
