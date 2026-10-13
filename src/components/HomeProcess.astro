@@ -1,0 +1,100 @@
+---
+import CalButton from "./CalButton.astro";
+import ServiceTimelineScroll from "./ServiceTimelineScroll.astro";
+import type { ServiceTimelinePoint } from "@/data/services";
+
+// ⚠️ À VALIDER PAR WILLIAM avant mise en ligne : les délais entre crochets
+// sont des emplacements, aucun délai n'a encore été confirmé.
+const steps: ServiceTimelinePoint[] = [
+    {
+        title: "On échange",
+        description:
+            "Un appel pour comprendre votre activité, vos clients et ce que le site doit provoquer. Délai : [à valider par William].",
+        icon: "search",
+        tone: "sky",
+    },
+    {
+        title: "Cadrage et devis",
+        description:
+            "Pages, contenus, fonctionnalités et budget sont posés par écrit avant de commencer. Délai : [à valider par William].",
+        icon: "ux",
+        tone: "violet",
+    },
+    {
+        title: "Conception et développement",
+        description:
+            "Design, contenus et développement, avec des points de validation réguliers. Délai : [à valider par William].",
+        icon: "refonte",
+        tone: "cyan",
+    },
+    {
+        title: "Mise en ligne et suivi",
+        description:
+            "Mise en ligne vérifiée sur mobile, Search Console, mesure des conversions et point de suivi à 30 jours.",
+        icon: "deploy",
+        tone: "orange",
+    },
+];
+
+// Engagements : uniquement ce que le site affirme déjà ailleurs, sauf mention
+// « à valider ».
+const commitments = [
+    {
+        title: "Un seul interlocuteur",
+        text: "Vous échangez avec moi du premier appel à la mise en ligne, sans intermédiaire.",
+    },
+    {
+        title: "Un point de suivi à 30 jours",
+        text: "Après la mise en ligne, on regarde ensemble Search Console et les demandes reçues.",
+    },
+    {
+        title: "Le site et le nom de domaine sont à vous",
+        text: "[À valider par William] Le nom de domaine est enregistré à votre nom et vous gardez vos accès.",
+    },
+];
+const title = "Comment se déroule un projet";
+const description =
+    "Quatre étapes claires, pour savoir à quoi vous attendre avant de vous lancer.";
+---
+
+<section
+    class="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 py-12 sm:px-8 md:py-16"
+    aria-labelledby="home-process-title"
+>
+    <div class="flex flex-col items-center gap-4 text-center">
+        <h2 class="section-heading" id="home-process-title">{title}</h2>
+        <p class="section-subheading">{description}</p>
+    </div>
+
+    <ServiceTimelineScroll
+        description={description}
+        id="home-process-timeline"
+        items={steps}
+        layout="center"
+        showHeader={false}
+        title={title}
+    />
+
+    <ul class="grid gap-4 md:grid-cols-3" aria-label="Mes engagements">
+        {
+            commitments.map((item) => (
+                <li class="rounded-xl bg-snow-50 p-6 ring-1 ring-snow-600">
+                    <h3 class="text-xl font-normal leading-tight text-gray-900">
+                        {item.title}
+                    </h3>
+                    <p class="mt-3 text-base font-normal leading-relaxed text-gray-600">
+                        {item.text}
+                    </p>
+                </li>
+            ))
+        }
+    </ul>
+
+    <div class="flex justify-center">
+        <CalButton
+            class="rounded-xl text-base font-normal"
+            label="Réserver 15 min"
+            location="home-process"
+        />
+    </div>
+</section>

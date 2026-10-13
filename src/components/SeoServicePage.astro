@@ -13,6 +13,7 @@ import WaveText from "@/components/ui/WaveText.astro";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import { getProjectById } from "@/data/projects";
 import { type Service, getServiceBySlug } from "@/data/services";
+import { buildFaqJsonLd } from "@/lib/faqJsonLd";
 import Layout from "@/layout/Layout.astro";
 
 interface Props {
@@ -131,18 +132,7 @@ const serviceJsonLd = {
     },
 };
 
-const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: service.faq.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-            "@type": "Answer",
-            text: item.answer,
-        },
-    })),
-};
+const faqJsonLd = buildFaqJsonLd(service.faq);
 
 const breadcrumbJsonLd = {
     "@context": "https://schema.org",
