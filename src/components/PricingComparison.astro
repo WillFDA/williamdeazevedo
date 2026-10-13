@@ -47,11 +47,25 @@ type ComparisonIcon =
     | "user"
     | "ux";
 
+interface Props {
+    /**
+     * `full` : comparatif complet (page /tarifs/).
+     * `costs` : uniquement le coût réel sur 3 ans, pour les pages services.
+     */
+    variant?: "costs" | "full";
+}
+
+const { variant = "full" } = Astro.props;
+const isCosts = variant === "costs";
+const headingId = isCosts
+    ? "pricing-comparison-costs-title"
+    : "pricing-comparison-title";
+
 const otherColumns = [
     {
         eyebrow: "Option 1",
-        title: "Site seul",
-        note: "Template ou page générée vite",
+        title: "Site à 600 €",
+        note: "Agence low-cost ou modèle tout fait",
     },
     {
         eyebrow: "Option 2",
@@ -133,33 +147,98 @@ const rows: ComparisonRow[] = [
         split: { type: "text", text: "Intervenants à rappeler" },
         complete: "Base maintenable",
     },
+];
+
+// Coût réel sur 3 ans. Colonne « Site à 600 € » : fourchettes prudentes
+// relevées sur des offres publiques d'agences et de sites par abonnement
+// (octobre 2026), aucune agence nommée. Colonne William : uniquement ce que
+// publie /tarifs/ (« Dès 2 000 € HT », postes à votre nom).
+const costRows: ComparisonRow[] = [
     {
-        label: "Budget de départ",
+        label: "Création",
         icon: "budget",
         tone: "cyan",
-        solo: { type: "text", text: "600 - 2 000 €" },
-        split: { type: "text", text: "Très variable" },
-        complete: "Dès 2 000 € HT",
+        solo: { type: "text", text: "600 € HT environ" },
+        split: { type: "text", text: "Un devis par prestataire" },
+        complete: "Dès 2 000 € HT, une fois",
+    },
+    {
+        label: "Abonnement sur 3 ans",
+        icon: "code",
+        tone: "slate",
+        solo: {
+            type: "text",
+            text: "Souvent 30 à 100 € HT par mois, soit 1 080 à 3 600 € HT",
+        },
+        split: { type: "text", text: "Hébergement et maintenance à part" },
+        complete:
+            "Pas d'abonnement imposé : domaine et hébergement payés à votre nom",
+    },
+    {
+        label: "Modifications",
+        icon: "form",
+        tone: "pink",
+        solo: {
+            type: "text",
+            text: "En général limitées ou facturées en plus",
+        },
+        split: { type: "text", text: "Facturées par chaque intervenant" },
+        complete: "Sur devis, selon le besoin",
+    },
+    {
+        label: "Propriété du site et du domaine",
+        icon: "user",
+        tone: "indigo",
+        solo: {
+            type: "text",
+            text: "Pas toujours : souvent liée à l'abonnement",
+        },
+        split: { type: "text", text: "Selon chaque contrat" },
+        complete: "Domaine, hébergement et outils à votre nom",
+    },
+    {
+        label: "Modèle tout fait",
+        icon: "ux",
+        tone: "sky",
+        solo: { type: "text", text: "Souvent, partagé avec d'autres sites" },
+        split: { type: "text", text: "Selon le profil" },
+        complete: "Design sur mesure",
     },
 ];
+
+const costTotal = {
+    label: "Total estimé sur 3 ans",
+    solo: "1 680 à 4 200 € HT",
+    split: "Très variable",
+    complete: "Dès 2 000 € HT",
+    completeNote: "+ domaine et hébergement à votre nom",
+};
+
+const displayedRows = isCosts ? costRows : [...rows, ...costRows];
 ---
 
 <section
     class="relative left-1/2 w-[calc(100dvw-2rem)] max-w-7xl -translate-x-1/2 rounded-4xl bg-gray-100 px-4 py-12 sm:px-8 md:py-16"
-    aria-labelledby="pricing-comparison-title"
+    aria-labelledby={headingId}
 >
     <FadeRevealOnScroll>
         <div class="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
             <span class="rounded-full bg-snow-50 px-4 py-2 text-sm font-normal text-gray-900 shadow-lg">
                 Comparaison
             </span>
-            <h2 id="pricing-comparison-title" class="section-heading max-w-3xl">
-                Pourquoi un accompagnement complet évite les angles morts.
+            <h2 id={headingId} class="section-heading max-w-3xl">
+                {
+                    isCosts
+                        ? "Site à 600 € : ce qu'il coûte vraiment sur 3 ans."
+                        : "Pourquoi un accompagnement complet évite les angles morts."
+                }
             </h2>
             <p class="section-subheading max-w-xl">
-                Vous pouvez acheter un site seul, empiler plusieurs prestataires,
-                ou construire une présence claire avec le bon cadrage dès le
-                départ.
+                {
+                    isCosts
+                        ? "Le prix affiché n'est pas le prix payé : abonnement, modifications et propriété du site changent le total."
+                        : "Un site à 600 €, plusieurs prestataires à coordonner, ou une présence claire avec le bon cadrage dès le départ : poste par poste, puis coût réel sur 3 ans."
+                }
             </p>
         </div>
     </FadeRevealOnScroll>
@@ -169,8 +248,9 @@ const rows: ComparisonRow[] = [
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[58rem] border-separate border-spacing-0 text-left">
                     <caption class="sr-only">
-                        Comparaison entre un site seul, plusieurs prestataires
-                        séparés et un accompagnement complet, poste par poste.
+                        Comparaison entre un site à 600 €, plusieurs prestataires
+                        séparés et un accompagnement complet, poste par poste,
+                        avec le coût estimé sur 3 ans.
                     </caption>
                     <thead>
                         <tr>
@@ -218,7 +298,7 @@ const rows: ComparisonRow[] = [
                     </thead>
                     <tbody>
                         {
-                            rows.map((row, rowIndex) => (
+                            displayedRows.map((row, rowIndex) => (
                                 <tr
                                     class="comparison-row group"
                                     style={`--row-index: ${rowIndex}`}
@@ -310,6 +390,32 @@ const rows: ComparisonRow[] = [
                             ))
                         }
                     </tbody>
+                    <tfoot>
+                        <tr class="comparison-total">
+                            <th
+                                class="sticky left-0 z-10 bg-snow-50 px-5 py-5 text-sm font-medium leading-tight text-gray-900"
+                                scope="row"
+                            >
+                                {costTotal.label}
+                            </th>
+                            <td class="px-5 py-5 text-center text-sm font-medium leading-tight text-gray-500">
+                                <s class="decoration-gray-500 decoration-2">
+                                    {costTotal.solo}
+                                </s>
+                            </td>
+                            <td class="px-5 py-5 text-center text-sm font-normal leading-tight text-gray-500">
+                                {costTotal.split}
+                            </td>
+                            <td class="comparison-highlight px-5 py-5 text-snow-50">
+                                <strong class="block text-lg font-semibold leading-tight">
+                                    {costTotal.complete}
+                                </strong>
+                                <span class="mt-1 block text-xs font-light leading-snug text-snow-50/80">
+                                    {costTotal.completeNote}
+                                </span>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -320,16 +426,21 @@ const rows: ComparisonRow[] = [
     </FadeRevealOnScroll>
 
     <FadeRevealOnScroll delay={0.12}>
-        <p class="mx-auto mt-8 max-w-2xl text-center text-sm font-normal leading-relaxed text-gray-500">
-            Le but n'est pas de cocher toutes les cases pour tous les projets.
-            C'est de savoir lesquelles comptent vraiment avant d'engager du
-            budget.
+        <p class="mx-auto mt-8 max-w-2xl text-center text-sm font-normal leading-relaxed text-gray-600">
+            Fourchettes indicatives relevées sur des offres publiques de sites à
+            bas prix et par abonnement (octobre 2026) : elles varient selon les
+            prestataires et la durée d'engagement. Le détail est dans l'article{" "}
+            <a
+                class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                href="/articles/site-600-euros-vs-site-2000-euros/"
+                >site à 600 € ou site à 2 000 €</a
+            >.
         </p>
         <div class="mt-6 flex justify-center">
             <CalButton
                 class="rounded-xl text-base font-normal"
                 label="Vérifier ce qui compte pour votre projet"
-                location="tarifs-comparaison"
+                location={isCosts ? "service-comparaison-couts" : "tarifs-comparaison"}
             />
         </div>
     </FadeRevealOnScroll>
@@ -349,6 +460,15 @@ const rows: ComparisonRow[] = [
     tbody tr:last-child th,
     tbody tr:last-child td {
         border-bottom: 0;
+    }
+
+    tfoot th,
+    tfoot td {
+        border-top: 2px solid var(--color-gray-200);
+    }
+
+    tfoot th {
+        border-right: 1px solid var(--color-gray-200);
     }
 
     .comparison-highlight {

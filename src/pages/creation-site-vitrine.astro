@@ -1,4 +1,5 @@
 ---
+import PricingComparison from "@/components/PricingComparison.astro";
 import SeoServicePage from "@/components/SeoServicePage.astro";
 import { getServiceBySlug } from "@/data/services";
 
@@ -11,4 +12,6 @@ if (!service) {
 }
 ---
 
-<SeoServicePage service={service} canonicalPath="/creation-site-vitrine/" />
+<SeoServicePage service={service} canonicalPath="/creation-site-vitrine/">
+    <PricingComparison slot="after-cta" variant="costs" />
+</SeoServicePage>
