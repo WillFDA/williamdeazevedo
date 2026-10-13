@@ -25,11 +25,6 @@ const slugs = [
   "landing-page",
   "application-metier-sur-mesure-btp",
 ];
-// Links to pages created in a separate PR, scoped per article. The check fails
-// once the page exists, so the exemption must be removed.
-const pendingLinks = new Map([
-  ["application-metier-sur-mesure-btp", new Set(["/realisations/reglet/"])],
-]);
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
 const listing = read("dist/articles/index.html");
@@ -125,15 +120,6 @@ for (const slug of slugs) {
     if (!target.startsWith("/") || target.startsWith("//")) continue;
     const url = new URL(target, "https://williamdeazevedo.fr");
     const localPath = decodeURIComponent(url.pathname);
-    if (pendingLinks.get(slug)?.has(localPath)) {
-      const pendingFile = resolve(root, `dist${localPath}`, "index.html");
-      assert.ok(
-        !existsSync(pendingFile),
-        `${slug}: ${target} exists, remove it from pendingLinks`
-      );
-      console.warn(`${slug}: pending link ${target} (page created in a separate PR)`);
-      continue;
-    }
     const file = resolve(root, `dist${localPath}`);
     const candidate =
       existsSync(file) && statSync(file).isDirectory()
