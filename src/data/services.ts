@@ -47,8 +47,18 @@ export type ServiceTimelinePoint = {
 
 export type ServiceLocalArea = {
   description: string;
+  /** Lien vers la fiche Google Business Profile. */
+  googleProfile?: {
+    href: string;
+    label: string;
+  };
   places: string[];
   title: string;
+  /** Section argumentaire affichée sous la zone d'intervention (H2). */
+  why?: {
+    paragraphs: string[];
+    title: string;
+  };
 };
 
 export type Service = {
@@ -68,6 +78,8 @@ export type Service = {
   }[];
   h1: string;
   heroPillPhrases?: string[];
+  /** Exclut le service du menu « Services » du header (reste dans le footer). */
+  hideFromNav?: boolean;
   included: string[];
   intro: string;
   localArea?: ServiceLocalArea;
@@ -203,6 +215,7 @@ export const services: Service[] = [
       "creation-site-internet-artisan",
       "creation-site-internet-professionnel",
       "refonte-site-internet",
+      "creation-site-internet-yvelines",
     ],
     faq: [
       {
@@ -574,6 +587,7 @@ export const services: Service[] = [
       "creation-site-vitrine",
       "refonte-site-internet",
       "creation-site-internet-professionnel",
+      "creation-site-internet-yvelines",
     ],
     faq: [
       {
@@ -624,6 +638,7 @@ export const services: Service[] = [
       { icon: "deploy", label: "Mise en ligne", tone: "orange" },
     ],
     serviceType: "Création de site internet",
+    hideFromNav: true,
     localArea: {
       title: "Où j'interviens",
       description:
@@ -635,6 +650,19 @@ export const services: Service[] = [
         "Conflans-Sainte-Honorine",
         "Yvelines (78)",
       ],
+      googleProfile: {
+        href: "https://www.google.com/maps?cid=13737868056282468024",
+        label: "Voir ma fiche Google",
+      },
+      why: {
+        title:
+          "Pourquoi un développeur freelance à Achères plutôt qu'une agence web dans les Yvelines",
+        paragraphs: [
+          "Avec un freelance, la personne qui échange avec vous est celle qui conçoit et développe votre site. Il n'y a pas de chef de projet entre vous et le travail, et les décisions se prennent directement.",
+          "Une agence peut mobiliser plusieurs profils en même temps, ce qui sert sur de gros projets. Pour le site d'un indépendant, d'un artisan ou d'une TPE, un interlocuteur unique suffit souvent, et je peux m'appuyer sur un partenaire quand il faut une identité visuelle complète.",
+          "Être basé à Achères ne change pas la méthode : les échanges se font en visio ou par téléphone. C'est ainsi que j'ai mené le site de Le Fellic, une entreprise basée à Rennes. Je n'affiche pas ici de référence locale : le projet présenté plus bas a été mené à distance.",
+        ],
+      },
     },
     problem: {
       title: "Un site local doit rassurer avant le premier appel",
@@ -701,6 +729,12 @@ export const services: Service[] = [
         question: "Faut-il se rencontrer pour lancer le projet ?",
         answer:
           "Non. Le premier échange et les points de suivi se font en visio ou par téléphone, ce qui permet d'avancer vite sans contrainte de déplacement.",
+      },
+      {
+        question:
+          "Travaillez-vous avec des entreprises de Poissy, Saint-Germain-en-Laye ou Conflans-Sainte-Honorine ?",
+        answer:
+          "Oui. Ces communes sont proches d'Achères, où je suis basé, et font partie de ma zone d'intervention avec le reste des Yvelines. Les échanges se font en visio ou par téléphone, quelle que soit votre commune.",
       },
       {
         question: "Travaillez-vous uniquement dans les Yvelines ?",

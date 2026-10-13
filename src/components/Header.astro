@@ -36,7 +36,9 @@ const getServiceIconKind = (href: string): ServiceIconKind => {
     return "pointer";
 };
 
-const serviceLinks = services.map((service) => {
+const serviceLinks = services
+    .filter((service) => !service.hideFromNav)
+    .map((service) => {
     const href = service.rootPath ?? `/services/${service.slug}/`;
 
     return {

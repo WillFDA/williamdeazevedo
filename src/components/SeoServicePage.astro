@@ -331,6 +331,19 @@ const breadcrumbJsonLd = {
                         <p class="text-base font-normal leading-relaxed text-gray-600">
                             {service.localArea.description}
                         </p>
+                        {service.localArea.googleProfile && (
+                            <a
+                                class="inline-flex w-fit text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                data-analytics-label="fiche-google"
+                                data-analytics-location={`service-${service.slug}-local-area`}
+                                href={service.localArea.googleProfile.href}
+                                rel="noreferrer"
+                                target="_blank"
+                            >
+                                {service.localArea.googleProfile.label}
+                                <span class="sr-only"> (nouvel onglet)</span>
+                            </a>
+                        )}
                     </div>
                     <ul class="flex flex-wrap gap-3">
                         {service.localArea.places.map((place) => (
@@ -339,6 +352,27 @@ const breadcrumbJsonLd = {
                             </li>
                         ))}
                     </ul>
+                </section>
+            )
+        }
+
+        {
+            service.localArea?.why && (
+                <section
+                    class="flex max-w-3xl flex-col gap-4"
+                    aria-labelledby={`${service.slug}-local-why`}
+                >
+                    <h2
+                        class="section-heading text-left"
+                        id={`${service.slug}-local-why`}
+                    >
+                        {service.localArea.why.title}
+                    </h2>
+                    {service.localArea.why.paragraphs.map((paragraph) => (
+                        <p class="text-base font-normal leading-relaxed text-gray-600">
+                            {paragraph}
+                        </p>
+                    ))}
                 </section>
             )
         }
