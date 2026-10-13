@@ -2,6 +2,9 @@ import leFellicHomePoster from "../assets/projects/lefellic-home.webp";
 import motivaiLandingHero from "../assets/projects/motivai-landing-hero.webp";
 import motivaiLandingPreset from "../assets/projects/motivai-landing-preset.webp";
 import motivaiLandingPoster from "../assets/projects/motivai-landing.webp";
+import regletEquipe from "../assets/projects/reglet-equipe.webp";
+import regletHomePoster from "../assets/projects/reglet-home.webp";
+import regletRapport from "../assets/projects/reglet-rapport.webp";
 import persistanceHomePoster from "../assets/projects/persistance-home.webp";
 
 export type Project = {
@@ -30,6 +33,10 @@ export type Project = {
         type: "video";
       }
     | {
+        poster: string;
+        type: "image";
+      }
+    | {
         label: string;
         type: "placeholder";
       };
@@ -44,11 +51,63 @@ export type Project = {
     label: string;
   }[];
   summary: string;
+  /** Short context label, e.g. "Projet personnel". */
+  status?: string;
   seoDescription?: string;
   title: string;
 };
 
 export const projects: Project[] = [
+  {
+    id: "reglet",
+    title: "Réglet",
+    href: "https://reglet.fr/",
+    brand: {
+      logo: {
+        alt: "Logo Réglet",
+        className: "scale-[1.1]",
+        src: "/projects/reglet/logo.svg",
+      },
+    },
+    summary:
+      "Application de suivi de chantier pour le BTP : l'équipe alimente un journal terrain (photos, audios, notes) et l'IA rédige le rapport de chantier en citant ses sources.",
+    seoDescription:
+      "Réglet, application de suivi de chantier pour le BTP : journal terrain et rapports de chantier rédigés par IA à partir de photos, audios et notes.",
+    tags: [
+      { icon: "sparkle", label: "Produit IA" },
+      { icon: "window-pointer", label: "Application métier" },
+      { icon: "window-layout", label: "BTP" },
+    ],
+    stack: [
+      "TanStack Start",
+      "React",
+      "TypeScript",
+      "PostgreSQL",
+      "Cloudflare Workers",
+      "Astro",
+    ],
+    media: {
+      type: "image",
+      poster: regletHomePoster.src,
+    },
+    gallery: [
+      {
+        src: regletRapport.src,
+        alt: "Journal de chantier et rapport technique rédigé par l'IA dans Réglet",
+      },
+      {
+        src: regletEquipe.src,
+        alt: "Collaboration d'équipe et rôles sur un chantier dans Réglet",
+      },
+    ],
+    caseStudy: {
+      overview:
+        "Application de suivi de chantier pour le BTP, conçue et développée par William De Azevedo, en ligne sur reglet.fr.",
+      need: "Sur le terrain, les constats s'éparpillent entre photos, messages vocaux et notes, et la rédaction du rapport de chantier prend du temps une fois rentré au bureau.",
+      solution:
+        "Un journal de chantier partagé où chacun dépose photos, audios et notes ; l'IA transcrit les audios, rédige le rapport en citant ses sources, puis l'équipe relit, corrige et exporte en PDF.",
+    },
+  },
   {
     id: "persistance",
     title: "Persistance",
@@ -144,6 +203,7 @@ export const projects: Project[] = [
         src: "/projects/motivai/logo.svg",
       },
     },
+    status: "Projet personnel",
     summary:
       "SaaS de génération de lettres de motivation par IA, développé en solo avec une architecture produit complète, authentification, base de données et intégration multi-modèles.",
     seoDescription:
@@ -178,7 +238,7 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       overview:
-        "SaaS de génération de lettres de motivation par IA développé en solo depuis 2024.",
+        "Projet personnel : SaaS de génération de lettres de motivation par IA développé en solo depuis 2024.",
       need: "Construire un produit complet avec onboarding, génération IA, gestion utilisateur, environnements multiples et déploiements versionnés.",
       solution:
         "Architecture Next.js avec Drizzle ORM, Better Auth et Vercel AI SDK pour permettre aux utilisateurs de choisir leur modèle d'IA.",
