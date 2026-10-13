@@ -40,6 +40,7 @@ export const serviceReadings: Record<string, ServiceReading> = {
       "choisir-developpeur-web",
       "site-600-euros-vs-site-2000-euros",
       "application-metier-sur-mesure-btp",
+      "landing-page",
     ],
     fallbackTags: ["tpe"],
   },
@@ -71,12 +72,14 @@ export const serviceReadings: Record<string, ServiceReading> = {
     fallbackTags: ["artisan"],
   },
   "developpement-sur-mesure": {
+    // L'article application-metier-sur-mesure-btp est déjà lié par la preuve
+    // de cette page : pas de doublon ici.
     articles: [
-      "application-metier-sur-mesure-btp",
       "choisir-developpeur-web",
       "cahier-des-charges-site-internet",
+      "site-600-euros-vs-site-2000-euros",
     ],
-    fallbackTags: ["application métier"],
+    fallbackTags: ["tpe"],
   },
 };
 
@@ -85,16 +88,14 @@ export const articleServices: Record<string, string[]> = {
     "developpement-sur-mesure",
     "developpeur-web-freelance",
   ],
-  "audit-seo": ["refonte-site-internet"],
+  "audit-seo": ["creation-site-vitrine"],
   "cahier-des-charges-site-internet": ["creation-site-vitrine"],
   "changer-prestataire-web": ["refonte-site-internet"],
-  "choisir-developpeur-web": ["developpeur-web-freelance"],
+  "choisir-developpeur-web": ["creation-site-vitrine"],
   "cout-site-internet-par-mois": ["creation-site-vitrine"],
   "creer-site-internet-ia": ["creation-site-vitrine"],
   "exemples-sites-vitrines": ["creation-site-vitrine"],
-  "fiche-google-my-business-artisan": [
-    "creation-site-internet-artisan",
-  ],
+  "fiche-google-my-business-artisan": ["creation-site-internet-artisan"],
   "landing-page": ["creation-site-vitrine"],
   "mentions-legales-site-internet-professionnel": [
     "creation-site-internet-professionnel",
@@ -106,6 +107,6 @@ export const articleServices: Record<string, string[]> = {
   "site-600-euros-vs-site-2000-euros": ["creation-site-vitrine"],
   "site-internet-artisan-contenus": ["creation-site-internet-artisan"],
   "tester-accessibilite-site-web": ["refonte-site-internet"],
-  "widget-avis-google": ["creation-site-internet-artisan"],
+  "widget-avis-google": ["creation-site-vitrine"],
   // premier-side-project-motivai : projet personnel, pas d'encart service.
 };

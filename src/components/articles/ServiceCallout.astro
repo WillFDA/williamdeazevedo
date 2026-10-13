@@ -22,28 +22,25 @@ const href = service
             class="mt-12 rounded-xl bg-snow-50 p-6 ring-1 ring-snow-600"
             aria-labelledby={`${articleId}-service-callout`}
         >
-            <p class="text-sm font-normal text-gray-500">Le service lié</p>
+            <p class="text-sm font-normal text-gray-600">Le service lié</p>
             <h2
                 class="mt-1 text-2xl font-normal leading-tight text-gray-900"
                 id={`${articleId}-service-callout`}
             >
-                <a class="text-gray-900 underline-offset-4 hover:underline" href={href}>
-                    {service.title}
-                </a>
+                {service.title}
             </h2>
             <p class="mt-3 text-base font-normal leading-relaxed text-gray-600">
-                {service.description}
+                {service.intro}
             </p>
             <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <a
-                    class="inline-flex min-h-12 items-center justify-center rounded-xl bg-gray-100 px-6 py-3 text-base font-normal text-gray-900 no-underline ring-1 ring-gray-200 hover:bg-gray-200"
+                    class="inline-flex min-h-14 items-center justify-center rounded-xl bg-gray-100 px-6 py-3 text-base font-normal text-gray-900 no-underline ring-1 ring-gray-200 hover:bg-gray-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
                     href={href}
                 >
                     Découvrir le service
                 </a>
                 <CalButton
                     class="rounded-xl text-base font-normal"
-                    label="Parlons de votre projet"
                     location={`article-${articleId}-service-callout`}
                 />
             </div>
