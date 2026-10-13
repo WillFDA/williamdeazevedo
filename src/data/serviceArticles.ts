@@ -79,7 +79,8 @@ export const serviceReadings: Record<string, ServiceReading> = {
       "cahier-des-charges-site-internet",
       "site-600-euros-vs-site-2000-euros",
     ],
-    fallbackTags: ["tpe"],
+    // Pas de repli : le tag « tpe » ramènerait l'article Réglet en doublon.
+    fallbackTags: [],
   },
 };
 
