@@ -53,7 +53,6 @@ export type ServiceLocalArea = {
 
 export type Service = {
   capabilities?: ServiceCapability[];
-  localArea?: ServiceLocalArea;
   description: string;
   seoDescription?: string;
   diagnostic?: ServiceDiagnostic;
@@ -71,6 +70,7 @@ export type Service = {
   heroPillPhrases?: string[];
   included: string[];
   intro: string;
+  localArea?: ServiceLocalArea;
   navLabel: string;
   rootPath?: string;
   problem: {
@@ -606,12 +606,12 @@ export const services: Service[] = [
     title: "Création de site internet dans les Yvelines (78)",
     seoTitle: "Création de site internet Yvelines (78) - William De Azevedo",
     description:
-      "Création de site internet dans les Yvelines (78) par un développeur web freelance basé à Achères : site vitrine rapide, mobile et rassurant, rendez-vous sur place ou en visio.",
+      "Création de site internet dans les Yvelines (78) par un développeur web freelance basé à Achères : site vitrine rapide, mobile et rassurant, échanges en visio ou par téléphone.",
     seoDescription:
-      "Création de site internet dans les Yvelines (78) par un freelance basé à Achères : site vitrine rapide et rassurant, rendez-vous sur place ou en visio.",
+      "Création de site internet dans les Yvelines (78) par un freelance basé à Achères : site vitrine rapide et rassurant, échanges en visio ou par téléphone.",
     eyebrow: "Yvelines (78)",
     h1: "Création de site internet dans les Yvelines, depuis Achères",
-    heroPillPhrases: ["Yvelines", "Achères"],
+    heroPillPhrases: ["Yvelines,", "Achères"],
     intro:
       "Je suis développeur web freelance à Achères. Je crée des sites vitrines clairs et rapides pour les indépendants, artisans et TPE des Yvelines, avec un seul interlocuteur du premier échange à la mise en ligne.",
     capabilities: [
@@ -627,13 +627,13 @@ export const services: Service[] = [
     localArea: {
       title: "Où j'interviens",
       description:
-        "Je travaille depuis Achères. Le premier échange se fait en visio ou par téléphone, et je peux me déplacer pour un rendez-vous dans les communes proches.",
+        "Je travaille depuis Achères, pour les indépendants, artisans et TPE des communes voisines et du reste des Yvelines. Les échanges se font en visio ou par téléphone.",
       places: [
         "Achères (base)",
         "Poissy",
         "Saint-Germain-en-Laye",
         "Conflans-Sainte-Honorine",
-        "les Yvelines (78)",
+        "Yvelines (78)",
       ],
     },
     problem: {
@@ -668,12 +668,12 @@ export const services: Service[] = [
     },
     fit: [
       "vous êtes indépendant, artisan ou dirigeant d'une TPE dans les Yvelines",
-      "vous préférez un interlocuteur proche que vous pouvez rencontrer",
+      "vous préférez travailler avec un freelance basé près de chez vous",
       "vous n'avez pas encore de site, ou votre site actuel ne vous ressemble plus",
       "vos clients vous trouvent surtout par recommandation et veulent vérifier votre sérieux",
     ],
     included: [
-      "premier échange en visio, par téléphone ou sur place",
+      "premier échange en visio ou par téléphone",
       "cadrage de l'activité, des prestations et de la zone d'intervention",
       "structure des pages utiles et parcours de contact",
       "design responsive et mise en valeur de vos réalisations",
@@ -681,15 +681,15 @@ export const services: Service[] = [
       "mise en ligne, vérifications sur mobile et prise en main",
     ],
     steps: [
-      "échange sur votre activité, en visio ou sur place",
-      "structure des pages, des appels à l'action et de la zone d'intervention",
+      "échange sur votre activité, vos clients et votre zone d'intervention",
+      "choix des pages utiles et des communes ou secteurs à mettre en avant",
       "design responsive et mise en valeur des visuels",
       "développement, formulaire, performance et SEO technique",
-      "mise en ligne, tests mobile et prise en main",
+      "mise en ligne, vérifications sur mobile et cohérence avec votre fiche Google",
     ],
     proof: {
       projectId: "le-fellic",
-      text: "Le Fellic montre comment un site compact peut présenter un métier, rassurer et faciliter la prise de contact.",
+      text: "Le Fellic, entreprise de maîtrise d'oeuvre à Rennes, montre comment un site compact présente un métier, rassure et facilite la prise de contact, même à distance.",
     },
     relatedServices: [
       "creation-site-internet-artisan",
@@ -700,12 +700,12 @@ export const services: Service[] = [
       {
         question: "Faut-il se rencontrer pour lancer le projet ?",
         answer:
-          "Non, ce n'est pas obligatoire. Le premier échange se fait souvent en visio ou par téléphone. Si vous préférez un rendez-vous en personne, je peux me déplacer autour d'Achères.",
+          "Non. Le premier échange et les points de suivi se font en visio ou par téléphone, ce qui permet d'avancer vite sans contrainte de déplacement.",
       },
       {
         question: "Travaillez-vous uniquement dans les Yvelines ?",
         answer:
-          "Non. Je suis basé à Achères et je travaille aussi à distance partout en France. La proximité est surtout utile si vous aimez échanger en face à face.",
+          "Non. Je suis basé à Achères et je travaille aussi à distance partout en France, comme pour Le Fellic à Rennes.",
       },
       {
         question: "Le SEO local est-il inclus ?",
@@ -715,7 +715,7 @@ export const services: Service[] = [
       {
         question: "Combien coûte un site internet ?",
         answer:
-          "Cela dépend du nombre de pages, du contenu à produire et des fonctionnalités. La page tarifs donne les repères de départ, et l'appel découverte permet de cadrer un devis précis.",
+          "Cela dépend du nombre de pages, du contenu à produire et des fonctionnalités. L'appel découverte permet de cadrer un devis précis.",
       },
     ],
   },
