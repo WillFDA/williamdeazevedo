@@ -3,8 +3,7 @@ import CalButton from "./CalButton.astro";
 import ServiceTimelineScroll from "./ServiceTimelineScroll.astro";
 import type { ServiceTimelinePoint } from "@/data/services";
 
-type ProcessStep = Omit<ServiceTimelinePoint, "description"> & {
-    description: string;
+type ProcessStep = ServiceTimelinePoint & {
     /**
      * À VALIDER PAR WILLIAM : délai propre à l'étape, affiché seulement une
      * fois renseigné (ex. « sous 48 h »). Doit rester dans la fourchette
@@ -75,7 +74,7 @@ const commitments = [
 ];
 const title = "Comment se déroule un projet de site";
 const description =
-    "Création ou refonte : quatre étapes claires, livrées en 10 jours à 5 semaines selon le périmètre.";
+    "Création ou refonte : quatre étapes claires, un site livré en 10 jours à 5 semaines selon le périmètre.";
 ---
 
 <section
