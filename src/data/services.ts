@@ -732,19 +732,20 @@ export const services: Service[] = [
     description:
       "Développement web sur mesure pour indépendants et TPE : une application web pensée pour votre façon de travailler, à la place des tableurs et des outils bricolés.",
     seoDescription:
-      "Développement web et application web sur mesure : vos tableurs et outils bricolés deviennent un outil simple, à vous. Parlons de votre besoin.",
+      "Développement et application web sur mesure : vos tableurs et outils bricolés deviennent un outil simple, fait pour vous. Parlons de votre besoin.",
     eyebrow: "Sur mesure",
-    h1: "Développement web sur mesure : vos tableurs deviennent un outil à vous",
-    heroPillPhrases: ["sur mesure", "outil à vous"],
+    h1: "Développement web sur mesure pour transformer vos tableurs en un outil simple",
+    heroPillPhrases: ["sur mesure", "outil simple"],
     intro:
-      "Quand un logiciel du marché ne colle pas à votre façon de travailler, je conçois et développe une application web simple, pensée pour vos usages, que vous et votre équipe utilisez au quotidien.",
+      "Quand un logiciel du marché ne colle pas à votre façon de travailler, je conçois et développe une application web sur mesure, simple et pensée pour vos usages, que vous et votre équipe utiliserez au quotidien.",
     capabilities: [
       { icon: "ux", label: "Cadrage du besoin", tone: "violet" },
       { icon: "web", label: "Application web", tone: "blue" },
       { icon: "form", label: "Formulaires & saisie", tone: "pink" },
       { icon: "ia", label: "IA quand elle est utile", tone: "indigo" },
       { icon: "touch", label: "Mobile & accessibilité", tone: "teal" },
-      { icon: "performance", label: "Rapide et fiable", tone: "green" },
+      { icon: "performance", label: "Performance", tone: "green" },
+      { icon: "cms", label: "Comptes et droits d'accès", tone: "slate" },
       { icon: "deploy", label: "Mise en ligne", tone: "orange" },
     ],
     serviceType: "Développement web sur mesure",
@@ -758,7 +759,7 @@ export const services: Service[] = [
       ],
     },
     diagnostic: {
-      title: "Ce qu'un outil sur mesure doit changer",
+      title: "Ce qu'une application web sur mesure doit changer",
       description:
         "On part de votre façon de travailler, pas d'une liste de fonctionnalités.",
       beforeItems: [
@@ -771,7 +772,7 @@ export const services: Service[] = [
         "un outil web pensé pour vos usages réels",
         "une saisie unique, au bon endroit",
         "des écrans simples, utilisables sur mobile",
-        "une base propre, maintenable et qui vous appartient",
+        "une base propre et maintenable",
         "une première version utile, puis des évolutions selon vos retours",
       ],
     },
@@ -787,19 +788,18 @@ export const services: Service[] = [
       "développement de l'application web",
       "comptes utilisateurs et droits d'accès si besoin",
       "mise en ligne et prise en main",
-      "évolutions selon vos retours",
+      "évolutions possibles selon vos retours",
     ],
     steps: [
       "comprendre votre façon de travailler et ce qui bloque",
       "définir le plus petit outil vraiment utile",
       "concevoir les écrans et les parcours",
       "développer, tester avec vous et corriger",
-      "mettre en ligne, accompagner la prise en main",
-      "faire évoluer l'outil selon vos retours",
+      "mettre en ligne, accompagner la prise en main, puis faire évoluer l'outil selon vos retours",
     ],
     proof: {
       projectId: "reglet",
-      text: "Réglet est une application web que j'ai conçue et développée de A à Z : un exemple concret d'outil construit autour d'une façon de travailler précise.",
+      text: "Réglet est un produit que j'ai conçu et développé de A à Z. Ce n'est pas une commande client, mais il suit la même démarche qu'un projet sur mesure : partir d'un problème de terrain précis, puis construire l'outil qui y répond.",
       article: {
         href: "/articles/application-metier-sur-mesure-btp/",
         label: "Lire le retour d'expérience sur Réglet",
