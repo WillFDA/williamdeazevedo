@@ -23,6 +23,7 @@ const slugs = [
   "changer-prestataire-web",
   "audit-seo",
   "landing-page",
+  "application-metier-sur-mesure-btp",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
