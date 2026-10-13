@@ -78,7 +78,7 @@ export type Service = {
   }[];
   h1: string;
   heroPillPhrases?: string[];
-  /** Exclut le service du menu « Services » du header (reste dans le footer). */
+  /** Exclut le service du menu « Services » du header (le footer est géré à part). */
   hideFromNav?: boolean;
   included: string[];
   intro: string;
@@ -659,8 +659,8 @@ export const services: Service[] = [
           "Pourquoi un développeur freelance à Achères plutôt qu'une agence web dans les Yvelines",
         paragraphs: [
           "Avec un freelance, la personne qui échange avec vous est celle qui conçoit et développe votre site. Il n'y a pas de chef de projet entre vous et le travail, et les décisions se prennent directement.",
-          "Une agence peut mobiliser plusieurs profils en même temps, ce qui sert sur de gros projets. Pour le site d'un indépendant, d'un artisan ou d'une TPE, un interlocuteur unique suffit souvent, et je peux m'appuyer sur un partenaire quand il faut une identité visuelle complète.",
-          "Être basé à Achères ne change pas la méthode : les échanges se font en visio ou par téléphone. C'est ainsi que j'ai mené le site de Le Fellic, une entreprise basée à Rennes. Je n'affiche pas ici de référence locale : le projet présenté plus bas a été mené à distance.",
+          "Une agence peut mobiliser plusieurs profils en même temps, ce qui sert sur de gros projets. Pour le site d'un indépendant, d'un artisan ou d'une TPE, un interlocuteur unique suffit souvent. S'il faut d'abord une identité visuelle complète, je peux vous orienter vers Persistance Studio.",
+          "Être basé à Achères ne change pas la méthode : c'est à distance que j'ai mené le site de Le Fellic, une entreprise de maîtrise d'oeuvre à Rennes, présenté juste en dessous.",
         ],
       },
     },
@@ -734,7 +734,7 @@ export const services: Service[] = [
         question:
           "Travaillez-vous avec des entreprises de Poissy, Saint-Germain-en-Laye ou Conflans-Sainte-Honorine ?",
         answer:
-          "Oui. Ces communes sont proches d'Achères, où je suis basé, et font partie de ma zone d'intervention avec le reste des Yvelines. Les échanges se font en visio ou par téléphone, quelle que soit votre commune.",
+          "Oui. Ces communes sont proches d'Achères, où je suis basé, et font partie de ma zone d'intervention, comme le reste des Yvelines.",
       },
       {
         question: "Travaillez-vous uniquement dans les Yvelines ?",
