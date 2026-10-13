@@ -45,6 +45,16 @@ export type ServiceTimelinePoint = {
   tone: ServiceCapabilityTone;
 };
 
+export type ServiceSection = {
+  items?: string[];
+  link?: {
+    href: string;
+    label: string;
+  };
+  paragraphs: string[];
+  title: string;
+};
+
 export type Service = {
   capabilities?: ServiceCapability[];
   description: string;
@@ -79,6 +89,8 @@ export type Service = {
     text: string;
   };
   relatedServices: string[];
+  /** Sections éditoriales supplémentaires (H2), affichées après la preuve. */
+  sections?: ServiceSection[];
   seoTitle: string;
   serviceType: string;
   slug: string;
@@ -331,6 +343,7 @@ export const services: Service[] = [
       "creation-site-vitrine",
       "creation-site-internet-professionnel",
       "developpeur-web-freelance",
+      "developpement-sur-mesure",
     ],
     faq: [
       {
@@ -441,6 +454,7 @@ export const services: Service[] = [
       "creation-site-vitrine",
       "refonte-site-internet",
       "creation-site-internet-professionnel",
+      "developpement-sur-mesure",
     ],
     faq: [
       {
@@ -805,6 +819,45 @@ export const services: Service[] = [
         label: "Lire le retour d'expérience sur Réglet",
       },
     },
+    sections: [
+      {
+        title:
+          "Développement web sur mesure ou logiciel du marché : comment décider",
+        paragraphs: [
+          "Un logiciel du marché reste souvent le bon choix : il est disponible tout de suite, maintenu par un éditeur et payé par abonnement. Le développement d'une application web sur mesure se justifie quand ces outils vous obligent à contourner votre façon de travailler.",
+          "Quelques questions aident à trancher :",
+        ],
+        items: [
+          "Un logiciel existant couvre-t-il l'essentiel de votre besoin, même avec quelques compromis ?",
+          "Ressaisissez-vous les mêmes informations dans plusieurs outils ou tableurs ?",
+          "Votre équipe garde-t-elle des habitudes papier parce qu'aucun outil ne colle au terrain ?",
+          "Le besoin est-il assez stable pour justifier un outil construit pour vous ?",
+        ],
+      },
+      {
+        title: "Exemples d'applications web sur mesure pour une TPE",
+        paragraphs: [
+          "Quelques types d'outils que le développement d'une application web sur mesure permet de construire, à adapter à votre activité :",
+        ],
+        items: [
+          "un outil de suivi des demandes et des devis, à la place d'un tableur partagé",
+          "un planning d'interventions consultable par toute l'équipe, y compris sur mobile",
+          "un espace client pour partager des documents et suivre l'avancement d'un dossier",
+          "un formulaire de saisie terrain qui alimente directement un tableau de bord",
+          "un back-office simple pour gérer un catalogue, des stocks ou des réservations",
+        ],
+      },
+      {
+        title: "Budget et délais",
+        paragraphs: [
+          "Un développement web sur mesure est chiffré sur devis : le prix dépend surtout des écrans, des états, des rôles, des données et des intégrations. Un cadrage est possible dès 900 € HT, et le planning est défini après lecture du périmètre.",
+        ],
+        link: {
+          href: "/tarifs/",
+          label: "Voir les tarifs",
+        },
+      },
+    ],
     relatedServices: [
       "developpeur-web-freelance",
       "creation-site-internet-professionnel",
