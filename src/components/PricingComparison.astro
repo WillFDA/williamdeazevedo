@@ -54,7 +54,7 @@ type ComparisonIcon =
 interface Props {
     /**
      * `full` : comparatif complet (page /tarifs/).
-     * `costs` : uniquement le coût réel sur 3 ans, pour les pages services.
+     * `costs` : uniquement le coût estimé sur 3 ans, pour les pages services.
      */
     variant?: "costs" | "full";
 }
@@ -148,10 +148,10 @@ const rows: ComparisonRow[] = [
 // Coût sur 3 ans. Colonne « Site à 600 € » : relevé d'offres publiques de
 // sites à bas prix et par abonnement, consulté le 14 octobre 2026, aucune
 // agence nommée. Valeurs brutes : mise en place de 0 à 1 190 € HT, mensualités
-// de 29 à 169 € HT, engagement de 12 à 24 mois (jusqu'à 48 mois sur certaines
-// offres), modifications souvent incluses tant que l'abonnement court,
+// de 29 à 169 € HT, engagement de 12 à 48 mois (24 mois le plus souvent,
+// selon les offres), modifications souvent incluses tant que l'abonnement court,
 // propriété du site variable selon le contrat. Scénario retenu : 600 € HT de
-// mise en place + 36 mensualités de 30 à 100 € HT, calculé offre par offre.
+// mise en place + 36 mensualités de 30 à 100 € HT (scénario, pas une moyenne).
 // Colonne William : uniquement ce que publie /tarifs/.
 const nbsp = "\u00a0";
 const euro = (value: number) =>
@@ -175,7 +175,7 @@ const costRows: ComparisonRow[] = [
         tone: "teal",
         solo: {
             type: "text",
-            text: `Souvent ${lowCost.monthlyMin} à ${euro(lowCost.monthlyMax)} par mois, engagement de 12 à 24 mois selon l'offre, soit ${euro(subscriptionMin)} à ${euro(subscriptionMax)} sur 3 ans`,
+            text: `Souvent ${lowCost.monthlyMin} à ${euro(lowCost.monthlyMax)} par mois, engagement de 12 à 48 mois selon l'offre, soit ${euro(subscriptionMin)} à ${euro(subscriptionMax)} sur 3${nbsp}ans`,
         },
         split: { type: "text", text: "Hébergement et maintenance à part" },
         complete:
@@ -183,8 +183,8 @@ const costRows: ComparisonRow[] = [
     },
     {
         label: "Modifications",
-        icon: "form",
-        tone: "pink",
+        icon: "code",
+        tone: "slate",
         solo: {
             type: "text",
             text: "Souvent incluses, tant que l'abonnement est payé",
@@ -237,7 +237,7 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                 {
                     isCosts
                         ? "Le prix affiché n'est pas le prix payé : l'abonnement change le total, et la propriété décide de ce que vous gardez en partant."
-                        : "Un site à 600 €, plusieurs prestataires à coordonner, ou une présence claire avec le bon cadrage dès le départ : poste par poste, puis coût réel sur 3 ans."
+                        : "Un site à 600 €, plusieurs prestataires à coordonner, ou une présence claire avec le bon cadrage dès le départ : poste par poste, puis coût estimé sur 3 ans."
                 }
             </p>
         </div>
@@ -265,7 +265,7 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                             {
                                 otherColumns.map((column) => (
                                     <th
-                                        class="w-[21%] border-b border-r border-gray-200 px-5 py-5 text-center align-bottom"
+                                        class="lg:w-[21%] border-b border-r border-gray-200 px-5 py-5 text-center align-bottom"
                                         scope="col"
                                     >
                                         <span class="block text-sm font-normal text-gray-500">
@@ -281,7 +281,7 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                                 ))
                             }
                             <th
-                                class="comparison-highlight w-[32%] border-b px-5 py-5 text-center align-bottom text-snow-50"
+                                class="comparison-highlight lg:w-[32%] border-b px-5 py-5 text-center align-bottom text-snow-50"
                                 scope="col"
                             >
                                 <span class="inline-flex rounded-full bg-snow-50/15 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-widest text-snow-50 ring-1 ring-snow-50/25">
@@ -437,6 +437,10 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                 </table>
             </div>
         </div>
+        <p class="mt-3 text-center text-xs font-normal text-gray-500 lg:hidden">
+            Faites défiler le tableau horizontalement pour comparer les trois
+            options.
+        </p>
         <dl class="mt-4 grid gap-3 lg:hidden">
             <div class="rounded-2xl bg-snow-50 px-5 py-4 ring-1 ring-gray-200">
                 <dt class="text-sm font-normal text-gray-600">
@@ -459,10 +463,6 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                 </dd>
             </div>
         </dl>
-        <p class="mt-3 text-center text-xs font-normal text-gray-500 lg:hidden">
-            Faites défiler le tableau horizontalement pour comparer les trois
-            options.
-        </p>
     </FadeRevealOnScroll>
 
     <FadeRevealOnScroll delay={0.12}>
