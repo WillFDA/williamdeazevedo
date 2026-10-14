@@ -44,8 +44,8 @@ const realisationsDiagnosticTitleParts = [
     title="Réalisations web - William De Azevedo"
     description="Études de cas de sites vitrines, refontes et interfaces produit conçus pour clarifier une offre, rassurer et faciliter le passage à l'action."
 >
-    <div class="flex w-full flex-col gap-16 py-12 md:gap-20 md:py-16">
-        <section class="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 md:gap-20">
+    <div class="flex w-full flex-col gap-16 pt-10 pb-12 sm:pt-14 md:gap-20 md:pb-16 lg:pt-16">
+        <div class="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 md:gap-20">
             <section
                 class="mx-auto flex w-full min-w-0 max-w-5xl flex-col items-center gap-6 text-center"
                 data-section-reveal="false"
@@ -69,7 +69,7 @@ const realisationsDiagnosticTitleParts = [
                             location="realisations-hero"
                         />
                         <a
-                            class="realisations-secondary-button flex min-h-14 w-full max-w-full items-center justify-center rounded-xl px-8 py-3 text-base font-normal sm:w-auto sm:px-10"
+                            class="service-method-button flex min-h-14 w-full max-w-full items-center justify-center rounded-xl px-8 py-3 text-base font-normal sm:w-auto sm:px-10"
                             href="/services/"
                         >
                             <WaveText
@@ -89,7 +89,7 @@ const realisationsDiagnosticTitleParts = [
                     </FadeReveal>
                 )
             }
-        </section>
+        </div>
 
         <DiagnosticCta
             titleParts={realisationsDiagnosticTitleParts}
@@ -111,43 +111,3 @@ const realisationsDiagnosticTitleParts = [
         }
     </div>
 </Layout>
-
-<style>
-    /* Même rendu que le bouton secondaire du hero des pages services
-       (.service-method-button dans SeoServicePage.astro). */
-    .realisations-secondary-button {
-        color: var(--color-coffee-300);
-        isolation: isolate;
-        overflow: hidden;
-        position: relative;
-        text-decoration: none;
-        z-index: 0;
-    }
-
-    .realisations-secondary-button::before {
-        background: var(--color-gray-100);
-        border-radius: inherit;
-        content: "";
-        inset: 0;
-        position: absolute;
-        transform: scale(1);
-        transition: transform 520ms
-            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
-        z-index: 0;
-    }
-
-    .realisations-secondary-button:focus-visible {
-        outline: 2px solid var(--color-blue-500);
-        outline-offset: 3px;
-    }
-
-    .realisations-secondary-button:focus-visible::before {
-        transform: scale(0.95);
-    }
-
-    @media (hover: hover) {
-        .realisations-secondary-button:hover::before {
-            transform: scale(0.95);
-        }
-    }
-</style>
