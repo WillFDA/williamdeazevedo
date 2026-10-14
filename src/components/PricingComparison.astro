@@ -192,7 +192,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
     >
         <div class="relative">
             <div
-                class="comparison-card absolute -top-8 right-0 -bottom-4 w-[36%] rounded-4xl border-2 border-blue-500 bg-snow-50"
+                class="comparison-card absolute -top-8 right-0 -bottom-4 w-[36%] rounded-4xl bg-snow-50 ring-1 ring-gray-200"
                 aria-hidden="true"
             >
             </div>
@@ -375,7 +375,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
             </article>
         </FadeRevealOnScroll>
         <FadeRevealOnScroll class="flex" delay={0.12}>
-            <article class="comparison-card w-full rounded-3xl border-2 border-blue-500 bg-snow-50 p-6">
+            <article class="comparison-card w-full rounded-3xl bg-snow-50 ring-1 ring-gray-200 p-6">
                 <span class={withMeChip} aria-hidden="true">
                     <WindowPointer class="size-5" />
                 </span>
@@ -495,12 +495,12 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
 <style>
     .comparison-card {
         box-shadow:
-            0 2.5rem 5rem -2.75rem rgba(62, 96, 212, 0.5),
+            0 2.5rem 5rem -2.75rem rgba(34, 42, 55, 0.35),
             0 1rem 2rem -1.5rem rgba(34, 42, 55, 0.2);
     }
 
     /* Inset separators: a full-width cell border would paint over the
-       card's blue border. */
+       card edge. */
     .comparison-card-cell {
         position: relative;
     }
