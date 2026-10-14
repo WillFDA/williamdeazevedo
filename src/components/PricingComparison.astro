@@ -14,6 +14,8 @@ import TouchClick from "./icons/nucleo/touch-click-fill.svg";
 import UserHeart from "./icons/nucleo/user-heart-fill.svg";
 import WindowLayout from "./icons/nucleo/window-layout-fill.svg";
 import WindowPaintbrush from "./icons/nucleo/window-paintbrush-fill.svg";
+import AnimationRepeat from "./icons/nucleo/animation-repeat-fill.svg";
+import Globe from "./icons/nucleo/globe-outline.svg";
 import XMarkIcon from "./icons/nucleo/xmark-fill.svg";
 
 type ComparisonCell =
@@ -41,6 +43,8 @@ type ComparisonIcon =
     | "ia"
     | "identity"
     | "performance"
+    | "globe"
+    | "repeat"
     | "search"
     | "target"
     | "touch"
@@ -139,40 +143,43 @@ const rows: ComparisonRow[] = [
         split: { type: "x" },
         complete: "Oui, du cadrage à la mise en ligne",
     },
-    {
-        label: "Évolutions après livraison",
-        icon: "code",
-        tone: "slate",
-        solo: { type: "text", text: "À recadrer" },
-        split: { type: "text", text: "Intervenants à rappeler" },
-        complete: "Base maintenable",
-    },
 ];
 
-// Coût réel sur 3 ans. Colonne « Site à 600 € » : fourchettes prudentes
-// relevées sur des offres publiques d'agences et de sites par abonnement
-// (octobre 2026), aucune agence nommée. Colonne William : uniquement ce que
-// publie /tarifs/ (« Dès 2 000 € HT », postes à votre nom).
+// Coût sur 3 ans. Colonne « Site à 600 € » : relevé d'offres publiques de
+// sites à bas prix et par abonnement, consulté le 14 octobre 2026, aucune
+// agence nommée. Valeurs brutes : mise en place de 0 à 1 190 € HT, mensualités
+// de 29 à 169 € HT, engagement de 12 à 24 mois (jusqu'à 48 mois sur certaines
+// offres), modifications souvent incluses tant que l'abonnement court,
+// propriété du site variable selon le contrat. Scénario retenu : 600 € HT de
+// mise en place + 36 mensualités de 30 à 100 € HT, calculé offre par offre.
+// Colonne William : uniquement ce que publie /tarifs/.
+const nbsp = "\u00a0";
+const euro = (value: number) =>
+    `${new Intl.NumberFormat("fr-FR").format(value)}${nbsp}€${nbsp}HT`;
+const lowCost = { setup: 600, monthlyMin: 30, monthlyMax: 100, months: 36 };
+const subscriptionMin = lowCost.monthlyMin * lowCost.months;
+const subscriptionMax = lowCost.monthlyMax * lowCost.months;
+
 const costRows: ComparisonRow[] = [
     {
         label: "Création",
         icon: "budget",
         tone: "cyan",
-        solo: { type: "text", text: "600 € HT environ" },
+        solo: { type: "text", text: `Environ ${euro(lowCost.setup)} de mise en place` },
         split: { type: "text", text: "Un devis par prestataire" },
-        complete: "Dès 2 000 € HT, une fois",
+        complete: `Dès ${euro(2000)}, une fois`,
     },
     {
         label: "Abonnement sur 3 ans",
-        icon: "code",
-        tone: "slate",
+        icon: "repeat",
+        tone: "teal",
         solo: {
             type: "text",
-            text: "Souvent 30 à 100 € HT par mois, soit 1 080 à 3 600 € HT",
+            text: `Souvent ${lowCost.monthlyMin} à ${euro(lowCost.monthlyMax)} par mois, engagement de 12 à 24 mois selon l'offre, soit ${euro(subscriptionMin)} à ${euro(subscriptionMax)} sur 3 ans`,
         },
         split: { type: "text", text: "Hébergement et maintenance à part" },
         complete:
-            "Pas d'abonnement imposé : domaine et hébergement payés à votre nom",
+            "Pas d'abonnement imposé : domaine, hébergement et outils payés à votre nom",
     },
     {
         label: "Modifications",
@@ -180,38 +187,31 @@ const costRows: ComparisonRow[] = [
         tone: "pink",
         solo: {
             type: "text",
-            text: "En général limitées ou facturées en plus",
+            text: "Souvent incluses, tant que l'abonnement est payé",
         },
         split: { type: "text", text: "Facturées par chaque intervenant" },
-        complete: "Sur devis, selon le besoin",
+        complete: "Sur devis, sans forfait ni engagement",
     },
     {
         label: "Propriété du site et du domaine",
-        icon: "user",
+        icon: "globe",
         tone: "indigo",
         solo: {
             type: "text",
-            text: "Pas toujours : souvent liée à l'abonnement",
+            text: "Pas toujours, selon le contrat : le site peut être mis hors ligne à l'arrêt",
         },
         split: { type: "text", text: "Selon chaque contrat" },
         complete: "Domaine, hébergement et outils à votre nom",
     },
-    {
-        label: "Modèle tout fait",
-        icon: "ux",
-        tone: "sky",
-        solo: { type: "text", text: "Souvent, partagé avec d'autres sites" },
-        split: { type: "text", text: "Selon le profil" },
-        complete: "Design sur mesure",
-    },
 ];
 
 const costTotal = {
-    label: "Total estimé sur 3 ans",
-    solo: "1 680 à 4 200 € HT",
+    label: "Coût estimé sur 3 ans",
+    soloAnchor: euro(lowCost.setup),
+    solo: `${euro(lowCost.setup + subscriptionMin)} à ${euro(lowCost.setup + subscriptionMax)}`,
     split: "Très variable",
-    complete: "Dès 2 000 € HT",
-    completeNote: "+ domaine et hébergement à votre nom",
+    complete: `Dès ${euro(2000)} de création`,
+    completeNote: "hors domaine, hébergement, outils et maintenance, payés à votre nom",
 };
 
 const displayedRows = isCosts ? costRows : [...rows, ...costRows];
@@ -229,14 +229,14 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
             <h2 id={headingId} class="section-heading max-w-3xl">
                 {
                     isCosts
-                        ? "Site à 600 € : ce qu'il coûte vraiment sur 3 ans."
+                        ? "Site à 600 € : ce qu'il peut coûter sur 3 ans."
                         : "Pourquoi un accompagnement complet évite les angles morts."
                 }
             </h2>
             <p class="section-subheading max-w-xl">
                 {
                     isCosts
-                        ? "Le prix affiché n'est pas le prix payé : abonnement, modifications et propriété du site changent le total."
+                        ? "Le prix affiché n'est pas le prix payé : l'abonnement change le total, et la propriété décide de ce que vous gardez en partant."
                         : "Un site à 600 €, plusieurs prestataires à coordonner, ou une présence claire avec le bon cadrage dès le départ : poste par poste, puis coût réel sur 3 ans."
                 }
             </p>
@@ -255,7 +255,7 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                     <thead>
                         <tr>
                             <th
-                                class="sticky left-0 z-10 w-[26%] border-b border-r border-gray-200 bg-snow-50 px-5 py-5 align-bottom"
+                                class="sticky left-0 z-10 w-32 lg:w-[26%] border-b border-r border-gray-200 bg-snow-50 px-5 py-5 align-bottom"
                                 scope="col"
                             >
                                 <span class="text-sm font-normal leading-tight text-gray-500">
@@ -342,6 +342,12 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                                                 {row.icon === "code" && (
                                                     <CodeEditor class="size-5" />
                                                 )}
+                                                {row.icon === "repeat" && (
+                                                    <AnimationRepeat class="size-5" />
+                                                )}
+                                                {row.icon === "globe" && (
+                                                    <Globe class="size-5" />
+                                                )}
                                                 {row.icon === "budget" && (
                                                     <BadgeDollar class="size-5" />
                                                 )}
@@ -353,7 +359,7 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                                         </span>
                                     </th>
                                     {[row.solo, row.split].map((cell) => (
-                                        <td class="px-5 py-4 text-center text-sm font-normal leading-tight text-gray-500 transition-colors group-hover:bg-snow-200">
+                                        <td class="px-5 py-4 text-center text-sm font-normal leading-tight text-gray-600 transition-colors group-hover:bg-snow-200">
                                             {cell.type === "check" && (
                                                 <span
                                                     class="inline-flex size-8 items-center justify-center rounded-full bg-blue-50 text-blue-500"
@@ -391,26 +397,38 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                         }
                     </tbody>
                     <tfoot>
-                        <tr class="comparison-total">
+                        <tr
+                            class="comparison-row"
+                            style={`--row-index: ${displayedRows.length}`}
+                        >
                             <th
                                 class="sticky left-0 z-10 bg-snow-50 px-5 py-5 text-sm font-medium leading-tight text-gray-900"
                                 scope="row"
                             >
                                 {costTotal.label}
                             </th>
-                            <td class="px-5 py-5 text-center text-sm font-medium leading-tight text-gray-500">
-                                <s class="decoration-gray-500 decoration-2">
+                            <td class="px-5 py-5 text-center text-sm font-medium leading-tight text-gray-600">
+                                <span class="block">
+                                    <span class="sr-only">Prix affiché :</span>
+                                    <s class="decoration-gray-600 decoration-2">
+                                        {costTotal.soloAnchor}
+                                    </s>
+                                </span>
+                                <span class="mt-1 block text-gray-900">
                                     {costTotal.solo}
-                                </s>
+                                </span>
+                                <span class="mt-1 block text-xs font-normal">
+                                    abonnement en cours
+                                </span>
                             </td>
-                            <td class="px-5 py-5 text-center text-sm font-normal leading-tight text-gray-500">
+                            <td class="px-5 py-5 text-center text-sm font-normal leading-tight text-gray-600">
                                 {costTotal.split}
                             </td>
                             <td class="comparison-highlight px-5 py-5 text-snow-50">
                                 <strong class="block text-lg font-semibold leading-tight">
                                     {costTotal.complete}
                                 </strong>
-                                <span class="mt-1 block text-xs font-light leading-snug text-snow-50/80">
+                                <span class="mt-1 block text-sm font-normal leading-snug text-snow-50">
                                     {costTotal.completeNote}
                                 </span>
                             </td>
@@ -419,6 +437,28 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
                 </table>
             </div>
         </div>
+        <dl class="mt-4 grid gap-3 lg:hidden">
+            <div class="rounded-2xl bg-snow-50 px-5 py-4 ring-1 ring-gray-200">
+                <dt class="text-sm font-normal text-gray-600">
+                    Site à 600 €, {costTotal.label.toLowerCase()}
+                </dt>
+                <dd class="mt-1 text-base font-medium text-gray-900">
+                    {costTotal.solo}
+                    <span class="block text-sm font-normal text-gray-600">
+                        mise en place + abonnement en cours
+                    </span>
+                </dd>
+            </div>
+            <div class="rounded-2xl bg-blue-500 px-5 py-4 text-snow-50">
+                <dt class="text-sm font-normal">Avec moi</dt>
+                <dd class="mt-1 text-base font-medium">
+                    {costTotal.complete}
+                    <span class="block text-sm font-normal">
+                        {costTotal.completeNote}
+                    </span>
+                </dd>
+            </div>
+        </dl>
         <p class="mt-3 text-center text-xs font-normal text-gray-500 lg:hidden">
             Faites défiler le tableau horizontalement pour comparer les trois
             options.
@@ -429,7 +469,7 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
         <p class="mx-auto mt-8 max-w-2xl text-center text-sm font-normal leading-relaxed text-gray-600">
             Fourchettes indicatives relevées sur des offres publiques de sites à
             bas prix et par abonnement (octobre 2026) : elles varient selon les
-            prestataires et la durée d'engagement. Le détail est dans l'article{" "}
+            prestataires et la durée d'engagement. Pour voir ce que recouvre chaque niveau d'offre, lisez l'article{" "}
             <a
                 class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
                 href="/articles/site-600-euros-vs-site-2000-euros/"
@@ -440,7 +480,7 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
             <CalButton
                 class="rounded-xl text-base font-normal"
                 label="Vérifier ce qui compte pour votre projet"
-                location={isCosts ? "service-comparaison-couts" : "tarifs-comparaison"}
+                location={isCosts ? "service-creation-site-vitrine-comparaison" : "tarifs-comparaison"}
             />
         </div>
     </FadeRevealOnScroll>
@@ -465,6 +505,10 @@ const displayedRows = isCosts ? costRows : [...rows, ...costRows];
     tfoot th,
     tfoot td {
         border-top: 2px solid var(--color-gray-200);
+    }
+
+    tfoot .comparison-highlight {
+        border-top-color: rgba(255, 255, 255, 0.22);
     }
 
     tfoot th {
