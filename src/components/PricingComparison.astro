@@ -47,7 +47,7 @@ const { headingId, ctaLocation } = {
 // Coût sur 3 ans. Colonne « Site à 600 € » : relevé d'offres publiques de
 // sites à bas prix et par abonnement, consulté le 14 octobre 2026, aucune
 // agence nommée. Valeurs brutes : mise en place de 0 à 1 190 € HT, mensualités
-// de 29 à 169 € HT, engagement de 12 à 48 mois (24 mois le plus souvent,
+// de 29 à 169 € HT, engagement de 12 à 48${nbsp}mois (24 mois le plus souvent,
 // selon les offres), modifications souvent incluses tant que l'abonnement court,
 // propriété du site variable selon le contrat. Scénario retenu : 600 € HT de
 // mise en place + 36 mensualités de 30 à 100 € HT (scénario, pas une moyenne).
@@ -63,7 +63,7 @@ const subscriptionMax = lowCost.monthlyMax * lowCost.months;
 const costs = {
     anchor: euro(lowCost.setup),
     total: `${euro(lowCost.setup + subscriptionMin)} à ${euro(lowCost.setup + subscriptionMax)}`,
-    monthly: `${lowCost.monthlyMin} à ${euro(lowCost.monthlyMax)} par mois, engagement de 12 à 48 mois selon l'offre`,
+    monthly: `${lowCost.monthlyMin} à ${euro(lowCost.monthlyMax)} par mois, engagement de 12 à 48${nbsp}mois selon l'offre`,
     withMe: `Dès ${euro(2000)} de création`,
     withMeNote: "hors domaine, hébergement, outils et maintenance, payés à votre nom",
 };
@@ -78,7 +78,7 @@ const titleParts = [
     { text: "peu" },
     { text: "au départ." },
     { text: "Il rapporte" },
-    { pill: true, text: `souvent${nbsp}peu.` },
+    { pill: true, text: "souvent peu." },
 ];
 
 const columns = {
@@ -100,7 +100,7 @@ const rows: ResultRow[] = [
         icon: SearchContent,
         tone: "sky",
         cheap: "Souvent laissés par défaut",
-        withMe: "Titres, descriptions et structure HTML : une base SEO technique propre",
+        withMe: `Titres, descriptions et structure HTML${nbsp}: une base SEO technique propre`,
     },
     {
         label: "Offre clarifiée",
@@ -192,7 +192,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
     >
         <div class="relative">
             <div
-                class="comparison-card absolute -top-8 right-0 -bottom-4 w-[36%] rounded-4xl bg-snow-50 ring-1 ring-gray-200"
+                class="comparison-card absolute -top-8 right-0 -bottom-4 w-[36%] rounded-4xl bg-snow-50"
                 aria-hidden="true"
             >
             </div>
@@ -337,7 +337,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
 
     <div class="mx-auto mt-12 grid max-w-xl gap-5 md:max-w-4xl md:grid-cols-2 lg:hidden">
         <FadeRevealOnScroll class="flex" delay={0.06}>
-            <article class="w-full rounded-3xl bg-snow-50/60 p-6 ring-1 ring-gray-200">
+            <article class="w-full rounded-3xl bg-snow-50/60 p-6">
                 <span class={cheapChip} aria-hidden="true">
                     <Sparkle class="size-5" />
                 </span>
@@ -375,7 +375,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
             </article>
         </FadeRevealOnScroll>
         <FadeRevealOnScroll class="flex" delay={0.12}>
-            <article class="comparison-card w-full rounded-3xl bg-snow-50 ring-1 ring-gray-200 p-6">
+            <article class="comparison-card w-full rounded-3xl bg-snow-50 p-6">
                 <span class={withMeChip} aria-hidden="true">
                     <WindowPointer class="size-5" />
                 </span>
@@ -449,7 +449,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                         sur 3{nbsp}ans, abonnement en cours
                     </dd>
                     <dd class="mt-2 text-sm leading-relaxed text-gray-600">
-                        Mise en place puis abonnement de {costs.monthly} ;
+                        Mise en place puis abonnement de {costs.monthly}{nbsp};
                         hébergement et modifications souvent inclus tant que
                         l'abonnement court.
                     </dd>
@@ -471,7 +471,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
 
     <FadeRevealOnScroll delay={0.12}>
         <p class="mx-auto mt-10 max-w-2xl text-center text-[0.8125rem] leading-relaxed text-gray-600">
-            Côté site à 600 €, il s'agit de tendances générales : chaque offre
+            Côté site à 600{nbsp}€, il s'agit de tendances générales : chaque offre
             est différente. Coûts indicatifs d'après un relevé d'offres
             publiques de sites à bas prix et par abonnement, consulté le
             14{nbsp}octobre 2026, sans agence citée. Pour le détail, lisez
