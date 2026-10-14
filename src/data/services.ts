@@ -824,7 +824,7 @@ export const services: Service[] = [
         title:
           "Développement web sur mesure ou logiciel du marché : comment décider",
         paragraphs: [
-          "Un logiciel du marché reste souvent le bon choix : il est disponible tout de suite, maintenu par un éditeur et payé par abonnement. Le développement d'une application web sur mesure se justifie quand ces outils vous obligent à contourner votre façon de travailler.",
+          "Un logiciel du marché reste souvent le bon choix : il est disponible tout de suite, maintenu par un éditeur et payé par abonnement. Le développement d'une application web sur mesure se justifie quand ces outils freinent votre façon de travailler.",
           "Quelques questions aident à trancher :",
         ],
         items: [
