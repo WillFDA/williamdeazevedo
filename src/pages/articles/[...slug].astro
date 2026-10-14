@@ -399,11 +399,36 @@ const getTagIcon = (tag: string) => {
 
     .article-table-scroll {
         background: var(--color-snow-50);
-        border: 1px solid var(--color-gray-200);
-        border-radius: 1rem;
-        margin-block: 1.75rem;
+        border-radius: 1.25rem;
+        box-shadow:
+            0 0 0 1px var(--color-gray-200),
+            0 1.25rem 2.5rem -2rem rgba(34, 42, 55, 0.35);
+        margin-block: 2rem;
         max-width: 100%;
         overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-color: var(--color-gray-300) transparent;
+        scrollbar-width: thin;
+    }
+
+    /* Scroll hint: the right edge fades while more columns remain hidden.
+       Scroll-driven animation only; without support the table simply scrolls. */
+    @supports (animation-timeline: scroll(self inline)) {
+        .article-table-scroll {
+            animation: article-table-hint linear both;
+            animation-timeline: scroll(self inline);
+        }
+
+        @keyframes article-table-hint {
+            from,
+            95% {
+                mask-image: linear-gradient(to right, #000 calc(100% - 3rem), transparent);
+            }
+
+            to {
+                mask-image: none;
+            }
+        }
     }
 
     .article-table-scroll:focus-visible {
@@ -412,7 +437,8 @@ const getTagIcon = (tag: string) => {
     }
 
     .article-prose table {
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 0;
         font-size: 0.875rem;
         line-height: 1.55;
         width: 100%;
@@ -421,7 +447,7 @@ const getTagIcon = (tag: string) => {
     .article-prose th,
     .article-prose td {
         min-width: 9rem;
-        padding: 0.85rem 1rem;
+        padding: 0.9rem 1.1rem;
         text-align: left;
         vertical-align: top;
     }
@@ -433,25 +459,51 @@ const getTagIcon = (tag: string) => {
 
     .article-prose td {
         border-top: 1px solid var(--color-gray-100);
+        color: var(--color-gray-700);
+        transition: background-color 160ms ease;
+    }
+
+    .article-prose tbody tr:nth-child(even) td {
+        background: var(--color-surface-100);
+    }
+
+    @media (hover: hover) {
+        .article-prose tbody tr:hover td {
+            background: var(--color-blue-50);
+        }
     }
 
     .article-prose td:first-child {
         color: var(--color-gray-900);
-        font-weight: 500;
+        font-weight: 600;
     }
 
-    .article-prose th {
-        background: var(--color-surface-100);
-        color: var(--color-gray-600);
-        font-size: 0.75rem;
+    .article-prose thead th {
+        background: var(--color-blue-500);
+        color: var(--color-snow-50);
+        font-size: 0.8125rem;
         font-weight: 500;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        letter-spacing: 0.01em;
+    }
+
+    .article-prose thead th:first-child {
+        border-top-left-radius: 1.25rem;
+    }
+
+    .article-prose thead th:last-child {
+        border-top-right-radius: 1.25rem;
     }
 
     .article-prose tbody tr:last-child:has(strong) td {
         background: var(--color-blue-50);
-        border-top-color: var(--color-blue-100);
+        border-top: 1px solid var(--color-blue-100);
+        color: var(--color-gray-900);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .article-prose td {
+            transition: none;
+        }
     }
 
     .article-prose hr {
