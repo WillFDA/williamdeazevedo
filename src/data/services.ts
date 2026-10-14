@@ -660,7 +660,7 @@ export const services: Service[] = [
         paragraphs: [
           "Avec un freelance, la personne qui échange avec vous est celle qui conçoit et développe votre site. Il n'y a pas de chef de projet entre vous et le travail, et les décisions se prennent directement.",
           "Une agence peut mobiliser plusieurs profils en même temps, ce qui sert sur de gros projets. Pour le site d'un indépendant, d'un artisan ou d'une TPE, un interlocuteur unique suffit souvent. S'il faut d'abord une identité visuelle complète, je peux vous orienter vers Persistance Studio.",
-          "Être basé à Achères ne change pas la méthode : c'est à distance que j'ai mené le site de Le Fellic, une entreprise de maîtrise d'oeuvre à Rennes, présenté juste en dessous.",
+          "Être basé à Achères ne change pas la méthode : c'est à distance que j'ai mené le site de Le Fellic à Rennes, présenté juste en dessous.",
         ],
       },
     },
