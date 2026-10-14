@@ -51,8 +51,9 @@ const { headingId, ctaLocation } = {
 // selon les offres), modifications souvent incluses tant que l'abonnement court,
 // propriété du site variable selon le contrat. Scénario retenu : 600 € HT de
 // mise en place + 36 mensualités de 30 à 100 € HT (scénario, pas une moyenne).
-// Colonne William : uniquement ce que publie /tarifs/.
-const nbsp = "\u00a0";
+// Colonne William : uniquement des formulations déjà publiées (« Dès 2 000 €
+// HT » : PricingPreview.astro ; coûts après livraison : tarifs.astro).
+const nbsp = "\u00A0";
 const euro = (value: number) =>
     `${new Intl.NumberFormat("fr-FR").format(value)}${nbsp}€${nbsp}HT`;
 const lowCost = { setup: 600, monthlyMin: 30, monthlyMax: 100, months: 36 };
@@ -64,7 +65,7 @@ const costs = {
     total: `${euro(lowCost.setup + subscriptionMin)} à ${euro(lowCost.setup + subscriptionMax)}`,
     monthly: `${lowCost.monthlyMin} à ${euro(lowCost.monthlyMax)} par mois, engagement de 12 à 48 mois selon l'offre`,
     withMe: `Dès ${euro(2000)} de création`,
-    withMeNote: "hors domaine, hébergement, outils et maintenance",
+    withMeNote: "hors domaine, hébergement, outils et maintenance, payés à votre nom",
 };
 
 // « Il rapporte » reste groupé pour que « Il » ne termine pas la 1re ligne.
@@ -74,9 +75,10 @@ const titleParts = [
     { text: "à" },
     { text: `600${nbsp}€` },
     { text: "coûte" },
-    { text: "peu." },
+    { text: "peu" },
+    { text: "au départ." },
     { text: "Il rapporte" },
-    { pill: true, text: "souvent peu." },
+    { pill: true, text: `souvent${nbsp}peu.` },
 ];
 
 const columns = {
@@ -141,7 +143,7 @@ const rows: ResultRow[] = [
 const outcome = {
     label: "Ce que le site vous rapporte",
     cheap: "Souvent une simple présence en ligne",
-    withMe: "Un site qui rassure, clarifie l'offre et guide vers le contact",
+    withMe: "Un site pensé pour transformer une première visite en prise de contact",
     withMeNote:
         "Search Console et mesure des conversions pour suivre ce qu'il apporte",
 };
@@ -179,7 +181,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                 Un site fait vite ou généré par IA assure en général une
                 présence en ligne, sans plus. Or, face à un prospect, votre site
                 sert de carte de visite : il doit rassurer, clarifier votre offre
-                et faire professionnel.
+                et donner une image professionnelle.
             </p>
         </div>
     </FadeRevealOnScroll>
@@ -349,14 +351,14 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                     {
                         rows.map((row) => (
                             <div class="py-3.5">
-                                <dt class="flex items-start gap-3 text-sm font-medium leading-snug text-gray-900">
+                                <dt class="text-sm font-medium leading-snug text-gray-900">
+                                    {row.label}
+                                </dt>
+                                <dd class="mt-1.5 flex items-start gap-3 text-sm leading-snug text-gray-600">
                                     <span class={crossBadge} aria-hidden="true">
                                         <XMarkIcon class={crossIcon} />
                                     </span>
-                                    <span class="pt-0.5">{row.label}</span>
-                                </dt>
-                                <dd class="mt-1 pl-9 text-sm leading-snug text-gray-600">
-                                    {row.cheap}
+                                    <span class="pt-0.5">{row.cheap}</span>
                                 </dd>
                             </div>
                         ))
@@ -387,14 +389,14 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                     {
                         rows.map((row) => (
                             <div class="py-3.5">
-                                <dt class="flex items-start gap-3 text-sm font-medium leading-snug text-gray-900">
+                                <dt class="text-sm font-medium leading-snug text-gray-900">
+                                    {row.label}
+                                </dt>
+                                <dd class="mt-1.5 flex items-start gap-3 text-sm leading-snug text-gray-700">
                                     <span class={checkBadge} aria-hidden="true">
                                         <CheckIcon class={checkIcon} />
                                     </span>
-                                    <span class="pt-0.5">{row.label}</span>
-                                </dt>
-                                <dd class="mt-1 pl-9 text-sm leading-snug text-gray-700">
-                                    {row.withMe}
+                                    <span class="pt-0.5">{row.withMe}</span>
                                 </dd>
                             </div>
                         ))
@@ -439,6 +441,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                             </s>
                         </span>
                         <span class="text-lg font-medium leading-tight text-gray-900">
+                            <span class="sr-only">Coût estimé :</span>
                             {costs.total}
                         </span>
                     </dd>
@@ -446,7 +449,9 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                         sur 3{nbsp}ans, abonnement en cours
                     </dd>
                     <dd class="mt-2 text-sm leading-relaxed text-gray-600">
-                        Mise en place puis abonnement de {costs.monthly}.
+                        Mise en place puis abonnement de {costs.monthly} ;
+                        hébergement et modifications souvent inclus tant que
+                        l'abonnement court.
                     </dd>
                 </div>
                 <div class="lg:px-8">
@@ -468,18 +473,19 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
         <p class="mx-auto mt-10 max-w-2xl text-center text-[0.8125rem] leading-relaxed text-gray-600">
             Côté site à 600 €, il s'agit de tendances générales : chaque offre
             est différente. Coûts indicatifs d'après un relevé d'offres
-            publiques de sites à bas prix et par abonnement, consulté le 14
-            octobre 2026, sans agence citée. Pour le détail, lisez l'article{" "}
+            publiques de sites à bas prix et par abonnement, consulté le
+            14{nbsp}octobre 2026, sans agence citée. Pour le détail, lisez
+            l'article{" "}
             <a
                 class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
                 href="/articles/site-600-euros-vs-site-2000-euros/"
-                >site à 600 € ou site à 2 000 €</a
+                >site à 600{nbsp}€ ou site à 2{nbsp}000{nbsp}€</a
             >.
         </p>
         <div class="mt-6 flex justify-center">
             <CalButton
                 class="rounded-xl text-base font-normal"
-                label="Vérifier ce qui compte pour votre projet"
+                label="Parler de mon projet"
                 location={ctaLocation}
             />
         </div>

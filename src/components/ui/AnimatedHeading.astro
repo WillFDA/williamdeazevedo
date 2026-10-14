@@ -16,7 +16,7 @@ const { as = "h1", class: className, parts, ...attributes } = Astro.props as Pro
 const Tag = as;
 
 const isMultiWordPill = (part: AnimatedHeadingPart) =>
-    part.pill === true && /\s/.test(part.text.trim());
+    part.pill === true && part.text.trim().includes(" ");
 ---
 
 <Tag {...attributes} class={className}>
@@ -32,7 +32,7 @@ const isMultiWordPill = (part: AnimatedHeadingPart) =>
                     style={`--animated-heading-index: ${index}`}
                 >
                     {isMultiWordPill(part)
-                        ? part.text.split(/\s+/).map((word, wordIndex, words) => (
+                        ? part.text.split(/ +/).map((word, wordIndex, words) => (
                               <Fragment>
                                   <span class="title-pill animated-heading__pill-word">
                                       {word}
