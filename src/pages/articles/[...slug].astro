@@ -400,14 +400,13 @@ const getTagIcon = (tag: string) => {
     .article-table-scroll {
         background: var(--color-snow-50);
         border-radius: 1.25rem;
-        box-shadow:
-            0 0 0 1px var(--color-gray-200),
-            0 1.25rem 2.5rem -2rem rgba(34, 42, 55, 0.35);
+        border: 1px solid var(--color-gray-200);
+        box-shadow: 0 1.25rem 2.5rem -2rem rgba(34, 42, 55, 0.35);
         margin-block: 2rem;
         max-width: 100%;
         overflow-x: auto;
         overscroll-behavior-x: contain;
-        scrollbar-color: var(--color-gray-300) transparent;
+        scrollbar-color: var(--color-gray-500) transparent;
         scrollbar-width: thin;
     }
 
@@ -415,7 +414,11 @@ const getTagIcon = (tag: string) => {
        Scroll-driven animation only; without support the table simply scrolls. */
     @supports (animation-timeline: scroll(self inline)) {
         .article-table-scroll {
-            animation: article-table-hint linear both;
+            /* Longhands on purpose: Lightning CSS would merge a shorthand
+               into a form Chrome rejects. */
+            animation-name: article-table-hint;
+            animation-timing-function: linear;
+            animation-fill-mode: both;
             animation-timeline: scroll(self inline);
         }
 
@@ -432,6 +435,8 @@ const getTagIcon = (tag: string) => {
     }
 
     .article-table-scroll:focus-visible {
+        /* The fade mask would clip the focus ring. */
+        animation-name: none;
         outline: 2px solid var(--color-blue-500);
         outline-offset: 4px;
     }
@@ -469,7 +474,7 @@ const getTagIcon = (tag: string) => {
 
     @media (hover: hover) {
         .article-prose tbody tr:hover td {
-            background: var(--color-blue-50);
+            background: color-mix(in srgb, var(--color-blue-50) 60%, white);
         }
     }
 
@@ -486,12 +491,17 @@ const getTagIcon = (tag: string) => {
         letter-spacing: 0.01em;
     }
 
-    .article-prose thead th:first-child {
-        border-top-left-radius: 1.25rem;
+    .article-prose td strong {
+        font-weight: 600;
     }
 
-    .article-prose thead th:last-child {
-        border-top-right-radius: 1.25rem;
+    .article-prose thead th :is(strong, a, a:hover) {
+        color: inherit;
+    }
+
+    .article-prose td :not(pre) > code {
+        background: var(--color-snow-50);
+        box-shadow: inset 0 0 0 1px var(--color-gray-200);
     }
 
     .article-prose tbody tr:last-child:has(strong) td {
