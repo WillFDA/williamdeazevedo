@@ -43,7 +43,7 @@ const {
                         data-project-name={project.title}
                         aria-hidden="true"
                     >
-                        {project.media.type === "video" && (
+                        {project.media.type !== "placeholder" && (
                             <img
                                 src={project.media.poster}
                                 alt=""

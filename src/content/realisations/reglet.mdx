@@ -1,0 +1,26 @@
+---
+projectId: "reglet"
+partners: []
+---
+
+## Contexte
+
+Sur un chantier, l'information se disperse vite : photos prises au téléphone, messages vocaux, notes rapides. Le rapport de chantier, lui, se rédige souvent plus tard, au bureau, en recollant ces morceaux.
+
+Réglet part de ce constat : centraliser ce qui est capté sur le terrain et en faire un rapport propre, sans que l'équipe perde la main sur ce qui est écrit.
+
+## Ce qui a été construit
+
+J'ai conçu et développé Réglet, une application de suivi de chantier pour le BTP, de l'interface à l'infrastructure.
+
+- **Un journal de chantier partagé** : chaque membre de l'équipe y ajoute photos, audios et notes, avec des rôles clairs et des fichiers privés.
+- **Des rapports rédigés par IA** : les audios sont transcrits, puis l'IA rédige le rapport à partir du journal. Chaque passage cite ses sources (note, photo, audio) pour pouvoir être vérifié.
+- **La relecture reste humaine** : l'équipe relit, corrige et exporte le rapport en PDF.
+
+## Choix techniques
+
+L'application repose sur TanStack Start et React, avec PostgreSQL pour les données. Cloudflare Workers gère le stockage des médias, l'export PDF et les traitements en arrière-plan. Le site de présentation est réalisé avec Astro.
+
+## Résultat
+
+Réglet est en ligne sur [reglet.fr](https://reglet.fr/), ouvert sur invitation aux premières équipes. Le projet montre la conception d'une application métier complète, où l'IA s'intègre dans un vrai flux de travail plutôt que de rester une démo.

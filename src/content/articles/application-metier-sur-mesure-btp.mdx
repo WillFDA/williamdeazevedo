@@ -1,0 +1,158 @@
+---
+title: "Application métier sur mesure : ce que j’ai appris en créant Réglet pour le BTP"
+seoTitle: "Application métier sur mesure : le cas Réglet (BTP)"
+description: "Faut-il faire développer une application métier sur mesure ? Retour concret sur Réglet, un outil de rédaction de rapports conçu pour les équipes du BTP."
+pubDate: 2026-10-13
+author: "William De Azevedo"
+draft: false
+tags: ["application métier", "IA", "tpe"]
+image:
+  src: "/articles/application-metier-sur-mesure-btp/cover.webp"
+  alt: "Quatre cartes résumant une application métier sur mesure : les informations du terrain, un journal de notes, photos et audios, un rapport qui cite ses sources, et un export PDF."
+---
+
+import PreparationChecklist from "../../components/articles/PreparationChecklist.astro";
+
+**Une application métier sur mesure se justifie quand votre façon de travailler ne rentre pas dans un logiciel du marché : vous ressaisissez les mêmes informations, vos outils ne se parlent pas, ou votre équipe a gardé ses habitudes papier parce qu’aucun produit ne colle au terrain.** Si un logiciel existant couvre l’essentiel de votre besoin, il reste souvent le meilleur choix. Cet article vous aide à trancher, avec un exemple concret : Réglet, une application que j’ai conçue et développée pour les équipes du BTP.
+
+Sur un chantier, l’information est partout : des photos dans un téléphone, un message vocal laissé en voiture, des notes sur un carnet, un échange par e-mail. Le jour où il faut rédiger un document propre pour un client ou un maître d’ouvrage, quelqu’un doit tout rassembler, retrouver qui a dit quoi et remettre en forme. Ce désordre ne se voit dans aucun tableau de bord, mais il coûte du temps et de la fiabilité.
+
+## Qu’est-ce qu’une application métier sur mesure ?
+
+Une application métier est un outil numérique construit autour d’une activité précise : gérer des interventions, préparer des devis, suivre des stocks, rédiger des documents techniques. Elle est « sur mesure » lorsqu’elle est conçue pour votre façon de travailler, plutôt que de vous demander de vous adapter à un produit standard. On parle aussi de logiciel sur mesure : le terme est plus large, mais la logique est la même.
+
+| Critère | Logiciel du marché | Application métier sur mesure |
+| --- | --- | --- |
+| Point de départ | Les besoins communs à beaucoup d’entreprises | Votre façon de travailler, vos documents, votre terrain |
+| Mise en route | Rapide : abonnement et paramétrage | Plus longue : cadrage, prototype, tests |
+| Évolution | Selon la feuille de route de l’éditeur | Selon vos priorités |
+| Dépendance | À l’éditeur et à ses tarifs | Au prestataire, à encadrer par contrat |
+| Après la mise en ligne | Mises à jour comprises dans l’abonnement | Hébergement, maintenance et évolutions à prévoir |
+| Adéquation | Bonne si votre besoin est standard | Forte si votre besoin est spécifique |
+
+Le sur mesure n’est pas forcément une usine à gaz. Une application métier peut se limiter à quelques écrans bien pensés, à condition qu’ils fassent exactement ce dont votre équipe a besoin.
+
+## Logiciel du marché ou sur mesure : comment trancher
+
+### Les signaux qui justifient le sur mesure
+
+Plusieurs situations peuvent justifier le développement d’une application sur mesure :
+
+- **votre façon de travailler est spécifique** : vos documents, vos étapes de validation ou votre vocabulaire ne correspondent à aucun logiciel existant ;
+- **vous ressaisissez les mêmes informations** dans plusieurs outils, ou d’un carnet vers un ordinateur ;
+- **vos outils ne se parlent pas** : les photos d’un côté, les notes de l’autre, les documents finaux dans un troisième ;
+- **votre équipe contourne les logiciels déjà achetés**, parce qu’ils sont trop lourds pour le terrain ;
+- **l’outil fait partie de votre valeur** : il vous distingue de vos concurrents ou devient un service que vous proposez à vos clients.
+
+### Quand un logiciel existant suffit
+
+Dans beaucoup de cas, un logiciel du marché fait très bien l’affaire. Comptabilité, facturation, agenda partagé, messagerie : ces besoins sont communs, et des produits éprouvés les couvrent. Faire développer un équivalent coûterait plus cher, à la création puis en maintenance, et apporterait peu.
+
+Avant de lancer un projet, testez deux ou trois solutions existantes avec un vrai cas de votre activité. Si l’une d’elles couvre l’essentiel et que les écarts sont acceptables, gardez-la. Le sur mesure se justifie quand l’écart touche le cœur de votre métier, pas un détail.
+
+## Le cas Réglet : du problème terrain à l’outil
+
+[Réglet](https://reglet.fr) est une application destinée aux équipes du BTP, que j’ai conçue et développée de bout en bout. Elle est en ligne, en bêta, et ouverte sur invitation. Réglet s’adresse à plusieurs équipes, comme un logiciel du marché : ce n’est pas un outil fait pour une seule entreprise. Il suit pourtant la même démarche qu’un projet sur mesure : partir d’un problème de terrain précis, puis construire l’outil qui y répond.
+
+### Le problème : des infos de chantier éparpillées
+
+Sur le terrain, les observations se prennent avec ce qu’on a sous la main : une photo, un vocal, une note rapide. La difficulté vient au moment de retrouver et d’assembler ces éléments pour rédiger un document clair et fiable. Les outils généralistes (galerie photo, messagerie, traitement de texte) font chacun une partie du travail, mais aucun ne relie les éléments entre eux.
+
+### La réponse : un journal terrain et des rapports rédigés par l’IA qui citent leurs sources
+
+Réglet repose sur deux idées :
+
+- **un journal par projet**, que l’équipe complète depuis son téléphone avec des notes, des photos et des enregistrements audio, sur place comme au retour ; les audios peuvent être transcrits, puis la transcription corrigée ;
+- **un rapport rédigé par l’IA à partir de ce journal** : l’utilisateur sélectionne les éléments à prendre en compte et précise ses consignes, et chaque passage du rapport indique les notes, photos ou audios dont il provient.
+
+Un texte généré sans source oblige à tout revérifier. Un texte qui cite ses sources permet de contrôler rapidement d’où vient chaque affirmation. L’IA prend en charge le premier jet ; le jugement reste celui de l’équipe.
+
+### Ce que l’utilisateur fait : relire, corriger, exporter en PDF
+
+L’utilisateur garde la main. Il relit le rapport dans un éditeur, corrige ce qui doit l’être, puis exporte un document PDF. C’est l’équipe qui valide ce qui part chez le client.
+
+Ce que j’en retiens pour toute application métier :
+
+- rendre le travail de l’outil vérifiable, ici grâce aux sources ;
+- automatiser ce qui est répétitif, laisser à l’humain ce qui engage.
+
+## Comment se déroule un projet d’application sur mesure
+
+Un projet d’application métier ne commence pas par du code. Voici les étapes que je propose, et que vous pouvez attendre de tout prestataire sérieux.
+
+### 1. Le cadrage
+
+On part de votre activité : qui utilise l’outil, où, avec quel appareil, pour produire quoi. On liste ce que vous faites aujourd’hui, ce qui vous fait perdre du temps et ce que l’outil doit absolument faire dans sa première version. Tout le reste attend.
+
+### 2. Le prototype
+
+Avant de tout développer, on construit une version simple des écrans principaux. C’est le moment de vérifier que le parcours a du sens pour les vrais utilisateurs, et de corriger le tir à moindre coût.
+
+### 3. Les tests sur le terrain
+
+Une application métier se juge dans ses conditions réelles d’utilisation. Pour un outil de chantier, cela veut dire un téléphone, parfois des gants, du bruit et une connexion faible. Les retours des premiers utilisateurs orientent les corrections bien plus sûrement que des suppositions faites au bureau.
+
+### 4. La mise en ligne progressive
+
+Plutôt que d’ouvrir l’outil à tout le monde d’un coup, on l’ouvre d’abord à quelques utilisateurs qui savent qu’ils testent une version récente, et on corrige avant d’élargir. Réglet, par exemple, est en bêta et ouvert sur invitation.
+
+## Les choix techniques, expliqués à un dirigeant
+
+Vous n’avez pas besoin de connaître les technologies pour juger un projet. Vous avez besoin de comprendre ce qu’elles vous apportent, et ce qu’elles demandent. Pour Réglet, trois choix comptent :
+
+- **Mobile d’abord.** Les informations naissent sur le terrain : l’application est pensée d’abord pour le téléphone, ensuite pour l’ordinateur.
+- **Pas de serveur à administrer.** L’application fonctionne sur Cloudflare Workers : le code s’exécute sur le réseau de Cloudflare, sans machine à installer ni à mettre à jour. Cela allège la maintenance technique, sans rendre l’outil infaillible : comme tout service en ligne, il dépend de son hébergeur.
+- **Des données dans une base standard.** Les données de l’application sont stockées dans PostgreSQL, un logiciel libre très répandu. Pour une application faite pour vous, c’est un atout à une condition : que le contrat vous garantisse l’accès à cette base, pour qu’un autre développeur puisse la reprendre.
+
+L’application repose sur des outils open source (React, TanStack Start, PostgreSQL) et elle est hébergée sur Cloudflare Workers. Pour une application faite pour vous, des outils connus facilitent la reprise par un autre développeur, à condition d’avoir accès au code et à sa documentation : c’est une question à poser à tout prestataire, au même titre que la propriété du code et des données. L’article [changer de prestataire web](/articles/changer-prestataire-web/) liste ce qu’il faut récupérer avant de partir.
+
+## Votre métier mérite-t-il son propre outil ?
+
+Avant de contacter un développeur, cochez les affirmations qui vous correspondent. Si vous en cochez au moins trois, un projet d’application métier sur mesure mérite d’être étudié.
+
+<PreparationChecklist
+  legend="Cochez ce qui décrit votre situation"
+  note="Cette liste reste sur cette page : aucune réponse n’est enregistrée ni transmise."
+  countLabel="affirmations cochées"
+  doneLabel="Un projet sur mesure mérite d’être étudié."
+  items={[
+    "Mon équipe ressaisit régulièrement les mêmes informations dans plusieurs outils.",
+    "J’ai testé des logiciels du marché, et aucun ne colle à notre façon de travailler.",
+    "Une partie importante du travail se fait sur le terrain, loin d’un ordinateur.",
+    "Je peux décrire précisément ce que l’outil doit produire (document, suivi, alerte).",
+    "Au moins une personne de l’équipe est prête à tester et à faire des retours.",
+  ]}
+/>
+
+Si vous êtes artisan et que votre priorité est d’abord d’être trouvé par vos clients, un site bien construit passe souvent avant une application : c’est l’objet de la page [création de site internet pour artisan](/creation-site-internet-artisan/).
+
+## Questions fréquentes
+
+### Combien de temps faut-il pour développer une application métier sur mesure ?
+
+Cela dépend surtout du périmètre de la première version : nombre d’écrans et de profils d’utilisateurs, liens avec vos outils existants, disponibilité de l’équipe pour tester. Un cadrage précis permet de livrer d’abord l’essentiel, puis d’ajouter des fonctions selon les retours du terrain. Méfiez-vous d’un délai annoncé avant que le besoin ait été cadré.
+
+### Faut-il utiliser l’IA dans une application métier ?
+
+Seulement si elle règle un vrai problème. Dans Réglet, l’IA rédige un premier jet de rapport à partir d’éléments réels, et chaque passage renvoie à sa source. Elle ne remplace pas la relecture de l’équipe. Si vous l’envisagez, demandez aussi où sont traitées les données envoyées au service d’IA.
+
+### Qui est propriétaire de l’application et des données ?
+
+C’est à fixer dans le contrat avant le démarrage : droits sur le code, accès aux données et leur restitution, hébergement, conditions de sortie. Le paiement de la prestation ne vaut pas forcément, à lui seul, cession des droits sur le code : faites-la écrire. Si l’application traite des données personnelles, le RGPD s’applique et le contrat doit encadrer le rôle du prestataire qui les héberge.
+
+### Un développeur freelance peut-il mener ce type de projet ?
+
+Oui, si le périmètre est adapté et que le développeur couvre la conception, l’interface et la logique métier. Réglet en est un exemple. Motivai, un projet personnel que je raconte dans l’article [Motivai, mon premier side project](/articles/premier-side-project-motivai/), montre un autre produit mené seul, dans un registre différent. Pour un projet qui mobilise de nombreux métiers en parallèle, une équipe plus large peut être préférable.
+
+## Décrivez-moi votre besoin
+
+Vous avez une façon de travailler qu’aucun logiciel ne couvre correctement ? Décrivez-moi ce que fait votre équipe aujourd’hui, ce qui vous fait perdre du temps et ce que l’outil devrait produire. Je vous dirai si un logiciel existant suffit, ou si une application métier sur mesure se justifie.
+
+Pour en parler, écrivez-moi à [william.deazevedopro@gmail.com](mailto:william.deazevedopro@gmail.com). Vous pouvez aussi parcourir mes [réalisations](/realisations/), dont [la fiche Réglet](/realisations/reglet/), ou ma page [développeur web freelance](/services/developpeur-web-freelance/).
+
+## Sources
+
+- [Réglet](https://reglet.fr) : présentation publique de l’application (consultée le 13 octobre 2026).
+- [Cloudflare Workers : documentation](https://developers.cloudflare.com/workers/) : la plateforme d’exécution utilisée.
+- [PostgreSQL : à propos](https://www.postgresql.org/about/) : la base de données open source utilisée.
+- [CNIL : RGPD, de quoi parle-t-on ?](https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on) : les règles applicables aux données personnelles.
