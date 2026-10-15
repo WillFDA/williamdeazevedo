@@ -23,6 +23,7 @@ const slugs = [
   "changer-prestataire-web",
   "audit-seo",
   "landing-page",
+  "choisir-developpeur-web",
   "application-metier-sur-mesure-btp",
   "maintenance-site-web",
   "arborescence-site-web",
