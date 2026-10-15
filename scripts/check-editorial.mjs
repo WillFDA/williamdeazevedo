@@ -24,6 +24,7 @@ const slugs = [
   "audit-seo",
   "landing-page",
   "application-metier-sur-mesure-btp",
+  "maintenance-site-web",
   "arborescence-site-web",
 ];
 const root = resolve(import.meta.dirname, "..");
