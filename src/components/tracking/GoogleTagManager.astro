@@ -1,0 +1,109 @@
+---
+// Google Tag Manager + Consent Mode v2.
+// Placé tout en haut du <head> dans src/layout/Layout.astro.
+// Zaraz (Cloudflare) n'est PAS touché ici : il est géré côté dashboard.
+const GTM_ID = "GTM-TCZVQQ29";
+---
+
+{/* 1. Consent Mode v2 : valeurs par défaut AVANT le chargement de GTM. */}
+<script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    window.gtag = window.gtag || gtag;
+    if (!window.__wuiConsentDefaultSet) {
+        window.__wuiConsentDefaultSet = true;
+        gtag("consent", "default", {
+            ad_storage: "denied",
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+            analytics_storage: "denied",
+            wait_for_update: 500,
+        });
+
+        // Ré-applique le choix mémorisé par CookieBanner.astro (même clé, même
+        // durée de 6 mois) avant le chargement de GTM.
+        try {
+            var stored = JSON.parse(localStorage.getItem("wui-consent") || "null");
+            if (
+                stored &&
+                stored.value === "granted" &&
+                Date.now() < new Date(stored.at).setMonth(new Date(stored.at).getMonth() + 6)
+            ) {
+                gtag("consent", "update", {
+                    ad_storage: "granted",
+                    ad_user_data: "granted",
+                    ad_personalization: "granted",
+                    analytics_storage: "granted",
+                });
+            }
+        } catch (error) {}
+    }
+</script>
+
+{/* 2. Snippet GTM, protégé contre un double chargement avec le ClientRouter. */}
+<script is:inline define:vars={{ GTM_ID }}>
+    (function (w, d, s, l, i) {
+        if (w.__wuiGtmLoaded) return;
+        w.__wuiGtmLoaded = true;
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", GTM_ID);
+</script>
+
+{/* 3. Pages virtuelles + clics contact (listeners délégués, posés une seule fois). */}
+<script is:inline>
+    (function () {
+        if (window.__wuiGtmListenersReady) return;
+        window.__wuiGtmListenersReady = true;
+        var push = function (data) {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push(data);
+        };
+
+        // astro:page-load se déclenche aussi au chargement initial : on l'ignore,
+        // car la page vue initiale est déjà couverte par le déclencheur
+        // "All Pages / Initialisation" de GTM. Seules les navigations
+        // ClientRouter suivantes poussent page_view_virtual.
+        // page_location / page_referrer : la doc GA4 SPA insiste sur un referrer
+        // correct entre pages virtuelles.
+        var isFirstLoad = true;
+        var lastUrl = window.location.href;
+        document.addEventListener("astro:page-load", function () {
+            if (isFirstLoad) {
+                isFirstLoad = false;
+                return;
+            }
+            var referrer = lastUrl;
+            lastUrl = window.location.href;
+            push({
+                event: "page_view_virtual",
+                page_location: window.location.href,
+                page_referrer: referrer,
+                page_path: window.location.pathname + window.location.search,
+                page_title: document.title,
+            });
+        });
+
+        document.addEventListener(
+            "click",
+            function (event) {
+                var target = event.target;
+                if (!(target instanceof Element)) return;
+                var link = target.closest("a[href]");
+                if (!link) return;
+                var href = (link.getAttribute("href") || "").trim().toLowerCase();
+                if (href.indexOf("tel:") === 0) push({ event: "clic_telephone" });
+                else if (href.indexOf("mailto:") === 0) push({ event: "clic_email" });
+            },
+            { capture: true },
+        );
+    })();
+</script>
