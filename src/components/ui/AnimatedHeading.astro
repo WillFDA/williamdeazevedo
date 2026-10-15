@@ -7,17 +7,19 @@ export type AnimatedHeadingPart = {
 };
 
 type Props = Omit<HTMLAttributes<"h1">, "class"> & {
+    as?: "h1" | "h2";
     class?: string;
     parts: readonly AnimatedHeadingPart[];
 };
 
-const { class: className, parts, ...attributes } = Astro.props as Props;
+const { as = "h1", class: className, parts, ...attributes } = Astro.props as Props;
+const Tag = as;
 
 const isMultiWordPill = (part: AnimatedHeadingPart) =>
     part.pill === true && /\s/.test(part.text.trim());
 ---
 
-<h1 {...attributes} class={className}>
+<Tag {...attributes} class={className}>
     {
         parts.map((part, index) => (
             <Fragment>
@@ -44,7 +46,7 @@ const isMultiWordPill = (part: AnimatedHeadingPart) =>
             </Fragment>
         ))
     }
-</h1>
+</Tag>
 
 <style>
     .animated-heading__word {

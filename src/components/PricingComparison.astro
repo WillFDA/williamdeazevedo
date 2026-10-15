@@ -2,371 +2,517 @@
 import { type IconTone, iconToneClasses } from "@/lib/iconTones";
 import CalButton from "./CalButton.astro";
 import FadeRevealOnScroll from "./animations/FadeRevealOnScroll.astro";
+import AnimatedHeading from "./ui/AnimatedHeading.astro";
 import CheckIcon from "./icons/nucleo/check-2-outline.svg";
-import BadgeDollar from "./icons/nucleo/badge-dollar-fill.svg";
-import CodeEditor from "./icons/nucleo/code-editor-fill.svg";
-import Gauge from "./icons/nucleo/gauge-3-fill.svg";
-import Msgs from "./icons/nucleo/msgs-fill.svg";
 import SearchContent from "./icons/nucleo/search-content-2-fill.svg";
 import Sparkle from "./icons/nucleo/sparkle-3-fill.svg";
+import SquareChartSearch from "./icons/nucleo/square-chart-search-fill.svg";
+import Star from "./icons/nucleo/star-fill.svg";
 import Target from "./icons/nucleo/target-fill.svg";
-import TouchClick from "./icons/nucleo/touch-click-fill.svg";
-import UserHeart from "./icons/nucleo/user-heart-fill.svg";
 import WindowLayout from "./icons/nucleo/window-layout-fill.svg";
 import WindowPaintbrush from "./icons/nucleo/window-paintbrush-fill.svg";
+import WindowPointer from "./icons/nucleo/window-pointer-fill.svg";
 import XMarkIcon from "./icons/nucleo/xmark-fill.svg";
 
-type ComparisonCell =
-    | {
-          type: "check" | "x";
-      }
-    | {
-          type: "text";
-          text: string;
-      };
-
-type ComparisonRow = {
+type ResultRow = {
+    cheap: string;
+    detail?: string;
+    icon: typeof Target;
     label: string;
-    icon: ComparisonIcon;
     tone: IconTone;
-    solo: ComparisonCell;
-    split: ComparisonCell;
-    complete: string;
+    withMe: string;
 };
 
-type ComparisonIcon =
-    | "budget"
-    | "code"
-    | "form"
-    | "ia"
-    | "identity"
-    | "performance"
-    | "search"
-    | "target"
-    | "touch"
-    | "user"
-    | "ux";
+interface Props {
+    /**
+     * `tarifs` : page /tarifs/. `vitrine` : page /creation-site-vitrine/
+     * (slot after-cta). Seuls l'ancre du titre et l'emplacement analytics
+     * du bouton changent.
+     */
+    variant?: "tarifs" | "vitrine";
+}
 
-const otherColumns = [
-    {
-        eyebrow: "Option 1",
-        title: "Site seul",
-        note: "Template ou page générée vite",
+const { variant = "tarifs" } = Astro.props;
+const { headingId, ctaLocation } = {
+    tarifs: {
+        headingId: "pricing-comparison-title",
+        ctaLocation: "tarifs-comparaison",
     },
-    {
-        eyebrow: "Option 2",
-        title: "Prestataires séparés",
-        note: "Graphiste, dev et SEO à coordonner",
+    vitrine: {
+        headingId: "pricing-comparison-costs-title",
+        ctaLocation: "service-creation-site-vitrine-comparaison",
     },
-] as const;
+}[variant];
 
-const rows: ComparisonRow[] = [
-    {
-        label: "Offre et positionnement",
-        icon: "target",
-        tone: "blue",
-        solo: { type: "text", text: "À clarifier seul" },
-        split: { type: "text", text: "Souvent dispersé" },
-        complete: "Message cadré",
+// Coût sur 3 ans. Colonne « Site à 600 € » : relevé d'offres publiques de
+// sites à bas prix et par abonnement, consulté le 14 octobre 2026, aucune
+// agence nommée. Valeurs brutes : mise en place de 0 à 1 190 € HT, mensualités
+// de 29 à 169 € HT, engagement de 12 à 48${nbsp}mois (24 mois le plus souvent,
+// selon les offres), modifications souvent incluses tant que l'abonnement court,
+// propriété du site variable selon le contrat. Scénario retenu : 600 € HT de
+// mise en place + 36 mensualités de 30 à 100 € HT (scénario, pas une moyenne).
+// Colonne William : uniquement des formulations déjà publiées (« Dès 2 000 €
+// HT » : PricingPreview.astro ; coûts après livraison : tarifs.astro).
+const nbsp = "\u00A0";
+const euro = (value: number) =>
+    `${new Intl.NumberFormat("fr-FR").format(value)}${nbsp}€${nbsp}HT`;
+const lowCost = { setup: 600, monthlyMin: 30, monthlyMax: 100, months: 36 };
+const subscriptionMin = lowCost.monthlyMin * lowCost.months;
+const subscriptionMax = lowCost.monthlyMax * lowCost.months;
+
+const costs = {
+    anchor: euro(lowCost.setup),
+    total: `${euro(lowCost.setup + subscriptionMin)} à ${euro(lowCost.setup + subscriptionMax)}`,
+    monthly: `${lowCost.monthlyMin} à ${euro(lowCost.monthlyMax)} par mois, engagement de 12 à 48${nbsp}mois selon l'offre`,
+    withMe: `Dès ${euro(2000)} de création`,
+    withMeNote: "hors domaine, hébergement, outils et maintenance, payés à votre nom",
+};
+
+// « Il rapporte » reste groupé pour que « Il » ne termine pas la 1re ligne.
+const titleParts = [
+    { text: "Un" },
+    { text: "site" },
+    { text: "à" },
+    { text: `600${nbsp}€` },
+    { text: "coûte" },
+    { text: "peu" },
+    { text: "au départ." },
+    { text: "Il rapporte" },
+    { pill: true, text: "souvent peu." },
+];
+
+const columns = {
+    cheap: {
+        title: `Site à 600${nbsp}€`,
+        note: "Fait vite ou généré par IA",
     },
-    {
-        label: "Identité visuelle",
-        icon: "identity",
-        tone: "violet",
-        solo: { type: "text", text: "À fournir" },
-        split: { type: "text", text: "À coordonner" },
-        complete: "Graphiste partenaire si besoin",
+    withMe: {
+        title: "Avec moi",
+        note: "Pensé à partir de votre offre et de vos prospects",
     },
+};
+
+// Côté « Avec moi » : uniquement des formulations déjà publiées dans
+// src/data/services.ts, pour ne promettre aucune prestation nouvelle.
+const rows: ResultRow[] = [
     {
-        label: "Parcours pensé conversion",
-        icon: "touch",
-        tone: "teal",
-        solo: { type: "text", text: "Variable" },
-        split: { type: "text", text: "Dépend du brief" },
-        complete: "Objectif priorisé",
-    },
-    {
-        label: "Design responsive",
-        icon: "ux",
+        label: "Titres et balises pensés pour Google",
+        icon: SearchContent,
         tone: "sky",
-        solo: { type: "text", text: "Souvent basique" },
-        split: { type: "text", text: "Selon profil" },
-        complete: "Sur mesure",
+        cheap: "Souvent laissés par défaut",
+        withMe: `Titres, descriptions et structure HTML${nbsp}: une base SEO technique propre`,
     },
     {
-        label: "Performance et accessibilité",
-        icon: "performance",
-        tone: "green",
-        solo: { type: "text", text: "Souvent option" },
-        split: { type: "text", text: "Souvent à part" },
-        complete: "Vérifiées avant mise en ligne",
+        label: "Offre clarifiée",
+        icon: WindowLayout,
+        tone: "violet",
+        cheap: "En général un titre passe-partout et une offre floue",
+        withMe: "Une offre comprise rapidement, sans devoir tout réexpliquer",
     },
     {
-        label: "SEO technique initial",
-        icon: "search",
-        tone: "orange",
-        solo: { type: "text", text: "Léger" },
-        split: { type: "text", text: "À part" },
-        complete: "Inclus",
-    },
-    {
-        label: "Formulaire, CMS ou tracking",
-        icon: "form",
-        tone: "pink",
-        solo: { type: "text", text: "Option" },
-        split: { type: "text", text: "À connecter" },
-        complete: "Prévu au cadrage",
-    },
-    {
-        label: "Interlocuteur unique",
-        icon: "user",
-        tone: "indigo",
-        solo: { type: "text", text: "Oui, mais limité" },
-        split: { type: "x" },
-        complete: "Oui, du cadrage à la mise en ligne",
-    },
-    {
-        label: "Évolutions après livraison",
-        icon: "code",
-        tone: "slate",
-        solo: { type: "text", text: "À recadrer" },
-        split: { type: "text", text: "Intervenants à rappeler" },
-        complete: "Base maintenable",
-    },
-    {
-        label: "Budget de départ",
-        icon: "budget",
+        label: "Photos et preuves réelles",
+        icon: WindowPaintbrush,
         tone: "cyan",
-        solo: { type: "text", text: "600 - 2 000 €" },
-        split: { type: "text", text: "Très variable" },
-        complete: "Dès 2 000 € HT",
+        cheap: "Souvent des images génériques",
+        withMe: "Vos photos et références disponibles, mises en valeur",
+    },
+    {
+        label: "Parcours vers le contact",
+        icon: Target,
+        tone: "indigo",
+        cheap: "Souvent une page sans fil conducteur",
+        withMe: "Un parcours de contact clair, avec formulaire ou action adaptée",
+    },
+    {
+        label: "Éléments qui rassurent",
+        detail: "Avis, réalisations, interlocuteur",
+        icon: Star,
+        tone: "orange",
+        cheap: "Souvent absents ou noyés dans la page",
+        withMe: "Des preuves placées au bon moment pour rassurer",
+    },
+    {
+        label: "Visibilité locale",
+        icon: SquareChartSearch,
+        tone: "green",
+        cheap: "Rarement travaillée",
+        withMe: "Une base SEO locale propre dès la mise en ligne",
     },
 ];
+
+const outcome = {
+    label: "Ce que le site vous rapporte",
+    cheap: "Souvent une simple présence en ligne",
+    withMe: "Un site pensé pour transformer une première visite en prise de contact",
+    withMeNote:
+        "Search Console et mesure des conversions pour suivre ce qu'il apporte",
+};
+
+const crossBadge =
+    "inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-snow-50 text-gray-700 ring-1 ring-gray-300";
+const checkBadge =
+    "inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-blue-500 text-snow-50 shadow-[0_6px_14px_-8px_rgba(62,96,212,0.9)]";
+const cheapChip =
+    "mb-4 inline-flex size-9 items-center justify-center rounded-lg bg-snow-50 text-gray-600 ring-1 ring-gray-300";
+const withMeChip = `mb-4 inline-flex size-9 items-center justify-center rounded-lg text-snow-50 ${iconToneClasses.blue}`;
+// À la taille des pastilles, les deux icônes ont un trait trop fin pour
+// rester lisibles : on l'épaissit.
+const crossIcon = "size-3 [&_path]:stroke-current [&_path]:stroke-[1.2]";
+const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
 ---
 
 <section
-    class="relative left-1/2 w-[calc(100dvw-2rem)] max-w-7xl -translate-x-1/2 rounded-4xl bg-gray-100 px-4 py-12 sm:px-8 md:py-16"
-    aria-labelledby="pricing-comparison-title"
+    class="pricing-comparison relative left-1/2 w-[calc(100dvw-2rem)] max-w-7xl -translate-x-1/2 rounded-4xl bg-gray-100 px-4 py-14 sm:px-8 md:py-20"
+    aria-labelledby={headingId}
+    data-section-reveal="false"
 >
     <FadeRevealOnScroll>
-        <div class="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+        <div class="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
             <span class="rounded-full bg-snow-50 px-4 py-2 text-sm font-normal text-gray-900 shadow-lg">
                 Comparaison
             </span>
-            <h2 id="pricing-comparison-title" class="section-heading max-w-3xl">
-                Pourquoi un accompagnement complet évite les angles morts.
-            </h2>
-            <p class="section-subheading max-w-xl">
-                Vous pouvez acheter un site seul, empiler plusieurs prestataires,
-                ou construire une présence claire avec le bon cadrage dès le
-                départ.
+            <AnimatedHeading
+                as="h2"
+                class="section-heading mx-auto flex max-w-[13em] flex-wrap justify-center gap-x-[0.18em]"
+                id={headingId}
+                parts={titleParts}
+            />
+            <p class="section-subheading max-w-2xl">
+                Un site fait vite ou généré par IA assure en général une
+                présence en ligne, sans plus. Or, face à un prospect, votre site
+                sert de carte de visite : il doit rassurer, clarifier votre offre
+                et donner une image professionnelle.
             </p>
         </div>
     </FadeRevealOnScroll>
 
-    <FadeRevealOnScroll class="mx-auto mt-12 max-w-6xl" delay={0.08}>
-        <div class="overflow-hidden rounded-3xl bg-snow-50 shadow-[0_34px_90px_-64px_rgba(34,42,55,0.6)] ring-1 ring-gray-200">
-            <div class="overflow-x-auto">
-                <table class="w-full min-w-[58rem] border-separate border-spacing-0 text-left">
-                    <caption class="sr-only">
-                        Comparaison entre un site seul, plusieurs prestataires
-                        séparés et un accompagnement complet, poste par poste.
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th
-                                class="sticky left-0 z-10 w-[26%] border-b border-r border-gray-200 bg-snow-50 px-5 py-5 align-bottom"
-                                scope="col"
-                            >
-                                <span class="text-sm font-normal leading-tight text-gray-500">
-                                    Ce que le budget doit couvrir
-                                </span>
-                            </th>
-                            {
-                                otherColumns.map((column) => (
-                                    <th
-                                        class="w-[21%] border-b border-r border-gray-200 px-5 py-5 text-center align-bottom"
-                                        scope="col"
-                                    >
-                                        <span class="block text-sm font-normal text-gray-500">
-                                            {column.eyebrow}
-                                        </span>
-                                        <strong class="mt-1 block text-base font-medium leading-tight text-gray-900">
-                                            {column.title}
-                                        </strong>
-                                        <span class="mt-1.5 block text-xs font-light leading-snug text-gray-500">
-                                            {column.note}
-                                        </span>
-                                    </th>
-                                ))
-                            }
-                            <th
-                                class="comparison-highlight w-[32%] border-b px-5 py-5 text-center align-bottom text-snow-50"
-                                scope="col"
-                            >
-                                <span class="inline-flex rounded-full bg-snow-50/15 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-widest text-snow-50 ring-1 ring-snow-50/25">
-                                    Recommandé
-                                </span>
-                                <strong class="mt-2 block text-lg font-semibold leading-tight">
-                                    William + partenaires
-                                </strong>
-                                <span class="mt-1.5 block text-xs font-light leading-snug text-snow-50/80">
-                                    Cadrage, site, identité si besoin
-                                </span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            rows.map((row, rowIndex) => (
+    <FadeRevealOnScroll
+        class="mx-auto mt-16 hidden max-w-5xl lg:block"
+        delay={0.08}
+    >
+        <div class="relative">
+            <div
+                class="comparison-card absolute -top-8 right-0 -bottom-4 w-[36%] rounded-4xl bg-snow-50"
+                aria-hidden="true"
+            >
+            </div>
+            <table
+                class="relative w-full table-fixed border-separate border-spacing-0 text-left"
+            >
+                <caption class="sr-only">
+                    Comparaison critère par critère entre un site à 600 € fait
+                    vite ou généré par IA et un site conçu avec William De
+                    Azevedo, puis ce que chacun rapporte en général.
+                </caption>
+                <colgroup>
+                    <col class="w-[30%]" />
+                    <col class="w-[34%]" />
+                    <col class="w-[36%]" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="pb-6" scope="col">
+                            <span class="sr-only">Critère</span>
+                        </th>
+                        <th class="px-6 pb-6 align-bottom" scope="col">
+                            <span class={cheapChip} aria-hidden="true">
+                                <Sparkle class="size-5" />
+                            </span>
+                            <span class="block text-xl font-medium leading-tight text-gray-900">
+                                {columns.cheap.title}
+                            </span>
+                            <span class="mt-1.5 block text-sm font-normal leading-snug text-gray-600">
+                                {columns.cheap.note}
+                            </span>
+                        </th>
+                        <th class="px-8 pb-6 align-bottom" scope="col">
+                            <span class={withMeChip} aria-hidden="true">
+                                <WindowPointer class="size-5" />
+                            </span>
+                            <span class="block text-xl font-medium leading-tight text-gray-900">
+                                {columns.withMe.title}
+                            </span>
+                            <span class="mt-1.5 block text-sm font-normal leading-snug text-gray-600">
+                                {columns.withMe.note}
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        rows.map((row, rowIndex) => {
+                            const Icon = row.icon;
+
+                            return (
                                 <tr
-                                    class="comparison-row group"
+                                    class="comparison-row"
                                     style={`--row-index: ${rowIndex}`}
                                 >
                                     <th
-                                        class="sticky left-0 z-10 bg-snow-50 px-5 py-4 text-sm font-normal leading-tight text-gray-900 transition-colors group-hover:bg-snow-200"
+                                        class="border-b border-gray-300/70 py-5 pr-6 font-normal"
                                         scope="row"
                                     >
-                                        <span class="flex items-center gap-3">
+                                        <span class="flex items-center gap-4">
                                             <span
                                                 class:list={[
-                                                    "inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-snow-50",
+                                                    "inline-flex size-9 shrink-0 items-center justify-center rounded-lg text-snow-50",
                                                     iconToneClasses[row.tone],
                                                 ]}
                                                 aria-hidden="true"
                                             >
-                                                {row.icon === "target" && (
-                                                    <Target class="size-5" />
-                                                )}
-                                                {row.icon === "identity" && (
-                                                    <WindowPaintbrush class="size-5" />
-                                                )}
-                                                {row.icon === "touch" && (
-                                                    <TouchClick class="size-5" />
-                                                )}
-                                                {row.icon === "ux" && (
-                                                    <WindowLayout class="size-5" />
-                                                )}
-                                                {row.icon === "performance" && (
-                                                    <Gauge class="size-5" />
-                                                )}
-                                                {row.icon === "search" && (
-                                                    <SearchContent class="size-5" />
-                                                )}
-                                                {row.icon === "form" && (
-                                                    <Msgs class="size-5" />
-                                                )}
-                                                {row.icon === "user" && (
-                                                    <UserHeart class="size-5" />
-                                                )}
-                                                {row.icon === "code" && (
-                                                    <CodeEditor class="size-5" />
-                                                )}
-                                                {row.icon === "budget" && (
-                                                    <BadgeDollar class="size-5" />
-                                                )}
-                                                {row.icon === "ia" && (
-                                                    <Sparkle class="size-5" />
+                                                <Icon class="size-5" />
+                                            </span>
+                                            <span class="leading-snug">
+                                                <span class="block text-base text-gray-900">
+                                                    {row.label}
+                                                </span>
+                                                {row.detail && (
+                                                    <span class="mt-0.5 block text-sm text-gray-600">
+                                                        {row.detail}
+                                                    </span>
                                                 )}
                                             </span>
-                                            <span>{row.label}</span>
                                         </span>
                                     </th>
-                                    {[row.solo, row.split].map((cell) => (
-                                        <td class="px-5 py-4 text-center text-sm font-normal leading-tight text-gray-500 transition-colors group-hover:bg-snow-200">
-                                            {cell.type === "check" && (
-                                                <span
-                                                    class="inline-flex size-8 items-center justify-center rounded-full bg-blue-50 text-blue-500"
-                                                    aria-label="Oui"
-                                                >
-                                                    <CheckIcon class="size-4" />
-                                                </span>
-                                            )}
-                                            {cell.type === "x" && (
-                                                <span
-                                                    class="inline-flex size-8 items-center justify-center rounded-full bg-gray-100 text-gray-900"
-                                                    aria-label="Non"
-                                                >
-                                                    <XMarkIcon class="size-3" />
-                                                </span>
-                                            )}
-                                            {cell.type === "text" && (
-                                                <span>{cell.text}</span>
-                                            )}
-                                        </td>
-                                    ))}
-                                    <td class="comparison-highlight px-5 py-4 text-sm font-normal leading-tight text-snow-50">
-                                        <span class="flex items-center gap-3">
+                                    <td class="border-b border-gray-300/70 px-6 py-5">
+                                        <span class="flex items-start gap-3 text-[0.9375rem] leading-snug text-gray-600">
                                             <span
-                                                class="inline-flex size-7 flex-none items-center justify-center rounded-full bg-snow-50 text-blue-500 shadow-[0_10px_20px_-12px_rgba(14,23,37,0.55)]"
+                                                class={crossBadge}
                                                 aria-hidden="true"
                                             >
-                                                <CheckIcon class="size-3.5" />
+                                                <XMarkIcon class={crossIcon} />
                                             </span>
-                                            <span>{row.complete}</span>
+                                            <span class="pt-0.5">
+                                                {row.cheap}
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="comparison-card-cell px-8 py-5">
+                                        <span class="flex items-start gap-3 text-base leading-snug text-gray-900">
+                                            <span
+                                                class={checkBadge}
+                                                aria-hidden="true"
+                                            >
+                                                <CheckIcon class={checkIcon} />
+                                            </span>
+                                            <span class="pt-0.5">
+                                                {row.withMe}
+                                            </span>
                                         </span>
                                     </td>
                                 </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
-            </div>
+                            );
+                        })
+                    }
+                </tbody>
+                <tfoot>
+                    <tr
+                        class="comparison-row"
+                        style={`--row-index: ${rows.length}`}
+                    >
+                        <th
+                            class="py-7 pr-6 text-lg font-medium leading-tight text-gray-900"
+                            scope="row"
+                        >
+                            {outcome.label}
+                        </th>
+                        <td class="px-6 py-7 text-lg font-normal leading-snug text-gray-700">
+                            {outcome.cheap}
+                        </td>
+                        <td class="px-4 pt-4">
+                            <div class="rounded-3xl bg-blue-500 px-6 py-5 text-snow-50 shadow-[0_22px_44px_-26px_rgba(62,96,212,0.95)]">
+                                <strong class="block text-lg font-medium leading-snug">
+                                    {outcome.withMe}
+                                </strong>
+                                <span class="mt-2 block text-sm font-normal leading-snug">
+                                    {outcome.withMeNote}
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-        <p class="mt-3 text-center text-xs font-normal text-gray-500 lg:hidden">
-            Faites défiler le tableau horizontalement pour comparer les trois
-            options.
-        </p>
+    </FadeRevealOnScroll>
+
+    <div class="mx-auto mt-12 grid max-w-xl gap-5 md:max-w-4xl md:grid-cols-2 lg:hidden">
+        <FadeRevealOnScroll class="flex" delay={0.06}>
+            <article class="w-full rounded-3xl bg-snow-50/60 p-6">
+                <span class={cheapChip} aria-hidden="true">
+                    <Sparkle class="size-5" />
+                </span>
+                <h3 class="text-xl font-medium leading-tight text-gray-900">
+                    {columns.cheap.title}
+                </h3>
+                <p class="mt-1.5 text-sm leading-snug text-gray-600">
+                    {columns.cheap.note}
+                </p>
+                <dl class="mt-5 divide-y divide-gray-200">
+                    {
+                        rows.map((row) => (
+                            <div class="py-3.5">
+                                <dt class="text-sm font-medium leading-snug text-gray-900">
+                                    {row.label}
+                                </dt>
+                                <dd class="mt-1.5 flex items-start gap-3 text-sm leading-snug text-gray-600">
+                                    <span class={crossBadge} aria-hidden="true">
+                                        <XMarkIcon class={crossIcon} />
+                                    </span>
+                                    <span class="pt-0.5">{row.cheap}</span>
+                                </dd>
+                            </div>
+                        ))
+                    }
+                    <div class="mt-3 rounded-2xl bg-gray-100 px-5 py-4">
+                        <dt class="text-sm leading-snug text-gray-600">
+                            {outcome.label}
+                        </dt>
+                        <dd class="mt-1 text-lg font-medium leading-snug text-gray-900">
+                            {outcome.cheap}
+                        </dd>
+                    </div>
+                </dl>
+            </article>
+        </FadeRevealOnScroll>
+        <FadeRevealOnScroll class="flex" delay={0.12}>
+            <article class="comparison-card w-full rounded-3xl bg-snow-50 p-6">
+                <span class={withMeChip} aria-hidden="true">
+                    <WindowPointer class="size-5" />
+                </span>
+                <h3 class="text-xl font-medium leading-tight text-gray-900">
+                    {columns.withMe.title}
+                </h3>
+                <p class="mt-1.5 text-sm leading-snug text-gray-600">
+                    {columns.withMe.note}
+                </p>
+                <dl class="mt-5 divide-y divide-gray-200">
+                    {
+                        rows.map((row) => (
+                            <div class="py-3.5">
+                                <dt class="text-sm font-medium leading-snug text-gray-900">
+                                    {row.label}
+                                </dt>
+                                <dd class="mt-1.5 flex items-start gap-3 text-sm leading-snug text-gray-700">
+                                    <span class={checkBadge} aria-hidden="true">
+                                        <CheckIcon class={checkIcon} />
+                                    </span>
+                                    <span class="pt-0.5">{row.withMe}</span>
+                                </dd>
+                            </div>
+                        ))
+                    }
+                    <div class="mt-3 rounded-2xl bg-blue-500 px-5 py-4 text-snow-50">
+                        <dt class="text-sm leading-snug">{outcome.label}</dt>
+                        <dd class="mt-1 text-lg font-medium leading-snug">
+                            {outcome.withMe}
+                        </dd>
+                        <dd class="mt-2 text-sm leading-snug">
+                            {outcome.withMeNote}
+                        </dd>
+                    </div>
+                </dl>
+            </article>
+        </FadeRevealOnScroll>
+    </div>
+
+    <FadeRevealOnScroll
+        class="mx-auto mt-14 max-w-xl md:max-w-4xl lg:mt-20 lg:max-w-5xl"
+        delay={0.1}
+    >
+        <div class="grid gap-6 border-t border-gray-300/70 pt-8 lg:grid-cols-[30fr_70fr] lg:gap-0">
+            <div class="lg:pr-6">
+                <h3 class="text-base font-medium leading-tight text-gray-900">
+                    Et le budget ?
+                </h3>
+                <p class="mt-1.5 text-sm leading-snug text-gray-600">
+                    Coût estimé sur 3{nbsp}ans
+                </p>
+            </div>
+            <dl class="grid gap-6 sm:grid-cols-2 lg:grid-cols-[34fr_36fr] lg:gap-0">
+                <div class="lg:px-6">
+                    <dt class="text-sm font-medium text-gray-900">
+                        {columns.cheap.title}
+                    </dt>
+                    <dd class="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <span class="text-sm text-gray-600">
+                            <span class="sr-only">Prix affiché :</span>
+                            <s class="decoration-red-500 decoration-2">
+                                {costs.anchor}
+                            </s>
+                        </span>
+                        <span class="text-lg font-medium leading-tight text-gray-900">
+                            <span class="sr-only">Coût estimé :</span>
+                            {costs.total}
+                        </span>
+                    </dd>
+                    <dd class="mt-1 text-sm leading-snug text-gray-600">
+                        sur 3{nbsp}ans, abonnement en cours
+                    </dd>
+                    <dd class="mt-2 text-sm leading-relaxed text-gray-600">
+                        Mise en place puis abonnement de {costs.monthly}{nbsp};
+                        hébergement et modifications souvent inclus tant que
+                        l'abonnement court.
+                    </dd>
+                </div>
+                <div class="lg:px-8">
+                    <dt class="text-sm font-medium text-gray-900">
+                        {columns.withMe.title}
+                    </dt>
+                    <dd class="mt-1.5 text-lg font-medium leading-tight text-blue-600">
+                        {costs.withMe}
+                    </dd>
+                    <dd class="mt-1 text-sm leading-snug text-gray-600">
+                        {costs.withMeNote}
+                    </dd>
+                </div>
+            </dl>
+        </div>
     </FadeRevealOnScroll>
 
     <FadeRevealOnScroll delay={0.12}>
-        <p class="mx-auto mt-8 max-w-2xl text-center text-sm font-normal leading-relaxed text-gray-500">
-            Le but n'est pas de cocher toutes les cases pour tous les projets.
-            C'est de savoir lesquelles comptent vraiment avant d'engager du
-            budget.
+        <p class="mx-auto mt-10 max-w-2xl text-center text-[0.8125rem] leading-relaxed text-gray-600">
+            Côté site à 600{nbsp}€, il s'agit de tendances générales : chaque offre
+            est différente. Coûts indicatifs d'après un relevé d'offres
+            publiques de sites à bas prix et par abonnement, consulté le
+            14{nbsp}octobre 2026, sans agence citée. Pour le détail, lisez
+            l'article{" "}
+            <a
+                class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                href="/articles/site-600-euros-vs-site-2000-euros/"
+                >site à 600{nbsp}€ ou site à 2{nbsp}000{nbsp}€</a
+            >.
         </p>
         <div class="mt-6 flex justify-center">
             <CalButton
                 class="rounded-xl text-base font-normal"
-                label="Vérifier ce qui compte pour votre projet"
-                location="tarifs-comparaison"
+                label="Parler de mon projet"
+                location={ctaLocation}
             />
         </div>
     </FadeRevealOnScroll>
 </section>
 
 <style>
-    /* Per-cell borders (border-separate keeps the sticky column clean). */
-    tbody th,
-    tbody td {
-        border-bottom: 1px solid var(--color-gray-200);
+    .comparison-card {
+        box-shadow:
+            0 2.5rem 5rem -2.75rem rgba(34, 42, 55, 0.35),
+            0 1rem 2rem -1.5rem rgba(34, 42, 55, 0.2);
     }
 
-    tbody th {
-        border-right: 1px solid var(--color-gray-200);
+    /* Inset separators: a full-width cell border would paint over the
+       card edge. */
+    .comparison-card-cell {
+        position: relative;
     }
 
-    tbody tr:last-child th,
-    tbody tr:last-child td {
-        border-bottom: 0;
-    }
-
-    .comparison-highlight {
-        background: var(--color-blue-500);
-        box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.14);
-    }
-
-    thead .comparison-highlight {
-        border-bottom-color: rgba(255, 255, 255, 0.22);
-    }
-
-    tbody .comparison-highlight {
-        border-bottom-color: rgba(255, 255, 255, 0.16);
-        transition: background-color 200ms ease;
-    }
-
-    tbody tr:hover .comparison-highlight {
-        background: var(--color-blue-600);
+    .comparison-card-cell::after {
+        background: var(--color-gray-200);
+        bottom: 0;
+        content: "";
+        height: 1px;
+        left: 2rem;
+        position: absolute;
+        right: 2rem;
     }
 
     /* Staggered row reveal, driven by the FadeRevealOnScroll wrapper state.
@@ -382,6 +528,14 @@ const rows: ComparisonRow[] = [
             .comparison-row {
             opacity: 0;
             transition: none;
+        }
+
+        /* The section sits below the fold: hold the title's word reveal
+           until it scrolls into view instead of playing it on page load. */
+        .pricing-comparison
+            :global(.fade-reveal-on-scroll.is-reveal-ready:not(.is-visible))
+            :global(.animated-heading__word) {
+            animation-play-state: paused;
         }
     }
 </style>
