@@ -45,6 +45,12 @@ const serviceBentoCopy: Record<
     title: "Site internet professionnel",
     visual: "professional",
   },
+  "creation-site-internet-yvelines": {
+    description:
+      "Un développeur web freelance basé à Achères pour les indépendants, artisans et TPE des Yvelines, en visio ou par téléphone.",
+    title: "Site internet dans les Yvelines",
+    visual: "artisan",
+  },
   "creation-site-vitrine": {
     description:
       "Du cadrage à la mise en ligne, je construis une présence claire, rapide et crédible, avec un parcours pensé pour déclencher le contact.",
