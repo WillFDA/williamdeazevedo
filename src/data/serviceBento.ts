@@ -51,6 +51,12 @@ const serviceBentoCopy: Record<
     title: "Création de site vitrine",
     visual: "vitrine",
   },
+  "developpement-sur-mesure": {
+    description:
+      "Une application web pensée pour votre façon de travailler, à la place des tableurs et des outils bricolés.",
+    title: "Développement web sur mesure",
+    visual: "frontend",
+  },
   "developpeur-web-freelance": {
     description:
       "J'intègre des maquettes, corrige les états d'interface, le responsive, l'accessibilité et la performance sans casser votre produit.",
