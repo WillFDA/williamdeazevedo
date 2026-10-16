@@ -4,6 +4,7 @@ import Accordion from "./ui/Accordion.astro";
 import WaveIcon from "./ui/WaveIcon.astro";
 import WaveText from "./ui/WaveText.astro";
 import { getProjectById } from "@/data/projects";
+import { buildFaqJsonLd } from "@/lib/faqJsonLd";
 
 type FaqItem = {
     answer: string;
@@ -23,6 +24,8 @@ interface Props {
     items?: readonly FaqItem[];
     padded?: boolean;
     showCta?: boolean;
+    /** Publie le JSON-LD FAQPage (une seule FAQ balisée par page). */
+    structuredData?: boolean;
     title?: string;
 }
 
@@ -105,9 +108,11 @@ const {
     items,
     padded = true,
     showCta = true,
+    structuredData = false,
     title = "FAQ",
 } = Astro.props;
 const faqItems = Array.from(items ?? getDefaultFaqItems());
+const faqJsonLd = structuredData ? buildFaqJsonLd(faqItems) : null;
 
 const accordionClasses = {
     content:
@@ -118,6 +123,16 @@ const accordionClasses = {
         "px-5 py-4 text-base font-normal leading-tight text-gray-900 sm:px-6",
 };
 ---
+
+{
+    faqJsonLd && (
+        <script
+            type="application/ld+json"
+            is:inline
+            set:html={JSON.stringify(faqJsonLd)}
+        />
+    )
+}
 
 <section
     id={id}
