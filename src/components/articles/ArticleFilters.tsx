@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 const ALL_VALUE = "all";
 const COMBINING_MARKS = /[\u0300-\u036F]/g;
+const COLLAPSED_TAG_COUNT = 4;
+const TAG_LIST_ID = "article-tag-list";
 
 type FilterOption = {
   label: string;
@@ -238,6 +240,7 @@ export default function ArticleFilters({ tags, years }: Props) {
   const [tag, setTag] = useState(ALL_VALUE);
   const [year, setYear] = useState(ALL_VALUE);
   const [isUrlReady, setIsUrlReady] = useState(false);
+  const [isTagListExpanded, setIsTagListExpanded] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -329,6 +332,15 @@ export default function ArticleFilters({ tags, years }: Props) {
     empty?.classList.toggle("hidden", visibleCount > 0);
   }, [search, tag, year]);
 
+  // Le tag actif reste visible même quand la liste est repliée.
+  const visibleTags = isTagListExpanded
+    ? tags
+    : tags.filter(
+        (tagName, index) => index < COLLAPSED_TAG_COUNT || tagName === tag
+      );
+  const hiddenTagCount = tags.length - visibleTags.length;
+  const hasToggle = isTagListExpanded || hiddenTagCount > 0;
+
   const yearOptions = [
     { label: "Toutes les dates", value: ALL_VALUE },
     ...years.map((yearValue) => ({ label: yearValue, value: yearValue })),
@@ -367,9 +379,10 @@ export default function ArticleFilters({ tags, years }: Props) {
       <fieldset
         aria-label="Filtrer par tag"
         className="flex max-w-4xl min-w-0 flex-wrap gap-2"
+        id={TAG_LIST_ID}
       >
         <legend className="sr-only">Filtrer par tag</legend>
-        {tags.map((tagName) => {
+        {visibleTags.map((tagName) => {
           const isActive = tag === tagName;
           const TagIcon = getTagIcon(tagName);
 
@@ -394,6 +407,26 @@ export default function ArticleFilters({ tags, years }: Props) {
             </button>
           );
         })}
+        {hasToggle && (
+          <button
+            aria-controls={TAG_LIST_ID}
+            aria-expanded={isTagListExpanded}
+            className={`${tagButtonBaseClass} ${tagButtonInactiveClass}`}
+            onClick={() => setIsTagListExpanded((isExpanded) => !isExpanded)}
+            type="button"
+          >
+            {isTagListExpanded ? (
+              "Moins"
+            ) : (
+              <>
+                +{hiddenTagCount}
+                <span className="sr-only">
+                  {hiddenTagCount > 1 ? " tags" : " tag"}
+                </span>
+              </>
+            )}
+          </button>
+        )}
       </fieldset>
       <style>
         {`
