@@ -5,6 +5,7 @@ import DiagnosticCta from "@/components/DiagnosticCta.astro";
 import FaqSection from "@/components/FaqSection.astro";
 import Marquee from "@/components/Marquee.astro";
 import RelatedServicesBento from "@/components/RelatedServicesBento.astro";
+import ServiceReadingList from "@/components/ServiceReadingList.astro";
 import ServiceDiagnosticToggle from "@/components/ServiceDiagnosticToggle.astro";
 import ServiceTimelineScroll from "@/components/ServiceTimelineScroll.astro";
 import ProjectListItem from "@/components/realisations/ProjectListItem.astro";
@@ -370,6 +371,8 @@ const breadcrumbJsonLd = {
                 title={methodSectionTitle}
             />
         </div>
+
+        <ServiceReadingList serviceSlug={service.slug} />
 
         <FaqSection
             id={`${service.slug}-faq`}
