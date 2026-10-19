@@ -105,6 +105,7 @@ export const articleServices: Record<string, string[]> = {
   "prix-site-vitrine": ["creation-site-vitrine"],
   "referencement-chatgpt": ["refonte-site-internet"],
   "refonte-seo": ["refonte-site-internet"],
+  "seo-local": ["creation-site-internet-artisan"],
   "site-600-euros-vs-site-2000-euros": ["creation-site-vitrine"],
   "site-internet-artisan-contenus": ["creation-site-internet-artisan"],
   "tester-accessibilite-site-web": ["refonte-site-internet"],

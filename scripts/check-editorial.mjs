@@ -28,6 +28,7 @@ const slugs = [
   "maintenance-site-web",
   "arborescence-site-web",
   "rgpd-formulaire-de-contact",
+  "seo-local",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
