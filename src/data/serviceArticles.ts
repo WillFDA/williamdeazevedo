@@ -107,6 +107,8 @@ export const articleServices: Record<string, string[]> = {
   "refonte-seo": ["refonte-site-internet"],
   "seo-local": ["creation-site-internet-artisan"],
   "site-600-euros-vs-site-2000-euros": ["creation-site-vitrine"],
+  "site-non-securise": ["refonte-site-internet"],
+  "site-pas-sur-google": ["refonte-site-internet"],
   "site-internet-artisan-contenus": ["creation-site-internet-artisan"],
   "tester-accessibilite-site-web": ["refonte-site-internet"],
   "widget-avis-google": ["creation-site-vitrine"],

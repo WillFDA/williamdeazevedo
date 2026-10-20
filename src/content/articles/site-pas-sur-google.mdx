@@ -1,0 +1,213 @@
+---
+title: "Pourquoi mon site n’apparaît pas sur Google (et comment le vérifier en 10 minutes)"
+seoTitle: "Pourquoi mon site n’apparaît pas sur Google ?"
+description: "Site introuvable sur Google ? Testez en 10 minutes : indexation, robots.txt, noindex, Search Console. Les vraies causes, et quoi faire pour chacune."
+image:
+  src: "/articles/site-pas-sur-google/cover.webp"
+  alt: "Le diagnostic en quatre cartes : la recherche site: dans Google, l’inspection d’URL dans Search Console, les blocages techniques à vérifier, et les liens qui mènent Google jusqu’à vos pages."
+pubDate: 2026-10-20
+author: "William De Azevedo"
+draft: false
+faq:
+  - question: "Combien de temps faut-il pour qu’un nouveau site apparaisse sur Google ?"
+    answer: "Google indique qu’il faut jusqu’à une semaine pour commencer à explorer et indexer un nouveau site. Une demande d’indexation prend en général un jour ou deux, parfois plusieurs semaines. Être bien placé sur votre métier est un autre travail, qui peut prendre des mois, sans garantie."
+  - question: "Faut-il payer Google pour apparaître dans les résultats ?"
+    answer: "Non. Référencer son site sur Google ne coûte rien : Google n’accepte aucun paiement pour explorer un site plus souvent ou le classer plus haut. Les annonces payantes existent, mais elles sont signalées comme sponsorisées et ne changent rien à votre place dans les résultats naturels."
+  - question: "Mon site apparaît quand je tape son nom, mais pas sur mon métier : pourquoi ?"
+    answer: "Google connaît au moins votre page d’accueil ; vérifiez dans Search Console que vos autres pages sont indexées. Sur votre métier, Google montre d’abord des pages qu’il juge plus pertinentes ou plus complètes. Travaillez vos titres, le contenu de vos pages de services et votre présence locale, détaillée dans l’article sur le SEO local."
+  - question: "Que veut dire « Détectée, actuellement non indexée » dans Search Console ?"
+    answer: "Google connaît l’adresse de la page mais ne l’a pas encore visitée. En règle générale, il a reporté sa visite. Ajoutez des liens vers cette page depuis vos pages importantes, vérifiez qu’elle est dans le sitemap, puis demandez l’indexation une fois."
+  - question: "Un site Wix ou WordPress est-il moins bien référencé ?"
+    answer: "Pas en soi. Google indique même que des services comme Wix ou Squarespace devraient le prévenir quand vous publiez une page. Ce qui compte, ce sont les réglages (une case « ne pas indexer » oubliée sur WordPress, par exemple) et la qualité du contenu, pas l’outil."
+tags: ["SEO", "indexation", "Search Console", "tpe"]
+---
+
+import PreparationChecklist from "../../components/articles/PreparationChecklist.astro";
+
+**Si votre site n’apparaît pas sur Google, c’est le plus souvent pour l’une de ces raisons : Google ne connaît pas encore la page (site récent, pas de sitemap, peu de liens vers elle), un réglage technique la bloque (balise `noindex`, robots.txt, mot de passe), ou elle est indexée mais trop loin dans les résultats pour que vous la voyiez. Pour savoir laquelle, tapez `site:votredomaine.fr` dans Google, puis inspectez l’adresse dans Google Search Console : l’outil gratuit de Google vous dit si la page est indexée et, sinon, pourquoi.**
+
+Cet article s’adresse aux artisans et dirigeants de TPE qui ont déjà un site et ne le trouvent pas sur Google. Pas besoin d’être technicien : on avance dans l’ordre, du test le plus simple au plus précis. Et je vous montre un cas réel : mon propre site, techniquement propre, dont plus de la moitié des pages n’étaient pas indexées en octobre 2026.
+
+## D’abord, vérifiez si Google connaît votre site (la commande site: et ses limites)
+
+Premier réflexe : demander à Google ce qu’il connaît de votre site. Tapez `site:` suivi de votre nom de domaine, sans espace :
+
+- `site:votredomaine.fr` affiche des pages de votre site que Google a dans son index ;
+- `site:votredomaine.fr/contact` vérifie une page précise.
+
+Trois résultats possibles :
+
+| Ce que vous voyez | Ce que ça veut dire | Où aller ensuite |
+| --- | --- | --- |
+| Aucun résultat | Google ne connaît pas votre site, ou quelque chose le bloque | Les deux sections suivantes : Search Console, puis blocages techniques |
+| Quelques pages seulement | Une partie du site est connue, le reste non | Inspecter les pages absentes dans Search Console |
+| Toutes vos pages importantes | Votre site est indexé | Le problème est le positionnement : voir plus bas |
+
+Cette commande a des limites, que Google décrit lui-même : elle ne montre pas forcément **toutes** les pages indexées, et `site:www.votredomaine.fr` ne donne pas toujours les mêmes résultats que `site:votredomaine.fr`. C’est un thermomètre, pas un compteur. Et ne concluez pas trop vite d’une recherche sur votre métier : les résultats varient notamment selon le lieu et l’appareil.
+
+## Votre site est-il indexé ? Ce que dit Google Search Console
+
+Pour une réponse fiable, il faut **Google Search Console**, l’outil gratuit de Google réservé au propriétaire du site. S’il n’y est pas encore déclaré, commencez par là (ou demandez-le à votre prestataire) : il faut prouver que le site est à vous.
+
+Collez ensuite l’adresse d’une page dans la barre **Inspection de l’URL**, tout en haut : l’outil indique si la page est sur Google et, sinon, pourquoi. Pour un site de moins de 500 pages, Google conseille cette inspection et la commande `site:` plutôt que le rapport global d’indexation.
+
+Les quatre réponses principales, expliquées simplement :
+
+| Statut affiché | En clair | Ce que vous pouvez faire |
+| --- | --- | --- |
+| Cette URL est sur Google (page indexée) | Google a enregistré la page : elle peut apparaître dans les résultats | Rien côté indexation. Si vous ne la voyez pas, c’est un problème de positionnement |
+| Détectée, actuellement non indexée | Google connaît l’adresse mais ne l’a pas encore visitée | Ajouter des liens vers cette page depuis vos pages importantes, puis demander l’indexation |
+| Explorée, actuellement non indexée | Google a lu la page mais ne l’a pas retenue pour l’instant | Rendre la page plus utile et plus complète, la relier au reste du site, puis attendre |
+| Google ne reconnaît pas cette URL | Google n’a jamais entendu parler de cette page | Vérifier le sitemap et les liens internes, puis demander l’indexation |
+
+Dans le même écran, le bouton **Demander une indexation** place la page dans une file d’attente. Utile pour une nouvelle page ou une correction, mais le nombre de demandes par jour est limité, et les répéter n’accélère rien.
+
+Pour aller plus loin que ce diagnostic (titres, vitesse, contenus, liens), l’[audit SEO d’un site vitrine](/articles/audit-seo/) reprend la méthode complète.
+
+## Les blocages techniques à éliminer en premier
+
+Si votre site entier est absent, ou si Search Console signale un réglage, cherchez d’abord ces cinq points, rapides à corriger : un seul suffit parfois à rendre une page invisible.
+
+| Blocage | Comment le repérer | Correction |
+| --- | --- | --- |
+| Balise `noindex` | Search Console : « Indexation autorisée ? Non », ou « URL marquée noindex » | Retirer la balise ou décocher l’option WordPress décrite ci-dessous |
+| Fichier robots.txt | Ouvrir `votredomaine.fr/robots.txt` : `Disallow: /` sous `User-agent: *` bloque tout le site | Supprimer la règle qui bloque vos pages |
+| Mode maintenance ou mot de passe | Le site s’ouvre sur une page « bientôt en ligne », ou demande un identifiant | Désactiver le mode maintenance ou le mot de passe une fois le site lancé |
+| URL canonique incorrecte | Inspection : le champ « URL canonique sélectionnée par Google » ne montre pas votre page | Chaque page doit désigner sa propre adresse comme version principale |
+| HTTPS et versions du site | Le site s’ouvre avec et sans www ; pour le http, Chrome passe tout seul en https : faites confirmer la redirection par votre prestataire | Rediriger toutes les variantes vers une seule adresse en https |
+
+Quelques précisions, parce que ces mots font peur :
+
+- **`noindex`** est une instruction invisible qui dit à Google « n’affiche pas cette page ». Elle est souvent posée pendant la construction du site, puis oubliée au lancement. Sur WordPress, c’est la case « Demander aux moteurs de recherche de ne pas indexer ce site », dans les réglages de lecture.
+- **Le robots.txt** indique aux robots les zones qu’ils peuvent explorer : une seule ligne mal placée leur ferme tout le site. Google précise qu’il ne sert pas à cacher une page ; pour cela, il faut `noindex` ou un mot de passe.
+- **Le mode maintenance** : Google n’indexe que des pages qui fonctionnent et s’ouvrent sans identifiant. Une page « en construction » restée en place cache tout le contenu réel.
+- **La canonique** : quand plusieurs adresses affichent le même contenu, Google n’en montre qu’une. Si votre page en désigne une autre comme version principale, elle s’efface à son profit.
+- **Les versions du site** : avec ou sans `www`, en `http` ou en `https`, ce sont pour Google des adresses différentes. Une redirection (un renvoi automatique) vers une seule version, en `https`, lui indique laquelle garder. Si votre navigateur affiche « Non sécurisé », lisez d’abord [pourquoi votre site n’est pas en https](/articles/site-non-securise/).
+
+Vous ne savez pas vérifier ces points seul ? C’est le travail de votre prestataire. Si vous n’avez plus de contact avec lui, l’article [changer de prestataire web](/articles/changer-prestataire-web/) explique comment récupérer vos accès.
+
+## Site récent ou peu relié : pourquoi Google met du temps
+
+Aucun blocage, et vos pages restent « détectées » ou inconnues ? C’est un cas courant sur les sites récents ou petits. Il n’existe pas de registre central des pages web : Google doit les **découvrir**, en suivant les liens d’une page qu’il connaît déjà, ou en lisant la liste que vous lui fournissez, le sitemap.
+
+Pour indexer son site sur Google, trois leviers, du plus simple au plus long :
+
+1. **Le sitemap.** C’est un fichier qui liste les adresses importantes de votre site. La plupart des outils de création (WordPress, Wix, Shopify) le génèrent automatiquement. Déclarez son adresse dans Search Console, rubrique **Sitemaps**, et vérifiez qu’il est lu sans erreur.
+2. **Les liens internes.** Une page que rien ne relie au reste du site est souvent la dernière explorée. Chaque page importante doit être accessible depuis la page d’accueil, le menu ou une page de service, en quelques clics. Google l’écrit lui-même : si la navigation est bien pensée, il devrait pouvoir trouver toutes vos pages à partir de l’accueil.
+3. **Les liens externes.** Google découvre aussi les pages grâce aux autres sites qui renvoient vers vous. Pour une entreprise locale, les plus naturels sont votre fiche Google, l’annuaire de votre chambre de métiers, votre fédération, vos partenaires. Le guide de la [fiche Google My Business pour artisan](/articles/fiche-google-my-business-artisan/) montre comment relier la fiche à votre site.
+
+## Indexé mais introuvable : le problème est le positionnement
+
+Search Console dit « Cette URL est sur Google », mais vous ne vous trouvez pas en tapant « menuisier Poissy » ? Alors Google connaît votre page, mais il en montre d’autres avant. Ce n’est plus une question d’indexation, c’est une question de **positionnement**.
+
+Tapez le nom exact de votre entreprise : si vous apparaissez, Google connaît au moins votre page d’accueil. Si vous restez absent sur votre métier, les causes habituelles sont :
+
+- **la page ne dit pas clairement ce que vous faites ni où** : un titre « Accueil » et un texte vague ne répondent à aucune recherche ;
+- **le contenu est trop mince** : trois lignes par service ne suffisent pas face à des concurrents qui expliquent, montrent et rassurent ;
+- **la concurrence locale est en place depuis longtemps**, avec une fiche Google complète, des avis et des liens.
+
+Google le rappelle : être indexé ne garantit pas d’apparaître, et la place dépend notamment de la pertinence de la page pour la recherche, de sa qualité, et du lieu de la personne qui cherche. Pour les recherches de proximité, la carte et la fiche Google comptent souvent autant que le site : c’est tout le sujet du [SEO local](/articles/seo-local/), que je détaille dans un article dédié.
+
+## Cas réel : mon propre site, 14 pages indexées sur 30
+
+Mon propre site, williamdeazevedo.fr, a ce problème. Voici l’état relevé dans Search Console le 19 octobre 2026, page par page.
+
+**Ce qui allait bien.** Les 30 adresses de mon sitemap répondaient correctement, aucune ne portait de balise `noindex`, chacune désignait sa propre adresse comme version principale, et Google retenait ces choix sur les pages qu’il avait explorées.
+
+**Ce qui n’allait pas.** Seulement 14 pages sur 30 étaient indexées :
+
+| Statut dans Search Console | Nombre de pages | Lesquelles, en gros |
+| --- | --- | --- |
+| Indexée | 14 | L’accueil, les pages de services, la liste des articles et deux articles anciens |
+| Détectée, actuellement non indexée | 6 | Surtout des articles, dont celui sur l’audit SEO |
+| Google ne reconnaît pas cette URL | 10 | Sept articles, surtout les plus récents, et trois pages de réalisations très courtes |
+| Explorée, actuellement non indexée | 0 | Aucune |
+
+**La cause probable.** La page qui liste mes articles, `/articles/`, n’avait pas été explorée depuis le 26 septembre. Or, en dehors du sitemap, c’est par elle et par les liens entre articles que Google pouvait découvrir les nouveaux. La page d’accueil, elle, avait été explorée le jour même, mais elle ne contenait aucun lien vers un article. Autrement dit : Google passait bien, mais il ne descendait pas jusqu’aux articles. Exactement le cas des sites « peu reliés » décrit plus haut.
+
+**Ce que je prévois de corriger.** Au moment où j’écris, ces corrections ne sont pas encore en ligne :
+
+- un bloc « Derniers articles » sur la page d’accueil, pour que cette page, que Google explore souvent, mène directement aux articles ;
+- davantage de liens depuis mes pages de services vers les articles qui en reçoivent peu ;
+- des demandes d’indexation dans Search Console pour une dizaine d’adresses prioritaires, dont la liste des articles ;
+- des pages de réalisations plus complètes, avant d’en demander l’indexation.
+
+Je ne peux donc pas encore vous dire combien de pages ces corrections feront indexer, ni en combien de temps. La leçon est déjà claire : un site techniquement propre peut rester à moitié invisible si ses nouvelles pages ne sont reliées à rien que Google visite souvent.
+
+## Combien de temps attendre, et quand demander de l’aide
+
+Aucun délai n’est garanti, et Google ne promet jamais d’indexer une page. Voici les repères qu’il donne lui-même :
+
+| Situation | Délai indiqué par Google |
+| --- | --- |
+| Nouveau site ou nouvelle page | Jusqu’à une semaine pour commencer l’exploration et l’indexation |
+| Demande d’indexation ou de nouvelle exploration | Généralement un jour ou deux, parfois plusieurs semaines |
+| Effet d’une modification sur les résultats | De quelques heures à plusieurs mois ; attendre quelques semaines avant de juger |
+
+Ma règle pratique : si une page importante n’est toujours pas indexée **plusieurs semaines** après une demande, sans blocage visible, regardez de plus près. Et demandez de l’aide sans attendre dans ces trois cas :
+
+- **votre site entier est absent**, même avec la commande `site:` : un blocage technique est probable ;
+- **le site a disparu après une refonte** ou un changement de prestataire : d’anciennes adresses mal redirigées, une balise oubliée ou un robots.txt de test sont fréquents ;
+- **vous n’avez pas accès à Search Console** ni au site, et votre ancien prestataire ne répond plus.
+
+## Check-list : votre diagnostic en 10 minutes
+
+<PreparationChecklist
+  legend="Pourquoi mon site n’apparaît-il pas sur Google ?"
+  note="Cochez les points déjà vérifiés. Cette liste reste sur cette page : aucune réponse n’est enregistrée ni transmise."
+  countLabel="points vérifiés"
+  doneLabel="Diagnostic terminé"
+  items={[
+    "J’ai tapé site:votredomaine.fr dans Google et noté les pages qui apparaissent.",
+    "Mon site est déclaré dans Google Search Console, et j’y ai accès.",
+    "J’ai inspecté ma page d’accueil et mes pages de services dans Search Console.",
+    "Aucune de ces pages n’affiche « noindex » ni « bloquée par le fichier robots.txt ».",
+    "Mon site s’ouvre sans mot de passe ni page « bientôt en ligne ».",
+    "Toutes les versions de mon adresse redirigent vers une seule, en https.",
+    "Mon sitemap est déclaré dans Search Console et lu sans erreur.",
+    "Chaque page importante est accessible depuis l’accueil ou le menu.",
+    "J’ai demandé l’indexation des pages importantes qui manquaient.",
+    "Mon site apparaît quand je tape le nom exact de mon entreprise.",
+  ]}
+/>
+
+## Faire vérifier votre site
+
+Vous avez trouvé la cause et vous pouvez la corriger ? Parfait : demandez l’indexation, puis revenez voir dans deux ou trois semaines.
+
+Si vous bloquez à une étape, ou si vous ne savez pas lire ce que dit Search Console, je peux regarder avec vous. Je suis [développeur web freelance](/services/developpeur-web-freelance/), basé à Achères, et je vérifie ces points à chaque [refonte de site internet](/refonte-site-internet/) comme dans mes autres [services](/services/) ; mes [tarifs](/tarifs/) détaillent ce qui est compris. Prenez rendez-vous : nous regarderons ensemble ce qui empêche Google de montrer votre site, sans engagement.
+
+## Questions fréquentes
+
+### Combien de temps faut-il pour qu’un nouveau site apparaisse sur Google ?
+
+Google indique qu’il faut jusqu’à une semaine pour commencer à explorer et indexer un nouveau site. Une demande d’indexation prend en général un jour ou deux, parfois plusieurs semaines. Être bien placé sur votre métier est un autre travail, qui peut prendre des mois, sans garantie.
+
+### Faut-il payer Google pour apparaître dans les résultats ?
+
+Non. Référencer son site sur Google ne coûte rien : Google n’accepte aucun paiement pour explorer un site plus souvent ou le classer plus haut. Les annonces payantes existent, mais elles sont signalées comme sponsorisées et ne changent rien à votre place dans les résultats naturels.
+
+### Mon site apparaît quand je tape son nom, mais pas sur mon métier : pourquoi ?
+
+Google connaît au moins votre page d’accueil ; vérifiez dans Search Console que vos autres pages sont indexées. Sur votre métier, Google montre d’abord des pages qu’il juge plus pertinentes ou plus complètes. Travaillez vos titres, le contenu de vos pages de services et votre présence locale, détaillée dans l’article sur le [SEO local](/articles/seo-local/).
+
+### Que veut dire « Détectée, actuellement non indexée » dans Search Console ?
+
+Google connaît l’adresse de la page mais ne l’a pas encore visitée. En règle générale, il a reporté sa visite. Ajoutez des liens vers cette page depuis vos pages importantes, vérifiez qu’elle est dans le sitemap, puis demandez l’indexation une fois.
+
+### Un site Wix ou WordPress est-il moins bien référencé ?
+
+Pas en soi. Google indique même que des services comme Wix ou Squarespace devraient le prévenir quand vous publiez une page. Ce qui compte, ce sont les réglages (une case « ne pas indexer » oubliée sur WordPress, par exemple) et la qualité du contenu, pas l’outil.
+
+## Sources officielles
+
+- [Google : opérateur de recherche site:](https://developers.google.com/search/docs/monitor-debug/search-operators/all-search-site?hl=fr)
+- [Search Console : rapport sur l’indexation des pages](https://support.google.com/webmasters/answer/7440203?hl=fr)
+- [Search Console : outil d’inspection d’URL](https://support.google.com/webmasters/answer/9012289?hl=fr)
+- [Google : demander une nouvelle exploration](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl?hl=fr)
+- [Google : fonctionnement de la recherche Google](https://developers.google.com/search/docs/fundamentals/how-search-works?hl=fr)
+- [Google : exigences techniques](https://developers.google.com/search/docs/essentials/technical?hl=fr)
+- [Google : présentation du fichier robots.txt](https://developers.google.com/search/docs/crawling-indexing/robots/intro?hl=fr)
+- [Google : choix de l’URL canonique](https://developers.google.com/search/docs/crawling-indexing/canonicalization?hl=fr)
+- [Google : bien débuter en SEO](https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=fr)
+- [WordPress : réglages de lecture](https://wordpress.org/documentation/article/settings-reading-screen/)

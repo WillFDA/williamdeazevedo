@@ -1,0 +1,199 @@
+---
+title: "Mon site affiche « Non sécurisé » : pourquoi, et comment le régler"
+seoTitle: "Site « non sécurisé » : pourquoi et que faire ?"
+description: "Votre site affiche « Non sécurisé » ? Les 4 causes possibles, comment les vérifier en 5 minutes, et qui doit régler le problème : hébergeur ou prestataire."
+image:
+  src: "/articles/site-non-securise/cover.webp"
+  alt: "Quatre cartes : repérer l’alerte « Non sécurisé » du navigateur, vérifier les quatre causes possibles, confier la correction à la bonne personne et prévenir pour que ça ne revienne pas."
+pubDate: 2026-10-20
+author: "William De Azevedo"
+draft: false
+faq:
+  - question: "Mon site affiche « Non sécurisé » : que faire en premier ?"
+    answer: "Cliquez sur l’icône à gauche de l’adresse et regardez le certificat : absent, expiré ou valide. Puis envoyez à votre hébergeur ou à votre prestataire le message de trois lignes proposé plus haut, avec une capture d’écran."
+  - question: "Un certificat SSL est-il obligatoire pour un site vitrine ?"
+    answer: "Aucune loi ne l’impose en toutes lettres à tous les sites, mais la CNIL recommande le chiffrement sur tous les sites et demande de le rendre obligatoire sur les pages qui transmettent des données personnelles, comme un formulaire de contact. Et sans lui, les navigateurs affichent « Non sécurisé », et Chrome avertit même avant d’ouvrir le site."
+  - question: "Peut-on avoir un certificat SSL gratuit ?"
+    answer: "Oui. Let’s Encrypt délivre gratuitement des certificats reconnus par la plupart des navigateurs, et beaucoup d’hébergeurs les intègrent à leurs offres. Pour un site vitrine, un certificat gratuit offre la même connexion sécurisée qu’un certificat payant."
+  - question: "Mon site est en https mais affiche quand même « Non sécurisé » : pourquoi ?"
+    answer: "Le plus souvent, le certificat a expiré ou ne couvre pas la bonne adresse (avec ou sans www) : le détail du certificat, dans le navigateur, permet de faire le tri. Un élément encore appelé en http, ce qu’on appelle du contenu mixte, se voit plutôt à une page qui s’affiche mal."
+  - question: "Le message « Non sécurisé » fait-il baisser mon référencement Google ?"
+    answer: "Pas directement. En 2014, Google a présenté le https comme un signal de classement très léger ; sa documentation actuelle précise que les critères d’expérience sur la page, dont le https, ne contribuent pas directement au classement, hormis les Core Web Vitals. Le vrai risque est ailleurs : des visiteurs qui repartent, et un site qui existe en plusieurs versions, http et https, pour Google."
+  - question: "Mon certificat a expiré : combien de temps pour le renouveler ?"
+    answer: "L’émission d’un certificat gratuit est automatisée : le délai dépend surtout de la réactivité de votre hébergeur ou de votre prestataire. Demandez-lui aussi de réparer le renouvellement automatique, sinon le problème reviendra."
+tags: ["sécurité", "site vitrine", "maintenance", "tpe"]
+---
+
+import PreparationChecklist from "../../components/articles/PreparationChecklist.astro";
+
+**Si votre site affiche « Non sécurisé », c’est que le navigateur ne peut pas établir de connexion sécurisée (https) avec lui. Dans la plupart des cas, il manque un certificat SSL, il a expiré ou il ne couvre pas la bonne adresse. Le certificat est souvent gratuit et inclus chez l’hébergeur : la réparation est en général simple pour votre hébergeur ou votre prestataire.**
+
+Vous avez vu ce message à côté de l’adresse de votre site, ou un client vous l’a signalé ? Cet article est écrit pour vous, propriétaire du site, pas pour le visiteur. Vous saurez ce que veut dire l’alerte, comment trouver la cause en cinq minutes avec votre navigateur, et surtout qui doit remettre votre site en https : votre hébergeur, votre prestataire ou vous.
+
+## Que veut dire « Non sécurisé » dans la barre d’adresse ?
+
+Sur une adresse en `http://`, les échanges circulent « en clair » : ce que le visiteur envoie ou reçoit peut être lu, voire modifié, en chemin. Une adresse en `https://` est chiffrée : seuls le visiteur et le site peuvent lire les échanges. Pour passer en https, un site a besoin d’un certificat, ce fameux certificat SSL. La question « http ou https » ne se pose donc plus : un site professionnel doit être en https.
+
+Selon le problème, l’alerte parle d’un site « Non sécurisé » ou d’une connexion non sécurisée :
+
+| Ce que voit le visiteur | Ce que ça signifie | Pour continuer, le visiteur doit… |
+| --- | --- | --- |
+| « Non sécurisé » à gauche de l’adresse, la page s’affiche | Le site s’ouvre en http, sans chiffrement | Rien, mais l’alerte reste affichée |
+| Une page d’alerte plein écran, du type « Votre connexion n’est pas privée » | Le certificat pose problème : expiré, absent, ou pour une autre adresse | Cliquer plusieurs fois pour passer outre |
+| « Votre connexion à ce site n’est pas sécurisée », en plein écran, avant la page | Chrome n’a pas pu ouvrir votre site en https : depuis l’automne 2026 (Chrome 154), il prévient par défaut avant de charger un site public en http | Confirmer qu’il veut continuer |
+| Un cadenas, ou l’icône habituelle, sans alerte | La connexion est chiffrée | Rien : c’est la situation normale |
+
+Chrome l’écrit noir sur blanc dans son aide : quand il affiche « Non sécurisé », « le propriétaire du site doit sécuriser celui-ci et vos données à l’aide du protocole HTTPS ». Safari affiche aussi les mots « Non sécurisé » dans la barre d’adresse quand un site n’utilise pas https ou ne chiffre pas les informations.
+
+À ne pas confondre avec la page rouge plein écran que Chrome affiche quand la navigation sécurisée de Google a repéré un site dangereux (hameçonnage, logiciel malveillant) : c’est un tout autre problème, qu’un certificat ne règle pas.
+
+## Est-ce grave pour votre entreprise ?
+
+Votre site ne va pas disparaître du jour au lendemain. Mais l’alerte vous coûte, de trois façons.
+
+**La confiance.** Votre site est votre carte de visite. Un particulier qui cherche un plombier, ou une entreprise qui compare des prestataires, voit l’alerte avant de voir votre travail. Sur un site en http, Chrome affiche même désormais une page d’avertissement : le visiteur doit confirmer qu’il veut continuer, alors que le résultat suivant s’ouvre sans alerte.
+
+**Les données du formulaire.** Un formulaire de contact en http envoie le nom, l’adresse e-mail et le message de votre client en clair. La CNIL recommande d’utiliser le chiffrement (TLS, le successeur de SSL) sur tous les sites, et de le rendre obligatoire sur les pages qui affichent ou transmettent des données personnelles : un formulaire de contact en fait partie. Les mentions à afficher sous ce formulaire sont un autre sujet, traité dans l’article sur le [RGPD et le formulaire de contact](/articles/rgpd-formulaire-de-contact/).
+
+**Google.** En 2014, Google a annoncé utiliser le https comme signal de classement, en précisant qu’il pesait très peu face à la qualité du contenu. Sa documentation actuelle range bien la question « Vos pages sont-elles diffusées de manière sécurisée ? » parmi les critères d’une bonne expérience sur la page, mais précise qu’en dehors des Core Web Vitals, ces critères ne contribuent pas directement au classement. Le vrai enjeu est ailleurs : un site qui s’ouvre à la fois en http et en https existe en plusieurs versions pour Google ; la marche à suivre est dans l’article [pourquoi mon site n’apparaît pas sur Google](/articles/site-pas-sur-google/).
+
+## Vérifier vous-même en 5 minutes
+
+Pour savoir si votre site est bien en https, votre navigateur suffit, ou presque. Faites ces vérifications sur ordinateur, dans Chrome par exemple.
+
+1. **Ouvrez votre site** en tapant simplement votre nom de domaine. Regardez l’icône à gauche de l’adresse : alerte, « Non sécurisé », ou icône normale ?
+2. **Cliquez sur cette icône.** Chrome indique si la connexion est sécurisée. Dans le détail du certificat, vous voyez à qui il a été délivré et sa **date d’expiration**.
+3. **Notez cette date.** Si elle est passée, vous tenez la cause. Si elle approche, prévenez votre prestataire.
+4. **Testez les variantes de l’adresse** : `http://votredomaine.fr`, `http://www.votredomaine.fr`, et les mêmes en `https://`. Toutes doivent arriver sur la même adresse en `https://`, sans alerte. Attention : Chrome essaie de lui-même la version https. S’il arrive en `https://`, cela ne prouve pas que votre site redirige : faites-le confirmer par votre prestataire.
+5. **Ouvrez vos pages clés** : accueil, contact, une page de service. Une alerte sur une seule page, ou un élément qui ne s’affiche plus, met souvent sur la piste du contenu mixte (voir plus bas).
+6. **Vérifiez sur votre téléphone, en 4G**, et en navigation privée. Si un seul client voit l’alerte, la cause peut être de son côté : Chrome cite par exemple un antivirus qui analyse les connexions https, un Wi-Fi public qui demande de se connecter, ou une date mal réglée sur l’appareil. Mais Chrome ne répète pas l’avertissement pour un site en http que l’on visite régulièrement : un nouveau client peut le voir alors que vous ne le voyez plus.
+
+<PreparationChecklist
+  legend="Votre site s’affiche-t-il en https sans alerte ?"
+  note="Cochez les points déjà vérifiés. Cette liste reste sur cette page : aucune réponse n’est enregistrée ni transmise."
+  countLabel="points vérifiés"
+  doneLabel="Connexion sécurisée"
+  items={[
+    "Mon site s’ouvre sans « Non sécurisé » ni page d’alerte.",
+    "Le certificat est valide, et je connais sa date d’expiration.",
+    "Mon prestataire m’a confirmé que les adresses en http, avec et sans www, redirigent vers la même adresse en https.",
+    "Ma page de contact et mon formulaire s’affichent sans alerte.",
+    "Je sais qui renouvelle le certificat : mon hébergeur ou mon prestataire.",
+    "J’ai mes accès à l’hébergement, au cas où mon prestataire serait injoignable.",
+  ]}
+/>
+
+## Les 4 causes les plus fréquentes
+
+Côté site, voici les quatre situations à vérifier en premier.
+
+### 1. Aucun certificat, ou pas pour la bonne adresse
+
+Le site n’a jamais été passé en https, ou le certificat ne couvre pas la bonne adresse (par exemple seulement `www.votredomaine.fr`, et pas `votredomaine.fr`). C’est fréquent sur un site ancien, ou après un changement d’hébergeur ou de nom de domaine.
+
+**Comment la reconnaître** : « Non sécurisé » sur toutes les pages, souvent précédé dans Chrome d’une page d’avertissement, ou page d’alerte uniquement sur l’une des deux variantes de l’adresse.
+
+### 2. Certificat expiré ou non renouvelé
+
+Un certificat a une durée de vie limitée. Les certificats gratuits de Let’s Encrypt durent 90 jours par défaut (64 jours à partir de février 2027, selon Let’s Encrypt), et les règles communes aux navigateurs et aux autorités de certification raccourcissent progressivement la durée maximale de tous les certificats : 200 jours depuis le 15 mars 2026, 100 jours en mars 2027, 47 jours en mars 2029. Il faut donc renouveler le certificat SSL automatiquement. Si ce renouvellement est cassé (changement d’hébergement, réglage modifié, nom de domaine déplacé), le certificat expire et l’alerte apparaît du jour au lendemain.
+
+**Comment la reconnaître** : page d’alerte plein écran, et une date d’expiration passée dans le détail du certificat.
+
+### 3. Contenu mixte : un élément encore appelé en http
+
+La page est bien en https, mais elle charge une image, une police, un script ou un formulaire depuis une adresse en `http://`. C’est ce qu’on appelle du contenu mixte. Les navigateurs récents forcent certains de ces éléments en https et bloquent les autres : une image, une police ou un script peut alors ne plus s’afficher ou ne plus fonctionner. Les navigateurs qui laissent encore passer ces éléments affichent une icône pour signaler le contenu mixte.
+
+**Comment la reconnaître** : le site est en https, le certificat est valide, mais une ou quelques pages posent problème. Souvent après l’ajout d’un ancien contenu, d’une vidéo, d’une carte ou d’un widget.
+
+### 4. Le site s’ouvre encore en http
+
+Le certificat existe et fonctionne, mais rien ne renvoie automatiquement les visiteurs de `http://` vers `https://`. Selon leur navigateur, ceux qui arrivent par un vieux lien, une carte de visite ou un favori peuvent tomber sur la version non chiffrée ; Chrome, lui, tente d’abord la version https.
+
+**Comment la reconnaître** : l’adresse en `https://` est normale, mais celle en `http://` reste en http, avec « Non sécurisé », dans certains navigateurs. Le réglage est le même que celui décrit dans l’article sur les [versions du site pour Google](/articles/site-pas-sur-google/) : une seule adresse, en https.
+
+## Certificat SSL : c’est quoi, et pourquoi il est souvent gratuit
+
+Qu’est-ce qu’un certificat SSL ? C’est un petit fichier installé sur le serveur qui prouve au navigateur que le site est bien celui de votre nom de domaine, et qui permet de chiffrer les échanges. On dit encore « SSL » par habitude, mais la technologie actuelle s’appelle TLS.
+
+**Un certificat SSL gratuit fait très bien l’affaire pour un site vitrine.** Let’s Encrypt, une autorité de certification gérée par un organisme à but non lucratif, délivre des certificats gratuits, reconnus par la plupart des navigateurs, à toute personne qui possède un nom de domaine. Ils sont pensés pour être obtenus et renouvelés automatiquement. Beaucoup d’hébergeurs les intègrent directement : il suffit souvent d’une option à activer dans l’espace client. Let’s Encrypt précise que certains intermédiaires, comme des hébergeurs, peuvent facturer des frais pour l’intégrer.
+
+Certains certificats payants ajoutent une vérification de l’entreprise. Pour un site d’artisan ou de TPE, le navigateur affiche la même connexion sécurisée : ce n’est pas ce qui fera disparaître l’alerte plus vite.
+
+## Qui doit régler le problème : hébergeur, prestataire ou vous ?
+
+C’est la vraie question. Voici qui intervient selon la cause :
+
+| Cause | Qui intervient | Ce qu’il doit faire |
+| --- | --- | --- |
+| Aucun certificat, ou mauvaise adresse couverte | L’hébergeur, ou le prestataire qui gère l’hébergement | Activer le certificat pour le domaine, avec et sans www |
+| Certificat expiré | L’hébergeur ou le prestataire | Renouveler le certificat, puis réparer le renouvellement automatique |
+| Contenu mixte | Le prestataire qui a fait ou maintient le site | Remplacer les adresses en http par des adresses en https dans les pages, le thème ou les extensions |
+| Le site s’ouvre encore en http | L’hébergeur ou le prestataire | Activer la redirection vers https sur toutes les adresses |
+| Dans tous les cas | Vous | Signaler le problème, garder vos accès, vérifier après la correction |
+
+Si vous ne savez pas qui gère votre hébergement, regardez qui vous facture le nom de domaine et l’hébergement : c’est souvent la bonne porte.
+
+Pour aller vite, envoyez un message précis. Trois lignes suffisent :
+
+> Bonjour, mon site votredomaine.fr affiche « Non sécurisé » (capture jointe) depuis le [date].
+>
+> Pouvez-vous vérifier le certificat SSL (présence, date d’expiration, adresses avec et sans www), la redirection de http vers https, ainsi que les éléments encore chargés en http ?
+>
+> Merci de me confirmer quand c’est réglé, et si le renouvellement automatique est bien en place.
+
+Votre prestataire ne répond plus, ou vous n’avez aucun accès à l’hébergement ? C’est le moment de récupérer vos accès : l’article [changer de prestataire web](/articles/changer-prestataire-web/) explique comment faire. Et si votre site est si ancien que personne ne sait plus le passer proprement en https, une [refonte de site internet](/refonte-site-internet/) peut coûter moins de temps qu’une série de rustines.
+
+## Éviter que ça revienne
+
+Un certificat corrigé peut expirer à nouveau dans quelques mois si rien ne change. Trois habitudes suffisent :
+
+- **Exigez le renouvellement automatique**, et demandez par écrit qui le surveille. Avec des certificats de plus en plus courts, un renouvellement à la main sera oublié tôt ou tard.
+- **Prévoyez une alerte d’expiration** : Let’s Encrypt n’envoie plus d’e-mail de rappel depuis juin 2025. Demandez à votre prestataire qui est prévenu si le renouvellement échoue, et vérifiez que l’alerte arrive dans une boîte que quelqu’un lit vraiment, pas dans celle d’un ancien salarié.
+- **Contrôlez après chaque modification** : changement d’hébergeur, de nom de domaine, ajout d’une page ou d’un widget. Les cinq minutes de vérification ci-dessus suffisent.
+
+C’est exactement le genre de point qu’un contrat de [maintenance de site web](/articles/maintenance-site-web/) doit couvrir, avec le nom de domaine, les sauvegardes et les mises à jour. Pour un contrôle plus large du site (indexation, titres, vitesse), suivez l’[audit SEO d’un site vitrine](/articles/audit-seo/).
+
+## Faire vérifier votre site
+
+Votre site affiche « Non sécurisé » et vous ne savez pas qui contacter, ou votre prestataire ne répond plus ? Je peux regarder avec vous d’où vient l’alerte et qui doit intervenir. Je suis développeur web freelance, basé à Achères, et je reprends régulièrement des sites existants pour les remettre d’aplomb. Mes [services](/services/) détaillent comment je travaille. Prenez rendez-vous : nous regarderons ensemble, sans engagement.
+
+## Questions fréquentes
+
+### Mon site affiche « Non sécurisé » : que faire en premier ?
+
+Cliquez sur l’icône à gauche de l’adresse et regardez le certificat : absent, expiré ou valide. Puis envoyez à votre hébergeur ou à votre prestataire le message de trois lignes proposé plus haut, avec une capture d’écran.
+
+### Un certificat SSL est-il obligatoire pour un site vitrine ?
+
+Aucune loi ne l’impose en toutes lettres à tous les sites, mais la CNIL recommande le chiffrement sur tous les sites et demande de le rendre obligatoire sur les pages qui transmettent des données personnelles, comme un formulaire de contact. Et sans lui, les navigateurs affichent « Non sécurisé », et Chrome avertit même avant d’ouvrir le site.
+
+### Peut-on avoir un certificat SSL gratuit ?
+
+Oui. Let’s Encrypt délivre gratuitement des certificats reconnus par la plupart des navigateurs, et beaucoup d’hébergeurs les intègrent à leurs offres. Pour un site vitrine, un certificat gratuit offre la même connexion sécurisée qu’un certificat payant.
+
+### Mon site est en https mais affiche quand même « Non sécurisé » : pourquoi ?
+
+Le plus souvent, le certificat a expiré ou ne couvre pas la bonne adresse (avec ou sans www) : le détail du certificat, dans le navigateur, permet de faire le tri. Un élément encore appelé en http, ce qu’on appelle du contenu mixte, se voit plutôt à une page qui s’affiche mal.
+
+### Le message « Non sécurisé » fait-il baisser mon référencement Google ?
+
+Pas directement. En 2014, Google a présenté le https comme un signal de classement très léger ; sa documentation actuelle précise que les critères d’expérience sur la page, dont le https, ne contribuent pas directement au classement, hormis les Core Web Vitals. Le vrai risque est ailleurs : des visiteurs qui repartent, et un site qui existe en plusieurs versions, http et https, pour Google.
+
+### Mon certificat a expiré : combien de temps pour le renouveler ?
+
+L’émission d’un certificat gratuit est automatisée : le délai dépend surtout de la réactivité de votre hébergeur ou de votre prestataire. Demandez-lui aussi de réparer le renouvellement automatique, sinon le problème reviendra.
+
+## Sources officielles
+
+- [Chrome : vérifier que la connexion d’un site est sécurisée](https://support.google.com/chrome/answer/95617?co=GENIE.Platform%3DDesktop&hl=fr)
+- [Chrome : messages d’erreur courants, dont « Votre connexion n’est pas privée »](https://support.google.com/chrome/answer/95669?hl=fr)
+- [Safari : éviter la fraude en utilisant des sites web chiffrés](https://support.apple.com/fr-fr/guide/safari/sfri40697/mac)
+- [Chrome 154 : notes de version (avertissement par défaut avant un site en http)](https://developer.chrome.com/release-notes/154)
+- [Google Security Blog : HTTPS by default (2025, en anglais)](https://security.googleblog.com/2025/10/https-by-default.html)
+- [Chromium Blog : Towards HTTPS by default (2023, en anglais)](https://blog.chromium.org/2023/08/towards-https-by-default.html)
+- [CNIL : sécuriser les sites web](https://www.cnil.fr/fr/securite-securiser-les-sites-web)
+- [Google Search Central : le protocole HTTPS en tant qu’indicateur de classement (2014)](https://developers.google.com/search/blog/2014/08/https-as-ranking-signal?hl=fr)
+- [Google Search Central : comprendre l’expérience sur la page](https://developers.google.com/search/docs/appearance/page-experience?hl=fr)
+- [Let’s Encrypt : à propos](https://letsencrypt.org/fr/about/) et [FAQ](https://letsencrypt.org/fr/docs/faq/) ; [fin des e-mails d’expiration](https://letsencrypt.org/2025/06/26/expiration-notification-service-has-ended/) et [passage à des certificats plus courts](https://letsencrypt.org/2025/12/02/from-90-to-45/) (en anglais)
+- [CA/Browser Forum : exigences de base (durée des certificats)](https://cabforum.org/working-groups/server/baseline-requirements/requirements/)
+- [MDN : contenu mixte](https://developer.mozilla.org/fr/docs/Web/Security/Defenses/Mixed_content)
