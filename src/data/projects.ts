@@ -2,10 +2,10 @@ import leFellicHomePoster from "../assets/projects/lefellic-home.webp";
 import motivaiLandingHero from "../assets/projects/motivai-landing-hero.webp";
 import motivaiLandingPreset from "../assets/projects/motivai-landing-preset.webp";
 import motivaiLandingPoster from "../assets/projects/motivai-landing.webp";
+import persistanceHomePoster from "../assets/projects/persistance-home.webp";
 import regletEquipe from "../assets/projects/reglet-equipe.webp";
 import regletHomePoster from "../assets/projects/reglet-home.webp";
 import regletRapport from "../assets/projects/reglet-rapport.webp";
-import persistanceHomePoster from "../assets/projects/persistance-home.webp";
 
 export type Project = {
   brand: {

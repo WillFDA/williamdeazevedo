@@ -23,23 +23,23 @@ Volumes estimés mensuels France/français provenant de la recherche OpenSEO ré
 
 La requête ajoutée dans cette PR n’a pas de mesure : OpenSEO a renvoyé `INSUFFICIENT_CREDITS` le 29 septembre 2026 et le projet disponible n’avait ni domaine ni contexte métier. « Non mesuré » ne signifie pas volume nul ; ne pas attribuer à ce sujet une intention ou une demande validée par l’outil.
 
-| Slug                                         | Requête principale                           | Volume estimé | Intention / distinction                                                                  |
-| -------------------------------------------- | -------------------------------------------- | ------------: | ---------------------------------------------------------------------------------------- |
-| prix-site-vitrine                            | prix site internet vitrine                   |           320 | Budget et périmètre concret ; complète l'essai existant sur les offres à 600/2 000 euros |
-| cout-site-internet-par-mois                  | combien coûte un site internet par mois      |            90 | Frais récurrents, pas prix de création                                                   |
-| prix-refonte-site-internet                   | refonte site internet prix                   |           110 | Arbitrage réparation / refonte, pas landing de prestation                                |
-| refonte-seo                                  | refonte seo                                  |           320 | Préserver les acquis lors d'une migration                                                |
-| cahier-des-charges-site-internet             | cahier des charges site internet             |           320 | Préparer le projet avec un modèle utilisable                                             |
-| exemples-sites-vitrines                      | site vitrine exemple                         |           320 | Analyse qualitative des projets réels, sans gains inventés                               |
-| site-internet-artisan-contenus               | création site internet artisan               |           140 | Guide des pages et contenus ; renvoi vers la landing commerciale                         |
-| creer-site-internet-ia                       | créer un site web gratuit avec ia            |           260 | Capacités et limites ; audience gratuite moins proche d'un achat                         |
-| tester-accessibilite-site-web                | test accessibilité site web                  |           140 | Premiers tests, distincts d'un audit de conformité                                       |
-| referencement-chatgpt                        | référencement chatgpt                        |           210 | Conditions et limites de visibilité, aucune garantie de citation                         |
-| mentions-legales-site-internet-professionnel | mentions légales site internet professionnel |    non mesuré | Checklist éditoriale par statut et fonctionnalités ; demande OpenSEO non validée         |
-| fiche-google-my-business-artisan             | fiche google my business                     |  5400 (KD 22) | Créer, valider, compléter la fiche et la relier au site d’artisan ; variantes : fiche établissement google 2900, fiche google business 1300, créer fiche google my business 590 (OpenSEO, 7 octobre 2026) |
-| widget-avis-google                           | widget avis google                           |    110 (KD 0) | Lien, citation ou widget, sous l’angle performance et RGPD ; variantes : widget avis google gratuit 50, plugin avis google wordpress 40 (OpenSEO, 7 octobre 2026) |
-| changer-prestataire-web                      | changer de prestataire web                   |    non mesuré | Passation et reprise de site, orientée conversion vers la refonte ; variante couverte : transférer nom de domaine 260 (KD 24) (OpenSEO, 7 octobre 2026) |
-| audit-seo                                    | audit seo                                    |         1 600 | Méthode d’auto-audit d’un site vitrine en une heure ; secondaire « audit seo technique » (480) |
+| Slug | Requête principale | Volume estimé | Intention / distinction |
+| --- | --- | --: | --- |
+| prix-site-vitrine | prix site internet vitrine | 320 | Budget et périmètre concret ; complète l'essai existant sur les offres à 600/2 000 euros |
+| cout-site-internet-par-mois | combien coûte un site internet par mois | 90 | Frais récurrents, pas prix de création |
+| prix-refonte-site-internet | refonte site internet prix | 110 | Arbitrage réparation / refonte, pas landing de prestation |
+| refonte-seo | refonte seo | 320 | Préserver les acquis lors d'une migration |
+| cahier-des-charges-site-internet | cahier des charges site internet | 320 | Préparer le projet avec un modèle utilisable |
+| exemples-sites-vitrines | site vitrine exemple | 320 | Analyse qualitative des projets réels, sans gains inventés |
+| site-internet-artisan-contenus | création site internet artisan | 140 | Guide des pages et contenus ; renvoi vers la landing commerciale |
+| creer-site-internet-ia | créer un site web gratuit avec ia | 260 | Capacités et limites ; audience gratuite moins proche d'un achat |
+| tester-accessibilite-site-web | test accessibilité site web | 140 | Premiers tests, distincts d'un audit de conformité |
+| referencement-chatgpt | référencement chatgpt | 210 | Conditions et limites de visibilité, aucune garantie de citation |
+| mentions-legales-site-internet-professionnel | mentions légales site internet professionnel | non mesuré | Checklist éditoriale par statut et fonctionnalités ; demande OpenSEO non validée |
+| fiche-google-my-business-artisan | fiche google my business | 5400 (KD 22) | Créer, valider, compléter la fiche et la relier au site d’artisan ; variantes : fiche établissement google 2900, fiche google business 1300, créer fiche google my business 590 (OpenSEO, 7 octobre 2026) |
+| widget-avis-google | widget avis google | 110 (KD 0) | Lien, citation ou widget, sous l’angle performance et RGPD ; variantes : widget avis google gratuit 50, plugin avis google wordpress 40 (OpenSEO, 7 octobre 2026) |
+| changer-prestataire-web | changer de prestataire web | non mesuré | Passation et reprise de site, orientée conversion vers la refonte ; variante couverte : transférer nom de domaine 260 (KD 24) (OpenSEO, 7 octobre 2026) |
+| audit-seo | audit seo | 1 600 | Méthode d’auto-audit d’un site vitrine en une heure ; secondaire « audit seo technique » (480) |
 
 ## Vérification avant fusion
 

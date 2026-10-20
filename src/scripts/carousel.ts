@@ -303,7 +303,9 @@ export function initCarousel(wrapperNode: HTMLElement) {
         }
       );
 
-      progressAnimation.finished.then(scrollIfCurrent).catch(ignoreExpectedRejection);
+      progressAnimation.finished
+        .then(scrollIfCurrent)
+        .catch(ignoreExpectedRejection);
     };
 
     const syncPausedUi = () => {

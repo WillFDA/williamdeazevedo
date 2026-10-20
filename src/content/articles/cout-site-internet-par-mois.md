@@ -28,13 +28,13 @@ Enfin, l’accompagnement fait évoluer le site : nouvelle page, ajout de réali
 
 Prenons un petit site vitrine fictif avec les hypothèses suivantes, toutes exprimées hors taxes. Elles servent uniquement à montrer le calcul et ne représentent pas une moyenne du marché.
 
-| Dépense hypothétique              | Montant annuel HT | Équivalent mensuel HT |
-| --------------------------------- | ----------------: | --------------------: |
-| Domaine                           |              24 € |                   2 € |
-| Hébergement                       |             144 € |                  12 € |
-| Messagerie et outil de formulaire |             120 € |                  10 € |
-| Maintenance convenue au contrat   |             600 € |                  50 € |
-| **Fonctionnement total**          |         **888 €** |              **74 €** |
+| Dépense hypothétique | Montant annuel HT | Équivalent mensuel HT |
+| --- | --: | --: |
+| Domaine | 24 € | 2 € |
+| Hébergement | 144 € | 12 € |
+| Messagerie et outil de formulaire | 120 € | 10 € |
+| Maintenance convenue au contrat | 600 € | 50 € |
+| **Fonctionnement total** | **888 €** | **74 €** |
 
 Dans cette hypothèse, le site coûte donc 74 € HT par mois en moyenne, hors création et nouvelles demandes. Si le domaine et l’hébergement sont facturés à l’année, la trésorerie nécessaire le mois du renouvellement sera différente. Gardez deux colonnes dans votre prévision : coût moyen et date de paiement.
 

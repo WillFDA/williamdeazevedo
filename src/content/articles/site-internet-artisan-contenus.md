@@ -20,13 +20,13 @@ Reprenez quelques échanges récents avec des prospects. Notez les précisions n
 
 Il n’existe pas de nombre de pages obligatoire pour présenter une activité. Vous pouvez regrouper certaines rubriques, puis les séparer lorsque leur contenu le justifie.
 
-| Rubrique     | Ce que le visiteur doit comprendre          | Matière à réunir                                      |
-| ------------ | ------------------------------------------- | ----------------------------------------------------- |
-| Accueil      | Votre spécialité et votre secteur           | Présentation courte, photo, coordonnées               |
-| Prestations  | Les travaux pris en charge et leurs limites | Explications, étapes, questions fréquentes            |
-| Réalisations | Ce que vous avez effectivement réalisé      | Photos autorisées et légendes                         |
-| Entreprise   | Qui intervient et avec quelle expérience    | Parcours, équipe, justificatifs pertinents            |
-| Contact      | Comment transmettre une demande utile       | Moyens de contact, horaires, informations nécessaires |
+| Rubrique | Ce que le visiteur doit comprendre | Matière à réunir |
+| --- | --- | --- |
+| Accueil | Votre spécialité et votre secteur | Présentation courte, photo, coordonnées |
+| Prestations | Les travaux pris en charge et leurs limites | Explications, étapes, questions fréquentes |
+| Réalisations | Ce que vous avez effectivement réalisé | Photos autorisées et légendes |
+| Entreprise | Qui intervient et avec quelle expérience | Parcours, équipe, justificatifs pertinents |
+| Contact | Comment transmettre une demande utile | Moyens de contact, horaires, informations nécessaires |
 
 La zone d’intervention peut figurer dans les prestations et le contact. Une page séparée devient utile si vous devez expliquer des secteurs ou des conditions de déplacement différents.
 
