@@ -30,7 +30,7 @@ interface Props {
 
 const { article } = Astro.props;
 const { Content, headings } = await render(article);
-const { author, description, image, pubDate, seoTitle, tags, title, updatedDate } =
+const { author, description, faq, image, pubDate, seoTitle, tags, title, updatedDate } =
     article.data;
 const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 
@@ -99,6 +99,18 @@ const breadcrumbJsonLd = {
     ],
 };
 
+const faqJsonLd = faq?.length
+    ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faq.map(({ question, answer }) => ({
+              "@type": "Question",
+              name: question,
+              acceptedAnswer: { "@type": "Answer", text: answer },
+          })),
+      }
+    : undefined;
+
 const getTagIcon = (tag: string) => {
     const normalizedTag = tag.toLowerCase();
 
@@ -138,6 +150,13 @@ const getTagIcon = (tag: string) => {
         is:inline
         set:html={JSON.stringify(breadcrumbJsonLd)}
     />
+    {faqJsonLd && (
+        <script
+            type="application/ld+json"
+            is:inline
+            set:html={JSON.stringify(faqJsonLd)}
+        />
+    )}
 
     <article
         class="mx-auto w-full max-w-6xl px-4 py-12 md:px-6 md:py-16"

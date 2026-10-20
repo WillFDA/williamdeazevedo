@@ -29,6 +29,7 @@ const slugs = [
   "arborescence-site-web",
   "rgpd-formulaire-de-contact",
   "seo-local",
+  "site-pas-sur-google",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
@@ -113,6 +114,36 @@ for (const slug of slugs) {
     schemas.some((schema) => schema["@type"] === "BreadcrumbList"),
     `${slug}: breadcrumbs`
   );
+  const faqPage = schemas.find((schema) => schema["@type"] === "FAQPage");
+  if (/^faq:/m.test(frontmatter) || faqPage) {
+    assert.ok(faqPage?.mainEntity?.length, `${slug}: FAQPage schema`);
+    const visibleText = html
+      .replace(/<script\b[\s\S]*?<\/script>/g, " ")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;|\s+/g, " ")
+      .replace(/&#39;|&#x27;/g, "'")
+      .replace(/&quot;/g, '"')
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&");
+    // Both ways: every visible question of the FAQ section is in the schema.
+    const faqSection = html
+      .split(/<h2\b[^>]*>\s*Questions fréquentes\s*<\/h2>/)[1]
+      ?.split(/<h2\b/)[0];
+    assert.equal(
+      (faqSection?.match(/<h3\b/g) || []).length,
+      faqPage.mainEntity.length,
+      `${slug}: FAQPage must list every visible FAQ question`
+    );
+    for (const entry of faqPage.mainEntity) {
+      for (const text of [entry.name, entry.acceptedAnswer?.text]) {
+        assert.ok(
+          visibleText.includes(text),
+          `${slug}: FAQPage text not visible on the page: ${text}`
+        );
+      }
+    }
+  }
   const person = schemas.find((schema) => schema["@type"] === "Person");
   assert.ok(
     person?.image.endsWith("/pictures/william-low.png"),
