@@ -132,7 +132,7 @@ const choiceClass =
             const name = entry.split("=")[0].trim();
             if (!/^(?:_ga|_gid|_gat|_gcl)/.test(name)) continue;
             for (const scope of ["", `;domain=${domain}`, `;domain=.${domain}`]) {
-                // oxlint-disable-next-line unicorn/no-document-cookie -- Cookie Store API absente de Firefox < 140 : document.cookie reste le seul moyen d'effacer _ga partout.
+                // oxlint-disable-next-line unicorn/no-document-cookie -- Cookie Store API absente de Firefox < 140 et Safari < 18.4 : document.cookie reste le seul moyen d'effacer _ga partout.
                 document.cookie = `${name}=;max-age=0;path=/${scope}`;
             }
         }

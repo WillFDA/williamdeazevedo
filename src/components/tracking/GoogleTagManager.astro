@@ -7,14 +7,21 @@ const GTM_ID = "GTM-TCZVQQ29";
 
 {/* 1. Consent Mode v2 : valeurs par défaut AVANT le chargement de GTM. */}
 <script is:inline>
-    window.dataLayer ||= [];
+    /*
+     * Script inline, non transpilé : il reste en ES5 (var, ||, catch avec
+     * binding) pour que les valeurs par défaut « denied » soient posées sur tout
+     * navigateur qui charge GTM : le bloc 2 s'exécute même si celui-ci échoue,
+     * une erreur de syntaxe ici chargerait donc GTM sans consentement par défaut.
+     */
+    /* oxlint-disable logical-assignment-operators, no-var, vars-on-top, unicorn/prefer-optional-catch-binding -- script inline ES5, voir ci-dessus */
+    window.dataLayer = window.dataLayer || [];
     // Stub gtag fourni par Google (Consent Mode) : gtag.js lit l'objet
     // `arguments` tel quel, un tableau issu de ...args casserait le consentement.
     function gtag() {
         // oxlint-disable-next-line prefer-rest-params -- forme imposée par Google.
         dataLayer.push(arguments);
     }
-    window.gtag ||= gtag;
+    window.gtag = window.gtag || gtag;
     if (!window.__wuiConsentDefaultSet) {
         window.__wuiConsentDefaultSet = true;
         gtag("consent", "default", {
@@ -28,7 +35,7 @@ const GTM_ID = "GTM-TCZVQQ29";
         // Ré-applique le choix mémorisé par CookieBanner.astro (même clé, même
         // durée de 6 mois) avant le chargement de GTM.
         try {
-            const stored = JSON.parse(localStorage.getItem("wui-consent") || "null");
+            var stored = JSON.parse(localStorage.getItem("wui-consent") || "null");
             if (
                 stored &&
                 stored.value === "granted" &&
@@ -41,7 +48,7 @@ const GTM_ID = "GTM-TCZVQQ29";
                     analytics_storage: "granted",
                 });
             }
-        } catch {
+        } catch (error) {
             // Stockage illisible (navigation privée, JSON corrompu) : on garde « denied ».
         }
     }

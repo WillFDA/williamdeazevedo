@@ -68,14 +68,16 @@ const calLink = String(
     let isCalConfigured = false;
     let closeTimer: number | undefined;
 
-    function loadCalEmbed() {
-        if ("Cal" in calWindow) return;
+    // Pose le stub du snippet une seule fois et renvoie window.Cal : les appels
+    // ne sont pas optionnels, un stub absent doit lever une erreur, pas se taire.
+    function loadCalEmbed(): CalGlobal {
+        if (calWindow.Cal) return calWindow.Cal;
 
-        (function initCalEmbedSnippet(
+        return (function initCalEmbedSnippet(
             C: typeof calWindow,
             A: string,
             L: string,
-        ) {
+        ): CalGlobal {
             const push = (api: CalQueue, args: unknown[]) => api.q?.push(args);
             const documentRef = C.document;
 
@@ -117,6 +119,7 @@ const calLink = String(
                 };
                 C.Cal = stub;
             }
+            return C.Cal;
         })(calWindow, "https://app.cal.com/embed/embed.js", "init");
     }
 
@@ -128,9 +131,9 @@ const calLink = String(
     function configureCalEmbed(calLink: string) {
         if (isCalConfigured) return;
 
-        loadCalEmbed();
-        calWindow.Cal?.("init", { origin: "https://cal.com" });
-        calWindow.Cal?.("ui", {
+        const cal = loadCalEmbed();
+        cal("init", { origin: "https://cal.com" });
+        cal("ui", {
             cssVarsPerTheme: {
                 dark: {
                     "cal-bg": "#141016",
@@ -146,7 +149,7 @@ const calLink = String(
             },
             theme: "dark",
         });
-        calWindow.Cal?.("on", {
+        cal("on", {
             action: "bookingSuccessfulV2",
             callback: (event: CalBookingEvent) => {
                 const booking = event.detail?.data ?? {};
@@ -164,7 +167,7 @@ const calLink = String(
                 });
             },
         });
-        calWindow.Cal?.("preload", { calLink });
+        cal("preload", { calLink });
         isCalConfigured = true;
     }
 
@@ -175,7 +178,7 @@ const calLink = String(
         if (!calLink) return;
 
         configureCalEmbed(calLink);
-        calWindow.Cal?.("inline", {
+        loadCalEmbed()("inline", {
             calLink,
             config: { theme: "dark", "ui.color-scheme": "dark" },
             elementOrSelector: inlineEmbed,

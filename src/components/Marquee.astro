@@ -259,7 +259,6 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
         }
 
         state.timeout = window.setTimeout(
-            // oxlint-disable-next-line no-use-before-define -- récursion mutuelle schedule ↔ tick : tick n'est appelé qu'après le chargement du script.
             () => tick(root, state),
             randomInt(state.minDelay, state.maxDelay),
         );

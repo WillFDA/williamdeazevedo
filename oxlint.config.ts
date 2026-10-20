@@ -12,6 +12,9 @@ export default defineConfig({
     "func-style": "off",
     "import/consistent-type-specifier-style": "off",
     "no-implicit-globals": "off",
+    // Function declarations are hoisted (no TDZ): mutual recursion such as
+    // schedule <-> tick in Marquee stays allowed; variables and classes are still checked.
+    "no-use-before-define": ["error", { functions: false }],
     "prefer-destructuring": "off",
     "promise/prefer-await-to-then": "off",
     "react/function-component-definition": "off",

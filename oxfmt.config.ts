@@ -10,7 +10,8 @@ const ultraciteTailwind =
 
 export default defineConfig({
   ...ultracite,
-  // ponytail: Oxfmt does not format Astro templates yet; remove when support lands.
+  // ponytail: .astro formatting exists in oxfmt 0.74 (`astro` option, needs
+  // @astrojs/compiler-rs) but stays off: it would reindent every template.
   ignorePatterns: [...ultraciteIgnorePatterns, "**/*.astro"],
   sortTailwindcss: {
     ...ultraciteTailwind,
