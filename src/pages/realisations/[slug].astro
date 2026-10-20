@@ -45,9 +45,9 @@ const siteUrl = project.href;
 
 const galleryItems = [...(project.gallery ?? []), ...gallery];
 const tocItems = [
-    ...(project.media.type !== "placeholder"
-        ? [{ depth: 2, slug: "apercu-du-projet", text: "Aperçu du projet" }]
-        : []),
+    ...(project.media.type === "placeholder"
+        ? []
+        : [{ depth: 2, slug: "apercu-du-projet", text: "Aperçu du projet" }]),
     ...headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3),
     ...(galleryItems.length > 0
         ? [{ depth: 2, slug: "captures-du-projet", text: "Captures du projet" }]

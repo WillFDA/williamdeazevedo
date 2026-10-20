@@ -95,6 +95,12 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
     windowWithLogoShuffle.__wuiLogoShuffleStates = activeLogoShuffleStates;
     const stateByRoot = new WeakMap<HTMLElement, LogoShuffleState>();
 
+    // `animation.finished` rejette quand l'animation est annulée (navigation,
+    // reduced-motion) : ce rejet est attendu et sans conséquence.
+    const ignoreCancelledAnimation = () => {
+        // Rejet attendu, rien à faire.
+    };
+
     function parseInteger(value: string | undefined, fallback: number) {
         const parsed = Number.parseInt(value ?? "", 10);
         return Number.isFinite(parsed) ? parsed : fallback;
@@ -125,7 +131,7 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
     function createSlotQueue(count: number, previous: number | undefined) {
         const queue = Array.from({ length: count }, (_, index) => index);
 
-        for (let index = queue.length - 1; index > 0; index--) {
+        for (let index = queue.length - 1; index > 0; index -= 1) {
             const swapIndex = randomInt(0, index);
             [queue[index], queue[swapIndex]] = [queue[swapIndex], queue[index]];
         }
@@ -195,7 +201,7 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
 
         state.animations.add(animation);
         animation.finished
-            .catch(() => {})
+            .catch(ignoreCancelledAnimation)
             .finally(() => state.animations.delete(animation));
 
         return animation;
@@ -221,7 +227,7 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
                     { filter: "blur(8px)", opacity: 0, transform: "translateY(8px)" },
                 ],
                 { duration: 140, easing: "cubic-bezier(0.4, 0, 0.2, 1)" },
-        ).finished.catch(() => {});
+        ).finished.catch(ignoreCancelledAnimation);
 
         if (state.destroyed || !document.contains(slot)) return;
 
@@ -235,7 +241,7 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
                     { filter: "blur(0px)", opacity: 1, transform: "translateY(0)" },
                 ],
                 { duration: 260, easing: "cubic-bezier(0.2, 0, 0, 1)" },
-        ).finished.catch(() => {});
+        ).finished.catch(ignoreCancelledAnimation);
     }
 
     function schedule(root: HTMLElement, state: LogoShuffleState) {
@@ -253,6 +259,7 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
         }
 
         state.timeout = window.setTimeout(
+            // oxlint-disable-next-line no-use-before-define -- récursion mutuelle schedule ↔ tick : tick n'est appelé qu'après le chargement du script.
             () => tick(root, state),
             randomInt(state.minDelay, state.maxDelay),
         );
@@ -355,10 +362,7 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
             parseInteger(root.dataset.wuiLogoShuffleMaxDelay, 1600),
         );
         const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-        let state: LogoShuffleState;
-        const replayListener = () => replayIntro(root, state);
-
-        state = {
+        const state: LogoShuffleState = {
             animations: new Set(),
             autoplay:
                 root.dataset.wuiLogoShuffleAutoplay !== "false" &&
@@ -375,7 +379,7 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
             maxDelay,
             minDelay,
             reducedMotion: media.matches,
-            replayListener,
+            replayListener: () => replayIntro(root, state),
             root,
             slotQueue: createSlotQueue(visibleSlotCount, undefined),
             slots: slots.slice(0, visibleSlotCount),
@@ -386,7 +390,7 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
         stateByRoot.set(root, state);
         activeLogoShuffleStates.add(state);
         root.dataset.wuiLogoShuffleReady = "true";
-        root.addEventListener("willui:logo-shuffle:replay", replayListener);
+        root.addEventListener("willui:logo-shuffle:replay", state.replayListener);
 
         if ("IntersectionObserver" in window) {
             const visibilityObserver = new IntersectionObserver(
