@@ -29,6 +29,7 @@ const slugs = [
   "arborescence-site-web",
   "rgpd-formulaire-de-contact",
   "seo-local",
+  "site-non-securise",
   "site-pas-sur-google",
 ];
 const root = resolve(import.meta.dirname, "..");

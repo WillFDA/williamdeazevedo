@@ -74,7 +74,7 @@ Si votre site entier est absent, ou si Search Console signale un réglage, cherc
 | Fichier robots.txt | Ouvrir `votredomaine.fr/robots.txt` : `Disallow: /` sous `User-agent: *` bloque tout le site | Supprimer la règle qui bloque vos pages |
 | Mode maintenance ou mot de passe | Le site s’ouvre sur une page « bientôt en ligne », ou demande un identifiant | Désactiver le mode maintenance ou le mot de passe une fois le site lancé |
 | URL canonique incorrecte | Inspection : le champ « URL canonique sélectionnée par Google » ne montre pas votre page | Chaque page doit désigner sa propre adresse comme version principale |
-| HTTPS et versions du site | Le site s’ouvre avec et sans www, en http et en https | Rediriger toutes les variantes vers une seule adresse en https |
+| HTTPS et versions du site | Le site s’ouvre avec et sans www ; pour le http, Chrome passe tout seul en https : faites confirmer la redirection par votre prestataire | Rediriger toutes les variantes vers une seule adresse en https |
 
 Quelques précisions, parce que ces mots font peur :
 
@@ -82,7 +82,7 @@ Quelques précisions, parce que ces mots font peur :
 - **Le robots.txt** indique aux robots les zones qu’ils peuvent explorer : une seule ligne mal placée leur ferme tout le site. Google précise qu’il ne sert pas à cacher une page ; pour cela, il faut `noindex` ou un mot de passe.
 - **Le mode maintenance** : Google n’indexe que des pages qui fonctionnent et s’ouvrent sans identifiant. Une page « en construction » restée en place cache tout le contenu réel.
 - **La canonique** : quand plusieurs adresses affichent le même contenu, Google n’en montre qu’une. Si votre page en désigne une autre comme version principale, elle s’efface à son profit.
-- **Les versions du site** : avec ou sans `www`, en `http` ou en `https`, ce sont pour Google des adresses différentes. Une redirection (un renvoi automatique) vers une seule version, en `https`, lui indique laquelle garder.
+- **Les versions du site** : avec ou sans `www`, en `http` ou en `https`, ce sont pour Google des adresses différentes. Une redirection (un renvoi automatique) vers une seule version, en `https`, lui indique laquelle garder. Si votre navigateur affiche « Non sécurisé », lisez d’abord [pourquoi votre site n’est pas en https](/articles/site-non-securise/).
 
 Vous ne savez pas vérifier ces points seul ? C’est le travail de votre prestataire. Si vous n’avez plus de contact avec lui, l’article [changer de prestataire web](/articles/changer-prestataire-web/) explique comment récupérer vos accès.
 
