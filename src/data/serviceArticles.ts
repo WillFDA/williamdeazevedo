@@ -112,5 +112,6 @@ export const articleServices: Record<string, string[]> = {
   "site-internet-artisan-contenus": ["creation-site-internet-artisan"],
   "tester-accessibilite-site-web": ["refonte-site-internet"],
   "widget-avis-google": ["creation-site-vitrine"],
+  "wix-ou-wordpress": ["creation-site-vitrine"],
   // premier-side-project-motivai : projet personnel, pas d'encart service.
 };
