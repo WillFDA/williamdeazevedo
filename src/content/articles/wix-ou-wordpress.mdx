@@ -14,7 +14,7 @@ faq:
   - question: "Peut-on passer d’un site Wix à WordPress (ou à un site sur mesure) sans tout perdre ?"
     answer: "Vos contenus vous appartiennent et votre nom de domaine peut être transféré, mais Wix indique que le site ne peut pas être hébergé ailleurs, ni ses articles de blog exportés vers une autre plateforme. Il faut donc reconstruire le site, en reprenant vos textes et vos images, et rediriger les anciennes adresses vers les nouvelles."
   - question: "Un site WordPress est-il forcément plus long à entretenir qu’un site Wix ?"
-    answer: "Il demande plus de suivi, car le thème et les extensions doivent être mis à jour, alors que Wix gère la plateforme. Avec peu d’extensions, des sauvegardes régulières et un prestataire identifié, la maintenance reste raisonnable."
+    answer: "Il demande plus de suivi, car le thème, les extensions et la version de PHP chez l’hébergeur doivent être mis à jour, alors que Wix gère la plateforme. Avec peu d’extensions, des sauvegardes régulières et un prestataire identifié, la maintenance reste raisonnable."
   - question: "Avec un site sur mesure, est-ce que je peux modifier mes textes moi-même ?"
     answer: "Oui, si un outil d’édition de contenus (un CMS) est prévu dès le départ. Vous modifiez alors vos textes, vos photos ou vos articles sans toucher au code. Précisez-le avant le devis."
   - question: "Le nom de domaine acheté chez Wix m’appartient-il ?"
@@ -32,19 +32,19 @@ Je suis développeur web et designer freelance à Achères (78). Je ne vends ni 
 
 ## Wix et WordPress : deux modèles différents, pas deux logiciels concurrents
 
-On les compare souvent comme deux marques du même produit. Ce sont en fait deux façons très différentes d’avoir un site.
+On les compare souvent comme deux marques du même produit, alors que ce sont deux façons différentes d’avoir un site.
 
 ### Wix : vous louez une plateforme tout compris
 
-Wix est un service en ligne : vous construisez votre site dans l’éditeur de Wix, et il est hébergé sur les serveurs de Wix. L’hébergement, la sécurité, le certificat HTTPS et les mises à jour du logiciel sont gérés par la plateforme. Wix l’explique dans son centre d’aide : il effectue les mises à jour logicielles automatiquement, et votre site doit être « hébergé et opéré sur les serveurs de Wix » pour fonctionner.
+Wix est un service en ligne : vous construisez votre site dans l’éditeur de Wix, et il est hébergé sur les serveurs de Wix. L’hébergement, la sécurité, le certificat HTTPS et les mises à jour du logiciel sont gérés par la plateforme. Son centre d’aide précise que le site doit être « hébergé et opéré sur les serveurs de Wix » pour fonctionner.
 
-C’est le principe d’une location : tout est prêt, rien n’est à installer, mais le site vit chez Wix, avec ses règles. D’autres constructeurs de sites fonctionnent sur le même modèle.
+C’est le principe d’une location : tout est prêt, rien n’est à installer, mais le site vit chez Wix, avec ses règles.
 
 ### WordPress : un logiciel libre installé chez l’hébergeur de votre choix
 
 WordPress est un logiciel libre, publié sous licence GPL : chacun peut l’utiliser, l’étudier, le modifier et le redistribuer. Selon WordPress.org, il fait tourner plus de 43 % des sites web. Vous l’installez (ou votre prestataire l’installe) chez l’hébergeur de votre choix, et vous pouvez le déplacer ailleurs plus tard.
 
-Une précision pour éviter la confusion : WordPress.com est un service où l’hébergement est inclus, alors que WordPress.org distribue le logiciel à installer soi-même. Les deux utilisent le même WordPress ; la différence, c’est qui héberge. Dans la suite de cet article, « WordPress » désigne la version installée chez un hébergeur.
+Une précision pour éviter la confusion : WordPress.com est un service où l’hébergement est inclus, alors que WordPress.org distribue le logiciel à installer soi-même. Les deux utilisent le même WordPress ; la différence, c’est qui héberge. Ici, « WordPress » désigne la version installée chez un hébergeur.
 
 ## WordPress ou Wix : le comparatif en un tableau
 
@@ -54,7 +54,7 @@ Voici les deux outils face au site sur mesure, critère par critère :
 | --- | --- | --- | --- |
 | Prise en main | Éditeur visuel, accessible sans connaissances techniques | Interface d’administration à apprendre, plus simple si le site est bien préparé | Vous ne construisez rien : vous validez les maquettes, puis vous modifiez vos contenus si un outil d’édition est prévu |
 | Qui héberge | Wix, obligatoirement | L’hébergeur de votre choix | L’hébergeur choisi avec votre prestataire, à mettre à votre nom |
-| Qui fait la maintenance | Wix pour la plateforme ; vous pour vos contenus | Vous ou votre prestataire : cœur, thème, extensions | Votre prestataire, avec moins d’éléments à mettre à jour |
+| Qui fait la maintenance | Wix pour la plateforme ; vous pour vos contenus | Vous, votre prestataire ou l’hébergeur : cœur, thème, extensions, PHP | Votre prestataire, avec moins d’éléments à mettre à jour |
 | Propriété et export | Vos contenus vous appartiennent, mais le site ne peut pas être hébergé ailleurs | Le site entier peut être déplacé chez un autre hébergeur | Le code vous est livré si le contrat le prévoit |
 | Design | Modèles personnalisables | Thèmes, ou thème développé pour vous | Conçu pour votre activité, sans modèle de départ |
 | Vitesse sur mobile | Dépend du modèle, des images et des applications ajoutées | Dépend de l’hébergeur, du thème et des extensions | Dépend du travail du développeur : à exiger et à mesurer |
@@ -63,11 +63,9 @@ Voici les deux outils face au site sur mesure, critère par critère :
 | Changement de prestataire | Vous l’invitez sur votre site Wix, ou il reconstruit le site ailleurs | Facile si vous avez les accès : WordPress est très répandu | Facile seulement si le code et la documentation sont livrés |
 | Coûts | Un abonnement | Création si un prestataire s’en charge, puis hébergement, nom de domaine et maintenance | Création, puis hébergement, nom de domaine et maintenance |
 
-Ce tableau ne donne volontairement aucun montant : les écarts dépendent trop du projet. Pour comparer des budgets réels, lisez [ce qui sépare deux niveaux d’offre](/articles/site-600-euros-vs-site-2000-euros/).
+Ce tableau ne donne aucun montant, car tout dépend du projet. Pour comparer des budgets réels, lisez [ce qui sépare deux niveaux d’offre](/articles/site-600-euros-vs-site-2000-euros/).
 
 ## Propriété : à qui appartient votre site si vous partez ?
-
-C’est la question que presque personne ne pose au départ, et celle qui coûte le plus cher quand on la découvre trop tard.
 
 ### Le site, les contenus et le nom de domaine : trois choses différentes
 
@@ -77,9 +75,9 @@ Quand on parle de « mon site », on mélange souvent trois éléments :
 - **le site lui-même** : la mise en page, le design, le code qui fait fonctionner l’ensemble ;
 - **le nom de domaine** : votre adresse, par exemple `votreentreprise.fr`, qui pointe vers le site.
 
-Avec **Wix**, le centre d’aide est clair sur les deux premiers points : « le contenu que vous construisez sur Wix vous appartient », mais le site ne peut pas utiliser un autre hébergeur, car il repose sur la technologie propre à Wix. Wix indique aussi qu’il n’est pas possible, pour le moment, d’exporter les articles de blog vers une autre plateforme. Changer d’outil veut donc dire reconstruire le site ailleurs, en récupérant vos textes et vos images. Le nom de domaine, lui, peut quitter Wix : un domaine acheté chez Wix se transfère vers un autre fournisseur, sauf dans les 60 jours qui suivent son achat ou une modification des coordonnées du titulaire. Il faut ensuite reconfigurer l’e-mail professionnel.
+Avec **Wix**, le centre d’aide est clair sur les deux premiers points : « le contenu que vous construisez sur Wix vous appartient », mais le site ne peut pas utiliser un autre hébergeur, car il repose sur la technologie propre à Wix. Changer d’outil veut donc dire reconstruire le site ailleurs. Le nom de domaine, lui, peut quitter Wix : un domaine acheté chez Wix se transfère vers un autre fournisseur, sauf dans les 60 jours qui suivent son achat ou une modification des coordonnées du titulaire. Il faut ensuite reconfigurer l’e-mail professionnel.
 
-Avec **WordPress**, le logiciel peut tourner chez n’importe quel hébergeur. La documentation officielle explique comment déplacer un site WordPress vers un nouveau serveur, et l’outil d’export intégré produit un fichier qui contient les articles, les pages, les commentaires, les catégories et les utilisateurs.
+Avec **WordPress**, le logiciel peut tourner chez n’importe quel hébergeur. La documentation officielle explique comment déplacer un site WordPress vers un nouveau serveur, et l’outil d’export intégré produit un fichier avec les articles, les pages, les commentaires et les utilisateurs.
 
 Avec un **site sur mesure**, tout dépend de ce qui a été prévu. Si le code vous est livré, avec les accès et une documentation, un autre développeur peut le reprendre. Sinon, vous dépendez d’une seule personne.
 
@@ -95,7 +93,7 @@ Si votre prestataire actuel garde tout à son nom, l’article sur [le changemen
 
 ## Référencement : Wix est-il moins bien placé sur Google que WordPress ?
 
-C’est la question qui revient le plus, et la réponse honnête est : l’outil compte beaucoup moins qu’on le croit.
+Réponse courte : l’outil compte beaucoup moins qu’on le croit.
 
 Dans son guide de démarrage en référencement, Google précise qu’avec un outil de gestion de contenu, vous n’aurez peut-être rien de technique à faire pour vos titres de pages, à part bien les rédiger : la plupart de ces outils peuvent les transformer eux-mêmes en balise lue par les moteurs. Wix comme WordPress savent produire des pages que Google peut lire.
 
@@ -112,11 +110,21 @@ Pour une entreprise qui travaille autour de chez elle, le [référencement local
 
 **Avec Wix**, la plateforme se charge du logiciel, de l’hébergement et de la sécurité des serveurs. Il vous reste vos contenus, les applications que vous avez ajoutées, et l’abonnement à ne pas laisser expirer.
 
-**Avec WordPress**, le cœur installe en général seul ses correctifs de sécurité, mais les versions majeures, le thème et les extensions doivent être tenus à jour, et la documentation officielle conseille de sauvegarder le site avant chaque mise à jour. Les mises à jour automatiques des thèmes et des extensions peuvent être activées, ce qui ne dispense pas de vérifier que le site fonctionne toujours. C’est la partie la plus souvent négligée, quand personne ne sait qui doit s’en charger.
+**Avec WordPress**, le cœur installe en général seul ses correctifs de sécurité, mais les versions majeures, le thème et les extensions doivent être tenus à jour, et la documentation officielle conseille de sauvegarder le site avant chaque mise à jour. Les mises à jour automatiques des thèmes et des extensions peuvent être activées, ce qui ne dispense pas de vérifier que le site fonctionne toujours.
 
 **Avec un site sur mesure**, il y a en général moins d’éléments à mettre à jour, surtout si le site est statique. Le nom de domaine, l’hébergement, le certificat et le formulaire doivent quand même être suivis, par votre prestataire ou dans le cadre d’un contrat.
 
-Pour le détail, l’article sur la [maintenance de site web](/articles/maintenance-site-web/) compare déjà WordPress et le sur mesure point par point.
+L’article sur la [maintenance de site web](/articles/maintenance-site-web/) compare en détail WordPress et le sur mesure.
+
+### Un exemple : les failles critiques de PHP en octobre 2026
+
+WordPress fonctionne avec PHP, un langage installé sur le serveur de l’hébergeur. Le 20 octobre 2026, [l’équipe de PHP a annoncé](https://www.php.net/archive/2026.php#2026-10-20-1) deux failles critiques, de gravité 9,2 sur 10. Selon [le CERT-FR](https://cert.cyber.gouv.fr/alerte/CERTFR-2026-ALE-014/), le centre d’alerte de l’État en cybersécurité, toutes les versions de PHP, de la 5 à la 8, étaient concernées. Les versions corrigées, [PHP 8.5.12, 8.4.27, 8.3.36 et 8.2.35](https://www.php.net/archive/2026.php#2026-10-21-5), sont sorties le 21 octobre. Les versions 8.1 et antérieures ne sont plus maintenues : le CERT-FR recommande de passer à une version maintenue et corrigée.
+
+Ce que cela change, selon l’option :
+
+- **WordPress** : mettre WordPress à jour ne suffit pas, PHP doit l’être aussi. Selon votre formule, cette mise à jour revient à l’hébergeur, à votre prestataire ou à vous : demandez qui s’en charge, et si votre version de PHP est encore maintenue.
+- **Wix** : la plateforme gère ses serveurs, vous n’avez rien à mettre à jour.
+- **Sur mesure** : tout dépend de la technologie. Un site statique hébergé sans PHP n’est pas concerné ; un site en PHP doit être mis à jour comme un WordPress.
 
 ## La troisième option : un site internet sur mesure, quand ça vaut le coup
 
@@ -130,9 +138,9 @@ Le site de [Le Fellic](/realisations/le-fellic/), une entreprise de maîtrise d�
 
 ### « Je veux pouvoir modifier mes textes » : sur mesure ne veut pas dire figé
 
-C’est la crainte la plus fréquente, et elle est légitime. Un site sur mesure peut être relié à un outil d’édition de contenus (un CMS), qui permet de modifier les textes, les photos ou les articles sans toucher au code.
+Un site sur mesure peut être relié à un outil d’édition de contenus (un CMS), qui permet de modifier les textes, les photos ou les articles sans toucher au code.
 
-Le site de [Persistance](/realisations/persistance/), un studio d’accompagnement graphique, fonctionne ainsi : la cliente peut publier elle-même ses articles, ses réalisations et ses témoignages, grâce au CMS Sanity, sans intervention technique à chaque modification.
+Le site de [Persistance](/realisations/persistance/), un studio d’accompagnement graphique, fonctionne ainsi : la cliente peut publier elle-même ses articles, ses réalisations et ses témoignages, grâce au CMS Sanity.
 
 ### Les points à exiger : code livré, accès à votre nom, documentation
 
@@ -157,7 +165,7 @@ Il n’y a pas de meilleur outil dans l’absolu, seulement une option adaptée 
 
 Dans le dernier cas, changer d’outil ne règle rien si la structure et les contenus restent les mêmes. Commencez par un diagnostic, puis envisagez une [refonte de site internet](/refonte-site-internet/) si elle se justifie.
 
-Wix est donc un bon choix quand vous démarrez, que vous voulez avancer seul et que le site restera simple. Il devient contraignant le jour où vous voulez changer d’outil : le site, lui, ne part pas avec vous. Et pour une simple [page de campagne](/articles/landing-page/), un outil sans code peut aussi suffire.
+Enfin, pour une simple [page de campagne](/articles/landing-page/), un outil sans code peut suffire.
 
 ## Votre site, on en parle ?
 
@@ -175,7 +183,7 @@ Vos contenus vous appartiennent et votre nom de domaine peut être transféré, 
 
 ### Un site WordPress est-il forcément plus long à entretenir qu’un site Wix ?
 
-Il demande plus de suivi, car le thème et les extensions doivent être mis à jour, alors que Wix gère la plateforme. Avec peu d’extensions, des sauvegardes régulières et un prestataire identifié, la maintenance reste raisonnable.
+Il demande plus de suivi, car le thème, les extensions et la version de PHP chez l’hébergeur doivent être mis à jour, alors que Wix gère la plateforme. Avec peu d’extensions, des sauvegardes régulières et un prestataire identifié, la maintenance reste raisonnable.
 
 ### Avec un site sur mesure, est-ce que je peux modifier mes textes moi-même ?
 
@@ -200,3 +208,5 @@ Pas en soi : vos clients jugent ce qu’ils voient, pas l’outil. Un site Wix s
 - [WordPress : mettre à jour WordPress](https://wordpress.org/documentation/article/updating-wordpress/) et [mises à jour automatiques des thèmes et extensions](https://wordpress.org/documentation/article/plugins-themes-auto-updates/), en anglais
 - [WordPress : l’outil d’export](https://wordpress.org/documentation/article/tools-export-screen/) et [déplacer un site WordPress](https://developer.wordpress.org/advanced-administration/upgrade/migrating/), en anglais
 - [Google Search Central : guide de démarrage en référencement](https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=fr)
+- PHP : [annonce du 20 octobre 2026](https://www.php.net/archive/2026.php#2026-10-20-1) et [avis de sécurité du 21 octobre 2026](https://www.php.net/archive/2026.php#2026-10-21-5) (CVE-2026-109618 et CVE-2026-109619), en anglais, lu le 21/10/2026
+- [CERT-FR : alerte CERTFR-2026-ALE-014, multiples vulnérabilités dans PHP](https://cert.cyber.gouv.fr/alerte/CERTFR-2026-ALE-014/), lu le 21/10/2026
