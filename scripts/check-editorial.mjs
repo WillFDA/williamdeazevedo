@@ -119,14 +119,14 @@ for (const slug of slugs) {
   if (/^faq:/m.test(frontmatter) || faqPage) {
     assert.ok(faqPage?.mainEntity?.length, `${slug}: FAQPage schema`);
     const visibleText = html
-      .replace(/<script\b[\s\S]*?<\/script>/g, " ")
-      .replace(/<[^>]+>/g, "")
-      .replace(/&nbsp;|\s+/g, " ")
-      .replace(/&#39;|&#x27;/g, "'")
-      .replace(/&quot;/g, '"')
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&amp;/g, "&");
+      .replaceAll(/<script\b[\s\S]*?<\/script>/g, " ")
+      .replaceAll(/<[^>]+>/g, "")
+      .replaceAll(/&nbsp;|\s+/g, " ")
+      .replaceAll(/&#39;|&#x27;/g, "'")
+      .replaceAll("&quot;", '"')
+      .replaceAll("&lt;", "<")
+      .replaceAll("&gt;", ">")
+      .replaceAll("&amp;", "&");
     // Both ways: every visible question of the FAQ section is in the schema.
     const faqSection = html
       .split(/<h2\b[^>]*>\s*Questions fréquentes\s*<\/h2>/)[1]

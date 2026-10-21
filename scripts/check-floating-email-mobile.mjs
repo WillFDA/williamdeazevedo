@@ -7,10 +7,19 @@ import path from "node:path";
 
 const temp = mkdtempSync(path.join(tmpdir(), "bubble-qa-"));
 const init = path.join(temp, "init.js");
-writeFileSync(init, `window.__contactEvents=[];window.rybbit={event:(name,properties)=>window.__contactEvents.push({name,properties})};document.addEventListener('click',e=>{if(e.target.closest?.('a[href^="mailto:"],a[href^="tel:"]'))e.preventDefault()});`);
+writeFileSync(
+  init,
+  `window.__contactEvents=[];window.rybbit={event:(name,properties)=>window.__contactEvents.push({name,properties})};document.addEventListener('click',e=>{if(e.target.closest?.('a[href^="mailto:"],a[href^="tel:"]'))e.preventDefault()});`
+);
 const session = `bubble-regression-${process.pid}`;
 const browser = (...args) => {
-  const response = JSON.parse(execFileSync("npx", ["--yes", "agent-browser", "--session", session, "--json", ...args], { encoding: "utf-8" }));
+  const response = JSON.parse(
+    execFileSync(
+      "npx",
+      ["--yes", "agent-browser", "--session", session, "--json", ...args],
+      { encoding: "utf-8" }
+    )
+  );
   assert.equal(response.success, true, JSON.stringify(response));
   return response.data;
 };
@@ -26,7 +35,11 @@ try {
     browser("open", baseline);
     const original = evaluate(widths);
     browser("open", candidate);
-    assert.deepEqual(evaluate(widths), original, `Content widths must equal pre-#83 baseline at ${width}px`);
+    assert.deepEqual(
+      evaluate(widths),
+      original,
+      `Content widths must equal pre-#83 baseline at ${width}px`
+    );
     const samples = evaluate(`(async()=>{
       const output=[],bubble=document.querySelector('[data-floating-email]');
       const footer=document.querySelector('[data-site-footer]');
@@ -37,10 +50,19 @@ try {
       }
       scrollTo({top:0,behavior:'instant'});return output;
     })()`);
-    if (width < 768) for (const sample of samples) {
-      assert.equal(sample.visible, !sample.footerVisible, `Mobile visibility at ${width}px scrollY=${sample.y}`);
-      assert.equal(sample.width, sample.height, "Mobile bubble remains circular");
-    }
+    if (width < 768)
+      for (const sample of samples) {
+        assert.equal(
+          sample.visible,
+          !sample.footerVisible,
+          `Mobile visibility at ${width}px scrollY=${sample.y}`
+        );
+        assert.equal(
+          sample.width,
+          sample.height,
+          "Mobile bubble remains circular"
+        );
+      }
     const overlays = evaluate(`(async()=>{
       const wait=()=>new Promise(r=>setTimeout(r,450));
       await wait();
@@ -56,11 +78,14 @@ try {
       if(innerWidth<768)output.dialogRestored=visible();
       return output;
     })()`);
-    for(const [state,passed] of Object.entries(overlays))assert.equal(passed,true,`${width}px ${state}`);
+    for (const [state, passed] of Object.entries(overlays))
+      assert.equal(passed, true, `${width}px ${state}`);
     results.push({ width, baselineWidths: original, samples, overlays });
   }
   console.log(JSON.stringify(results, null, 2));
-  console.log("PASS: original widths and stable mobile overlay; footer hides on entry");
+  console.log(
+    "PASS: original widths and stable mobile overlay; footer hides on entry"
+  );
 } finally {
   browser("close");
   rmSync(temp, { recursive: true, force: true });

@@ -26,13 +26,13 @@ Les préférences graphiques ont leur place. Mais elles ne doivent pas faire dis
 
 Un diagnostic doit permettre d’arbitrer, y compris en faveur d’une intervention limitée. Le tableau suivant décrit des situations possibles, pas une décision automatique.
 
-| Situation observée                                | Première piste à examiner                |
-| ------------------------------------------------- | ---------------------------------------- |
-| Contenus périmés, structure encore adaptée        | Actualisation des pages existantes       |
-| Difficulté à trouver le contact sur mobile        | Correction du parcours et de l’interface |
-| Offre profondément modifiée, pages mal organisées | Refonte éditoriale et de l’arborescence  |
-| Outil non maintenu ou bloquant les besoins futurs | Remplacement du socle technique          |
-| Plusieurs difficultés liées entre elles           | Refonte globale après inventaire         |
+| Situation observée | Première piste à examiner |
+| --- | --- |
+| Contenus périmés, structure encore adaptée | Actualisation des pages existantes |
+| Difficulté à trouver le contact sur mobile | Correction du parcours et de l’interface |
+| Offre profondément modifiée, pages mal organisées | Refonte éditoriale et de l’arborescence |
+| Outil non maintenu ou bloquant les besoins futurs | Remplacement du socle technique |
+| Plusieurs difficultés liées entre elles | Refonte globale après inventaire |
 
 Pour vérifier une difficulté d’usage, commencez par des tests simples : ouvrir les pages sur téléphone, envoyer un message et naviguer au clavier. Le guide pour [tester l’accessibilité d’un site web](/articles/tester-accessibilite-site-web/) donne un point de départ, sans remplacer un audit complet.
 

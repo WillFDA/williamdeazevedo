@@ -130,8 +130,9 @@ const choiceClass =
         const domain = window.location.hostname.replace(/^www\./, "");
         for (const entry of document.cookie.split(";")) {
             const name = entry.split("=")[0].trim();
-            if (!/^(_ga|_gid|_gat|_gcl)/.test(name)) continue;
+            if (!/^(?:_ga|_gid|_gat|_gcl)/.test(name)) continue;
             for (const scope of ["", `;domain=${domain}`, `;domain=.${domain}`]) {
+                // oxlint-disable-next-line unicorn/no-document-cookie -- Cookie Store API absente de Firefox < 140 et Safari < 18.4 : document.cookie reste le seul moyen d'effacer _ga partout.
                 document.cookie = `${name}=;max-age=0;path=/${scope}`;
             }
         }
@@ -146,7 +147,9 @@ const choiceClass =
                 STORAGE_KEY,
                 JSON.stringify({ value, at: new Date().toISOString() }),
             );
-        } catch {}
+        } catch {
+            // Stockage indisponible (navigation privée) : le choix vaut pour cette page.
+        }
         consentWindow.gtag?.("consent", "update", {
             ad_storage: value,
             ad_user_data: value,

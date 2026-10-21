@@ -49,24 +49,42 @@ const calLink = String(
 <script>
     import { trackAnalytics } from "../scripts/analytics";
 
+    // File d'attente du snippet Cal.com : les appels sont mis en file jusqu'au
+    // chargement de embed.js, qui remplace ensuite window.Cal.
+    type CalQueue = { q?: unknown[][] };
+    type CalApi = ((...args: unknown[]) => void) & CalQueue;
+    type CalGlobal = CalApi & { loaded?: boolean; ns?: Record<string, CalApi> };
+    type CalBookingEvent = {
+        detail?: { data?: { eventTypeId?: number | string; status?: string } };
+    };
+
+    const calWindow = window as Window & { Cal?: CalGlobal };
+
     const drawer = document.querySelector("[data-cal-drawer]");
     const inlineEmbed = document.querySelector("[data-cal-inline]");
     const root = document.documentElement;
     const closeAnimationMs = 320;
     let isCalEmbedded = false;
     let isCalConfigured = false;
-    let closeTimer;
+    let closeTimer: number | undefined;
 
-    function loadCalEmbed() {
-        if ("Cal" in window) return;
+    // Pose le stub du snippet une seule fois et renvoie window.Cal : les appels
+    // ne sont pas optionnels, un stub absent doit lever une erreur, pas se taire.
+    function loadCalEmbed(): CalGlobal {
+        if (calWindow.Cal) return calWindow.Cal;
 
-        (function initCalEmbedSnippet(C, A, L) {
-            const push = (api, args) => api.q.push(args);
+        return (function initCalEmbedSnippet(
+            C: typeof calWindow,
+            A: string,
+            L: string,
+        ): CalGlobal {
+            const push = (api: CalQueue, args: unknown[]) => api.q?.push(args);
             const documentRef = C.document;
 
             if (!C.Cal) {
-                C.Cal = function Cal(...args) {
-                    const cal = C.Cal;
+                const stub: CalGlobal = (...args: unknown[]) => {
+                    // Comme le snippet officiel : relit window.Cal à chaque appel.
+                    const cal = C.Cal ?? stub;
 
                     if (!cal.loaded) {
                         cal.ns ||= {};
@@ -79,15 +97,17 @@ const calLink = String(
                     }
 
                     if (args[0] === L) {
-                        const api = function api(...namespaceArgs) {
+                        const api: CalApi = (...namespaceArgs: unknown[]) => {
                             push(api, namespaceArgs);
                         };
                         const namespace = args[1];
 
                         api.q ||= [];
                         if (typeof namespace === "string") {
-                            cal.ns[namespace] ||= api;
-                            push(cal.ns[namespace], args);
+                            cal.ns ||= {};
+                            const namespaces = cal.ns;
+                            namespaces[namespace] ||= api;
+                            push(namespaces[namespace], args);
                             push(cal, ["initNamespace", namespace]);
                         } else {
                             push(cal, args);
@@ -97,8 +117,10 @@ const calLink = String(
 
                     push(cal, args);
                 };
+                C.Cal = stub;
             }
-        })(window, "https://app.cal.com/embed/embed.js", "init");
+            return C.Cal;
+        })(calWindow, "https://app.cal.com/embed/embed.js", "init");
     }
 
     function getCalLink() {
@@ -106,12 +128,12 @@ const calLink = String(
         return inlineEmbed.dataset.calLink ?? "";
     }
 
-    function configureCalEmbed(calLink) {
+    function configureCalEmbed(calLink: string) {
         if (isCalConfigured) return;
 
-        loadCalEmbed();
-        window.Cal("init", { origin: "https://cal.com" });
-        window.Cal("ui", {
+        const cal = loadCalEmbed();
+        cal("init", { origin: "https://cal.com" });
+        cal("ui", {
             cssVarsPerTheme: {
                 dark: {
                     "cal-bg": "#141016",
@@ -127,14 +149,14 @@ const calLink = String(
             },
             theme: "dark",
         });
-        window.Cal("on", {
+        cal("on", {
             action: "bookingSuccessfulV2",
-            callback: (event) => {
+            callback: (event: CalBookingEvent) => {
                 const booking = event.detail?.data ?? {};
 
                 // Google Tag Manager : conversion prise de rendez-vous.
                 const w = window as Window & { dataLayer?: unknown[] };
-                w.dataLayer = w.dataLayer || [];
+                w.dataLayer ||= [];
                 w.dataLayer.push({ event: "prise_rdv" });
 
                 trackAnalytics("cal_booking_success", {
@@ -145,7 +167,7 @@ const calLink = String(
                 });
             },
         });
-        window.Cal("preload", { calLink });
+        cal("preload", { calLink });
         isCalConfigured = true;
     }
 
@@ -156,7 +178,7 @@ const calLink = String(
         if (!calLink) return;
 
         configureCalEmbed(calLink);
-        window.Cal("inline", {
+        loadCalEmbed()("inline", {
             calLink,
             config: { theme: "dark", "ui.color-scheme": "dark" },
             elementOrSelector: inlineEmbed,

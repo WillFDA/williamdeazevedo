@@ -36,12 +36,12 @@ Conservez aussi les titres, les contenus et la structure des liens des pages pri
 
 Un tableau de correspondance doit indiquer une décision explicite : conserver, déplacer, fusionner ou supprimer. Voici des exemples fictifs pour un site de services.
 
-| Ancienne adresse         | Décision                  | Destination ou réponse attendue                  |
-| ------------------------ | ------------------------- | ------------------------------------------------ |
-| `/contact/`              | Conserver                 | Même URL, réponse 200                            |
-| `/nos-travaux/`          | Déplacer                  | 301 vers `/realisations/`                        |
-| `/renovation-salle-eau/` | Fusionner                 | 301 vers une page couvrant réellement ce service |
-| `/offre-terminee/`       | Supprimer sans équivalent | Réponse 404 ou 410                               |
+| Ancienne adresse | Décision | Destination ou réponse attendue |
+| --- | --- | --- |
+| `/contact/` | Conserver | Même URL, réponse 200 |
+| `/nos-travaux/` | Déplacer | 301 vers `/realisations/` |
+| `/renovation-salle-eau/` | Fusionner | 301 vers une page couvrant réellement ce service |
+| `/offre-terminee/` | Supprimer sans équivalent | Réponse 404 ou 410 |
 
 La destination doit répondre au besoin de la personne qui suivait l’ancien lien. Rediriger toutes les anciennes pages vers l’accueil peut désorienter les visiteurs et être considéré par Google comme une erreur « soft 404 ».
 
