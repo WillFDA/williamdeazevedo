@@ -204,11 +204,11 @@ body {
   }
 
   /* Colonne commune aux sections du bas de l'accueil (réalisations, avis,
-     tarifs, FAQ, contact) : mêmes bords gauche et droit d'une section à
-     l'autre, 1024 px de contenu au maximum. */
+     tarifs, FAQ, contact) : 992 px de contenu au maximum, bord gauche aligné
+     sur les visuels du carrousel de réalisations. */
   .section-shell {
     margin-inline: auto;
-    max-width: 68rem;
+    max-width: 66rem;
     padding-inline: 1rem;
     width: 100%;
   }

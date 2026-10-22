@@ -5,6 +5,7 @@ import CodeEditor from "./icons/nucleo/code-editor-fill.svg";
 import ViewAll from "./icons/nucleo/view-all-fill.svg";
 import WindowPaintbrush from "./icons/nucleo/window-paintbrush-fill.svg";
 import WindowPointer from "./icons/nucleo/window-pointer-fill.svg";
+import { contact } from "../data/contact";
 import { services } from "../data/services";
 import WaveText from "./ui/WaveText.astro";
 import BrandMark from "./ui/BrandMark.astro";
@@ -14,8 +15,7 @@ interface Props {
 }
 
 const { pathName } = Astro.props;
-const phoneDisplay = "07 62 74 60 21";
-const phoneHref = "tel:+33762746021";
+const { phoneDisplay, phoneHref } = contact;
 const navItems = [
     { href: "/", id: "home", label: "Accueil" },
     { href: "/services/", id: "services", label: "Services" },

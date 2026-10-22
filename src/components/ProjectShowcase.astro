@@ -1,11 +1,14 @@
 ---
 import Carousel from "./Carousel.astro";
 import ProjectIntro from "./ProjectIntro.astro";
+import SectionHeader from "./ui/SectionHeader.astro";
 import { projects } from "@/data/projects";
 
 interface Props {
     class?: string;
     description?: string;
+    /** Libellé mono : en-tête éditorial et colonne .section-shell (accueil). */
+    eyebrow?: string;
     id?: string;
     title?: string;
 }
@@ -13,6 +16,7 @@ interface Props {
 const {
     class: className,
     description = "Chaque projet montre comment clarifier une offre, rassurer les visiteurs et transformer une première impression en parcours crédible.",
+    eyebrow,
     id = "projects",
     title = "Des projets pensés pour inspirer confiance",
 } = Astro.props;
@@ -24,16 +28,29 @@ const {
     data-project-showcase
     aria-labelledby={`${id}-title`}
 >
-    <div
-        class="mx-auto mb-12 flex max-w-5xl flex-col items-start gap-4 px-4 text-left"
-    >
-        <h2 id={`${id}-title`} class="section-heading project-showcase-heading">
-            {title}
-        </h2>
-        <p class="section-subheading mx-0 max-w-3xl text-left text-gray-700">
-            {description}
-        </p>
-    </div>
+    {
+        eyebrow ? (
+            <SectionHeader
+                class="section-shell mb-section-content"
+                description={description}
+                eyebrow={eyebrow}
+                id={`${id}-title`}
+                title={title}
+            />
+        ) : (
+            <div class="mx-auto mb-12 flex max-w-5xl flex-col items-start gap-4 px-4 text-left">
+                <h2
+                    id={`${id}-title`}
+                    class="section-heading project-showcase-heading"
+                >
+                    {title}
+                </h2>
+                <p class="section-subheading mx-0 max-w-3xl text-left text-gray-700">
+                    {description}
+                </p>
+            </div>
+        )
+    }
     <Carousel compactControls>
         {
             projects.map((project) => (
@@ -58,7 +75,12 @@ const {
         }
     </Carousel>
 
-    <div class="project-copy mx-auto grid max-w-5xl px-4 pt-8 md:pt-10">
+    <div
+        class:list={[
+            "project-copy grid pt-8 md:pt-10",
+            eyebrow ? "section-shell" : "mx-auto max-w-5xl px-4",
+        ]}
+    >
         {
             projects.map((project, index) => (
                 <article

@@ -19,7 +19,7 @@ Branche `redesign/galadrim-sections`. Analyse de galadrim.fr (accueil, `/contact
 - Tokens Tailwind v4 dans `src/styles/global.css` :
   - `--spacing-section` : 112 px (390 px) → 192 px (1 280 px), fluide entre les deux (`gap-section`, `pt-section`…) ;
   - `--spacing-section-content` : 40 → 64 px entre en-tête et contenu ;
-  - `.section-shell` : colonne commune (1 024 px de contenu max) pour aligner les bords des cinq sections ;
+  - `.section-shell` : colonne commune (992 px de contenu max, alignée sur les visuels du carrousel de réalisations) pour aligner les bords des cinq sections ;
   - `.section-title` : titre éditorial aligné à gauche.
 - `SectionEyebrow` (libellé mono + repère bleu) et `SectionHeader` (libellé, titre, description à droite en desktop) partagés par les cinq sections.
 - Ordre du bas de page : Réalisations, Avis, Tarifs, FAQ, Contact.

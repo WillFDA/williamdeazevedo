@@ -1,0 +1,107 @@
+---
+import { Image } from "astro:assets";
+import williamPortrait from "../assets/williamdeazevedo.webp";
+import CalButton from "./CalButton.astro";
+import SectionEyebrow from "./ui/SectionEyebrow.astro";
+import { contact } from "@/data/contact";
+
+interface Props {
+    id?: string;
+}
+
+const { id = "contact" } = Astro.props;
+const monoLabel =
+    "font-mono text-[0.6875rem] font-medium uppercase leading-none tracking-[0.08em]";
+const details = [
+    { label: "E-mail", value: contact.email, href: `mailto:${contact.email}` },
+    { label: "Téléphone", value: contact.phoneDisplay, href: contact.phoneHref },
+    { label: "Basé à", value: contact.base },
+    { label: "Zone", value: contact.area },
+];
+---
+
+<section id={id} class="section-shell" aria-labelledby={`${id}-title`}>
+    <div
+        class="contact-panel grid gap-12 rounded-3xl bg-snow-50 px-6 py-10 ring-1 ring-gray-200 sm:p-10 md:rounded-4xl lg:grid-cols-12 lg:gap-x-8 lg:p-14"
+    >
+        <div class="flex flex-col items-start lg:col-span-7">
+            <SectionEyebrow>Contact</SectionEyebrow>
+            <h2 id={`${id}-title`} class="contact-panel__title mt-6">
+                Parlons de votre projet
+            </h2>
+            <p
+                class="mt-6 max-w-md text-lg font-light leading-snug text-gray-600"
+            >
+                En 15 minutes, on peut déjà vérifier les freins prioritaires,
+                le type de projet et la prochaine étape pertinente.
+            </p>
+            <CalButton
+                class="mt-10 rounded-xl text-base font-normal"
+                label="Réserver un appel de 15 min"
+                location="contact"
+            />
+        </div>
+
+        <div class="lg:col-span-5 lg:self-end">
+            <div class="flex items-center gap-4">
+                <Image
+                    class="block size-16 rounded-lg bg-snow-600 object-cover"
+                    src={williamPortrait}
+                    alt=""
+                    width={128}
+                    height={128}
+                    loading="lazy"
+                />
+                <p class="flex flex-col gap-2">
+                    <span class="text-base font-medium leading-none text-gray-900">
+                        William De Azevedo
+                    </span>
+                    <span class:list={[monoLabel, "text-gray-600"]}>
+                        Développeur web freelance
+                    </span>
+                </p>
+            </div>
+            <dl
+                class="mt-8 grid border-t border-gray-200 sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-1"
+            >
+                {
+                    details.map((item) => (
+                        <div class="border-b border-gray-200 py-4">
+                            <dt class:list={[monoLabel, "text-gray-600"]}>
+                                {item.label}
+                            </dt>
+                            <dd class="mt-2 font-mono text-sm leading-snug text-gray-900 [overflow-wrap:anywhere]">
+                                {item.href ? (
+                                    <a
+                                        class="underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                        href={item.href}
+                                    >
+                                        {item.value}
+                                    </a>
+                                ) : (
+                                    item.value
+                                )}
+                            </dd>
+                        </div>
+                    ))
+                }
+            </dl>
+        </div>
+    </div>
+</section>
+
+<style>
+    .contact-panel {
+        box-shadow: 0 2.5rem 5rem -3.5rem rgba(34, 42, 55, 0.35);
+    }
+
+    .contact-panel__title {
+        color: var(--color-gray-900);
+        font-size: clamp(2.75rem, 1.6rem + 4.6vw, 5rem);
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        line-height: 0.95;
+        margin: 0;
+        text-wrap: balance;
+    }
+</style>

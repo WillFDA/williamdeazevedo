@@ -3,6 +3,7 @@ import Layout from "../layout/Layout.astro";
 import FadeReveal from "../components/animations/FadeReveal.astro";
 import AboutCallout from "../components/AboutCallout.astro";
 import CapabilitiesStrip from "../components/CapabilitiesStrip.astro";
+import ContactSection from "../components/ContactSection.astro";
 import ExpertiseShowcase from "../components/ExpertiseShowcase.astro";
 import FaqEssentials from "../components/FaqEssentials.astro";
 import PricingQuote from "../components/PricingQuote.astro";
@@ -296,10 +297,11 @@ const displayedTestimonials = getPublishedTestimonials();
     <div
         class="flex flex-col gap-section pt-[calc(var(--spacing-section)-2rem)]"
     >
+        <ProjectShowcase eyebrow="Réalisations" />
+        <TestimonialsSection />
         <PricingQuote />
         <FaqEssentials />
-        <TestimonialsSection />
-        <ProjectShowcase />
+        <ContactSection />
     </div>
 </Layout>
 
