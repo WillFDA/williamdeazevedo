@@ -8,3 +8,10 @@ export const contact = {
   base: "Achères (78)",
   area: "Yvelines, Île-de-France et toute la France",
 };
+
+// Fiche Google : lien de partage et note, affichés par le badge du haut de
+// l'accueil et sous les avis clients.
+export const googleReviews = {
+  href: "https://share.google/LlCN4Hr5IlatyVSl2",
+  rating: "5.0",
+};

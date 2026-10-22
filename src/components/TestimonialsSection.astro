@@ -4,6 +4,7 @@ import ArrowRight from "./icons/nucleo/arrow-right-fill.svg";
 import ArrowUpRight from "./icons/nucleo/arrow-up-right-fill.svg";
 import Star from "./icons/nucleo/star-fill.svg";
 import SectionHeader from "./ui/SectionHeader.astro";
+import { googleReviews } from "@/data/contact";
 import { getPublishedTestimonials } from "@/lib/testimonials";
 
 interface Props {
@@ -17,11 +18,6 @@ const testimonials = getPublishedTestimonials();
 const quote = (text: string) => `«\u00A0${text}\u00A0»`;
 const formatIndex = (index: number) => String(index + 1).padStart(2, "0");
 const lastIndex = formatIndex(testimonials.length - 1);
-// Même lien et même note que le badge « Avis Google » du haut de page.
-const googleReviews = {
-    href: "https://share.google/LlCN4Hr5IlatyVSl2",
-    rating: "5.0",
-};
 ---
 
 {
@@ -79,30 +75,30 @@ const googleReviews = {
                                 </p>
                             </blockquote>
                             <figcaption>
-                                <dl class="grid gap-y-3 border-t border-gray-200 pt-5 font-mono text-[0.8125rem] leading-snug sm:grid-cols-3 sm:gap-x-6">
-                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 sm:block">
+                                <dl class="grid gap-y-3 border-t border-gray-200 pt-5 font-mono text-[0.8125rem] leading-snug lg:grid-cols-[1fr_1fr_1.4fr] lg:gap-x-6">
+                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 lg:block">
                                         <dt class="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-gray-600">
                                             Client
                                         </dt>
-                                        <dd class="font-medium text-gray-900 sm:mt-1.5">
+                                        <dd class="font-medium text-gray-900 lg:mt-1.5">
                                             {testimonial.name}
                                         </dd>
                                     </div>
-                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 sm:block">
+                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 lg:block">
                                         <dt class="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-gray-600">
                                             Entreprise
                                         </dt>
-                                        <dd class="text-gray-900 sm:mt-1.5">
+                                        <dd class="text-gray-900 lg:mt-1.5">
                                             {testimonial.company}
                                         </dd>
                                     </div>
-                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 sm:block">
+                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 lg:block">
                                         <dt class="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-gray-600">
                                             Projet
                                         </dt>
-                                        <dd class="sm:mt-1.5">
+                                        <dd class="lg:mt-1.5">
                                             <a
-                                                class="testimonial-row__project group inline-flex items-baseline gap-2 text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                                class="group text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
                                                 href={testimonial.caseStudyHref}
                                             >
                                                 {testimonial.projectLabel}
@@ -110,7 +106,7 @@ const googleReviews = {
                                                     {` : voir la réalisation ${testimonial.company}`}
                                                 </span>
                                                 <ArrowRight
-                                                    class="size-3 shrink-0 translate-y-px transition-transform group-hover:translate-x-0.5"
+                                                    class="ml-2 inline-block size-3 align-[-0.05em] transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
                                                     aria-hidden="true"
                                                 />
                                             </a>

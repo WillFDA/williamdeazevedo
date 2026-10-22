@@ -17,6 +17,7 @@ import { Image } from "astro:assets";
 import WaveIcon from "../components/ui/WaveIcon.astro";
 import WaveText from "../components/ui/WaveText.astro";
 import AnimatedHeading from "../components/ui/AnimatedHeading.astro";
+import { googleReviews } from "@/data/contact";
 import { getPublishedTestimonials } from "@/lib/testimonials";
 
 export const prerender = true;
@@ -150,14 +151,14 @@ const displayedTestimonials = getPublishedTestimonials();
             aria-label="Avis Google : 5 étoiles sur 5"
             class="mx-auto inline-flex max-w-full items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-tight text-gray-900 no-underline shadow-[0_10px_22px_-16px_rgba(34,42,55,0.45)] transition-transform hover:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 sm:text-base"
             data-hero-eyebrow
-            href="https://share.google/LlCN4Hr5IlatyVSl2"
+            href={googleReviews.href}
             rel="noreferrer"
             target="_blank"
         >
             <span>Avis Google</span>
             <span class="inline-flex items-center gap-1.5 rounded-xl bg-blue-500 px-2.5 py-1 font-medium text-snow-50">
                 <Star aria-hidden="true" class="size-4 text-snow-50" />
-                <span>5.0</span>
+                <span>{googleReviews.rating}</span>
             </span>
         </a>
         <AnimatedHeading

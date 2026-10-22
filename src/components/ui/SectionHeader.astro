@@ -3,7 +3,8 @@ import SectionEyebrow from "./SectionEyebrow.astro";
 import { withFrenchSpacing } from "@/lib/typography";
 
 // En-tête commun aux sections du bas de l'accueil : libellé mono, titre
-// aligné à gauche et, en desktop, description dans la colonne de droite.
+// aligné à gauche et, en desktop, description dans la colonne de droite,
+// calée sur le haut du titre (lg:pt-9 = libellé + son écart).
 interface Props {
     class?: string;
     description?: string;
@@ -17,7 +18,7 @@ const { class: className, description, eyebrow, id, title } = Astro.props;
 
 <div
     class:list={[
-        "grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-x-8",
+        "grid gap-6 lg:grid-cols-12 lg:items-start lg:gap-x-8",
         className,
     ]}
 >
@@ -27,7 +28,7 @@ const { class: className, description, eyebrow, id, title } = Astro.props;
     </div>
     {
         description && (
-            <p class="max-w-xl text-base font-light leading-normal text-gray-600 sm:text-lg lg:col-span-5 lg:pb-1">
+            <p class="max-w-xl text-base font-light leading-normal text-gray-600 sm:text-lg lg:col-span-5 lg:pt-9">
                 {withFrenchSpacing(description)}
             </p>
         )

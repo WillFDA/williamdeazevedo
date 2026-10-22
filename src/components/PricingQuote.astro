@@ -90,14 +90,14 @@ const monoLabel =
                                     value={option.id}
                                 />
                                 <span
-                                    class="pricing-quote__box inline-flex size-5 items-center justify-center rounded-[0.25rem] border border-gray-300 bg-snow-50 text-transparent transition-colors peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-snow-50"
+                                    class="pricing-quote__box inline-flex size-5 items-center justify-center rounded-[0.25rem] border border-gray-500 bg-snow-50 text-transparent transition-colors peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-snow-50"
                                     aria-hidden="true"
                                 >
                                     <CheckIcon class="size-3.5 [&_g]:stroke-[1.75]" />
                                 </span>
                                 <span class="text-base leading-snug text-gray-700 peer-checked:text-gray-900">
                                     {option.label}
-                                </span>
+                                </span>{" "}
                                 <span class="whitespace-nowrap font-mono text-sm tabular-nums text-gray-600 peer-checked:text-blue-600">
                                     {option.price === undefined ? (
                                         "Sur devis"

@@ -31,3 +31,9 @@ Filets pointillés en cadre de page, crochets autour des libellés, palette crè
 ## Garde-fous de contenu
 
 Aucun prix, avis, client ou délai inventé : les offres et options viennent de l'ancien `PricingPreview.astro` (déplacées dans `src/data/pricing.ts`), les avis de `src/data/temoignage.ts`, les questions de l'ancienne FAQ.
+
+## Points d'attention
+
+- Le JSON-LD `FAQPage` de l'accueil est nouveau (il n'existait pas) : il est généré depuis `src/data/faq.ts`, comme le texte visible, donc les deux restent identiques.
+- `--font-mono` passe à Geist Mono pour tout le site : les blocs de code des articles et les petits libellés « code » des visuels de services l'utilisent aussi.
+- Astro 7, oxlint et oxfmt demandent Node 22.12 ou plus (22.18 pour les configurations TypeScript d'oxlint/oxfmt).
