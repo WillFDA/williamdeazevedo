@@ -1,0 +1,362 @@
+---
+import CalButton from "./CalButton.astro";
+import ArrowRight from "./icons/nucleo/arrow-right-fill.svg";
+import CheckIcon from "./icons/nucleo/check-2-outline.svg";
+import SectionEyebrow from "./ui/SectionEyebrow.astro";
+import SectionHeader from "./ui/SectionHeader.astro";
+import { formatEuro, productOffer, siteOffer } from "@/data/pricing";
+
+interface Props {
+    id?: string;
+}
+
+const { id = "tarifs" } = Astro.props;
+const formatIndex = (index: number) => String(index + 1).padStart(2, "0");
+const monoLabel =
+    "font-mono text-[0.6875rem] font-medium uppercase leading-none tracking-[0.08em]";
+---
+
+<section id={id} class="section-shell" aria-labelledby={`${id}-title`}>
+    <SectionHeader
+        eyebrow="Tarifs"
+        id={`${id}-title`}
+        title="Un site clair à lancer. Simple à faire évoluer."
+        description="Chaque projet dépend du nombre de pages, du contenu, du niveau de design, des animations et des fonctionnalités attendues. Voici des budgets de départ pour vous aider à vous situer avant un premier échange."
+    />
+
+    <div
+        class="mt-section-content grid gap-10 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-12"
+    >
+        <div class="lg:col-span-5 lg:col-start-1 lg:row-start-1">
+            <p class:list={[monoLabel, "text-gray-600"]}>Offre 01</p>
+            <h3
+                class="mt-4 text-3xl font-medium leading-none tracking-[-0.01em] text-gray-900 sm:text-4xl"
+            >
+                {siteOffer.title}
+            </h3>
+            <p
+                class="mt-4 max-w-md text-lg font-light leading-snug text-gray-600"
+            >
+                {siteOffer.subtitle}
+            </p>
+        </div>
+
+        <div
+            class="pricing-quote rounded-3xl bg-snow-50 p-6 ring-1 ring-gray-200 sm:p-8 lg:col-span-6 lg:col-start-7 lg:row-span-2 lg:row-start-1 lg:self-start"
+            data-pricing-quote
+            data-base-price={siteOffer.basePrice}
+        >
+            <div
+                class:list={[
+                    monoLabel,
+                    "flex items-baseline justify-between gap-4 border-b border-gray-200 pb-4 text-gray-600",
+                ]}
+            >
+                <span>Estimation</span>
+                <span>Montants HT</span>
+            </div>
+
+            <div
+                class="flex items-baseline justify-between gap-4 border-b border-gray-200 py-4"
+            >
+                <span class="text-base text-gray-900">
+                    {siteOffer.title}, base
+                </span>
+                <span class="font-mono text-sm tabular-nums text-gray-900">
+                    {formatEuro(siteOffer.basePrice)}&nbsp;€
+                </span>
+            </div>
+
+            <fieldset class="m-0 min-w-0 border-0 border-b border-gray-200 p-0 pb-2">
+                <legend
+                    class:list={[
+                        monoLabel,
+                        "float-left w-full pt-5 pb-2 text-gray-600",
+                    ]}
+                >
+                    Options à ajouter
+                </legend>
+                <div class="clear-both">
+                    {
+                        siteOffer.options.map((option) => (
+                            <label class="pricing-quote__option -mx-3 grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-4 rounded-xl px-3 py-3">
+                                <input
+                                    class="pricing-quote__input peer sr-only"
+                                    data-label={option.label}
+                                    data-price={option.price}
+                                    data-quote-option
+                                    name="options-site-web"
+                                    type="checkbox"
+                                    value={option.id}
+                                />
+                                <span
+                                    class="pricing-quote__box inline-flex size-5 items-center justify-center rounded-[0.25rem] border border-gray-300 bg-snow-50 text-transparent transition-colors peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-snow-50"
+                                    aria-hidden="true"
+                                >
+                                    <CheckIcon class="size-3.5 [&_g]:stroke-[1.75]" />
+                                </span>
+                                <span class="text-base leading-snug text-gray-700 peer-checked:text-gray-900">
+                                    {option.label}
+                                </span>
+                                <span class="whitespace-nowrap font-mono text-sm tabular-nums text-gray-600 peer-checked:text-blue-600">
+                                    {option.price === undefined ? (
+                                        "Sur devis"
+                                    ) : (
+                                        <>+&nbsp;{formatEuro(option.price)}&nbsp;€</>
+                                    )}
+                                </span>
+                            </label>
+                        ))
+                    }
+                </div>
+            </fieldset>
+
+            <div class="pt-5" aria-live="polite" aria-atomic="true">
+                <p class:list={[monoLabel, "text-gray-600"]}>Total estimé</p>
+                <p class="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                    <span class="text-sm font-light text-gray-600">
+                        À partir de
+                    </span>{" "}
+                    <span
+                        class="pricing-quote__total inline-block font-mono text-[2.25rem] font-medium leading-none tracking-[-0.04em] text-gray-900 tabular-nums sm:text-[2.75rem]"
+                        data-quote-total
+                    >
+                        {formatEuro(siteOffer.basePrice)}
+                    </span>{" "}
+                    <span class="font-mono text-lg font-medium text-gray-900">
+                        €&nbsp;HT
+                    </span>
+                </p>
+                <p
+                    class="mt-3 font-mono text-xs leading-snug text-blue-600"
+                    data-quote-note
+                    hidden
+                >
+                </p>
+            </div>
+
+            <CalButton
+                class="mt-7 w-full rounded-xl text-base font-normal"
+                label={siteOffer.cta}
+                location={siteOffer.ctaLocation}
+            />
+            <a
+                class:list={[
+                    monoLabel,
+                    "group mt-5 inline-flex items-center gap-2 text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500",
+                ]}
+                href="#faq"
+            >
+                <span
+                    class="underline decoration-gray-300 underline-offset-4 transition-colors group-hover:decoration-gray-900"
+                >
+                    Voir ce qui fait varier un devis
+                </span>
+                <ArrowRight aria-hidden="true" class="size-3" />
+            </a>
+        </div>
+
+        <div class="lg:col-span-5 lg:col-start-1 lg:row-start-2">
+            <p class:list={[monoLabel, "text-gray-600"]}>Compris dans la base</p>
+            <ul class="mt-4 border-t border-gray-200">
+                {
+                    siteOffer.features.map((feature) => (
+                        <li class="flex items-center gap-3 border-b border-gray-200 py-3 text-base leading-snug text-gray-900">
+                            <span
+                                class="inline-flex size-5 shrink-0 items-center justify-center rounded-[0.25rem] bg-blue-50 text-blue-600"
+                                aria-hidden="true"
+                            >
+                                <CheckIcon class="size-3.5 [&_g]:stroke-[1.75]" />
+                            </span>
+                            {feature}
+                        </li>
+                    ))
+                }
+            </ul>
+            <p class:list={[monoLabel, "mt-8 text-gray-600"]}>Délai</p>
+            <p class="mt-3 text-base leading-snug text-gray-900">
+                {siteOffer.delay}
+            </p>
+        </div>
+    </div>
+
+    <div
+        class="relative left-1/2 mt-section-content w-[calc(100dvw-1rem)] -translate-x-1/2 rounded-3xl bg-coffee-300 py-14 text-snow-50 sm:w-[calc(100dvw-2rem)] sm:py-20 md:rounded-4xl lg:py-24"
+    >
+        <div class="section-shell">
+            <div class="grid gap-10 lg:grid-cols-12 lg:gap-x-8">
+                <div class="lg:col-span-7">
+                    <SectionEyebrow tone="inverse">Offre 02</SectionEyebrow>
+                    <h3 class="section-title section-title--inverse mt-5">
+                        {productOffer.title}
+                    </h3>
+                    <p
+                        class="mt-5 max-w-lg text-lg font-light leading-snug text-coffee-100"
+                    >
+                        {productOffer.subtitle}
+                    </p>
+                </div>
+                <div
+                    class="border-t border-white/15 pt-6 lg:col-span-4 lg:col-start-9 lg:self-end"
+                >
+                    <p class:list={[monoLabel, "text-coffee-100"]}>Tarif</p>
+                    <p
+                        class="mt-3 text-4xl font-medium leading-none tracking-[-0.01em] sm:text-5xl"
+                    >
+                        {productOffer.price}
+                    </p>
+                    <p class="mt-4 font-mono text-sm leading-snug text-snow-50">
+                        Cadrage possible dès {formatEuro(productOffer.framingFrom)}&nbsp;€&nbsp;HT
+                    </p>
+                    <p class="mt-1.5 text-sm leading-snug text-coffee-100">
+                        {productOffer.delay}
+                    </p>
+                </div>
+            </div>
+
+            <ul
+                class="mt-12 grid border-t border-white/15 sm:grid-cols-2 sm:gap-x-8 lg:mt-16 lg:grid-cols-3"
+            >
+                {
+                    productOffer.features.map((feature, index) => (
+                        <li class="flex items-baseline gap-4 border-b border-white/15 py-4 text-base leading-snug">
+                            <span
+                                class="font-mono text-xs text-blue-200"
+                                aria-hidden="true"
+                            >
+                                {formatIndex(index)}
+                            </span>
+                            {feature}
+                        </li>
+                    ))
+                }
+            </ul>
+
+            <div
+                class="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
+            >
+                <p class="max-w-md text-sm leading-relaxed text-coffee-100">
+                    {productOffer.footnote}
+                </p>
+                <CalButton
+                    class="rounded-xl text-base font-normal"
+                    label={productOffer.cta}
+                    location={productOffer.ctaLocation}
+                    variant="light"
+                />
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .pricing-quote {
+        box-shadow: 0 2rem 4rem -3rem rgba(34, 42, 55, 0.35);
+    }
+
+    /* Focus clavier reporté sur la case dessinée (l'input natif est
+       visuellement masqué mais reste focusable et annoncé). */
+    .pricing-quote__input:focus-visible + .pricing-quote__box {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 2px;
+    }
+
+    @media (hover: hover) {
+        .pricing-quote__option:hover {
+            background: var(--color-gray-100);
+        }
+    }
+</style>
+
+<script>
+    const priceFormatter = new Intl.NumberFormat("fr-FR");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const quoteCleanups = new Map<HTMLElement, () => void>();
+
+    const initPricingQuotes = () => {
+        document
+            .querySelectorAll<HTMLElement>("[data-pricing-quote]")
+            .forEach((root) => {
+                if (quoteCleanups.has(root)) return;
+
+                const total = root.querySelector<HTMLElement>(
+                    "[data-quote-total]",
+                );
+                const note = root.querySelector<HTMLElement>("[data-quote-note]");
+                const options = Array.from(
+                    root.querySelectorAll<HTMLInputElement>(
+                        "[data-quote-option]",
+                    ),
+                );
+
+                if (!total || !note) return;
+
+                const basePrice = Number(root.dataset.basePrice) || 0;
+                const controller = new AbortController();
+
+                // Le conteneur aria-live du total n'annonce qu'un changement
+                // réel : rien n'est réécrit si le montant reste le même.
+                const update = () => {
+                    const checked = options.filter((option) => option.checked);
+                    const sum = checked.reduce(
+                        (amount, option) =>
+                            amount + (Number(option.dataset.price) || 0),
+                        basePrice,
+                    );
+                    const onQuote = checked
+                        .filter((option) => !option.dataset.price)
+                        .map((option) => option.dataset.label ?? option.value);
+                    const nextTotal = priceFormatter.format(sum);
+                    const nextNote = onQuote.length
+                        ? `+ ${onQuote.join(", ")} sur devis`
+                        : "";
+
+                    if (total.textContent?.trim() !== nextTotal) {
+                        total.textContent = nextTotal;
+
+                        if (!reducedMotion.matches) {
+                            total.animate(
+                                [
+                                    { opacity: 0.3, transform: "translateY(0.12em)" },
+                                    { opacity: 1, transform: "none" },
+                                ],
+                                {
+                                    duration: 320,
+                                    easing: "cubic-bezier(0.2, 0, 0, 1)",
+                                },
+                            );
+                        }
+                    }
+
+                    if (note.textContent !== nextNote) {
+                        note.textContent = nextNote;
+                    }
+                    note.hidden = !nextNote;
+                };
+
+                root.addEventListener("change", update, {
+                    signal: controller.signal,
+                });
+                // Cases restaurées par le navigateur (retour arrière).
+                update();
+                quoteCleanups.set(root, () => controller.abort());
+            });
+    };
+
+    const cleanupPricingQuotes = () => {
+        quoteCleanups.forEach((cleanup) => cleanup());
+        quoteCleanups.clear();
+    };
+
+    const pricingQuoteWindow = window as Window & {
+        __wuiPricingQuoteReady?: boolean;
+    };
+
+    initPricingQuotes();
+
+    if (!pricingQuoteWindow.__wuiPricingQuoteReady) {
+        pricingQuoteWindow.__wuiPricingQuoteReady = true;
+        document.addEventListener("astro:before-swap", cleanupPricingQuotes);
+        document.addEventListener("astro:page-load", initPricingQuotes);
+    }
+</script>

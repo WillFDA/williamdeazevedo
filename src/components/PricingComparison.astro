@@ -1,4 +1,5 @@
 ---
+import { siteOffer } from "@/data/pricing";
 import { type IconTone, iconToneClasses } from "@/lib/iconTones";
 import CalButton from "./CalButton.astro";
 import FadeRevealOnScroll from "./animations/FadeRevealOnScroll.astro";
@@ -52,7 +53,7 @@ const { headingId, ctaLocation } = {
 // propriété du site variable selon le contrat. Scénario retenu : 600 € HT de
 // mise en place + 36 mensualités de 30 à 100 € HT (scénario, pas une moyenne).
 // Colonne William : uniquement des formulations déjà publiées (« Dès 2 000 €
-// HT » : PricingPreview.astro ; coûts après livraison : tarifs.astro).
+// HT » : src/data/pricing.ts ; coûts après livraison : tarifs.astro).
 const nbsp = "\u00A0";
 const euro = (value: number) =>
     `${new Intl.NumberFormat("fr-FR").format(value)}${nbsp}€${nbsp}HT`;
@@ -64,7 +65,7 @@ const costs = {
     anchor: euro(lowCost.setup),
     total: `${euro(lowCost.setup + subscriptionMin)} à ${euro(lowCost.setup + subscriptionMax)}`,
     monthly: `${lowCost.monthlyMin} à ${euro(lowCost.monthlyMax)} par mois, engagement de 12 à 48${nbsp}mois selon l'offre`,
-    withMe: `Dès ${euro(2000)} de création`,
+    withMe: `Dès ${euro(siteOffer.basePrice)} de création`,
     withMeNote: "hors domaine, hébergement, outils et maintenance, payés à votre nom",
 };
 

@@ -5,7 +5,7 @@ import AboutCallout from "../components/AboutCallout.astro";
 import CapabilitiesStrip from "../components/CapabilitiesStrip.astro";
 import ExpertiseShowcase from "../components/ExpertiseShowcase.astro";
 import FaqSection from "../components/FaqSection.astro";
-import PricingPreview from "../components/PricingPreview.astro";
+import PricingQuote from "../components/PricingQuote.astro";
 import ProblemComparison from "../components/ProblemComparison.astro";
 import ProjectShowcase from "../components/ProjectShowcase.astro";
 import TestimonialsSection from "../components/TestimonialsSection.astro";
@@ -296,7 +296,7 @@ const displayedTestimonials = getPublishedTestimonials();
     <div
         class="flex flex-col gap-section pt-[calc(var(--spacing-section)-2rem)]"
     >
-        <PricingPreview />
+        <PricingQuote />
         <FaqSection title="Questions fréquentes" />
         <TestimonialsSection />
         <ProjectShowcase />
