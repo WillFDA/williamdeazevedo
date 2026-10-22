@@ -1,89 +1,242 @@
 ---
 import { Image } from "astro:assets";
-import Carousel from "./Carousel.astro";
+import ArrowRight from "./icons/nucleo/arrow-right-fill.svg";
+import ArrowUpRight from "./icons/nucleo/arrow-up-right-fill.svg";
+import Star from "./icons/nucleo/star-fill.svg";
+import SectionHeader from "./ui/SectionHeader.astro";
 import { getPublishedTestimonials } from "@/lib/testimonials";
 
+interface Props {
+    id?: string;
+}
+
+const { id = "avis" } = Astro.props;
 const testimonials = getPublishedTestimonials();
+
+// Guillemets français, espaces insécables à l'intérieur.
+const quote = (text: string) => `«\u00A0${text}\u00A0»`;
+const formatIndex = (index: number) => String(index + 1).padStart(2, "0");
+const lastIndex = formatIndex(testimonials.length - 1);
+// Même lien et même note que le badge « Avis Google » du haut de page.
+const googleReviews = {
+    href: "https://share.google/LlCN4Hr5IlatyVSl2",
+    rating: "5.0",
+};
 ---
 
 {
     testimonials.length > 0 && (
         <section
-            class="client-testimonials mx-auto w-full max-w-7xl px-4 py-12 sm:px-8 md:py-16"
-            aria-label="Témoignages clients"
+            id={id}
+            class="section-shell"
+            aria-labelledby={`${id}-title`}
         >
-            <div>
-                <Carousel
-                    class="testimonial-carousel"
-                    autoplay
-                    autoplayDelay={6500}
-                    compactControls
-                    showAutoplayInterface={false}
-                >
-                    {testimonials.map((testimonial, index) => (
-                        <article class="embla__slide">
-                            <figure class="testimonial-card mx-auto grid w-full max-w-5xl items-center gap-8 rounded-3xl p-0 text-center md:grid-cols-[18rem_1fr] md:p-6 md:text-left lg:p-8">
-                                <div class="testimonial-card__media mx-auto w-full max-w-56 overflow-hidden rounded-3xl bg-snow-600 shadow-lg md:max-w-none">
-                                    {testimonial.image ? (
-                                        <Image
-                                            class="block size-full object-cover"
-                                            src={testimonial.image}
-                                            alt={testimonial.imageAlt ?? ""}
-                                            width={384}
-                                            height={480}
-                                            loading={
-                                                index === 0 ? "eager" : "lazy"
-                                            }
-                                        />
-                                    ) : (
-                                        <div class="flex size-full items-center justify-center text-4xl font-medium text-gray-900">
-                                            {testimonial.initials}
-                                        </div>
-                                    )}
-                                </div>
+            <SectionHeader
+                eyebrow="Avis clients"
+                id={`${id}-title`}
+                title="Ce qu'en disent mes clients"
+                description="Leurs mots, leur projet, le site livré : chaque avis renvoie à la réalisation correspondante."
+            />
 
-                                <figcaption class="flex flex-col items-center gap-4 md:items-start">
-                                    <a
-                                        class="text-2xl font-medium leading-tight text-gray-900 no-underline underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
-                                        href={testimonial.href}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {testimonial.name}
-                                    </a>
-                                    <blockquote class="m-0 text-lg font-light leading-normal text-gray-700 sm:text-xl">
-                                        “{testimonial.text}”
-                                    </blockquote>
-                                </figcaption>
-                            </figure>
-                        </article>
-                    ))}
-                </Carousel>
-            </div>
+            <ol class="mt-section-content border-t border-gray-200">
+                {testimonials.map((testimonial, index) => (
+                    <li class="testimonial-row grid gap-y-7 border-b border-gray-200 py-10 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-x-12 md:py-14 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-x-16">
+                        <div class="flex flex-col items-start gap-4 md:row-span-2">
+                            <span
+                                class="font-mono text-xs font-medium tracking-[0.08em] text-gray-900"
+                                aria-hidden="true"
+                            >
+                                {formatIndex(index)}
+                                <span class="text-gray-600">/{lastIndex}</span>
+                            </span>
+                            {testimonial.image ? (
+                                <Image
+                                    class="block size-28 rounded-lg bg-snow-600 object-cover md:size-44 lg:size-52"
+                                    src={testimonial.image}
+                                    alt={testimonial.imageAlt ?? ""}
+                                    width={416}
+                                    height={416}
+                                    widths={[224, 416]}
+                                    sizes="(min-width: 1024px) 13rem, (min-width: 768px) 11rem, 7rem"
+                                    loading="lazy"
+                                />
+                            ) : (
+                                <span
+                                    class="flex size-28 items-center justify-center rounded-lg bg-snow-600 font-mono text-2xl text-gray-900 md:size-44 lg:size-52"
+                                    aria-hidden="true"
+                                >
+                                    {testimonial.initials}
+                                </span>
+                            )}
+                        </div>
+
+                        <figure class="flex min-w-0 flex-col gap-8 md:col-start-2">
+                            <blockquote class="testimonial-row__quote m-0 text-gray-900">
+                                <p>
+                                    {quote(
+                                        testimonial.excerpt ?? testimonial.text,
+                                    )}
+                                </p>
+                            </blockquote>
+                            <figcaption>
+                                <dl class="grid gap-y-3 border-t border-gray-200 pt-5 font-mono text-[0.8125rem] leading-snug sm:grid-cols-3 sm:gap-x-6">
+                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 sm:block">
+                                        <dt class="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-gray-600">
+                                            Client
+                                        </dt>
+                                        <dd class="font-medium text-gray-900 sm:mt-1.5">
+                                            {testimonial.name}
+                                        </dd>
+                                    </div>
+                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 sm:block">
+                                        <dt class="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-gray-600">
+                                            Entreprise
+                                        </dt>
+                                        <dd class="text-gray-900 sm:mt-1.5">
+                                            {testimonial.company}
+                                        </dd>
+                                    </div>
+                                    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-x-3 sm:block">
+                                        <dt class="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-gray-600">
+                                            Projet
+                                        </dt>
+                                        <dd class="sm:mt-1.5">
+                                            <a
+                                                class="testimonial-row__project group inline-flex items-baseline gap-2 text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                                href={testimonial.caseStudyHref}
+                                            >
+                                                {testimonial.projectLabel}
+                                                <span class="sr-only">
+                                                    {` : voir la réalisation ${testimonial.company}`}
+                                                </span>
+                                                <ArrowRight
+                                                    class="size-3 shrink-0 translate-y-px transition-transform group-hover:translate-x-0.5"
+                                                    aria-hidden="true"
+                                                />
+                                            </a>
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </figcaption>
+                        </figure>
+
+                        {testimonial.excerpt && (
+                            <details class="testimonial-row__more md:col-start-2">
+                                <summary class="testimonial-row__summary inline-flex cursor-pointer list-none items-center gap-3 rounded-sm font-mono text-xs font-medium uppercase tracking-[0.08em] text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500">
+                                    <span
+                                        class="testimonial-row__toggle"
+                                        aria-hidden="true"
+                                    />
+                                    Lire l'avis complet
+                                </summary>
+                                <p class="max-w-2xl pt-5 text-base font-light leading-relaxed text-gray-700 sm:text-lg">
+                                    {testimonial.text}
+                                </p>
+                            </details>
+                        )}
+                    </li>
+                ))}
+            </ol>
+
+            <a
+                aria-label="Tous les avis sur Google : 5 étoiles sur 5 (nouvel onglet)"
+                class="group mt-8 inline-flex items-center gap-3 font-mono text-xs font-medium uppercase tracking-[0.08em] text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                href={googleReviews.href}
+                rel="noreferrer"
+                target="_blank"
+            >
+                <span class="inline-flex items-center gap-1.5 rounded-md bg-blue-500 px-2 py-1 text-snow-50">
+                    <Star aria-hidden="true" class="size-3.5" />
+                    {googleReviews.rating}
+                </span>
+                <span class="underline decoration-gray-300 underline-offset-4 transition-colors group-hover:decoration-gray-900">
+                    Tous les avis sur Google
+                </span>
+                <ArrowUpRight aria-hidden="true" class="size-3" />
+            </a>
         </section>
     )
 }
 
 <style>
-    .client-testimonials :global(.embla) {
-        --slide-size: min(100%, 72rem);
+    .testimonial-row__quote {
+        font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
+        font-weight: 400;
+        letter-spacing: -0.015em;
+        line-height: 1.18;
+        text-wrap: pretty;
     }
 
-    .client-testimonials :global(.embla__slide) {
-        aspect-ratio: auto;
-    }
-
-    .testimonial-card__media {
-        aspect-ratio: 4 / 5;
-    }
-
-    .client-testimonials :global(.testimonial-carousel .embla__controls) {
+    .testimonial-row__summary::-webkit-details-marker {
         display: none;
     }
 
-    @media (min-width: 768px) {
-        .testimonial-card__media {
-            aspect-ratio: 3 / 4;
+    /* « + » qui devient « − » à l'ouverture. */
+    .testimonial-row__toggle {
+        border: 1px solid var(--color-gray-300);
+        border-radius: 0.375rem;
+        display: inline-block;
+        flex: none;
+        height: 1.5rem;
+        position: relative;
+        width: 1.5rem;
+    }
+
+    .testimonial-row__toggle::before,
+    .testimonial-row__toggle::after {
+        background: currentColor;
+        content: "";
+        height: 1px;
+        inset: 50% auto auto 50%;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        transition: transform 280ms cubic-bezier(0.2, 0, 0, 1);
+        width: 0.625rem;
+    }
+
+    .testimonial-row__toggle::after {
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .testimonial-row__more[open] .testimonial-row__toggle::after {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    @media (hover: hover) {
+        .testimonial-row__summary:hover .testimonial-row__toggle {
+            border-color: var(--color-gray-900);
+        }
+    }
+
+    @supports selector(::details-content) {
+        @media (prefers-reduced-motion: no-preference) {
+            .testimonial-row__more {
+                interpolate-size: allow-keywords;
+            }
+
+            .testimonial-row__more::details-content {
+                block-size: 0;
+                content-visibility: hidden;
+                opacity: 0;
+                overflow: clip;
+                transition:
+                    block-size 420ms cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 260ms ease,
+                    content-visibility 420ms allow-discrete;
+            }
+
+            .testimonial-row__more[open]::details-content {
+                block-size: auto;
+                content-visibility: visible;
+                opacity: 1;
+            }
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .testimonial-row__toggle::before,
+        .testimonial-row__toggle::after {
+            transition: none;
         }
     }
 </style>

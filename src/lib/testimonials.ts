@@ -18,6 +18,8 @@ export const getPublishedTestimonials = () =>
 
       return {
         ...testimonial,
+        caseStudyHref: `/realisations/${project.id}/`,
+        company: project.title,
         href: project.href,
         image: testimonial.imageFile
           ? testimonialImages[`../assets/temoignages/${testimonial.imageFile}`]
