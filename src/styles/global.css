@@ -234,6 +234,89 @@ body {
     color: var(--color-snow-50);
   }
 
+  /* <details class="disclosure"> : marqueur natif masqué, ouverture animée
+     si le navigateur sait animer ::details-content et que l'animation est
+     acceptée (prefers-reduced-motion). */
+  .disclosure > summary {
+    list-style: none;
+  }
+
+  .disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @supports selector(::details-content) {
+    @media (prefers-reduced-motion: no-preference) {
+      .disclosure {
+        interpolate-size: allow-keywords;
+      }
+
+      .disclosure::details-content {
+        block-size: 0;
+        content-visibility: hidden;
+        opacity: 0;
+        overflow: clip;
+        transition:
+          block-size 420ms cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 260ms ease,
+          content-visibility 420ms allow-discrete;
+      }
+
+      .disclosure[open]::details-content {
+        block-size: auto;
+        content-visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  /* Bouton carré « + » d'un <summary>, qui devient « − » à l'ouverture. */
+  .disclosure-toggle {
+    border: 1px solid var(--color-gray-300);
+    border-radius: 0.375rem;
+    display: inline-block;
+    flex: none;
+    height: 1.5rem;
+    position: relative;
+    transition: border-color 200ms ease;
+    width: 1.5rem;
+  }
+
+  .disclosure-toggle::before,
+  .disclosure-toggle::after {
+    background: currentColor;
+    content: "";
+    height: 1px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 280ms cubic-bezier(0.2, 0, 0, 1);
+    width: 0.625rem;
+  }
+
+  .disclosure-toggle::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  details[open] > summary .disclosure-toggle::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  @media (hover: hover) {
+    summary:hover .disclosure-toggle {
+      border-color: var(--color-gray-900);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .disclosure-toggle,
+    .disclosure-toggle::before,
+    .disclosure-toggle::after {
+      transition: none;
+    }
+  }
+
   .section-subheading--inverse {
     color: var(--color-coffee-50);
   }

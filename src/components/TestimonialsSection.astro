@@ -121,10 +121,10 @@ const googleReviews = {
                         </figure>
 
                         {testimonial.excerpt && (
-                            <details class="testimonial-row__more md:col-start-2">
-                                <summary class="testimonial-row__summary inline-flex cursor-pointer list-none items-center gap-3 rounded-sm font-mono text-xs font-medium uppercase tracking-[0.08em] text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500">
+                            <details class="disclosure md:col-start-2">
+                                <summary class="inline-flex cursor-pointer items-center gap-3 rounded-sm font-mono text-xs font-medium uppercase tracking-[0.08em] text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500">
                                     <span
-                                        class="testimonial-row__toggle"
+                                        class="disclosure-toggle"
                                         aria-hidden="true"
                                     />
                                     Lire l'avis complet
@@ -165,78 +165,5 @@ const googleReviews = {
         letter-spacing: -0.015em;
         line-height: 1.18;
         text-wrap: pretty;
-    }
-
-    .testimonial-row__summary::-webkit-details-marker {
-        display: none;
-    }
-
-    /* « + » qui devient « − » à l'ouverture. */
-    .testimonial-row__toggle {
-        border: 1px solid var(--color-gray-300);
-        border-radius: 0.375rem;
-        display: inline-block;
-        flex: none;
-        height: 1.5rem;
-        position: relative;
-        width: 1.5rem;
-    }
-
-    .testimonial-row__toggle::before,
-    .testimonial-row__toggle::after {
-        background: currentColor;
-        content: "";
-        height: 1px;
-        inset: 50% auto auto 50%;
-        position: absolute;
-        transform: translate(-50%, -50%);
-        transition: transform 280ms cubic-bezier(0.2, 0, 0, 1);
-        width: 0.625rem;
-    }
-
-    .testimonial-row__toggle::after {
-        transform: translate(-50%, -50%) rotate(90deg);
-    }
-
-    .testimonial-row__more[open] .testimonial-row__toggle::after {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-
-    @media (hover: hover) {
-        .testimonial-row__summary:hover .testimonial-row__toggle {
-            border-color: var(--color-gray-900);
-        }
-    }
-
-    @supports selector(::details-content) {
-        @media (prefers-reduced-motion: no-preference) {
-            .testimonial-row__more {
-                interpolate-size: allow-keywords;
-            }
-
-            .testimonial-row__more::details-content {
-                block-size: 0;
-                content-visibility: hidden;
-                opacity: 0;
-                overflow: clip;
-                transition:
-                    block-size 420ms cubic-bezier(0.16, 1, 0.3, 1),
-                    opacity 260ms ease,
-                    content-visibility 420ms allow-discrete;
-            }
-
-            .testimonial-row__more[open]::details-content {
-                block-size: auto;
-                content-visibility: visible;
-                opacity: 1;
-            }
-        }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .testimonial-row__toggle::before,
-        .testimonial-row__toggle::after {
-            transition: none;
-        }
     }
 </style>

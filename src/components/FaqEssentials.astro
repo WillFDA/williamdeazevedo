@@ -1,0 +1,148 @@
+---
+import CalButton from "./CalButton.astro";
+import ArrowUpRight from "./icons/nucleo/arrow-up-right-fill.svg";
+import SectionHeader from "./ui/SectionHeader.astro";
+import { homeFaq } from "@/data/faq";
+import { withFrenchSpacing } from "@/lib/typography";
+
+interface Props {
+    id?: string;
+}
+
+const { id = "faq" } = Astro.props;
+
+// Espaces insécables appliqués une fois : le texte visible et le JSON-LD
+// restent strictement identiques.
+const faqItems = homeFaq.map((item) => ({
+    ...item,
+    answer: withFrenchSpacing(item.answer),
+    question: withFrenchSpacing(item.question),
+}));
+// Budget, délais, point de départ : réponses ouvertes. Le reste en accordéon.
+const essentials = faqItems.filter((item) => item.topic);
+const others = faqItems.filter((item) => !item.topic);
+const formatIndex = (index: number) => String(index + 1).padStart(2, "0");
+const monoLabel =
+    "font-mono text-xs font-medium uppercase leading-none tracking-[0.08em]";
+
+// Même contenu que la FAQ visible, dans le même ordre.
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+        },
+    })),
+};
+---
+
+<section id={id} class="section-shell" aria-labelledby={`${id}-title`}>
+    <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify(faqJsonLd)}
+    />
+
+    <SectionHeader
+        eyebrow="FAQ"
+        id={`${id}-title`}
+        title="Questions fréquentes"
+        description="Le budget, les délais et le point de départ d'abord. Les autres réponses sont juste en dessous."
+    />
+
+    <div class="mt-section-content">
+        <p class:list={[monoLabel, "text-gray-900"]}>L'essentiel d'abord</p>
+        <ol class="mt-6 grid gap-x-8 lg:grid-cols-3">
+            {
+                essentials.map((item, index) => (
+                    <li class="flex flex-col border-t border-gray-300 pt-6 pb-10 lg:pb-0">
+                        <p class:list={[monoLabel, "flex items-center gap-3"]}>
+                            <span class="text-blue-600" aria-hidden="true">
+                                {formatIndex(index)}
+                            </span>
+                            <span class="text-gray-600">{item.topic}</span>
+                        </p>
+                        <h3 class="mt-5 text-xl font-medium leading-snug tracking-[-0.01em] text-gray-900 text-balance">
+                            {item.question}
+                        </h3>
+                        <p class="mt-4 text-base font-light leading-relaxed text-gray-600">
+                            {item.answer}
+                        </p>
+                    </li>
+                ))
+            }
+        </ol>
+    </div>
+
+    <div
+        class="mt-6 grid gap-y-8 lg:mt-24 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:gap-y-10"
+    >
+        <p
+            class:list={[
+                monoLabel,
+                "text-gray-900 lg:col-span-4 lg:row-start-1 lg:pt-7",
+            ]}
+        >
+            Les autres questions{" "}
+            <span class="text-gray-600">({others.length})</span>
+        </p>
+
+        <div
+            class="border-t border-gray-300 lg:col-span-8 lg:col-start-5 lg:row-span-2 lg:row-start-1"
+        >
+            {
+                others.map((item, index) => (
+                    <details class="disclosure border-b border-gray-200">
+                        <summary class="grid cursor-pointer grid-cols-[2.25rem_minmax(0,1fr)_auto] items-start gap-x-3 rounded-sm py-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:gap-x-4 sm:py-6">
+                            <span
+                                class="pt-[0.35em] font-mono text-xs text-gray-600"
+                                aria-hidden="true"
+                            >
+                                {formatIndex(essentials.length + index)}
+                            </span>
+                            <span class="text-base leading-snug text-gray-900 sm:text-lg">
+                                {item.question}
+                            </span>
+                            <span
+                                class="disclosure-toggle text-gray-900"
+                                aria-hidden="true"
+                            />
+                        </summary>
+                        <div class="pr-2 pb-7 pl-[3rem] sm:pr-12 sm:pl-[3.25rem]">
+                            <p class="max-w-2xl text-base font-light leading-relaxed text-gray-600">
+                                {item.answer}
+                            </p>
+                            {item.link && (
+                                <a
+                                    class="mt-4 inline-flex items-center gap-2 text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                    href={item.link.href}
+                                    rel="noreferrer"
+                                    target="_blank"
+                                >
+                                    {item.link.label}
+                                    <ArrowUpRight aria-hidden="true" class="size-3" />
+                                    <span class="sr-only">(nouvel onglet)</span>
+                                </a>
+                            )}
+                        </div>
+                    </details>
+                ))
+            }
+        </div>
+
+        <div class="lg:col-span-4 lg:row-start-2 lg:self-start">
+            <p class="max-w-xs text-base font-light leading-snug text-gray-600">
+                Une question qui n'est pas dans la liste ?
+            </p>
+            <CalButton
+                class="mt-5 rounded-xl text-base font-normal"
+                label="Parler de mon cas"
+                location="faq"
+            />
+        </div>
+    </div>
+</section>
