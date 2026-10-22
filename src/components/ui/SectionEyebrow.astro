@@ -1,0 +1,26 @@
+---
+// Libellé de section en Geist Mono, précédé d'un repère bleu.
+interface Props {
+    class?: string;
+    tone?: "default" | "inverse";
+}
+
+const { class: className, tone = "default" } = Astro.props;
+---
+
+<p
+    class:list={[
+        "inline-flex items-center gap-2.5 font-mono text-xs font-medium uppercase leading-none tracking-[0.08em]",
+        tone === "inverse" ? "text-coffee-100" : "text-gray-600",
+        className,
+    ]}
+>
+    <span
+        class:list={[
+            "size-1.5 shrink-0 rounded-[1px]",
+            tone === "inverse" ? "bg-blue-300" : "bg-blue-500",
+        ]}
+        aria-hidden="true"
+    ></span>
+    <slot />
+</p>

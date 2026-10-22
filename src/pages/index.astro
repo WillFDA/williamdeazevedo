@@ -264,7 +264,7 @@ const displayedTestimonials = getPublishedTestimonials();
     <CapabilitiesStrip />
     <ProblemComparison />
     <AboutCallout title="Hello moi c'est William, un développeur à la frontière du design !" />
-    <div class="mx-auto w-full max-w-7xl px-4 py-12 sm:px-8 md:py-16">
+    <div class="mx-auto w-full max-w-7xl px-4 pt-12 sm:px-8 md:pt-16">
         <ExpertiseShowcase
             title="Ce que je corrige pour rendre un site plus convaincant"
             description="Chaque accompagnement part d'un frein concret : manque de clarté, expérience lente, design qui ne rassure plus ou interface difficile à faire évoluer."
@@ -290,10 +290,17 @@ const displayedTestimonials = getPublishedTestimonials();
             </button>
         </div>
     </div>
-    <PricingPreview />
-    <FaqSection title="Questions fréquentes" />
-    <TestimonialsSection />
-    <ProjectShowcase />
+    {/* Bas de page : un seul rythme vertical, le token --spacing-section
+        (~112 px en mobile, ~192 px en desktop). Le premier écart déduit le
+        gap-8 (2rem) de <main>. */}
+    <div
+        class="flex flex-col gap-section pt-[calc(var(--spacing-section)-2rem)]"
+    >
+        <PricingPreview />
+        <FaqSection title="Questions fréquentes" />
+        <TestimonialsSection />
+        <ProjectShowcase />
+    </div>
 </Layout>
 
 <script>

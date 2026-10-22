@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 
 /* View transitions are driven by Astro's <ClientRouter /> (client-side, no
    full reload). The cross-document `@view-transition { navigation: auto }`
@@ -94,6 +95,19 @@ body {
   --color-coffee-700: #151c27;
   --color-coffee-800: #111824;
   --color-coffee-900: #0e1420;
+
+  /* Rythme vertical entre deux sections : ~112 px en mobile (390 px),
+     ~192 px en desktop (1280 px et plus), fluide entre les deux.
+     Utilitaires générés : gap-section, mt-section, py-section… */
+  --spacing-section-mobile: 7rem;
+  --spacing-section-desktop: 12rem;
+  --spacing-section: clamp(
+    var(--spacing-section-mobile),
+    4.8rem + 9vw,
+    var(--spacing-section-desktop)
+  );
+  /* Écart entre l'en-tête d'une section et son contenu (40 → 64 px). */
+  --spacing-section-content: clamp(2.5rem, 1.75rem + 2.8vw, 4rem);
 }
 
 :root {
@@ -106,6 +120,9 @@ body {
 
 @theme inline {
   --font-sans: "Geist Variable", sans-serif;
+  /* Accents : libellés, numéros, prix et métadonnées. */
+  --font-mono:
+    "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-ring: var(--ring);
   --color-border: var(--border);
   --color-foreground: var(--foreground);
@@ -183,6 +200,37 @@ body {
   }
 
   .section-heading--inverse {
+    color: var(--color-snow-50);
+  }
+
+  /* Colonne commune aux sections du bas de l'accueil (réalisations, avis,
+     tarifs, FAQ, contact) : mêmes bords gauche et droit d'une section à
+     l'autre, 1024 px de contenu au maximum. */
+  .section-shell {
+    margin-inline: auto;
+    max-width: 68rem;
+    padding-inline: 1rem;
+    width: 100%;
+  }
+
+  @media (min-width: 40rem) {
+    .section-shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Titre éditorial aligné à gauche, à l'échelle du titre des réalisations. */
+  .section-title {
+    color: var(--color-gray-900);
+    font-size: clamp(2.35rem, 3.9vw, 3.45rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 0.98;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .section-title--inverse {
     color: var(--color-snow-50);
   }
 
