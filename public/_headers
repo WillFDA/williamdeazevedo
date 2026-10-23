@@ -3,6 +3,24 @@
 # /public were served with no Cache-Control, so they were re-downloaded on
 # every visit (~2.1 MB+ each).
 
+# En-têtes de sécurité, sur toutes les pages et tous les fichiers.
+# - HSTS sans includeSubDomains ni preload : à élargir seulement quand tous
+#   les sous-domaines sont confirmés en HTTPS (décision de William).
+# - frame-ancestors est ignoré en Report-Only : il est donc imposé par une
+#   CSP séparée (et X-Frame-Options pour les anciens navigateurs).
+# - La CSP complète reste en Report-Only : elle signale dans la console ce
+#   qu'elle bloquerait (GTM/Google, Cal.com, Rybbit) sans rien casser. À
+#   passer en Content-Security-Policy après une période sans violation.
+#   'unsafe-inline' en script-src : scripts inline d'Astro (JSON-LD, GTM).
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://app.cal.com https://analytics.williamdeazevedo.fr; style-src 'self' 'unsafe-inline' https://app.cal.com; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net; font-src 'self' data:; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://pagead2.googlesyndication.com https://app.cal.com https://cal.com https://analytics.williamdeazevedo.fr; frame-src https://cal.com https://app.cal.com https://www.googletagmanager.com https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+
 # Astro fingerprints these filenames on every build, so they're safe to cache
 # forever.
 /_astro/*

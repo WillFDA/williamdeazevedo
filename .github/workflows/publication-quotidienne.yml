@@ -1,0 +1,43 @@
+# Publication des articles programmés.
+# Un article n'a de page qu'une fois sa `pubDate` atteinte, au moment du build
+# (voir src/lib/articles.ts). Sans nouveau commit, rien ne relance le build :
+# ce workflow déclenche chaque matin le déploiement de production via un
+# « deploy hook » Cloudflare Workers Builds.
+#
+# À configurer une fois (hors code) : créer le deploy hook sur la branche 2026
+# dans Cloudflare (Workers & Pages > projet > Settings > Builds > Deploy Hooks),
+# puis enregistrer son URL dans le secret GitHub CLOUDFLARE_DEPLOY_HOOK_URL.
+# Tant que le secret est absent, le workflow s'arrête sans erreur.
+name: Publication quotidienne
+
+on:
+  schedule:
+    # 05:00 UTC, soit 6 h ou 7 h à Paris selon l'heure d'été.
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: publication-quotidienne
+  cancel-in-progress: false
+
+jobs:
+  deploy-hook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Déclencher le build de production
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "::notice::Secret CLOUDFLARE_DEPLOY_HOOK_URL absent : aucun build déclenché."
+            exit 0
+          fi
+          curl --fail-with-body --silent --show-error --max-time 30 \
+            --retry 3 --retry-all-errors \
+            -X POST "$DEPLOY_HOOK_URL" > /dev/null
+          echo "Build de production demandé."
