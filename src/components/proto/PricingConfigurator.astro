@@ -3,14 +3,11 @@ import { Image } from "astro:assets";
 import CapabilityIcon from "@/components/ui/CapabilityIcon.astro";
 import WaveIcon from "@/components/ui/WaveIcon.astro";
 import WaveText from "@/components/ui/WaveText.astro";
-import AnimationRepeat from "@/components/icons/nucleo/animation-repeat-fill.svg";
 import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
-import BadgeDollar from "@/components/icons/nucleo/badge-dollar-fill.svg";
 import Check from "@/components/icons/nucleo/check-2-outline.svg";
-import Msgs from "@/components/icons/nucleo/msgs-fill.svg";
-import ViewAll from "@/components/icons/nucleo/view-all-fill.svg";
-import Xmark from "@/components/icons/nucleo/xmark-fill.svg";
-import lefellicHome from "@/assets/projects/lefellic-home.webp";
+import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
+import ChevronRight from "@/components/icons/nucleo/chevron-right-fill.svg";
+import clouds from "@/assets/pictures/madere-opti.jpg";
 import quentinPhoto from "@/assets/temoignages/quentin-le-fellic.webp";
 import { temoignages } from "@/data/temoignage";
 import { iconToneClasses } from "@/lib/iconTones";
@@ -23,7 +20,6 @@ const formats = [
         name: "Landing page",
         icon: "conversion",
         tone: "blue",
-        text: "Une page centrée sur une offre, une campagne ou une prise de rendez-vous.",
         base: 1200,
         included: 1,
         pages: "fixed",
@@ -34,7 +30,6 @@ const formats = [
         name: "Site vitrine",
         icon: "ux",
         tone: "violet",
-        text: "Plusieurs pages pour présenter vos services, vos preuves et faciliter le contact.",
         base: 2000,
         included: 5,
         pages: "extra",
@@ -45,7 +40,6 @@ const formats = [
         name: "Refonte",
         icon: "refonte",
         tone: "cyan",
-        text: "On reprend l'existant : structure, contenus, design, performance et redirections.",
         base: 2500,
         included: 5,
         pages: "extra",
@@ -56,11 +50,11 @@ const formats = [
         name: "Interface produit",
         icon: "cms",
         tone: "indigo",
-        text: "SaaS, dashboard, espace client ou outil métier.",
         base: null,
         included: 0,
         pages: "none",
-        sub: "Cadrage dès 900 € HT",
+        sub: "Cadrage dès 900 € HT",
+        summary: "Au cadrage",
     },
 ] as const;
 
@@ -71,174 +65,204 @@ const options = [
         id: "animations",
         title: "Animations",
         short: "Animations",
-        text: "Transitions, apparitions au scroll et micro-interactions soignées.",
+        text: "Transitions de page, apparitions au scroll et micro-interactions soignées, sans alourdir le chargement.",
+        icon: "touch",
+        tone: "orange",
         price: 500,
     },
     {
         id: "form",
         title: "Formulaire de contact personnalisé",
         short: "Formulaire",
-        text: "Champs sur mesure, envoi par e-mail et anti-spam.",
+        text: "Champs adaptés à vos demandes, envoi par e-mail, protection anti-spam et message de confirmation.",
+        icon: "form",
+        tone: "green",
         price: 500,
     },
     {
         id: "cms",
-        title: "CMS / contenus modifiables",
+        title: "CMS, contenus modifiables",
         short: "CMS",
-        text: "Vous publiez textes, projets et articles sans toucher au code.",
+        text: "Vous publiez vous-même textes, projets et articles depuis une interface simple, sans toucher au code.",
+        icon: "cms",
+        tone: "teal",
         price: 1000,
     },
     {
         id: "ads",
         title: "Google Ads",
         short: "Google Ads",
-        text: "Pages et suivi de conversion prêts pour vos campagnes.",
+        text: "Pages d'atterrissage et suivi des conversions prêts pour vos campagnes, chiffrés selon le volume.",
+        icon: "search",
+        tone: "sky",
         price: null,
     },
 ] as const;
 
 const included = [
-    "Cadrage du besoin et des objectifs",
-    "Structure des pages et hiérarchie des contenus",
+    "Cadrage du besoin",
+    "Structure des pages",
     "Design responsive",
     "Développement front-end",
     "SEO technique initial",
-    "Performance et accessibilité de base",
-    "Formulaire ou action de contact",
-    "Mise en ligne et vérifications",
+    "Performance et accessibilité",
+    "Action de contact",
+    "Mise en ligne",
 ];
 
 const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
 const vitrine = formats[1];
 ---
 
-<section
-    id="tarifs"
-    class="mx-auto w-full max-w-7xl px-4 py-12 sm:px-8 md:py-16"
-    aria-labelledby="pc-title"
-    data-pc
->
-    <div class="flex flex-col gap-4 xl:flex-row xl:justify-between xl:gap-12">
+<section class="pc" id="tarifs" aria-labelledby="pc-title" data-pc>
+    <div class="pc-heading">
         <div>
-            <p class="inline-flex rounded-lg bg-gray-100 px-3 py-1 text-sm text-gray-600">
-                Tarifs
-            </p>
-            <h2
-                id="pc-title"
-                class="mt-4 text-[2rem] leading-[1.15] font-[450] tracking-[-0.015em] text-gray-900 md:text-[2.875rem] xl:mt-5 xl:text-[3.5rem] xl:leading-[4rem]"
-            >
-                Choisissez votre projet.{" "}<br class="max-md:hidden" />Voyez
-                ce qu'il coûte.
+            <span class="pc-eyebrow">Tarifs</span>
+            <h2 id="pc-title">
+                Choisissez votre projet.{" "}<br />Voyez ce qu'il coûte.
             </h2>
         </div>
-        <div class="max-w-[27.5rem] xl:shrink-0 xl:pt-[50px]">
-            <p class="text-base leading-normal text-gray-700 md:text-lg md:leading-[27px] md:tracking-[-0.01em]">
-                Prix hors taxes, indicatifs. Le devis final confirme le
-                périmètre après un premier échange.
-            </p>
-            <p class="mt-3 text-[13px] text-gray-500">
-                Prix indicatifs en cours de validation.
+        <div class="pc-intro">
+            <p>
+                Les prix sont indicatifs et hors taxes. Choisissez un format,
+                ajoutez des pages ou des options, le total suit. Le devis final
+                confirme le périmètre.
             </p>
         </div>
     </div>
 
-    <div
-        class="mt-7 grid items-start gap-4 md:mt-10 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_21rem]"
-    >
-        <div
-            class="rounded-[1.75rem] bg-snow-50 px-4 py-1 inset-ring inset-ring-gray-200 sm:rounded-[2.25rem] sm:px-7 sm:py-2"
-            data-pc-steps
-        >
-            <div class="pc-step relative py-6 sm:py-8 sm:pl-12">
-                <div class="flex items-center gap-3">
-                    <span class="pc-num relative z-1 sm:absolute sm:top-8 sm:left-0">01</span>
-                    <h3 class="text-xl leading-[26px] font-[450] tracking-[-0.02em] text-gray-900 sm:mt-0.5 sm:text-2xl sm:leading-7">
-                        Votre format
-                    </h3>
-                </div>
-                <p class="mt-2 max-w-[32.5rem] text-sm leading-normal text-gray-500 sm:text-[15px]">
-                    Le point de départ du budget. Les pages et les options
-                    s'ajoutent ensuite.
-                </p>
-
-                <div
-                    class="mt-5 grid grid-cols-2 gap-2 sm:mt-7 sm:gap-2.5 xl:grid-cols-4"
-                    role="radiogroup"
-                    aria-label="Format du projet"
-                >
-                    {
-                        formats.map((f) => (
-                            <label class="pc-tile flex cursor-pointer flex-col rounded-[18px] bg-snow-50 p-3.5 inset-ring inset-ring-gray-200 hover:bg-gray-50 has-checked:bg-snow-50 has-checked:inset-ring-transparent has-checked:ring-[1.5px] has-checked:ring-coffee-300 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-500 sm:rounded-3xl sm:p-[18px]">
-                                <input
-                                    class="sr-only"
-                                    type="radio"
-                                    name="pc-format"
-                                    value={f.id}
-                                    checked={f.id === "vitrine"}
-                                    data-name={f.name}
-                                    data-text={f.text}
-                                    data-base={f.base ?? ""}
-                                    data-included={f.included}
-                                    data-pages={f.pages}
-                                    data-sub={f.sub}
-                                />
-                                <span class="flex items-center justify-between">
-                                    <span
-                                        class:list={[
-                                            "pc-icon inline-flex size-[26px] items-center justify-center rounded-lg text-snow-50 sm:size-8 sm:rounded-[10px]",
-                                            iconToneClasses[f.tone],
-                                        ]}
-                                        aria-hidden="true"
-                                    >
-                                        <CapabilityIcon icon={f.icon} class="size-4 sm:size-[18px]" />
-                                    </span>
-                                    <span class="pc-radio" aria-hidden="true" />
-                                </span>
-                                <span class="mt-3 text-[15px] leading-[21px] font-[450] text-gray-900 sm:mt-3.5 sm:text-base">
-                                    {f.name}
-                                </span>
-                                <span class="text-[26px] leading-8 font-[450] tracking-[-0.03em] whitespace-nowrap text-gray-900 tabular-nums sm:text-[2rem] sm:leading-[44px]">
-                                    {f.base === null ? "Sur devis" : `${fr(f.base)} €`}
-                                </span>
-                                <span class="text-xs leading-[21px] text-gray-500 sm:text-[13px]">
-                                    {f.base === null ? f.sub : "prix de départ HT"}
-                                </span>
-                                <span class="mt-auto flex justify-between gap-2 pt-3.5 text-[11px] leading-[21px] whitespace-nowrap text-gray-500 sm:text-xs">
-                                    Pages incluses
-                                    <b class="font-[450] text-gray-900">
-                                        {f.pages === "none" ? "à définir" : f.included}
-                                    </b>
-                                </span>
-                                <span class="pc-meter mt-2 h-[3px] rounded-full bg-gray-100" aria-hidden="true">
-                                    <i style={`width: ${(f.included / maxIncluded) * 100}%`} />
-                                </span>
-                            </label>
-                        ))
-                    }
+    <div class="pc-stage">
+        <div class="pc-steps" data-pc-steps>
+            <div class="pc-step">
+                <div class="pc-step-head">
+                    <span class="pc-num">01</span>
+                    <div class="pc-step-copy">
+                        <h3>Choisissez votre format</h3>
+                        <p>
+                            Tous les formats incluent le cadrage, le design
+                            responsive et le SEO technique. Le format fixe le
+                            point de départ du budget.
+                        </p>
+                    </div>
+                    <div class="pc-nav" data-pc-nav>
+                        <button
+                            class="pc-btn"
+                            type="button"
+                            aria-label="Formats précédents"
+                            data-pc-prev
+                        >
+                            <ChevronLeft class="size-3.5" aria-hidden="true" />
+                        </button>
+                        <button
+                            class="pc-btn"
+                            type="button"
+                            aria-label="Formats suivants"
+                            data-pc-next
+                        >
+                            <ChevronRight class="size-3.5" aria-hidden="true" />
+                        </button>
+                    </div>
                 </div>
 
-                <p class="mt-3 text-[13px] leading-5 text-gray-500" data-pc-desc>{vitrine.text}</p>
+                <div class="pc-vp" data-pc-vp>
+                    <div
+                        class="pc-tiles"
+                        role="radiogroup"
+                        aria-label="Format du projet"
+                    >
+                        {
+                            formats.map((f) => (
+                                <div class="pc-slide">
+                                    <label class="pc-tile">
+                                        <input
+                                            class="sr-only"
+                                            type="radio"
+                                            name="pc-format"
+                                            value={f.id}
+                                            checked={f.id === "vitrine"}
+                                            data-name={f.name}
+                                            data-base={f.base ?? ""}
+                                            data-included={f.included}
+                                            data-pages={f.pages}
+                                            data-sub={"summary" in f ? f.summary : f.sub}
+                                        />
+                                        <span class="pc-tile-top">
+                                            <span
+                                                class:list={[
+                                                    "pc-object",
+                                                    iconToneClasses[f.tone],
+                                                ]}
+                                                aria-hidden="true"
+                                            >
+                                                <CapabilityIcon
+                                                    icon={f.icon}
+                                                    class="size-[18px]"
+                                                />
+                                            </span>
+                                            <span class="pc-tile-name">
+                                                {f.name}
+                                            </span>
+                                            <span
+                                                class="pc-radio"
+                                                aria-hidden="true"
+                                            />
+                                        </span>
+                                        <span class="pc-tile-price">
+                                            <strong>
+                                                {f.base === null
+                                                    ? "Sur devis"
+                                                    : `${fr(f.base)} €`}
+                                            </strong>
+                                            <span>
+                                                {f.base === null
+                                                    ? f.sub
+                                                    : "prix de départ HT"}
+                                            </span>
+                                        </span>
+                                        <span class="pc-budget">
+                                            <span>Pages incluses</span>
+                                            <b>
+                                                {f.pages === "none"
+                                                    ? "au cadrage"
+                                                    : f.included}
+                                            </b>
+                                        </span>
+                                        <span
+                                            class="pc-meter"
+                                            aria-hidden="true"
+                                        >
+                                            <i
+                                                style={`width: ${(f.included / maxIncluded) * 100}%`}
+                                            />
+                                        </span>
+                                    </label>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
 
-                <details class="pc-included group mt-5 rounded-2xl bg-snow-50 inset-ring inset-ring-gray-200">
-                    <summary class="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-3.5 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-[18px] sm:py-4 [&::-webkit-details-marker]:hidden">
-                        <span class="text-sm leading-[21px] font-[450] text-gray-900 sm:text-[15px]">
-                            Inclus dans chaque site
-                            <small class="ml-2 text-[13px] font-normal text-gray-500">
-                                {included.length} éléments
-                            </small>
+                <details class="pc-included">
+                    <summary>
+                        <span>
+                            Inclus dans chaque format
+                            <small>{included.length} éléments</small>
                         </span>
-                        <span class="ml-auto inline-flex size-7 items-center justify-center rounded-[9px] bg-gray-100 text-gray-900 transition-colors duration-200 group-hover:bg-gray-200">
-                            <Xmark
-                                class="pc-toggle size-3 rotate-45 group-open:rotate-90"
-                                aria-hidden="true"
-                            />
+                        <span class="pc-toggle" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                <path class="pc-toggle-v" d="M8 3.5v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                <path d="M3.5 8h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                            </svg>
                         </span>
                     </summary>
-                    <ul class="pc-included-list grid gap-x-4 gap-y-3.5 border-t border-gray-100 px-3.5 pt-4 pb-[18px] sm:grid-cols-2 sm:px-[18px] xl:grid-cols-3">
+                    <ul>
                         {
                             included.map((item) => (
-                                <li class="flex items-start gap-1.5 text-[13px] leading-5 text-gray-700">
-                                    <Check class="mt-0.5 size-4 shrink-0 text-gray-500" aria-hidden="true" />
+                                <li>
+                                    <Check
+                                        class="size-4 shrink-0 text-gray-500"
+                                        aria-hidden="true"
+                                    />
                                     {item}
                                 </li>
                             ))
@@ -246,76 +270,62 @@ const vitrine = formats[1];
                     </ul>
                 </details>
 
-                <div
-                    class="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl px-3.5 py-3.5 inset-ring inset-ring-gray-200 transition-opacity data-disabled:opacity-55 sm:px-[18px] sm:py-4"
-                    data-pc-counter
-                >
-                    <div class="min-w-0 flex-[1_1_10rem]">
-                        <p class="text-[15px] leading-[21px] font-[450] text-gray-900">
-                            Nombre de pages
-                        </p>
-                        <p
-                            class="mt-0.5 text-xs leading-[21px] text-gray-500 sm:text-[13px]"
-                            data-pc-counter-text
-                        >
-                            5 pages incluses, puis +200 € HT par page.
-                        </p>
-                    </div>
-                    <div class="flex shrink-0 items-center gap-0.5 rounded-xl bg-gray-100 p-[3px]">
-                        <button
-                            class="pc-step-btn"
-                            type="button"
-                            aria-label="Retirer une page"
-                            data-pc-minus
-                        >
-                            <span class="h-[1.5px] w-3 rounded-full bg-current" />
-                        </button>
-                        <output
-                            class="pc-out min-w-8 text-center text-[15px] leading-[21px] font-[450] text-gray-900 tabular-nums"
-                            aria-live="polite"
-                            data-pc-pages
-                        >
-                            5
-                        </output>
-                        <button
-                            class="pc-step-btn"
-                            type="button"
-                            aria-label="Ajouter une page"
-                            data-pc-plus
-                        >
-                            <span class="relative h-[1.5px] w-3 rounded-full bg-current after:absolute after:inset-0 after:rotate-90 after:rounded-full after:bg-current" />
-                        </button>
+                <div class="pc-team" data-pc-counter>
+                    <div class="pc-team-head">
+                        <div>
+                            <strong>Nombre de pages</strong>
+                            <span data-pc-counter-text>
+                                Site vitrine : 5 pages incluses, puis 200 € HT
+                                par page.
+                            </span>
+                        </div>
+                        <div class="pc-stepper">
+                            <button
+                                class="pc-btn"
+                                type="button"
+                                aria-label="Retirer une page"
+                                data-pc-minus
+                            >
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M3.5 8h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                </svg>
+                            </button>
+                            <output aria-live="polite" data-pc-pages>5</output>
+                            <button
+                                class="pc-btn"
+                                type="button"
+                                aria-label="Ajouter une page"
+                                data-pc-plus
+                            >
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="pc-step group/opts relative py-6 sm:py-8 sm:pl-12">
-                <div class="flex items-center gap-3">
-                    <span class="pc-num relative z-1 sm:absolute sm:top-8 sm:left-0">02</span>
-                    <h3 class="flex flex-wrap items-center gap-2.5 text-xl leading-[26px] font-[450] tracking-[-0.02em] text-gray-900 sm:mt-0.5 sm:text-2xl sm:leading-7">
-                        Vos options
-                        <span class="rounded-full px-2 py-[3px] text-xs font-normal tracking-normal text-gray-500 inset-ring inset-ring-gray-200">
-                            Optionnel
-                        </span>
-                    </h3>
+            <div class="pc-step">
+                <div class="pc-step-head">
+                    <span class="pc-num">02</span>
+                    <div class="pc-step-copy">
+                        <h3>
+                            Ajoutez des options
+                            <span class="pc-optional">Optionnel</span>
+                        </h3>
+                        <p data-pc-options-text>
+                            À ajouter maintenant ou plus tard, sans refaire le
+                            site. Chaque option s'ajoute au total.
+                        </p>
+                    </div>
                 </div>
-                <p class="mt-2 max-w-[32.5rem] text-sm leading-normal text-gray-500 sm:text-[15px]">
-                    <span class="group-has-[fieldset:disabled]/opts:hidden">
-                        À ajouter maintenant ou plus tard, sans refaire le site.
-                    </span>
-                    <span class="hidden group-has-[fieldset:disabled]/opts:inline">
-                        Pour une interface produit, tout se chiffre au cadrage.
-                    </span>
-                </p>
 
-                <fieldset
-                    class="mt-5 flex flex-col gap-3 transition-opacity disabled:opacity-50 sm:mt-7"
-                    data-pc-options
-                >
+                <fieldset class="pc-rows" data-pc-options>
                     <legend class="sr-only">Options</legend>
                     {
                         options.map((o) => (
-                            <label class="pc-row grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 rounded-[18px] bg-snow-50 p-4 inset-ring inset-ring-gray-200 hover:bg-gray-50 has-checked:bg-snow-50 has-checked:inset-ring-transparent has-checked:ring-[1.5px] has-checked:ring-coffee-300 has-disabled:cursor-not-allowed has-disabled:hover:bg-snow-50 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-500 sm:grid-cols-[auto_auto_minmax(0,1fr)_auto] sm:gap-x-5 sm:rounded-3xl sm:px-6 sm:py-5">
+                            <label class="pc-row">
                                 <input
                                     class="sr-only"
                                     type="checkbox"
@@ -327,75 +337,98 @@ const vitrine = formats[1];
                                     <Check class="size-3" />
                                 </span>
                                 <span
-                                    class="pc-opt-icon hidden size-10 items-center justify-center rounded-xl bg-gray-100 text-gray-500 sm:inline-flex"
+                                    class:list={[
+                                        "pc-row-pic",
+                                        iconToneClasses[o.tone],
+                                    ]}
                                     aria-hidden="true"
                                 >
-                                    {o.id === "animations" && <AnimationRepeat class="size-5" />}
-                                    {o.id === "form" && <Msgs class="size-5" />}
-                                    {o.id === "cms" && <ViewAll class="size-5" />}
-                                    {o.id === "ads" && <BadgeDollar class="size-5" />}
+                                    <CapabilityIcon
+                                        icon={o.icon}
+                                        class="size-[18px]"
+                                    />
                                 </span>
-                                <span class="flex min-w-0 flex-col gap-0.5">
-                                    <span class="text-[15px] leading-[21px] font-[450] text-gray-900 sm:text-base">
-                                        {o.title}
-                                    </span>
-                                    <span class="text-[13px] leading-[1.45] text-gray-500 sm:text-sm">
-                                        {o.text}
-                                    </span>
+                                <span class="pc-row-copy">
+                                    <strong>{o.title}</strong>
+                                    <span>{o.text}</span>
                                 </span>
-                                <span class="flex items-baseline justify-end gap-2 whitespace-nowrap">
-                                    <strong class="text-xl leading-8 font-[450] tracking-[-0.02em] text-gray-900 tabular-nums sm:text-2xl">
-                                        {o.price === null ? "Sur devis" : `+${fr(o.price)}`}
-                                    </strong>
-                                    {o.price !== null && <span class="text-sm text-gray-500">€ HT</span>}
+                                <span class="pc-row-price">
+                                    <span class="pc-row-amount">
+                                        <strong>
+                                            {o.price === null
+                                                ? "Sur devis"
+                                                : `+${fr(o.price)} €`}
+                                        </strong>
+                                        {o.price !== null && <span>HT</span>}
+                                    </span>
+                                    {o.price === null && (
+                                        <span class="pc-row-quoted">
+                                            Selon vos campagnes
+                                        </span>
+                                    )}
                                 </span>
                             </label>
                         ))
                     }
+                    <button
+                        class="pc-none"
+                        type="button"
+                        aria-pressed="true"
+                        data-pc-none
+                    >
+                        <span class="pc-radio" aria-hidden="true" />
+                        <strong>Aucune option pour l'instant</strong>
+                        <span>Vous pourrez en ajouter après la mise en ligne.</span>
+                    </button>
                 </fieldset>
             </div>
         </div>
 
-        <div class="flex flex-col gap-3.5 lg:sticky lg:top-24">
+        <div class="pc-side">
             <aside
-                class="relative flex flex-col overflow-hidden rounded-[1.75rem] bg-snow-50 after:pointer-events-none after:absolute after:inset-0 after:z-20 after:rounded-[inherit] after:inset-ring after:inset-ring-gray-200 sm:rounded-[2.25rem]"
+                class="pc-summary"
                 aria-label="Récapitulatif"
                 data-pc-summary
             >
-                <div class="relative z-10 flex flex-col px-5 pt-6 sm:px-8 sm:pt-8">
-                    <p class="text-xl leading-[21px] font-[450] tracking-[-0.02em] text-gray-900">
-                        Votre projet
-                    </p>
-                    <p class="mt-1.5 text-sm leading-normal text-gray-500">
-                        Tout ce que vous avez choisi, en un devis.
+                <Image
+                    src={clouds}
+                    alt=""
+                    widths={[360, 720]}
+                    sizes="360px"
+                    class="pc-sum-bg absolute inset-x-0 bottom-0 h-[230px] w-full object-cover object-bottom"
+                />
+                <div class="pc-sum-card">
+                    <span class="pc-sum-eyebrow">Votre projet</span>
+                    <p class="pc-sum-sub">
+                        Tout ce que vous avez choisi, sur un seul devis.
                     </p>
 
-                    <dl class="mt-6">
-                        <div class="pc-line">
+                    <dl class="pc-lines">
+                        <div>
                             <dt>
                                 Format
                                 <small data-pc-format-sub>{vitrine.sub}</small>
                             </dt>
                             <dd>
-                                <span class="pc-l">
+                                <span class="pc-line">
                                     <span data-pc-format-name>{vitrine.name}</span>
                                     <b data-pc-format-price>{fr(vitrine.base)} €</b>
                                 </span>
                             </dd>
                         </div>
-                        <div class="pc-line" data-pc-line-pages hidden>
+                        <div data-pc-line-pages hidden>
                             <dt>
                                 Pages en plus
                                 <small>200 € HT la page</small>
                             </dt>
                             <dd>
-                                <span class="pc-l">
+                                <span class="pc-line">
                                     <span data-pc-pages-count>× 1</span>
                                     <b data-pc-pages-price>200 €</b>
                                 </span>
                             </dd>
                         </div>
-                        <div class="pc-line">
+                        <div>
                             <dt>
                                 Options
                                 <small data-pc-options-sub>Optionnel</small>
@@ -403,9 +436,17 @@ const vitrine = formats[1];
                             <dd>
                                 {
                                     options.map((o) => (
-                                        <span class="pc-l" data-pc-line-option={o.id} hidden>
+                                        <span
+                                            class="pc-line"
+                                            data-pc-line-option={o.id}
+                                            hidden
+                                        >
                                             <span>{o.short}</span>
-                                            <b>{o.price === null ? "Sur devis" : `${fr(o.price)} €`}</b>
+                                            <b>
+                                                {o.price === null
+                                                    ? "Sur devis"
+                                                    : `${fr(o.price)} €`}
+                                            </b>
                                         </span>
                                     ))
                                 }
@@ -414,106 +455,65 @@ const vitrine = formats[1];
                         </div>
                     </dl>
 
-                    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-gray-100 pt-5">
-                        <span class="text-[15px] text-gray-700">Total</span>
-                        <strong
-                            class="ml-auto flex items-baseline gap-1.5 text-[2.25rem] leading-[44px] font-[450] tracking-[-0.03em] whitespace-nowrap text-gray-900 tabular-nums sm:text-[2.75rem] sm:leading-[52px]"
-                            data-pc-total-wrap
-                        >
+                    <div class="pc-total">
+                        <span>Total</span>
+                        <strong data-pc-total-wrap>
                             <span data-pc-total>{fr(vitrine.base)}</span>
-                            <small class="text-[15px] font-[450] tracking-normal text-gray-500" data-pc-unit>€ HT</small>
+                            <small data-pc-unit>€ HT</small>
                         </strong>
                     </div>
-                    <p class="text-right text-[13px] text-gray-500" data-pc-total-hint hidden></p>
-                    <p class="mt-2 min-h-[42px] text-[13px] leading-[1.6] text-gray-500" data-pc-note>
-                        Livré en 10 jours à 5 semaines selon périmètre. Prix
-                        indicatif hors taxes.
+                    <p class="pc-note" data-pc-note>
+                        Livré en 10 jours à 5 semaines selon le périmètre.
+                        Prix indicatif hors taxes, confirmé par le devis après
+                        un premier échange.
                     </p>
 
                     <button
                         aria-controls="cal-drawer"
                         aria-haspopup="dialog"
-                        class="pc-cta mt-5 flex h-[52px] w-full items-center justify-center gap-3 rounded-xl px-6 text-[15px] font-[450]"
+                        class="pc-cta"
                         data-cal-location="pricing-configurator"
                         data-cal-open
                         type="button"
                     >
                         <WaveText text="Parlons de votre projet" trigger="parent" />
-                        <WaveIcon style="--wui-wave-icon-size: 0.875rem;" direction="right" trigger="parent">
+                        <WaveIcon
+                            style="--wui-wave-icon-size: 0.875rem;"
+                            direction="right"
+                            trigger="parent"
+                        >
                             <ArrowRight class="size-full" aria-hidden="true" />
                         </WaveIcon>
                     </button>
                 </div>
 
-                <div class="relative">
-                    <div class="absolute inset-x-0 bottom-0 h-[230px] overflow-hidden" aria-hidden="true">
-                        <Image
-                            src={lefellicHome}
-                            alt=""
-                            widths={[420, 840]}
-                            sizes="420px"
-                            class="size-full object-cover object-right-bottom"
-                        />
-                        <span class="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-snow-50 from-30% to-transparent" />
-                    </div>
-                    <figure class="relative mx-3 mt-20 mb-3 flex items-center gap-2.5 rounded-2xl bg-white/80 px-4 py-3 inset-ring inset-ring-gray-900/5 backdrop-blur-lg sm:mt-[120px]">
-                        <Image
-                            src={quentinPhoto}
-                            alt={quentin.imageAlt ?? ""}
-                            width={48}
-                            height={48}
-                            class="size-6 shrink-0 rounded-full object-cover"
-                        />
-                        <figcaption class="text-[13px] leading-[1.5] text-gray-500">
-                            <strong class="block font-[450] text-gray-900">
-                                «&nbsp;Des échanges fluides et constructifs&nbsp;»
-                            </strong>
-                            SARL Le Fellic
-                        </figcaption>
-                    </figure>
-                </div>
+                <figure class="pc-proof">
+                    <Image
+                        src={quentinPhoto}
+                        alt={quentin.imageAlt ?? ""}
+                        width={40}
+                        height={40}
+                        class="size-5 shrink-0 rounded-full object-cover"
+                    />
+                    <figcaption>
+                        <strong>« Des échanges fluides »</strong>, SARL Le Fellic
+                    </figcaption>
+                </figure>
             </aside>
 
-            <a
-                class="inline-flex items-center gap-1.5 self-center text-sm font-[450] text-gray-900 underline-offset-[3px] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
-                href="#faq"
-            >
+            <a class="pc-compare" href="#faq">
                 Voir ce qui fait varier un devis
-                <ArrowRight class="size-3.5" aria-hidden="true" />
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
             </a>
         </div>
-    </div>
-
-    <div
-        class="pc-bar fixed inset-x-2 bottom-2 z-40 flex items-center justify-between gap-3 rounded-[20px] bg-snow-50/95 py-2.5 pr-2.5 pl-4 inset-ring inset-ring-gray-200 backdrop-blur-lg lg:hidden"
-        data-pc-bar
-        aria-hidden="true"
-    >
-        <span class="min-w-0">
-            <span class="block text-xs text-gray-500">Total estimé</span>
-            <span class="flex items-baseline gap-1 whitespace-nowrap" data-pc-bar-wrap>
-                <strong class="text-xl font-[450] tracking-tight text-gray-900 tabular-nums" data-pc-bar-total>{fr(vitrine.base)}</strong>
-                <small class="text-xs font-[450] text-gray-500" data-pc-bar-unit>€ HT</small>
-            </span>
-        </span>
-        <button
-            class="pc-cta flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-xl px-5 text-[15px] font-[450]"
-            data-cal-location="pricing-configurator-bar"
-            data-cal-open
-            aria-controls="cal-drawer"
-            aria-haspopup="dialog"
-            tabindex="-1"
-            type="button"
-        >
-            <WaveText text="Parlons-en" trigger="parent" />
-            <WaveIcon style="--wui-wave-icon-size: 0.875rem;" direction="right" trigger="parent">
-                <ArrowRight class="size-full" aria-hidden="true" />
-            </WaveIcon>
-        </button>
     </div>
 </section>
 
 <script>
+    import EmblaCarousel from "embla-carousel";
+
     const fr = new Intl.NumberFormat("fr-FR");
     const EXTRA_PAGE = 200;
     const MAX_PAGES = 30;
@@ -532,16 +532,48 @@ const vitrine = formats[1];
             ...root.querySelectorAll<HTMLInputElement>('input[name="pc-option"]'),
         ];
         const optionsSet = $<HTMLFieldSetElement>("[data-pc-options]");
+        const none = $<HTMLButtonElement>("[data-pc-none]");
         const counter = $("[data-pc-counter]");
         const minus = $<HTMLButtonElement>("[data-pc-minus]");
         const plus = $<HTMLButtonElement>("[data-pc-plus]");
-        const pagesOut = $("[data-pc-pages]");
-        const totals = [$("[data-pc-total]"), $("[data-pc-bar-total]")];
-        const units = [$("[data-pc-unit]"), $("[data-pc-bar-unit]")];
-        const totalWraps = [$("[data-pc-total-wrap]"), $("[data-pc-bar-wrap]")];
-        const hint = $("[data-pc-total-hint]");
+        const total = $("[data-pc-total]");
+        const totalWrap = $("[data-pc-total-wrap]");
         const note = $("[data-pc-note]");
-        const desc = $("[data-pc-desc]");
+
+        const vp = $("[data-pc-vp]");
+        const prev = $<HTMLButtonElement>("[data-pc-prev]");
+        const next = $<HTMLButtonElement>("[data-pc-next]");
+        const embla = EmblaCarousel(vp, {
+            align: "start",
+            containScroll: "trimSnaps",
+        });
+        const syncNav = () => {
+            const canPrev = embla.canScrollPrev();
+            const canNext = embla.canScrollNext();
+            prev.disabled = !canPrev;
+            next.disabled = !canNext;
+            vp.toggleAttribute("data-prev", canPrev);
+            vp.toggleAttribute("data-next", canNext);
+            $("[data-pc-nav]").hidden = !canPrev && !canNext;
+        };
+        embla.on("select", syncNav).on("reInit", syncNav);
+        syncNav();
+        prev.addEventListener("click", () => embla.scrollPrev());
+        next.addEventListener("click", () => embla.scrollNext());
+        const reveal = (input: HTMLInputElement, jump = false) => {
+            const slide = embla.slideNodes().findIndex((s) => s.contains(input));
+            const box = embla.slideNodes()[slide].getBoundingClientRect();
+            const view = vp.getBoundingClientRect();
+            if (box.left >= view.left - 1 && box.right <= view.right + 1) return;
+            const snap = embla
+                .internalEngine()
+                .slideRegistry.findIndex((group) => group.includes(slide));
+            embla.scrollTo(snap, jump);
+        };
+        reveal(formats.find((i) => i.checked)!, true);
+        document.addEventListener("astro:before-swap", () => embla.destroy(), {
+            once: true,
+        });
 
         let pages = 5;
         const reduce = () =>
@@ -557,22 +589,25 @@ const vitrine = formats[1];
             pages = Math.max(pages, includedPages || 1);
             const extra = mode === "extra" ? pages - includedPages : 0;
             counter.toggleAttribute("data-disabled", mode !== "extra");
-            counter.toggleAttribute("data-extra", extra > 0);
             minus.disabled = mode !== "extra" || pages <= includedPages;
             plus.disabled = mode !== "extra" || pages >= MAX_PAGES;
-            pagesOut.textContent =
+            $("[data-pc-pages]").textContent =
                 mode === "fixed" ? "1" : mode === "none" ? "—" : String(pages);
             $("[data-pc-counter-text]").textContent =
                 mode === "extra"
-                    ? `${d.name} : ${includedPages} pages incluses, puis +${EXTRA_PAGE} € HT par page.`
+                    ? `${d.name} : ${includedPages} pages incluses, puis ${EXTRA_PAGE} € HT par page.`
                     : mode === "fixed"
                       ? "Une landing page tient sur une seule page."
                       : "Le nombre d'écrans se définit pendant le cadrage.";
-            const descChanged = desc.textContent !== d.text;
-            desc.textContent = d.text!;
 
             optionsSet.disabled = base === null;
+            none.disabled = base === null;
             const active = base === null ? [] : opts.filter((o) => o.checked);
+            none.setAttribute("aria-pressed", String(active.length === 0));
+            $("[data-pc-options-text]").textContent =
+                base === null
+                    ? "Pour une interface produit, tout se chiffre pendant le cadrage."
+                    : "À ajouter maintenant ou plus tard, sans refaire le site. Chaque option s'ajoute au total.";
 
             $("[data-pc-format-name]").textContent = d.name!;
             $("[data-pc-format-sub]").textContent = d.sub!;
@@ -595,32 +630,37 @@ const vitrine = formats[1];
                 extra * EXTRA_PAGE +
                 active.reduce((s, o) => s + (Number(o.dataset.price) || 0), 0);
             const isQuote = base === null || active.some((o) => !o.dataset.price);
-
-            hint.hidden = !isQuote;
-            hint.textContent =
-                base === null
-                    ? "Cadrage dès 900 € HT"
-                    : `${fr.format(sum)} € HT + Google Ads sur devis`;
             note.textContent =
                 base === null
-                    ? "Planning défini après lecture du périmètre. Prix hors taxes."
-                    : "Livré en 10 jours à 5 semaines selon périmètre. Prix indicatif hors taxes.";
+                    ? "Le planning et le budget se définissent pendant le cadrage, à partir de 900 € HT."
+                    : isQuote
+                      ? `${fr.format(sum)} € HT, plus Google Ads chiffré selon vos campagnes. Livré en 10 jours à 5 semaines selon le périmètre.`
+                      : "Livré en 10 jours à 5 semaines selon le périmètre. Prix indicatif hors taxes, confirmé par le devis après un premier échange.";
 
-            const next = isQuote ? "Sur devis" : fr.format(sum);
-            const totalChanged = totals[0].textContent !== next;
-            totals.forEach((t) => (t.textContent = next));
-            units.forEach((u) => (u.hidden = isQuote));
-            if (reduce()) return;
-            const fade = (el: HTMLElement) =>
-                el.animate(
-                    [{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }],
+            const nextTotal = isQuote ? "Sur devis" : fr.format(sum);
+            const changed = total.textContent !== nextTotal;
+            total.textContent = nextTotal;
+            $("[data-pc-unit]").hidden = isQuote;
+            if (changed && !reduce()) {
+                totalWrap.animate(
+                    [
+                        { opacity: 0, transform: "translateY(4px)" },
+                        { opacity: 1, transform: "none" },
+                    ],
                     { duration: 400, easing: "ease" },
                 );
-            if (totalChanged) totalWraps.forEach(fade);
-            if (descChanged) fade(desc);
+            }
         };
 
-        root.addEventListener("change", update);
+        root.addEventListener("change", (event) => {
+            const input = event.target as HTMLInputElement;
+            if (input.name === "pc-format") reveal(input);
+            update();
+        });
+        none.addEventListener("click", () => {
+            opts.forEach((o) => (o.checked = false));
+            update();
+        });
         minus.addEventListener("click", () => {
             pages -= 1;
             update();
@@ -630,120 +670,573 @@ const vitrine = formats[1];
             update();
         });
         update();
-
-        const bar = $("[data-pc-bar]");
-        const seen = new Map<Element, boolean>();
-        const steps = $("[data-pc-steps]");
-        const summary = $("[data-pc-summary]");
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach((e) => seen.set(e.target, e.isIntersecting));
-            bar.toggleAttribute(
-                "data-visible",
-                !!seen.get(steps) && !seen.get(summary),
-            );
-        });
-        io.observe(steps);
-        io.observe(summary);
     };
 
     document.addEventListener("astro:page-load", init);
 </script>
 
 <style>
+    /* Awesomic's Cosmica 500/400 ("Regular"/"Book" files) match Geist 370/260
+       by stem width; their numerals sit 9% taller, so price sizes are x1.09. */
+    @property --pc-fade-l {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+    }
+
+    @property --pc-fade-r {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+    }
+
+    .pc {
+        --w5: 370;
+        --w4: 260;
+        color: var(--color-gray-900);
+        font-size: 14px;
+        font-weight: var(--w4);
+        line-height: 21px;
+        margin: 0 auto;
+        max-width: 1440px;
+        padding: 64px 80px 120px;
+    }
+
+    .pc-heading {
+        align-items: flex-start;
+        display: flex;
+        gap: 48px;
+        justify-content: space-between;
+    }
+
+    .pc-eyebrow {
+        align-items: center;
+        background: var(--color-gray-100);
+        border-radius: 8px;
+        color: var(--color-gray-700);
+        display: inline-flex;
+        height: 30px;
+        letter-spacing: -0.02em;
+        padding: 0 13px;
+    }
+
+    .pc-heading h2 {
+        font-size: 56px;
+        font-weight: var(--w5);
+        letter-spacing: -0.015em;
+        line-height: 64px;
+        margin-top: 20px;
+    }
+
+    .pc-intro {
+        flex: 0 0 440px;
+        padding-top: 50px;
+    }
+
+    .pc-intro p {
+        color: var(--color-gray-700);
+        font-size: 18px;
+        letter-spacing: -0.01em;
+        line-height: 27px;
+    }
+
+    .pc-stage {
+        align-items: start;
+        display: grid;
+        gap: 16px;
+        grid-template-columns: minmax(0, 1fr) 360px;
+        margin-top: 64px;
+    }
+
+    .pc-steps {
+        background: var(--color-snow-50);
+        border: 1px solid var(--color-gray-200);
+        border-radius: 36px;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 12px 40px;
+    }
+
+    .pc-step {
+        padding: 32px 0 32px 56px;
+        position: relative;
+    }
+
+    .pc-step:first-child::after {
+        background: linear-gradient(
+            var(--color-coffee-300),
+            var(--color-gray-200)
+        );
+        border-radius: 2px;
+        bottom: -32px;
+        content: "";
+        left: 15px;
+        position: absolute;
+        top: 72px;
+        width: 2px;
+    }
+
+    .pc-step-head {
+        align-items: flex-start;
+        display: flex;
+        gap: 16px;
+    }
+
     .pc-num {
         align-items: center;
         background: var(--color-coffee-300);
-        border-radius: 999px;
+        border-radius: 50%;
         color: var(--color-snow-50);
         display: inline-flex;
-        flex: none;
-        font-size: 0.75rem;
-        font-weight: 500;
-        height: 2rem;
+        font-size: 12px;
+        font-weight: var(--w5);
+        height: 32px;
         justify-content: center;
-        width: 2rem;
+        left: 0;
+        position: absolute;
+        top: 32px;
+        width: 32px;
     }
 
-    @media (min-width: 640px) {
-        .pc-step:first-child::after {
-            background: linear-gradient(
-                var(--color-coffee-300),
-                var(--color-gray-200)
-            );
-            border-radius: 2px;
-            bottom: -2rem;
-            content: "";
-            left: 15px;
-            position: absolute;
-            top: 4.5rem;
-            width: 2px;
-        }
+    .pc-step-copy {
+        flex: 1 1 auto;
+        min-width: 0;
     }
 
-    .pc-tile,
-    .pc-row {
+    .pc-step-copy h3 {
+        align-items: center;
+        display: flex;
+        font-size: 24px;
+        font-weight: var(--w5);
+        gap: 10px;
+        letter-spacing: -0.02em;
+        line-height: 28px;
+        margin-top: 2px;
+        white-space: nowrap;
+    }
+
+    .pc-step-copy p {
+        color: var(--color-gray-500);
+        font-size: 15px;
+        line-height: 1.5;
+        margin-top: 8px;
+        max-width: 520px;
+    }
+
+    .pc-optional {
+        border: 1px solid var(--color-gray-200);
+        border-radius: 80px;
+        color: var(--color-gray-500);
+        font-size: 12px;
+        font-weight: var(--w4);
+        letter-spacing: 0;
+        padding: 3px 8px;
+    }
+
+    .pc-nav,
+    .pc-stepper {
+        align-items: center;
+        background: var(--color-gray-100);
+        border-radius: 12px;
+        display: flex;
+        flex: 0 0 auto;
+        gap: 2px;
+        padding: 3px;
+    }
+
+    .pc-nav[hidden] {
+        display: none;
+    }
+
+    .pc-btn {
+        align-items: center;
+        background: var(--color-snow-50);
+        border-radius: 9px;
+        color: var(--color-gray-900);
+        cursor: pointer;
+        display: flex;
+        height: 32px;
+        justify-content: center;
         transition:
-            box-shadow 250ms,
-            background-color 250ms,
-            translate 250ms;
+            background-color 0.2s,
+            color 0.2s;
+        width: 32px;
+    }
+
+    .pc-btn:disabled {
+        background: transparent;
+        color: var(--color-gray-300);
+        cursor: default;
+    }
+
+    .pc-btn:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 2px;
+    }
+
+    /* The viewport bleeds 5px sideways and 6px vertically so the selected
+       ring, its lift and the focus outline are not clipped. */
+    .pc-vp {
+        margin: 22px -5px -6px;
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            #000 var(--pc-fade-l),
+            #000 calc(100% - var(--pc-fade-r)),
+            transparent
+        );
+        overflow: hidden;
+        padding: 6px 0;
+        transition:
+            --pc-fade-l 0.3s,
+            --pc-fade-r 0.3s;
+    }
+
+    .pc-vp[data-prev] {
+        --pc-fade-l: 48px;
+    }
+
+    .pc-vp[data-next] {
+        --pc-fade-r: 48px;
+    }
+
+    .pc-tiles {
+        display: flex;
+        touch-action: pan-y pinch-zoom;
+    }
+
+    .pc-slide {
+        flex: 0 0 246px;
+        min-width: 0;
+        padding: 0 5px;
+    }
+
+    .pc-tile {
+        background: var(--color-snow-50);
+        border-radius: 22px;
+        box-shadow: inset 0 0 0 1px var(--color-gray-200);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 18px;
+        transition:
+            box-shadow 0.25s,
+            background-color 0.25s,
+            transform 0.25s;
+    }
+
+    .pc-tile:hover {
+        background: var(--color-gray-50);
     }
 
     .pc-tile:has(:checked) {
-        translate: 0 -1px;
+        background: var(--color-snow-50);
+        box-shadow: 0 0 0 1.5px var(--color-coffee-300);
+        transform: translateY(-2px);
     }
 
-    .pc-icon {
+    .pc-tile:has(:focus-visible),
+    .pc-row:has(:focus-visible),
+    .pc-none:focus-visible,
+    .pc-included summary:focus-visible,
+    .pc-cta:focus-visible,
+    .pc-compare:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 2px;
+    }
+
+    .pc-tile-top {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        min-height: 24px;
+    }
+
+    .pc-object,
+    .pc-row-pic {
+        align-items: center;
+        border-radius: 10px;
+        color: var(--color-snow-50);
+        display: inline-flex;
+        flex: 0 0 auto;
+        height: 32px;
+        justify-content: center;
+        width: 32px;
+    }
+
+    .pc-object {
         filter: grayscale(0.35) saturate(0.85);
         transition:
-            filter 250ms,
-            transform 250ms;
+            filter 0.25s,
+            transform 0.25s;
     }
 
-    .pc-tile:hover .pc-icon,
-    .pc-tile:has(:checked) .pc-icon {
+    .pc-tile:hover .pc-object,
+    .pc-tile:has(:checked) .pc-object {
         filter: none;
         transform: scale(1.08) rotate(-4deg);
     }
 
+    .pc-tile-name {
+        font-size: 16px;
+        font-weight: var(--w5);
+        white-space: nowrap;
+    }
+
     .pc-radio {
         background: var(--color-snow-50);
-        border-radius: 999px;
+        border-radius: 50%;
         box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
-        flex: none;
+        flex: 0 0 auto;
         height: 18px;
-        transition: box-shadow 200ms;
+        transition: box-shadow 0.2s;
         width: 18px;
     }
 
-    .pc-tile:has(:checked) .pc-radio {
+    .pc-tile-top .pc-radio {
+        margin-left: auto;
+    }
+
+    .pc-tile:has(:checked) .pc-radio,
+    .pc-none[aria-pressed="true"] .pc-radio {
         box-shadow: inset 0 0 0 5px var(--color-coffee-300);
     }
 
-    .pc-meter > i {
-        background: var(--color-gray-300);
+    .pc-tile-price {
+        display: flex;
+        flex-direction: column;
+        margin-top: 14px;
+    }
+
+    .pc-tile-price strong {
+        font-size: 35px;
+        font-weight: var(--w5);
+        letter-spacing: -0.03em;
+        line-height: 44px;
+        white-space: nowrap;
+    }
+
+    .pc-tile-price span {
+        color: var(--color-gray-500);
+        font-size: 13px;
+    }
+
+    .pc-budget {
+        color: var(--color-gray-500);
+        display: flex;
+        font-size: 12px;
+        gap: 8px;
+        justify-content: space-between;
+        margin-top: 14px;
+    }
+
+    .pc-budget b {
+        color: var(--color-gray-900);
+        font-weight: var(--w5);
+    }
+
+    .pc-meter {
+        background: var(--color-gray-100);
+        border-radius: 4px;
+        display: block;
+        height: 3px;
+        margin-top: 8px;
+        overflow: hidden;
+    }
+
+    .pc-meter i {
+        background: var(--color-gray-400);
         border-radius: inherit;
         display: block;
         height: 100%;
-        transition: background-color 200ms;
+        transition: background-color 0.2s;
     }
 
-    .pc-tile:has(:checked) .pc-meter > i {
+    .pc-tile:has(:checked) .pc-meter i {
         background: var(--color-blue-500);
+    }
+
+    .pc-included {
+        background: var(--color-snow-50);
+        border-radius: 18px;
+        box-shadow: inset 0 0 0 1px var(--color-gray-200);
+        interpolate-size: allow-keywords;
+        margin-top: 20px;
+    }
+
+    .pc-included summary {
+        align-items: center;
+        border-radius: 18px;
+        cursor: pointer;
+        display: flex;
+        font-size: 15px;
+        font-weight: var(--w5);
+        gap: 12px;
+        justify-content: space-between;
+        list-style: none;
+        padding: 16px 18px;
+    }
+
+    .pc-included summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .pc-included small {
+        color: var(--color-gray-500);
+        font-size: 13px;
+        font-weight: var(--w4);
+        margin-left: 8px;
+    }
+
+    .pc-toggle {
+        align-items: center;
+        background: var(--color-gray-100);
+        border-radius: 9px;
+        display: inline-flex;
+        flex: 0 0 auto;
+        height: 28px;
+        justify-content: center;
+        transition: background-color 0.2s;
+        width: 28px;
+    }
+
+    .pc-included summary:hover .pc-toggle {
+        background: var(--color-gray-200);
+    }
+
+    .pc-toggle-v {
+        transform-origin: center;
+        transition: transform 0.3s var(--wui-ease-standard, ease);
+    }
+
+    .pc-included[open] .pc-toggle-v {
+        transform: scaleY(0);
+    }
+
+    .pc-included::details-content {
+        block-size: 0;
+        overflow: hidden;
+        transition:
+            block-size 0.3s var(--wui-ease-standard, ease),
+            content-visibility 0.3s allow-discrete;
+    }
+
+    .pc-included[open]::details-content {
+        block-size: auto;
+    }
+
+    .pc-included ul {
+        border-top: 1px solid var(--color-gray-100);
+        display: grid;
+        gap: 14px 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        padding: 16px 18px 18px;
+    }
+
+    .pc-included li {
+        align-items: center;
+        color: var(--color-gray-700);
+        display: flex;
+        font-size: 13px;
+        gap: 6px;
+    }
+
+    .pc-team {
+        border: 1px solid var(--color-gray-200);
+        border-radius: 18px;
+        margin-top: 20px;
+        padding: 16px 18px;
+        transition: opacity 0.2s;
+    }
+
+    .pc-team[data-disabled] {
+        opacity: 0.55;
+    }
+
+    .pc-team-head {
+        align-items: center;
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+    }
+
+    .pc-team-head strong {
+        display: block;
+        font-size: 15px;
+        font-weight: var(--w5);
+    }
+
+    .pc-team-head span {
+        color: var(--color-gray-500);
+        display: block;
+        font-size: 13px;
+        margin-top: 2px;
+    }
+
+    .pc-stepper output {
+        font-size: 15px;
+        font-weight: var(--w5);
+        min-width: 32px;
+        text-align: center;
+    }
+
+    .pc-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 28px;
+        min-width: 0;
+        transition: opacity 0.2s;
+    }
+
+    .pc-rows:disabled {
+        opacity: 0.5;
+    }
+
+    .pc-row {
+        align-items: center;
+        background: var(--color-snow-50);
+        border-radius: 22px;
+        box-shadow: inset 0 0 0 1px var(--color-gray-200);
+        cursor: pointer;
+        display: flex;
+        gap: 20px;
+        padding: 20px 24px;
+        transition:
+            box-shadow 0.25s,
+            background-color 0.25s;
+    }
+
+    .pc-row:hover {
+        background: var(--color-gray-50);
+    }
+
+    .pc-row:has(:checked) {
+        background: var(--color-snow-50);
+        box-shadow: 0 0 0 1.5px var(--color-coffee-300);
+    }
+
+    .pc-rows:disabled .pc-row,
+    .pc-rows:disabled .pc-none {
+        cursor: not-allowed;
     }
 
     .pc-check {
         align-items: center;
         background: var(--color-snow-50);
-        border-radius: 999px;
+        border-radius: 5px;
         box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
         color: transparent;
         display: inline-flex;
+        flex: 0 0 auto;
         height: 18px;
         justify-content: center;
         transition:
-            background-color 200ms,
-            box-shadow 200ms,
-            color 200ms;
+            background-color 0.2s,
+            box-shadow 0.2s,
+            color 0.2s;
         width: 18px;
     }
 
@@ -753,154 +1246,250 @@ const vitrine = formats[1];
         color: var(--color-snow-50);
     }
 
-    .pc-opt-icon {
-        transition:
-            background-color 250ms,
-            color 250ms;
+    .pc-row-pic {
+        height: 36px;
+        width: 36px;
     }
 
-    .pc-row:has(:checked) .pc-opt-icon {
-        background: var(--color-blue-50);
-        color: var(--color-blue-500);
-    }
-
-    .pc-step-btn {
-        align-items: center;
-        background: var(--color-snow-50);
-        border-radius: 9px;
-        box-shadow: inset 0 0 0 1px var(--color-gray-200);
-        color: var(--color-gray-900);
-        display: inline-flex;
-        height: 2rem;
-        justify-content: center;
-        transition:
-            background-color 200ms,
-            color 200ms;
-        width: 2rem;
-    }
-
-    .pc-step-btn:disabled {
-        background: transparent;
-        box-shadow: none;
-        color: var(--color-gray-300);
-        cursor: default;
-    }
-
-    .pc-step-btn:focus-visible {
-        outline: 2px solid var(--color-blue-500);
-        outline-offset: 2px;
-    }
-
-    .pc-out {
-        transition: color 200ms;
-    }
-
-    [data-pc-counter][data-extra] .pc-out {
-        color: var(--color-blue-500);
-    }
-
-    .pc-included {
-        interpolate-size: allow-keywords;
-    }
-
-    .pc-included::details-content {
-        block-size: 0;
-        overflow: hidden;
-        transition:
-            block-size 300ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
-            content-visibility 300ms allow-discrete;
-    }
-
-    .pc-included[open]::details-content {
-        block-size: auto;
-    }
-
-    .pc-included-list {
-        opacity: 0;
-        transition: opacity 300ms;
-    }
-
-    .pc-included[open] .pc-included-list {
-        opacity: 1;
-    }
-
-    .pc-toggle {
-        transition: rotate 300ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
-    }
-
-    .pc-line {
-        align-items: flex-start;
-        border-top: 1px solid var(--color-gray-100);
+    .pc-row-copy {
         display: flex;
-        flex-wrap: wrap;
-        gap: 4px 1rem;
-        justify-content: space-between;
-        padding: 1rem 0;
-    }
-
-    .pc-line[hidden],
-    .pc-l[hidden] {
-        display: none;
-    }
-
-    .pc-line dt {
-        color: var(--color-gray-900);
-        display: flex;
+        flex: 1 1 0%;
         flex-direction: column;
-        font-size: 15px;
-        font-weight: 450;
         gap: 2px;
-        line-height: 21px;
         min-width: 0;
     }
 
-    .pc-line dt small {
-        color: var(--color-gray-400);
-        font-size: 13px;
-        font-weight: 400;
+    .pc-row-copy strong {
+        font-size: 16px;
+        font-weight: var(--w5);
+    }
+
+    .pc-row-copy span {
+        color: var(--color-gray-500);
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    .pc-row-price {
+        align-items: flex-end;
+        display: flex;
+        flex: 0 0 auto;
+        flex-direction: column;
+        max-width: 180px;
+    }
+
+    .pc-row-amount {
+        align-items: baseline;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 8px;
+        justify-content: flex-end;
+    }
+
+    .pc-row-amount strong {
+        font-size: 26px;
+        font-weight: var(--w5);
+        letter-spacing: -0.02em;
+        line-height: 32px;
         white-space: nowrap;
     }
 
-    .pc-line dd {
+    .pc-row-amount span,
+    .pc-row-quoted {
+        color: var(--color-gray-500);
+        white-space: nowrap;
+    }
+
+    .pc-row-amount span {
+        font-size: 14px;
+    }
+
+    .pc-row-quoted {
+        font-size: 13px;
+        margin-top: 2px;
+    }
+
+    .pc-none {
+        align-items: center;
+        background: var(--color-gray-50);
+        border-radius: 18px;
+        cursor: pointer;
+        display: flex;
+        gap: 12px;
+        margin-top: -2px;
+        padding: 14px 20px;
+        text-align: left;
+        transition:
+            background-color 0.2s,
+            box-shadow 0.2s;
+    }
+
+    .pc-none[aria-pressed="true"] {
+        background: var(--color-snow-50);
+        box-shadow: inset 0 0 0 1px var(--color-gray-200);
+    }
+
+    .pc-none strong {
+        flex: 0 0 auto;
+        font-weight: var(--w5);
+    }
+
+    .pc-none > span:last-child {
+        color: var(--color-gray-500);
+    }
+
+    .pc-side {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        position: sticky;
+        top: 96px;
+    }
+
+    .pc-summary {
+        background: var(--color-snow-50);
+        border: 1px solid var(--color-gray-200);
+        border-radius: 36px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .pc-summary :global(.pc-sum-bg) {
+        filter: brightness(1.18) saturate(0.8);
+        mask-image: linear-gradient(transparent, #000 45%);
+    }
+
+    .pc-sum-card {
+        display: flex;
+        flex-direction: column;
+        padding: 32px 32px 0;
+        position: relative;
+    }
+
+    .pc-sum-eyebrow {
+        font-size: 20px;
+        font-weight: var(--w5);
+        letter-spacing: -0.02em;
+    }
+
+    .pc-sum-sub {
+        color: var(--color-gray-500);
+        line-height: 1.5;
+        margin-top: 6px;
+    }
+
+    .pc-lines {
+        margin-top: 24px;
+    }
+
+    .pc-lines > div {
+        align-items: flex-start;
+        border-top: 1px solid var(--color-gray-100);
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        padding: 16px 0;
+    }
+
+    .pc-lines > div[hidden],
+    .pc-line[hidden] {
+        display: none;
+    }
+
+    .pc-lines dt {
+        display: flex;
+        flex-direction: column;
+        font-size: 15px;
+        font-weight: var(--w5);
+        gap: 2px;
+    }
+
+    .pc-lines small {
+        color: var(--color-gray-400);
+        font-size: 13px;
+        font-weight: var(--w4);
+    }
+
+    .pc-lines dd {
         color: var(--color-gray-700);
         display: flex;
         flex-direction: column;
         font-size: 15px;
         gap: 4px;
-        line-height: 21px;
-        margin-left: auto;
         text-align: right;
     }
 
-    .pc-l {
+    .pc-line {
         display: flex;
         gap: 12px;
         justify-content: flex-end;
-        transition:
-            opacity 300ms,
-            translate 300ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
         white-space: nowrap;
     }
 
-    @starting-style {
-        .pc-l,
-        .pc-line {
-            opacity: 0;
-            translate: 0 -4px;
-        }
-    }
-
-    .pc-l b {
-        color: var(--color-gray-900);
-        font-variant-numeric: tabular-nums;
-        font-weight: 450;
+    .pc-line b {
+        font-weight: var(--w5);
         min-width: 56px;
         text-align: right;
     }
 
+    .pc-total {
+        align-items: baseline;
+        border-top: 1px solid var(--color-gray-100);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 16px;
+        justify-content: space-between;
+        padding-top: 20px;
+    }
+
+    .pc-total > span {
+        color: var(--color-gray-700);
+        font-size: 15px;
+    }
+
+    .pc-total strong {
+        align-items: baseline;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 48px;
+        font-weight: var(--w5);
+        gap: 0 6px;
+        justify-content: flex-end;
+        letter-spacing: -0.03em;
+        line-height: 52px;
+        margin-left: auto;
+        white-space: nowrap;
+    }
+
+    .pc-total small {
+        color: var(--color-gray-500);
+        font-size: 15px;
+        letter-spacing: 0;
+    }
+
+    .pc-note {
+        color: var(--color-gray-500);
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 8px;
+        min-height: 42px;
+    }
+
     .pc-cta {
+        align-items: center;
+        border-radius: 14px;
         color: var(--color-snow-50);
+        display: flex;
+        font-size: 14px;
+        font-weight: var(--w5);
+        gap: 8px;
+        height: 52px;
         isolation: isolate;
+        justify-content: center;
+        line-height: 1.25;
+        margin-top: 20px;
         position: relative;
     }
 
@@ -910,8 +1499,7 @@ const vitrine = formats[1];
         content: "";
         inset: 0;
         position: absolute;
-        transition: transform 520ms
-            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
+        transition: transform 0.52s var(--wui-ease-standard, ease);
         z-index: -1;
     }
 
@@ -921,55 +1509,319 @@ const vitrine = formats[1];
         }
     }
 
-    .pc-cta:focus-visible {
-        outline: 2px solid var(--color-blue-500);
-        outline-offset: 3px;
+    .pc-proof {
+        align-items: center;
+        backdrop-filter: blur(16px);
+        background: rgb(255 255 255 / 0.78);
+        border: 1px solid rgb(255 255 255 / 0.7);
+        border-radius: 20px;
+        display: flex;
+        gap: 10px;
+        margin: 120px 16px 16px;
+        padding: 12px 16px;
+        position: relative;
     }
 
-    .pc-cta:focus-visible::before {
-        transform: scale(0.95);
+    .pc-proof figcaption {
+        color: var(--color-gray-700);
+        font-size: 13px;
+        line-height: 1.5;
     }
 
-    .pc-bar {
-        opacity: 0;
-        pointer-events: none;
-        transition:
-            opacity 250ms,
-            translate 250ms;
-        translate: 0 1rem;
+    .pc-proof strong {
+        color: var(--color-gray-900);
+        font-weight: var(--w5);
     }
 
-    .pc-bar[data-visible] {
-        opacity: 1;
-        pointer-events: auto;
-        translate: 0 0;
+    .pc-compare {
+        align-items: center;
+        align-self: center;
+        display: inline-flex;
+        font-size: 14px;
+        font-weight: var(--w5);
+        gap: 6px;
     }
 
-    :global(body:has([data-pc-bar][data-visible]) .floating-email) {
-        visibility: hidden;
+    .pc-compare:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    @media (max-width: 1360px) {
+        .pc-stage {
+            grid-template-columns: minmax(0, 1fr) 330px;
+        }
+
+        .pc-steps {
+            padding: 8px 28px;
+        }
+
+        .pc-step {
+            padding-left: 48px;
+        }
+
+        .pc-tile-price strong {
+            font-size: 30.5px;
+        }
+
+        .pc-total strong {
+            font-size: 41.5px;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .pc {
+            padding: 48px 32px 96px;
+        }
+
+        .pc-heading {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pc-heading h2 {
+            font-size: 46px;
+            line-height: 1.12;
+        }
+
+        .pc-intro {
+            flex: 0 0 auto;
+            max-width: 560px;
+            padding-top: 0;
+        }
+
+        .pc-stage {
+            grid-template-columns: minmax(0, 1fr);
+            margin-top: 40px;
+        }
+
+        .pc-side {
+            position: static;
+        }
+
+        .pc-step-head {
+            flex-wrap: wrap;
+        }
+
+        .pc-included ul {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 767px) {
+        .pc {
+            padding: 40px 16px 72px;
+        }
+
+        .pc-heading {
+            align-items: center;
+            text-align: center;
+        }
+
+        .pc-heading h2 {
+            font-size: 32px;
+            line-height: 1.15;
+            margin-top: 16px;
+        }
+
+        .pc-heading h2 br {
+            display: none;
+        }
+
+        .pc-intro {
+            margin: 0 auto;
+        }
+
+        .pc-intro p {
+            font-size: 16px;
+        }
+
+        .pc-stage {
+            margin-top: 28px;
+        }
+
+        .pc-steps {
+            border-radius: 28px;
+            padding: 4px 16px;
+        }
+
+        .pc-step {
+            padding: 24px 0;
+        }
+
+        .pc-step:first-child::after,
+        .pc-nav {
+            display: none;
+        }
+
+        .pc-step-head {
+            align-items: stretch;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pc-num {
+            align-self: flex-start;
+            position: static;
+        }
+
+        .pc-step-copy h3 {
+            flex-wrap: wrap;
+            font-size: 20px;
+            line-height: 26px;
+            white-space: normal;
+        }
+
+        .pc-step-copy p {
+            font-size: 14px;
+        }
+
+        .pc-vp {
+            margin-top: 14px;
+        }
+
+        .pc-slide {
+            flex-basis: 226px;
+            padding: 0 4px;
+        }
+
+        .pc-vp {
+            margin-inline: -4px;
+        }
+
+        .pc-tile {
+            border-radius: 18px;
+            padding: 14px;
+        }
+
+        .pc-object {
+            height: 26px;
+            width: 26px;
+        }
+
+        .pc-tile-price strong {
+            font-size: 28px;
+            line-height: 32px;
+        }
+
+        .pc-tile-price span {
+            font-size: 12px;
+        }
+
+        .pc-budget {
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .pc-included summary,
+        .pc-team {
+            padding: 14px;
+        }
+
+        .pc-included summary {
+            font-size: 14px;
+        }
+
+        .pc-included ul {
+            gap: 10px;
+            grid-template-columns: minmax(0, 1fr);
+            padding: 14px;
+        }
+
+        .pc-team-head {
+            flex-wrap: wrap;
+        }
+
+        .pc-team-head > div:first-child {
+            flex: 1 1 160px;
+        }
+
+        .pc-team-head span {
+            font-size: 12px;
+        }
+
+        .pc-rows {
+            margin-top: 20px;
+        }
+
+        .pc-row {
+            flex-wrap: wrap;
+            gap: 10px 12px;
+            padding: 16px;
+        }
+
+        .pc-row-copy {
+            flex-basis: 100%;
+            order: 3;
+        }
+
+        .pc-row-price {
+            align-items: flex-start;
+            flex-basis: 100%;
+            order: 4;
+        }
+
+        .pc-row-amount {
+            justify-content: flex-start;
+        }
+
+        .pc-none {
+            flex-wrap: wrap;
+            gap: 4px 12px;
+            padding: 14px 16px;
+        }
+
+        .pc-none > span:last-child {
+            flex-basis: 100%;
+            padding-left: 30px;
+        }
+
+        .pc-sum-card {
+            padding: 24px 20px 0;
+        }
+
+        .pc-lines > div {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pc-lines dd {
+            width: 100%;
+        }
+
+        .pc-line {
+            justify-content: space-between;
+        }
+
+        .pc-total strong {
+            font-size: 39px;
+            line-height: 44px;
+        }
+
+        .pc-proof {
+            margin-top: 80px;
+        }
     }
 
     @media (prefers-reduced-motion: reduce) {
+        .pc-vp,
         .pc-tile,
         .pc-row,
-        .pc-icon,
+        .pc-object,
         .pc-radio,
         .pc-check,
-        .pc-toggle,
-        .pc-l,
-        .pc-bar,
+        .pc-toggle-v,
         .pc-cta::before,
-        .pc-included-list,
         .pc-included::details-content {
             transition: none;
         }
 
         .pc-tile:has(:checked) {
-            translate: none;
+            transform: none;
         }
 
-        .pc-tile:hover .pc-icon,
-        .pc-tile:has(:checked) .pc-icon {
+        .pc-tile:hover .pc-object,
+        .pc-tile:has(:checked) .pc-object {
             transform: none;
         }
     }
