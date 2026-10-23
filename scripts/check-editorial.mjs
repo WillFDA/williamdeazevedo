@@ -26,6 +26,7 @@ const slugs = [
   "choisir-developpeur-web",
   "application-metier-sur-mesure-btp",
   "maintenance-site-web",
+  "hebergement-site-vitrine",
   "arborescence-site-web",
   "rgpd-formulaire-de-contact",
   "seo-local",
