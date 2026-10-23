@@ -100,7 +100,9 @@ const businessJsonLd = {
         { "@type": "AdministrativeArea", name: "Île-de-France" },
         { "@type": "Country", name: "France" },
     ],
-    telephone: phoneValue || businessPhone.e164,
+    // business.ts est la source du numéro publié. PUBLIC_PHONE_* ne pilote que
+    // l'affichage du bandeau de contact (TopContactBanner).
+    telephone: businessPhone.e164,
 };
 
 // Nom du site pour Google : publié uniquement sur la page d'accueil et relié

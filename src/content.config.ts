@@ -9,35 +9,50 @@ const articles = defineCollection({
     base: "./src/content/articles",
     pattern: "**/[^_]*.{md,mdx}",
   }),
-  schema: z.object({
-    title: z.string(),
-    seoTitle: z.string().optional(),
-    // Optional: the part of `title` that starts a new line in the article H1
-    // on wide screens (e.g. "2 000 euros"). Must appear verbatim in `title`.
-    titleBreak: z.string().optional(),
-    description: z.string(),
-    // `pubDate` doubles as the scheduled release date: an article is not
-    // rendered (and gets no page) until this date is reached. See
-    // `src/lib/articles.ts`.
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    tags: z.array(z.string()).default([]),
-    image: z
-      .object({
-        alt: z.string().default(""),
-        src: z.string(),
-      })
-      .optional(),
-    author: z.string().default("William De Azevedo"),
-    // Optional FAQ, emitted as FAQPage JSON-LD. Each question and answer must
-    // repeat, word for word, the visible "Questions fréquentes" section of the
-    // article (checked by scripts/check-editorial.mjs).
-    faq: z
-      .array(z.object({ question: z.string(), answer: z.string() }))
-      .optional(),
-    // Force-hide an article regardless of its date.
-    draft: z.boolean().default(false),
-  }),
+  schema: z
+    .object({
+      title: z.string(),
+      seoTitle: z.string().optional(),
+      // Optional: the part of `title` that starts a new line in the article H1
+      // on wide screens (e.g. "2 000 euros"). Must appear verbatim in `title`.
+      titleBreak: z.string().optional(),
+      description: z.string(),
+      // `pubDate` doubles as the scheduled release date: an article is not
+      // rendered (and gets no page) until this date is reached. See
+      // `src/lib/articles.ts`.
+      pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
+      tags: z.array(z.string()).default([]),
+      image: z
+        .object({
+          alt: z.string().default(""),
+          src: z.string(),
+        })
+        .optional(),
+      author: z.string().default("William De Azevedo"),
+      // Optional FAQ, emitted as FAQPage JSON-LD. Each question and answer must
+      // repeat, word for word, the visible "Questions fréquentes" section of the
+      // article (checked by scripts/check-editorial.mjs).
+      faq: z
+        .array(z.object({ question: z.string(), answer: z.string() }))
+        .optional(),
+      // Force-hide an article regardless of its date.
+      draft: z.boolean().default(false),
+    })
+    .superRefine((data, ctx) => {
+      // Checked here so `astro sync` and dev fail on the right field too.
+      if (
+        data.titleBreak !== undefined &&
+        data.title.indexOf(data.titleBreak) <= 0
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message:
+            "titleBreak must appear in title, after its first character.",
+          path: ["titleBreak"],
+        });
+      }
+    }),
 });
 
 const realisations = defineCollection({

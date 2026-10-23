@@ -1,4 +1,4 @@
-import { localAreaLabel } from "./business";
+import { localAreaShortLabel } from "./business";
 
 export type ServiceCapabilityIcon =
   | "cms"
@@ -92,7 +92,7 @@ export const services: Service[] = [
     rootPath: "/creation-site-vitrine/",
     navLabel: "Création site vitrine",
     title: "Création de site vitrine",
-    seoTitle: `Création de site vitrine à ${localAreaLabel} - William De Azevedo`,
+    seoTitle: `Création de site vitrine freelance à ${localAreaShortLabel}`,
     localHeading: true,
     description:
       "Création de sites vitrines rapides, accessibles et pensés pour rassurer avant le premier contact. Accompagnement design, contenu, SEO technique et développement front-end.",
@@ -230,7 +230,7 @@ export const services: Service[] = [
     rootPath: "/refonte-site-internet/",
     navLabel: "Refonte site internet",
     title: "Refonte de site internet",
-    seoTitle: `Refonte de site internet à ${localAreaLabel} - William De Azevedo`,
+    seoTitle: `Refonte de site internet freelance à ${localAreaShortLabel}`,
     localHeading: true,
     description:
       "Refonte de site internet pour clarifier votre offre, moderniser votre interface et améliorer performance, SEO technique et conversion.",
@@ -362,6 +362,9 @@ export const services: Service[] = [
     slug: "developpeur-web-freelance",
     navLabel: "Développeur web freelance",
     title: "Développeur web freelance",
+    // Pas de libellé local ici : cette page vise les missions en renfort
+    // d'équipe, souvent à distance, partout en France. L'accueil porte déjà
+    // « Développeur web freelance » + Achères.
     seoTitle: "Développeur web freelance front-end - William De Azevedo",
     description:
       "Développeur web freelance front-end pour sites vitrines, interfaces produit et intégrations rapides, accessibles et maintenables.",
@@ -472,7 +475,7 @@ export const services: Service[] = [
     rootPath: "/creation-site-internet-artisan/",
     navLabel: "Site artisan",
     title: "Création de site internet artisan",
-    seoTitle: `Site internet artisan à ${localAreaLabel} - William De Azevedo`,
+    seoTitle: `Site internet artisan à ${localAreaShortLabel} - William De Azevedo`,
     localHeading: true,
     description:
       "Création de site internet pour artisan : site vitrine rapide, mobile, rassurant, avec réalisations, zone d'intervention, formulaire et base SEO locale.",
@@ -604,7 +607,7 @@ export const services: Service[] = [
     rootPath: "/creation-site-internet-professionnel/",
     navLabel: "Site professionnel",
     title: "Création de site internet professionnel",
-    seoTitle: `Site internet professionnel à ${localAreaLabel} - William De Azevedo`,
+    seoTitle: `Site internet professionnel freelance à ${localAreaShortLabel}`,
     localHeading: true,
     description:
       "Création de site internet professionnel pour indépendants, petites structures et équipes produit : stratégie, design, développement front-end, performance, accessibilité et SEO technique.",

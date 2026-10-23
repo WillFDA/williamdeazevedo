@@ -1,5 +1,5 @@
 ---
-import { localAreaLabel } from "@/data/business";
+import { localAreaLabel, localAreaShortLabel } from "@/data/business";
 import Layout from "../layout/Layout.astro";
 import FadeReveal from "../components/animations/FadeReveal.astro";
 import AboutCallout from "../components/AboutCallout.astro";
@@ -142,7 +142,7 @@ const displayedTestimonials = getPublishedTestimonials();
 ---
 
 <Layout
-    title={`Développeur web freelance à ${localAreaLabel} - William De Azevedo`}
+    title={`Développeur web freelance ${localAreaShortLabel} - William De Azevedo`}
     description="Développeur web freelance basé à Achères, dans les Yvelines (78) : sites vitrines et interfaces rapides, accessibles et pensés pour inspirer confiance."
 >
     <section

@@ -3,14 +3,20 @@ import { readdirSync, readFileSync, existsSync, appendFileSync } from "node:fs";
 import nodePath from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Frontmatter en LF ou CRLF.
 const frontmatterOf = (source) =>
-  source.match(/^---\n(?<body>[\s\S]*?)\n---/)?.groups?.body ?? "";
+  source.match(/^---\r?\n(?<body>[\s\S]*?)\r?\n---/)?.groups?.body ?? "";
 
+// Valeur scalaire d'un champ, sans commentaire YAML de fin de ligne
+// (` # …`) ni guillemets.
 const readField = (frontmatter, field) => {
-  const match = frontmatter.match(
-    new RegExp(`^${field}:\\s*["']?(?<value>[^"'\\n]+?)["']?\\s*$`, "m")
-  );
-  return match?.groups?.value;
+  const match = frontmatter.match(new RegExp(`^${field}:(?<value>.*)$`, "m"));
+  if (!match?.groups) return undefined;
+  const value = match.groups.value
+    .replace(/\s+#.*$/, "")
+    .trim()
+    .replace(/^(?<quote>["'])(?<inner>.*)\k<quote>$/, "$<inner>");
+  return value || undefined;
 };
 
 /**
@@ -28,9 +34,14 @@ export function readArticleDates(articlesDir, now = new Date()) {
     const frontmatter = frontmatterOf(
       readFileSync(nodePath.join(articlesDir, file), "utf-8")
     );
-    if (/^draft:\s*true\s*$/m.test(frontmatter)) continue;
+    if (readField(frontmatter, "draft") === "true") continue;
     const pubDate = new Date(readField(frontmatter, "pubDate") ?? "");
-    if (Number.isNaN(pubDate.getTime()) || pubDate > now) continue;
+    // Astro refuserait aussi cet article : mieux vaut échouer ici que publier
+    // un sitemap sans sa date.
+    if (Number.isNaN(pubDate.getTime())) {
+      throw new TypeError(`${file} : pubDate absente ou illisible.`);
+    }
+    if (pubDate > now) continue;
     const updatedDate = new Date(readField(frontmatter, "updatedDate") ?? "");
     dates.set(
       file.replace(/\.mdx?$/, ""),
@@ -67,17 +78,35 @@ export function createSitemapSerializer(articleDates) {
  * - puis `/blog/*` -> `/articles/` en dernier recours.
  * Cloudflare applique la première règle qui correspond : les sources déjà
  * présentes dans public/_redirects gardent la priorité et ne sont pas dupliquées.
+ * Une règle existante à joker (`*` ou `:param`) qui couvre /blog/<slug>
+ * rendrait les règles générées inutiles : elle fait échouer le build.
  * @param {string[]} pagePaths chemins construits, avec barre finale (ex. "/tarifs/")
  * @param {string} existingRules contenu actuel de _redirects
  */
 export function buildRedirectRules(pagePaths, existingRules = "") {
-  const taken = new Set(
-    existingRules
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line && !line.startsWith("#"))
-      .map((line) => line.split(/\s+/)[0])
-  );
+  const sources = existingRules
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"))
+    .map((line) => line.split(/\s+/)[0]);
+  for (const source of sources) {
+    if (!/[*:]/.test(source)) continue;
+    const pattern = source
+      .replaceAll(/[.+?^${}()|[\]\\]/g, "\\$&")
+      .replaceAll("*", ".*")
+      .replaceAll(/:[A-Za-z]\w*/g, "[^/]+");
+    const matcher = new RegExp(`^${pattern}$`);
+    if (
+      ["/blog/un-article", "/blog/un-article/"].some((path) =>
+        matcher.test(path)
+      )
+    ) {
+      throw new Error(
+        `public/_redirects : « ${source} » couvre /blog/<slug> et masquerait les redirections générées. Retirez-la, elle est ajoutée en dernier au build.`
+      );
+    }
+  }
+  const taken = new Set(sources);
   const rules = [];
   const add = (from, to) => {
     if (taken.has(from)) return;

@@ -46,7 +46,9 @@ const isMultiWordPill = (part: AnimatedHeadingPart) =>
             </Fragment>
         ))
     }
-    {/* Complément du titre (ex. la zone géographique), sans animation. */}
+    {/* Complément du titre (ex. la zone géographique), sans animation. L'espace
+        sépare les deux parties dans le texte extrait (moteurs, lecteurs). */}
+    {Astro.slots.has("after") && " "}
     <slot name="after" />
 </Tag>
 

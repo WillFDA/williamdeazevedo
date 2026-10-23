@@ -41,12 +41,8 @@ const {
 const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 
 // Retour à la ligne choisi dans le frontmatter (`titleBreak`), plus de titre
-// codé en dur ici. Un `titleBreak` absent du titre fait échouer le build.
-if (titleBreak && !title.includes(titleBreak)) {
-    throw new Error(
-        `Article « ${article.id} » : titleBreak « ${titleBreak} » introuvable dans le titre.`,
-    );
-}
+// codé en dur ici. Le schéma (content.config.ts) refuse un `titleBreak`
+// absent du titre ou placé au tout début.
 const titleBreakIndex = titleBreak ? title.indexOf(titleBreak) : -1;
 const shouldSplitArticleTitle = titleBreakIndex > 0;
 const articleTitleStart = shouldSplitArticleTitle
@@ -72,17 +68,18 @@ const jsonLd = {
     url: canonicalUrl.href,
     mainEntityOfPage: canonicalUrl.href,
     keywords: tags,
+    // Une seule `url` par @id : celle du nœud Person du Layout. Un auteur
+    // invité n'a ni @id ni url (rien ne le relie au profil de William).
     author: {
         "@type": "Person",
         ...(author === "William De Azevedo" && { "@id": personId }),
         name: author,
-        url: new URL("/about/", siteUrl).href,
     },
+    // Le site est publié par William, quel que soit l'auteur de l'article.
     publisher: {
         "@type": "Person",
-        ...(author === "William De Azevedo" && { "@id": personId }),
-        name: author,
-        url: siteUrl.href,
+        "@id": personId,
+        name: "William De Azevedo",
     },
 };
 

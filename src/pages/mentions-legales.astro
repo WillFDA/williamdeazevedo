@@ -1,5 +1,6 @@
 ---
 import FadeReveal from "@/components/animations/FadeReveal.astro";
+import { businessPhone } from "@/data/business";
 import Layout from "../layout/Layout.astro";
 
 const audienceEnabled = import.meta.env.PUBLIC_RYBBIT_EXEMPT_AUDIENCE === "true";
@@ -19,6 +20,8 @@ const sections = [
         id: "immatriculation",
         title: "Immatriculation",
         paragraphs: [
+            // À confirmer INSEE/INPI : SIRET encore rattaché à Villennes
+            // tant que le transfert du siège n'est pas enregistré.
             "Entreprise individuelle immatriculée au Registre National des Entreprises (RNE) depuis le 11 décembre 2025. SIREN : 995 010 873. SIRET du siège : 995 010 873 00017. Code APE/NAF : 6201Z (Programmation informatique).",
         ],
     },
@@ -31,7 +34,7 @@ const sections = [
         id: "contact",
         title: "Contact",
         paragraphs: [
-            "Pour toute demande, vous pouvez écrire à william.deazevedopro@gmail.com ou appeler le 07 62 74 60 21.",
+            `Pour toute demande, vous pouvez écrire à william.deazevedopro@gmail.com ou appeler le ${businessPhone.display}.`,
         ],
     },
     {
