@@ -63,7 +63,7 @@ const [featured, ...rest] = articles.slice(0, 5);
                             </span>
                             <span class="mt-5 flex flex-wrap items-center gap-3">
                                 {featured.data.tags[0] && (
-                                    <ArticleTag raised tag={featured.data.tags[0]} />
+                                    <ArticleTag tag={featured.data.tags[0]} />
                                 )}
                                 <time
                                     class="text-sm font-normal text-gray-500"
@@ -101,7 +101,7 @@ const [featured, ...rest] = articles.slice(0, 5);
                                     >
                                         <div class="min-w-0 flex-1">
                                             {article.data.tags[0] && (
-                                                <ArticleTag raised tag={article.data.tags[0]} />
+                                                <ArticleTag tag={article.data.tags[0]} />
                                             )}
                                             <h3 class="mt-4 text-xl font-normal leading-snug text-gray-900 text-pretty">
                                                 {article.data.title}

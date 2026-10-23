@@ -2,24 +2,13 @@
 import { getTagIconSvg } from "@/lib/articleTagIcons";
 
 interface Props {
-    raised?: boolean;
     tag: string;
 }
 
-const { raised = false, tag } = Astro.props;
+const { tag } = Astro.props;
 ---
 
-<span
-    class:list={[
-        "inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900",
-        raised
-            ? "shadow-[0_4px_12px_-8px_rgba(31,38,52,0.26)]"
-            : "shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]",
-    ]}
->
-    <span
-        class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
-        set:html={getTagIconSvg(tag)}
-    />
+<span class="pill">
+    <span class="pill-icon" set:html={getTagIconSvg(tag)} />
     {tag}
 </span>

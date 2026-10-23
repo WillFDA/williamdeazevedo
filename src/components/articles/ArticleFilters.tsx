@@ -31,9 +31,9 @@ const normalize = (value: string) =>
 const filterSelectClass =
   "h-11 w-full appearance-none rounded-xl border border-gray-100 bg-snow-50 px-3 pr-10 text-left text-sm font-light text-gray-900 transition-colors hover:border-gray-200 focus-visible:border-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500";
 const tagButtonBaseClass =
-  "article-tag-pill relative isolate inline-flex cursor-pointer items-center gap-2 rounded-xl bg-transparent px-3.5 py-2 text-sm font-normal leading-none shadow-[0_16px_34px_-23px_rgba(34,42,55,0.58)] transition-[box-shadow,color] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:rounded-xl before:transition-transform before:duration-500 before:ease-out hover:shadow-[0_24px_48px_-26px_rgba(34,42,55,0.68)] hover:before:scale-[1.06] focus-visible:shadow-[0_24px_48px_-26px_rgba(34,42,55,0.68)] focus-visible:before:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-blue-500";
+  "pill article-tag-pill relative isolate cursor-pointer bg-transparent transition-colors duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:rounded-xl before:transition-transform before:duration-500 before:ease-out hover:before:scale-[1.06] focus-visible:before:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-blue-500";
 const tagButtonActiveClass = "text-snow-50 before:bg-blue-500";
-const tagButtonInactiveClass = "text-gray-900 before:bg-snow-50";
+const tagButtonInactiveClass = "before:bg-snow-50";
 
 const getAllowedValue = (value: string | null, allowedValues: string[]) =>
   value && allowedValues.includes(value) ? value : ALL_VALUE;
@@ -257,8 +257,8 @@ export default function ArticleFilters({ tags, years }: Props) {
               type="button"
             >
               <span
-                className={`article-tag-pill__icon inline-flex size-4 shrink-0 items-center justify-center *:size-full ${
-                  isActive ? "text-snow-50" : "text-blue-500"
+                className={`pill-icon article-tag-pill__icon ${
+                  isActive ? "text-snow-50" : ""
                 }`}
                 // oxlint-disable-next-line react/no-danger -- SVG statiques du dépôt, pas de contenu utilisateur
                 dangerouslySetInnerHTML={{ __html: getTagIconSvg(tagName) }}

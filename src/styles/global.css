@@ -94,6 +94,9 @@ body {
   --color-coffee-700: #151c27;
   --color-coffee-800: #111824;
   --color-coffee-900: #0e1420;
+
+  /* Soft lift shared by every pill and pill-like field (tags, search). */
+  --shadow-pill: 0 4px 12px -8px rgba(31, 38, 52, 0.26);
 }
 
 :root {
@@ -102,8 +105,6 @@ body {
   --border: #d9dee6;
   --ring: #3e60d4;
   --radius: 0.625rem;
-  /* Soft lift shared by every pill and pill-like field (tags, search). */
-  --shadow-pill: 0 4px 12px -8px rgba(31, 38, 52, 0.26);
 }
 
 @theme inline {
@@ -190,6 +191,16 @@ body {
 
   .section-subheading--inverse {
     color: var(--color-coffee-50);
+  }
+
+  /* Tag pill shared by article tags, project tags and the tag filters.
+     Utilities on the element override it (e.g. the active filter colors). */
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-pill;
+  }
+
+  .pill-icon {
+    @apply inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full;
   }
 
   /* Pill word highlight shared by the animated titles (home hero, services
