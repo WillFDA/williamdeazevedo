@@ -12,6 +12,18 @@
 #   qu'elle bloquerait (GTM/Google, Cal.com, Rybbit) sans rien casser. À
 #   passer en Content-Security-Policy après une période sans violation.
 #   'unsafe-inline' en script-src : scripts inline d'Astro (JSON-LD, GTM).
+# - Aucun endpoint de rapport (report-to) : il faudrait un collecteur, donc un
+#   service de plus et une mention RGPD. Vérification manuelle avant de passer
+#   en bloquant : console DevTools sur l'accueil, /articles/, un article, une
+#   page service et /mentions-legales/, avec cookies acceptés puis refusés, et
+#   le tiroir Cal.com ouvert ; aucune ligne « Content-Security-Policy ».
+# - img-src : l'origine Vercel Blob sert encore l'image « Avant » de l'article
+#   MotivAI (ImageComparison) ; à retirer une fois l'image rapatriée (#137).
+# - Non listés, à ajouter si activés dans le dashboard Cloudflare : Web
+#   Analytics (static.cloudflareinsights.com, cloudflareinsights.com) et les
+#   outils côté client de Zaraz. HSTS : si l'option est aussi activée dans
+#   SSL/TLS > Edge Certificates, n'en garder qu'une des deux.
+# - tests/headers.test.ts vérifie ces en-têtes et les origines chargées.
 /*
   Strict-Transport-Security: max-age=31536000
   X-Content-Type-Options: nosniff
@@ -19,7 +31,7 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
   X-Frame-Options: DENY
   Content-Security-Policy: frame-ancestors 'none'
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://app.cal.com https://analytics.williamdeazevedo.fr; style-src 'self' 'unsafe-inline' https://app.cal.com; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net; font-src 'self' data:; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://pagead2.googlesyndication.com https://app.cal.com https://cal.com https://analytics.williamdeazevedo.fr; frame-src https://cal.com https://app.cal.com https://www.googletagmanager.com https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://app.cal.com https://analytics.williamdeazevedo.fr; style-src 'self' 'unsafe-inline' https://app.cal.com; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net https://igpmag5dwziffdrn.public.blob.vercel-storage.com; font-src 'self' data:; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://pagead2.googlesyndication.com https://app.cal.com https://cal.com https://analytics.williamdeazevedo.fr; frame-src https://cal.com https://app.cal.com https://www.googletagmanager.com https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 
 # Astro fingerprints these filenames on every build, so they're safe to cache
 # forever.
