@@ -330,7 +330,7 @@ const websiteJsonLd = {
                     path: window.location.pathname || "/",
                 };
 
-                // Ni adresse email ni numéro dans les événements : seul
+                // Ni adresse email ni numéro dans les événements : seule
                 // l'intention de contact (libellé, emplacement, page) est mesurée.
                 if (url.protocol === "mailto:") {
                     trackContactIntent("contact_email_click", baseProperties);

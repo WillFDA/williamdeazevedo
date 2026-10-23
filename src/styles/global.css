@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "@fontsource-variable/geist";
 
+/* Écran large ET assez haut : le bandeau cookies passe en version complète.
+   En paysage sur téléphone (hauteur < 32rem), il reste compact. */
+@custom-variant wide (@media (width >= 40rem) and (height >= 32rem));
+
 /* View transitions are driven by Astro's <ClientRouter /> (client-side, no
    full reload). The cross-document `@view-transition { navigation: auto }`
    trigger is intentionally NOT used: it forced a real navigation (the white

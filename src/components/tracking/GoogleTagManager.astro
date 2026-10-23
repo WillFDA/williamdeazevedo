@@ -9,10 +9,15 @@
 
 {/* 1. Choix mémorisé : recharge GTM seulement si une finalité est acceptée. */}
 <script>
-    import { applyConsent, readConsent } from "../../scripts/consent";
+    import {
+        applyConsent,
+        readConsent,
+        syncConsentAcrossTabs,
+    } from "../../scripts/consent";
 
     const choice = readConsent();
     if (choice) applyConsent(choice);
+    syncConsentAcrossTabs();
 </script>
 
 {/* 2. Pages virtuelles + clics contact (listeners délégués, posés une seule fois). */}
@@ -35,20 +40,36 @@
         // ClientRouter suivantes poussent page_view_virtual.
         // page_location / page_referrer : la doc GA4 SPA insiste sur un referrer
         // correct entre pages virtuelles.
+        // Seuls les paramètres de campagne sont transmis : le reste de la query
+        // string (formulaires, liens partagés) peut contenir des données
+        // personnelles.
+        const KEPT_PARAMS = /^(?:utm_[a-z_]+|gclid)$/;
+        const cleanUrl = (href) => {
+            const url = new URL(href);
+            const kept = new URLSearchParams();
+            for (const [key, value] of url.searchParams) {
+                if (KEPT_PARAMS.test(key)) kept.append(key, value);
+            }
+            url.search = kept.toString();
+            url.hash = "";
+            return url;
+        };
+
         let isFirstLoad = true;
-        let lastUrl = window.location.href;
+        let lastUrl = cleanUrl(window.location.href).href;
         document.addEventListener("astro:page-load", () => {
             if (isFirstLoad) {
                 isFirstLoad = false;
                 return;
             }
             const referrer = lastUrl;
-            lastUrl = window.location.href;
+            const url = cleanUrl(window.location.href);
+            lastUrl = url.href;
             push("analytics", {
                 event: "page_view_virtual",
-                page_location: window.location.href,
+                page_location: url.href,
                 page_referrer: referrer,
-                page_path: window.location.pathname + window.location.search,
+                page_path: url.pathname + url.search,
                 page_title: document.title,
             });
         });
@@ -59,7 +80,9 @@
                 const target = event.target;
                 if (!(target instanceof Element)) return;
                 const link = target.closest("a[href]");
-                if (!link) return;
+                // Les boutons de réservation (mailto en repli sans JS) ouvrent le
+                // tiroir Cal.com : ce n'est pas un clic email.
+                if (!link || link.closest("[data-cal-open]")) return;
                 const href = (link.getAttribute("href") || "").trim().toLowerCase();
                 if (href.startsWith("tel:")) push("ads", { event: "clic_telephone" });
                 else if (href.startsWith("mailto:")) push("ads", { event: "clic_email" });

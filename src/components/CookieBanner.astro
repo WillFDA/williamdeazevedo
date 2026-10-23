@@ -5,15 +5,15 @@
 
 // Refuser et accepter partagent la même taille et la même forme (exigence
 // CNIL) ; seule la couleur change (principal / secondaire gris).
-// Sur mobile, bandeau compact (boutons côte à côte, plus bas) pour ne pas
-// masquer l'appel à l'action du hero.
+// Sur mobile et en paysage (variante `wide` de global.css), bandeau compact
+// (boutons côte à côte, plus bas) pour masquer le moins possible le hero.
 const choiceClass =
-    "hero-button flex min-h-10 w-full cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-sm font-normal sm:min-h-14 sm:px-8 sm:py-3 sm:text-base";
+    "hero-button flex min-h-10 w-full cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-sm font-normal wide:min-h-14 wide:px-8 wide:py-3 wide:text-base";
 ---
 
 <div
     id="cookie-banner"
-    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-2.5 text-[13px] sm:p-4 sm:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] sm:right-auto sm:bottom-4 sm:left-4 sm:max-w-sm"
+    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-2.5 text-[13px] wide:p-4 wide:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] wide:right-auto wide:bottom-4 wide:left-4 wide:max-w-sm"
     role="dialog"
     aria-modal="false"
     aria-labelledby="cookie-banner-title"
@@ -23,12 +23,12 @@ const choiceClass =
     transition:persist
 >
     {/* Titre masqué visuellement sur mobile (bandeau plus bas), toujours lu. */}
-    <h2 id="cookie-banner-title" class="sr-only text-sm font-medium sm:not-sr-only sm:text-base">Cookies</h2>
-    <p id="cookie-banner-text" class="leading-snug text-gray-700 sm:mt-1 sm:leading-relaxed">
-        <span class="font-medium text-gray-900 sm:hidden">Cookies :{" "}</span>
-        <span class="sm:hidden">avec</span><span class="hidden sm:inline">Avec</span> votre accord, Google Analytics mesure l'audience et
-        Google Ads l'efficacité des annonces. Rien n'est chargé avant votre
-        choix, modifiable à tout moment.{" "}
+    <h2 id="cookie-banner-title" class="sr-only text-sm font-medium wide:not-sr-only wide:text-base">Cookies</h2>
+    <p id="cookie-banner-text" class="leading-snug text-gray-700 wide:mt-1 wide:leading-relaxed">
+        <span aria-hidden="true" class="font-medium text-gray-900 wide:hidden">Cookies&nbsp;:{" "}</span>
+        <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, Google Analytics mesure l'audience et
+        Google Ads les contacts issus des annonces. Rien n'est chargé sans
+        votre accord, modifiable à tout moment.{" "}
         <a
             class="underline underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             href="/mentions-legales/#cookies">En savoir plus</a
@@ -61,11 +61,11 @@ const choiceClass =
             />
             <span>
                 <span class="font-medium">Publicité</span>
-                <span class="block text-gray-600">Google Ads : mesure des prises de rendez-vous issues des annonces.</span>
+                <span class="block text-gray-600">Google Ads : mesure des contacts issus des annonces (rendez-vous, clics email ou téléphone), sans publicité personnalisée.</span>
             </span>
         </label>
     </fieldset>
-    <div class="mt-2 grid grid-cols-2 gap-1.5 sm:mt-4 sm:grid-cols-1 sm:gap-3">
+    <div class="mt-2 grid grid-cols-2 gap-1.5 wide:mt-4 wide:grid-cols-1 wide:gap-3">
         <button
             class:list={[choiceClass, "hero-button--secondary"]}
             type="button"
@@ -81,15 +81,14 @@ const choiceClass =
             Tout accepter
         </button>
         <button
-            class="col-span-2 min-h-6 cursor-pointer justify-self-center px-2 text-[13px] underline sm:col-span-1 sm:text-sm underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            class="col-span-2 min-h-6 cursor-pointer justify-self-center px-2 text-[13px] underline wide:col-span-1 wide:text-sm underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             type="button"
-            aria-expanded="false"
             data-cookie-customize
         >
             Choisir par finalité
         </button>
         <button
-            class:list={[choiceClass, "hero-button--secondary col-span-2 sm:col-span-1"]}
+            class:list={[choiceClass, "hero-button--secondary col-span-2 wide:col-span-1"]}
             type="button"
             data-cookie-choice="custom"
             hidden
@@ -148,6 +147,12 @@ const choiceClass =
         --hero-button-bg: var(--color-gray-100);
     }
 
+    /* Tant que le bandeau est affiché, le défilement au clavier garde
+       l'élément focalisé au-dessus de lui (WCAG 2.4.11). */
+    html:has(#cookie-banner:not([hidden])) {
+        scroll-padding-bottom: 12rem;
+    }
+
     @media (prefers-reduced-motion: reduce) {
         #cookie-banner .hero-button::before {
             transition: none;
@@ -180,7 +185,8 @@ const choiceClass =
         const save = element.querySelector<HTMLElement>('[data-cookie-choice="custom"]');
         if (fieldset) fieldset.hidden = !customizing;
         if (save) save.hidden = !customizing;
-        toggle?.setAttribute("aria-expanded", String(customizing));
+        // Le bouton disparaît une fois le détail ouvert (le focus passe à la
+        // première case) : pas d'aria-expanded sur un élément masqué.
         if (toggle) toggle.hidden = customizing;
         if (!customizing) return;
         const current = readConsent();
@@ -207,7 +213,10 @@ const choiceClass =
     const close = (element: HTMLElement) => {
         element.hidden = true;
         setCustomizing(element, false);
-        returnFocus?.focus();
+        // Premier choix : le focus revient au début du contenu, pas sur <body>.
+        (returnFocus ?? document.getElementById("main-content"))?.focus({
+            preventScroll: true,
+        });
         returnFocus = null;
     };
 

@@ -25,8 +25,9 @@ const isValidDate = (value: unknown): value is string =>
 
 /**
  * Lit la valeur stockée sans lui faire confiance (stockage modifiable par
- * n'importe quel script ou par l'utilisateur). Accepte l'ancien format
- * `{ value: "granted" | "denied", at }` pour ne pas redemander le choix.
+ * n'importe quel script ou par l'utilisateur). Ancien format
+ * `{ value: "granted" | "denied", at }` : un refus reste un refus, mais un
+ * ancien accord global (donné sans choix par finalité) est redemandé.
  * Renvoie null si la valeur est invalide ou a expiré.
  */
 export const parseStoredConsent = (
@@ -49,7 +50,6 @@ export const parseStoredConsent = (
   if (typeof parsed.analytics === "boolean" && typeof parsed.ads === "boolean")
     return { analytics: parsed.analytics, ads: parsed.ads };
 
-  if (parsed.value === "granted") return { analytics: true, ads: true };
   if (parsed.value === "denied") return { analytics: false, ads: false };
   return null;
 };
@@ -66,11 +66,15 @@ export const serializeConsent = (
 
 const state = (granted: boolean) => (granted ? "granted" : "denied");
 
-/** Signaux Consent Mode v2 correspondant au choix. */
+/**
+ * Signaux Consent Mode v2 correspondant au choix. La finalité « Publicité »
+ * couvre la mesure des contacts issus des annonces, pas le remarketing :
+ * ad_personalization reste donc toujours refusé.
+ */
 export const toConsentModeUpdate = (choice: ConsentChoice) => ({
   ad_storage: state(choice.ads),
   ad_user_data: state(choice.ads),
-  ad_personalization: state(choice.ads),
+  ad_personalization: state(false),
   analytics_storage: state(choice.analytics),
 });
 
@@ -109,6 +113,9 @@ const loadGoogleTagManager = (choice: ConsentChoice) => {
     toConsentModeUpdate({ analytics: false, ads: false })
   );
   gtag("consent", "update", toConsentModeUpdate(choice));
+  // Sans accord publicité, les balises Ads ne transmettent pas les
+  // identifiants de clic (gclid) ni d'autres données publicitaires.
+  gtag("set", "ads_data_redaction", true);
   w.dataLayer?.push({ "gtm.start": Date.now(), event: "gtm.js" });
   const script = document.createElement("script");
   script.async = true;
@@ -157,8 +164,11 @@ export const hasConsentFor = (purpose: keyof ConsentChoice) => {
   return Boolean(w.__wuiGtmLoaded && w.__wuiConsent?.[purpose]);
 };
 
-/** Applique un choix (nouveau ou restauré) sans l'enregistrer. */
-export const applyConsent = (choice: ConsentChoice) => {
+/**
+ * Applique un choix (nouveau ou restauré) sans l'enregistrer. Renvoie vrai si
+ * la page va être rechargée (retrait d'une finalité).
+ */
+export const applyConsent = (choice: ConsentChoice): boolean => {
   const w = gtagWindow();
   const withdrawn = w.__wuiGtmLoaded && isWithdrawal(w.__wuiConsent, choice);
   w.__wuiConsent = { ...choice };
@@ -170,6 +180,7 @@ export const applyConsent = (choice: ConsentChoice) => {
   // Retrait après un accord dans le même document : rechargement complet pour
   // décharger GTM (sinon GA4 / Ads continueraient d'envoyer des pings).
   if (withdrawn) window.location.reload();
+  return Boolean(withdrawn);
 };
 
 export const saveConsent = (choice: ConsentChoice) => {
@@ -178,6 +189,19 @@ export const saveConsent = (choice: ConsentChoice) => {
   } catch {
     // Stockage indisponible (navigation privée) : le choix vaut pour cette page.
   }
-  applyConsent(choice);
+  // Pas de consent_update vers un conteneur sur le point d'être déchargé.
+  if (applyConsent(choice)) return;
   gtagWindow().dataLayer?.push({ event: "consent_update", consent: choice });
+};
+
+/**
+ * Choix modifié dans un autre onglet : on l'applique ici aussi (un retrait
+ * recharge la page, donc décharge GTM dans cet onglet également).
+ */
+export const syncConsentAcrossTabs = () => {
+  window.addEventListener("storage", (event) => {
+    if (event.key !== CONSENT_STORAGE_KEY) return;
+    const choice = parseStoredConsent(event.newValue);
+    applyConsent(choice ?? { analytics: false, ads: false });
+  });
 };

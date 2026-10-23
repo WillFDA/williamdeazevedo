@@ -18,10 +18,10 @@ test("a stored choice round-trips per purpose", () => {
   expect(parseStoredConsent(raw, now)).toEqual({ analytics: true, ads: false });
 });
 
-test("the legacy all-or-nothing format is still understood", () => {
+test("a legacy refusal is kept, a legacy global consent is asked again", () => {
   expect(
     parseStoredConsent(JSON.stringify({ value: "granted", at: recent }), now)
-  ).toEqual({ analytics: true, ads: true });
+  ).toBeNull();
   expect(
     parseStoredConsent(JSON.stringify({ value: "denied", at: recent }), now)
   ).toEqual({ analytics: false, ads: false });
@@ -65,6 +65,13 @@ test("Consent Mode signals follow each purpose separately", () => {
     ad_user_data: "denied",
     ad_personalization: "denied",
     analytics_storage: "granted",
+  });
+  // Publicité = mesure des contacts issus des annonces, jamais le remarketing.
+  expect(toConsentModeUpdate({ analytics: false, ads: true })).toEqual({
+    ad_storage: "granted",
+    ad_user_data: "granted",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
   });
 });
 
