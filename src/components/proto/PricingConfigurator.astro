@@ -691,8 +691,6 @@ const vitrine = formats[1];
     }
 
     .pc {
-        --pc-card-shadow:
-            0 0 18px rgb(31 38 52 / 0.05), 0 16px 40px -24px rgb(31 38 52 / 0.22);
         --w5: 370;
         --w4: 260;
         color: var(--color-gray-900);
@@ -745,19 +743,17 @@ const vitrine = formats[1];
     .pc-stage {
         align-items: start;
         display: grid;
-        gap: 16px;
+        gap: 56px;
         grid-template-columns: minmax(0, 1fr) 360px;
         margin-top: 64px;
     }
 
     .pc-steps {
-        background: var(--color-snow-50);
         border-radius: 36px;
-        box-shadow: var(--pc-card-shadow);
         display: flex;
         flex-direction: column;
         min-width: 0;
-        padding: 12px 40px;
+        padding: 12px 0;
     }
 
     .pc-step {
@@ -1349,9 +1345,7 @@ const vitrine = formats[1];
     }
 
     .pc-summary {
-        background: var(--color-snow-50);
         border-radius: 36px;
-        box-shadow: var(--pc-card-shadow);
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -1366,7 +1360,7 @@ const vitrine = formats[1];
     .pc-sum-card {
         display: flex;
         flex-direction: column;
-        padding: 32px 32px 0;
+        padding: 32px 0 0;
         position: relative;
     }
 
@@ -1555,7 +1549,11 @@ const vitrine = formats[1];
         }
 
         .pc-steps {
-            padding: 8px 28px;
+            padding: 8px 0;
+        }
+
+        .pc-stage {
+            gap: 44px;
         }
 
         .pc-step {
@@ -1643,8 +1641,7 @@ const vitrine = formats[1];
         }
 
         .pc-steps {
-            border-radius: 28px;
-            padding: 4px 16px;
+            padding: 4px 0;
         }
 
         .pc-step {
@@ -1779,7 +1776,7 @@ const vitrine = formats[1];
         }
 
         .pc-sum-card {
-            padding: 24px 20px 0;
+            padding: 24px 0 0;
         }
 
         .pc-lines > div {
