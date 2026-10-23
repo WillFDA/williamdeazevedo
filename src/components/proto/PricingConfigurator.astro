@@ -10,6 +10,7 @@ import Check from "@/components/icons/nucleo/check-2-outline.svg";
 import Msgs from "@/components/icons/nucleo/msgs-fill.svg";
 import ViewAll from "@/components/icons/nucleo/view-all-fill.svg";
 import Xmark from "@/components/icons/nucleo/xmark-fill.svg";
+import lefellicHome from "@/assets/projects/lefellic-home.webp";
 import quentinPhoto from "@/assets/temoignages/quentin-le-fellic.webp";
 import { temoignages } from "@/data/temoignage";
 import { iconToneClasses } from "@/lib/iconTones";
@@ -24,11 +25,9 @@ const formats = [
         tone: "blue",
         text: "Une page centrée sur une offre, une campagne ou une prise de rendez-vous.",
         base: 1200,
-        baseProvisional: true,
         included: 1,
         pages: "fixed",
         sub: "1 page",
-        subProvisional: false,
     },
     {
         id: "vitrine",
@@ -37,11 +36,9 @@ const formats = [
         tone: "violet",
         text: "Plusieurs pages pour présenter vos services, vos preuves et faciliter le contact.",
         base: 2000,
-        baseProvisional: false,
         included: 5,
         pages: "extra",
         sub: "5 pages incluses",
-        subProvisional: true,
     },
     {
         id: "refonte",
@@ -50,11 +47,9 @@ const formats = [
         tone: "cyan",
         text: "On reprend l'existant : structure, contenus, design, performance et redirections.",
         base: 2500,
-        baseProvisional: true,
         included: 5,
         pages: "extra",
         sub: "5 pages incluses",
-        subProvisional: true,
     },
     {
         id: "interface",
@@ -63,36 +58,40 @@ const formats = [
         tone: "indigo",
         text: "SaaS, dashboard, espace client ou outil métier.",
         base: null,
-        baseProvisional: false,
         included: 0,
         pages: "none",
-        sub: "Cadrage dès 900\u00a0€\u00a0HT",
-        subProvisional: false,
+        sub: "Cadrage dès 900 € HT",
     },
 ] as const;
+
+const maxIncluded = Math.max(...formats.map((f) => f.included));
 
 const options = [
     {
         id: "animations",
         title: "Animations",
+        short: "Animations",
         text: "Transitions, apparitions au scroll et micro-interactions soignées.",
         price: 500,
     },
     {
         id: "form",
         title: "Formulaire de contact personnalisé",
+        short: "Formulaire",
         text: "Champs sur mesure, envoi par e-mail et anti-spam.",
         price: 500,
     },
     {
         id: "cms",
         title: "CMS / contenus modifiables",
+        short: "CMS",
         text: "Vous publiez textes, projets et articles sans toucher au code.",
         price: 1000,
     },
     {
         id: "ads",
         title: "Google Ads",
+        short: "Google Ads",
         text: "Pages et suivi de conversion prêts pour vos campagnes.",
         price: null,
     },
@@ -110,6 +109,7 @@ const included = [
 ];
 
 const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
+const vitrine = formats[1];
 ---
 
 <section
@@ -118,220 +118,216 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
     aria-labelledby="pc-title"
     data-pc
 >
-    <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-12">
-        <h2
-            id="pc-title"
-            class="section-heading max-w-2xl text-left text-[clamp(2.35rem,3.9vw,3.45rem)] text-balance"
-        >
-            Choisissez votre projet. Voyez ce qu'il coûte.
-        </h2>
-        <p class="section-subheading mx-0 max-w-sm text-left md:pb-1.5">
-            Prix hors taxes, indicatifs. Le devis final confirme le périmètre
-            après un premier échange.
-        </p>
+    <div class="flex flex-col gap-4 xl:flex-row xl:justify-between xl:gap-12">
+        <div>
+            <p class="inline-flex rounded-lg bg-gray-100 px-3 py-1 text-sm text-gray-600">
+                Tarifs
+            </p>
+            <h2
+                id="pc-title"
+                class="mt-4 text-[2rem] leading-[1.15] font-[450] tracking-[-0.015em] text-gray-900 md:text-[2.875rem] xl:mt-5 xl:text-[3.5rem] xl:leading-[4rem]"
+            >
+                Choisissez votre projet.{" "}<br class="max-md:hidden" />Voyez
+                ce qu'il coûte.
+            </h2>
+        </div>
+        <div class="max-w-[27.5rem] xl:shrink-0 xl:pt-[50px]">
+            <p class="text-base leading-normal text-gray-700 md:text-lg md:leading-[27px] md:tracking-[-0.01em]">
+                Prix hors taxes, indicatifs. Le devis final confirme le
+                périmètre après un premier échange.
+            </p>
+            <p class="mt-3 text-[13px] text-gray-500">
+                Prix indicatifs en cours de validation.
+            </p>
+        </div>
     </div>
 
-    <p class="mt-6 flex items-center gap-2 text-[13px] text-gray-500">
-        <span class="pc-prov">provisoire</span>
-        Prototype : montant inventé, à valider avant mise en ligne.
-    </p>
-
     <div
-        class="mt-6 grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_21rem] xl:grid-cols-[minmax(0,1fr)_22.5rem]"
+        class="mt-7 grid items-start gap-4 md:mt-10 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_21rem]"
     >
         <div
-            class="rounded-4xl bg-snow-50 px-4 py-1 inset-ring inset-ring-gray-200 sm:px-8 xl:px-10"
+            class="rounded-[1.75rem] bg-snow-50 px-4 py-1 inset-ring inset-ring-gray-200 sm:rounded-[2.25rem] sm:px-7 sm:py-2"
             data-pc-steps
         >
-            <div class="pc-step relative py-7 sm:py-8">
-                <div class="flex items-start gap-4">
-                    <span class="pc-num">01</span>
-                    <div class="min-w-0">
-                        <h3 class="text-xl font-medium leading-7 tracking-tight text-gray-900 sm:text-2xl">
-                            Votre format
-                        </h3>
-                        <p class="mt-1 max-w-lg text-[15px] font-light leading-normal text-gray-600">
-                            Le point de départ du budget. Les pages et les
-                            options s'ajoutent ensuite.
-                        </p>
-                    </div>
+            <div class="pc-step relative py-6 sm:py-8 sm:pl-12">
+                <div class="flex items-center gap-3">
+                    <span class="pc-num relative z-1 sm:absolute sm:top-8 sm:left-0">01</span>
+                    <h3 class="text-xl leading-[26px] font-[450] tracking-[-0.02em] text-gray-900 sm:mt-0.5 sm:text-2xl sm:leading-7">
+                        Votre format
+                    </h3>
                 </div>
+                <p class="mt-2 max-w-[32.5rem] text-sm leading-normal text-gray-500 sm:text-[15px]">
+                    Le point de départ du budget. Les pages et les options
+                    s'ajoutent ensuite.
+                </p>
 
-                <div class="mt-6 sm:pl-12">
-                    <div
-                        class="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4"
-                        role="radiogroup"
-                        aria-label="Format du projet"
-                    >
-                        {
-                            formats.map((f) => (
-                                <label class="pc-tile relative grid cursor-pointer rounded-3xl bg-snow-50 p-[18px] inset-ring inset-ring-gray-200 transition-[box-shadow,background-color] duration-250 hover:bg-gray-50 has-checked:bg-blue-50/50 has-checked:inset-ring-2 has-checked:inset-ring-blue-500 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-500">
-                                    <input
-                                        class="peer sr-only"
-                                        type="radio"
-                                        name="pc-format"
-                                        value={f.id}
-                                        checked={f.id === "vitrine"}
-                                        data-name={f.name}
-                                        data-base={f.base ?? ""}
-                                        data-included={f.included}
-                                        data-pages={f.pages}
-                                        data-sub={f.sub}
-                                    />
+                <div
+                    class="mt-5 grid grid-cols-2 gap-2 sm:mt-7 sm:gap-2.5 xl:grid-cols-4"
+                    role="radiogroup"
+                    aria-label="Format du projet"
+                >
+                    {
+                        formats.map((f) => (
+                            <label class="pc-tile flex cursor-pointer flex-col rounded-[18px] bg-snow-50 p-3.5 inset-ring inset-ring-gray-200 hover:bg-gray-50 has-checked:bg-snow-50 has-checked:inset-ring-transparent has-checked:ring-[1.5px] has-checked:ring-coffee-300 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-500 sm:rounded-3xl sm:p-[18px]">
+                                <input
+                                    class="sr-only"
+                                    type="radio"
+                                    name="pc-format"
+                                    value={f.id}
+                                    checked={f.id === "vitrine"}
+                                    data-name={f.name}
+                                    data-text={f.text}
+                                    data-base={f.base ?? ""}
+                                    data-included={f.included}
+                                    data-pages={f.pages}
+                                    data-sub={f.sub}
+                                />
+                                <span class="flex items-center justify-between">
                                     <span
                                         class:list={[
-                                            "[grid-area:icon] inline-flex size-9 items-center justify-center rounded-lg text-snow-50",
+                                            "pc-icon inline-flex size-[26px] items-center justify-center rounded-lg text-snow-50 sm:size-8 sm:rounded-[10px]",
                                             iconToneClasses[f.tone],
                                         ]}
                                         aria-hidden="true"
                                     >
-                                        <CapabilityIcon icon={f.icon} class="size-5" />
+                                        <CapabilityIcon icon={f.icon} class="size-4 sm:size-[18px]" />
                                     </span>
-                                    <span class="pc-radio [grid-area:radio]" aria-hidden="true" />
-                                    <span class="[grid-area:name] text-base font-medium leading-tight text-gray-900 sm:mt-4">
-                                        {f.name}
-                                    </span>
-                                    <span class="[grid-area:price] flex items-baseline gap-1 whitespace-nowrap text-gray-900 sm:mt-2.5">
-                                        {f.base === null ? (
-                                            <span class="text-[1.375rem] font-medium leading-8 tracking-[-0.03em] sm:text-[1.625rem] sm:leading-9">
-                                                Sur devis
-                                            </span>
-                                        ) : (
-                                            <>
-                                                <span class="text-[13px] text-gray-500">dès</span>
-                                                <span class="text-[1.375rem] font-medium leading-8 tracking-[-0.03em] tabular-nums sm:text-[1.625rem] sm:leading-9">
-                                                    {fr(f.base)}
-                                                </span>
-                                                <span class="text-[13px] text-gray-500">€ HT</span>
-                                            </>
-                                        )}
-                                    </span>
-                                    <span class="[grid-area:sub] mt-1 flex flex-wrap content-start items-center gap-x-1.5 gap-y-1 text-[13px] leading-5 text-gray-500 sm:mt-0">
-                                        {f.baseProvisional && <span class="pc-prov">provisoire</span>}
-                                        <span>{f.sub}</span>
-                                        {f.subProvisional && <span class="pc-prov">provisoire</span>}
-                                    </span>
-                                    <span class="[grid-area:desc] mt-3 border-t border-gray-100 pt-3 text-[13px] font-light leading-[1.45] text-gray-600 sm:mt-4 sm:pt-3.5">
-                                        {f.text}
-                                    </span>
-                                </label>
+                                    <span class="pc-radio" aria-hidden="true" />
+                                </span>
+                                <span class="mt-3 text-[15px] leading-[21px] font-[450] text-gray-900 sm:mt-3.5 sm:text-base">
+                                    {f.name}
+                                </span>
+                                <span class="text-[26px] leading-8 font-[450] tracking-[-0.03em] whitespace-nowrap text-gray-900 tabular-nums sm:text-[2rem] sm:leading-[44px]">
+                                    {f.base === null ? "Sur devis" : `${fr(f.base)} €`}
+                                </span>
+                                <span class="text-xs leading-[21px] text-gray-500 sm:text-[13px]">
+                                    {f.base === null ? f.sub : "prix de départ HT"}
+                                </span>
+                                <span class="mt-auto flex justify-between gap-2 pt-3.5 text-[11px] leading-[21px] whitespace-nowrap text-gray-500 sm:text-xs">
+                                    Pages incluses
+                                    <b class="font-[450] text-gray-900">
+                                        {f.pages === "none" ? "à définir" : f.included}
+                                    </b>
+                                </span>
+                                <span class="pc-meter mt-2 h-[3px] rounded-full bg-gray-100" aria-hidden="true">
+                                    <i style={`width: ${(f.included / maxIncluded) * 100}%`} />
+                                </span>
+                            </label>
+                        ))
+                    }
+                </div>
+
+                <p class="mt-3 text-[13px] leading-5 text-gray-500" data-pc-desc>{vitrine.text}</p>
+
+                <details class="pc-included group mt-5 rounded-2xl bg-snow-50 inset-ring inset-ring-gray-200">
+                    <summary class="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-3.5 py-3.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-[18px] sm:py-4 [&::-webkit-details-marker]:hidden">
+                        <span class="text-sm leading-[21px] font-[450] text-gray-900 sm:text-[15px]">
+                            Inclus dans chaque site
+                            <small class="ml-2 text-[13px] font-normal text-gray-500">
+                                {included.length} éléments
+                            </small>
+                        </span>
+                        <span class="ml-auto inline-flex size-7 items-center justify-center rounded-[9px] bg-gray-100 text-gray-900 transition-colors duration-200 group-hover:bg-gray-200">
+                            <Xmark
+                                class="pc-toggle size-3 rotate-45 group-open:rotate-90"
+                                aria-hidden="true"
+                            />
+                        </span>
+                    </summary>
+                    <ul class="pc-included-list grid gap-x-4 gap-y-3.5 border-t border-gray-100 px-3.5 pt-4 pb-[18px] sm:grid-cols-2 sm:px-[18px] xl:grid-cols-3">
+                        {
+                            included.map((item) => (
+                                <li class="flex items-start gap-1.5 text-[13px] leading-5 text-gray-700">
+                                    <Check class="mt-0.5 size-4 shrink-0 text-gray-500" aria-hidden="true" />
+                                    {item}
+                                </li>
                             ))
                         }
+                    </ul>
+                </details>
+
+                <div
+                    class="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl px-3.5 py-3.5 inset-ring inset-ring-gray-200 transition-opacity data-disabled:opacity-55 sm:px-[18px] sm:py-4"
+                    data-pc-counter
+                >
+                    <div class="min-w-0 flex-[1_1_10rem]">
+                        <p class="text-[15px] leading-[21px] font-[450] text-gray-900">
+                            Nombre de pages
+                        </p>
+                        <p
+                            class="mt-0.5 text-xs leading-[21px] text-gray-500 sm:text-[13px]"
+                            data-pc-counter-text
+                        >
+                            5 pages incluses, puis +200 € HT par page.
+                        </p>
                     </div>
-
-                    <details class="pc-included group mt-3 rounded-2xl bg-snow-50 inset-ring inset-ring-gray-200">
-                        <summary class="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-[18px] py-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 [&::-webkit-details-marker]:hidden">
-                            <span class="text-[15px] font-medium text-gray-900">
-                                Inclus dans chaque site
-                            </span>
-                            <span class="text-[13px] text-gray-500">8 éléments</span>
-                            <span class="ml-auto inline-flex size-7 items-center justify-center rounded-lg bg-gray-100 text-gray-900 transition-colors group-hover:bg-gray-200/70">
-                                <Xmark
-                                    class="size-3 rotate-45 transition-transform duration-300 group-open:rotate-0"
-                                    aria-hidden="true"
-                                />
-                            </span>
-                        </summary>
-                        <ul class="grid gap-x-4 gap-y-3 px-[18px] pt-1 pb-[18px] sm:grid-cols-2 xl:grid-cols-3">
-                            {
-                                included.map((item) => (
-                                    <li class="flex items-start gap-2 text-[13px] leading-5 text-gray-700">
-                                        <Check class="mt-0.5 size-4 shrink-0 text-blue-500" aria-hidden="true" />
-                                        {item}
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                    </details>
-
-                    <div
-                        class="mt-3 flex items-center justify-between gap-4 rounded-2xl px-[18px] py-4 inset-ring inset-ring-gray-200 transition-opacity data-disabled:opacity-55"
-                        data-pc-counter
-                    >
-                        <div class="min-w-0">
-                            <p class="text-[15px] font-medium leading-snug text-gray-900">
-                                Nombre de pages
-                            </p>
-                            <p class="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] leading-5 text-gray-500">
-                                <span data-pc-counter-text>
-                                    5 pages incluses, puis +200 € HT par page.
-                                </span>
-                                <span class="pc-prov" data-pc-counter-prov>provisoire</span>
-                            </p>
-                        </div>
-                        <div class="flex shrink-0 items-center gap-0.5 rounded-xl bg-gray-100 p-[3px]">
-                            <button
-                                class="pc-step-btn"
-                                type="button"
-                                aria-label="Retirer une page"
-                                data-pc-minus
-                            >
-                                <span class="h-[1.5px] w-3 rounded-full bg-current" />
-                            </button>
-                            <output
-                                class="w-8 text-center text-[15px] font-medium tabular-nums text-gray-900"
-                                aria-live="polite"
-                                data-pc-pages
-                            >
-                                5
-                            </output>
-                            <button
-                                class="pc-step-btn"
-                                type="button"
-                                aria-label="Ajouter une page"
-                                data-pc-plus
-                            >
-                                <span class="relative h-[1.5px] w-3 rounded-full bg-current after:absolute after:inset-0 after:rotate-90 after:rounded-full after:bg-current" />
-                            </button>
-                        </div>
+                    <div class="flex shrink-0 items-center gap-0.5 rounded-xl bg-gray-100 p-[3px]">
+                        <button
+                            class="pc-step-btn"
+                            type="button"
+                            aria-label="Retirer une page"
+                            data-pc-minus
+                        >
+                            <span class="h-[1.5px] w-3 rounded-full bg-current" />
+                        </button>
+                        <output
+                            class="pc-out min-w-8 text-center text-[15px] leading-[21px] font-[450] text-gray-900 tabular-nums"
+                            aria-live="polite"
+                            data-pc-pages
+                        >
+                            5
+                        </output>
+                        <button
+                            class="pc-step-btn"
+                            type="button"
+                            aria-label="Ajouter une page"
+                            data-pc-plus
+                        >
+                            <span class="relative h-[1.5px] w-3 rounded-full bg-current after:absolute after:inset-0 after:rotate-90 after:rounded-full after:bg-current" />
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="pc-step group/opts relative pt-3 pb-7 sm:pb-9">
-                <div class="flex items-start gap-4">
-                    <span class="pc-num">02</span>
-                    <div class="min-w-0">
-                        <h3 class="flex flex-wrap items-center gap-2.5 text-xl font-medium leading-7 tracking-tight text-gray-900 sm:text-2xl">
-                            Vos options
-                            <span class="rounded-full px-2.5 py-0.5 text-xs font-normal leading-5 tracking-normal text-gray-500 inset-ring inset-ring-gray-200">
-                                Optionnel
-                            </span>
-                        </h3>
-                        <p class="mt-1 max-w-lg text-[15px] font-light leading-normal text-gray-600">
-                            <span class="group-has-[fieldset:disabled]/opts:hidden">
-                                À ajouter maintenant ou plus tard, sans refaire
-                                le site.
-                            </span>
-                            <span class="hidden group-has-[fieldset:disabled]/opts:inline">
-                                Pour une interface produit, tout se chiffre au
-                                cadrage.
-                            </span>
-                        </p>
-                    </div>
+            <div class="pc-step group/opts relative py-6 sm:py-8 sm:pl-12">
+                <div class="flex items-center gap-3">
+                    <span class="pc-num relative z-1 sm:absolute sm:top-8 sm:left-0">02</span>
+                    <h3 class="flex flex-wrap items-center gap-2.5 text-xl leading-[26px] font-[450] tracking-[-0.02em] text-gray-900 sm:mt-0.5 sm:text-2xl sm:leading-7">
+                        Vos options
+                        <span class="rounded-full px-2 py-[3px] text-xs font-normal tracking-normal text-gray-500 inset-ring inset-ring-gray-200">
+                            Optionnel
+                        </span>
+                    </h3>
                 </div>
+                <p class="mt-2 max-w-[32.5rem] text-sm leading-normal text-gray-500 sm:text-[15px]">
+                    <span class="group-has-[fieldset:disabled]/opts:hidden">
+                        À ajouter maintenant ou plus tard, sans refaire le site.
+                    </span>
+                    <span class="hidden group-has-[fieldset:disabled]/opts:inline">
+                        Pour une interface produit, tout se chiffre au cadrage.
+                    </span>
+                </p>
 
                 <fieldset
-                    class="mt-6 grid gap-3 transition-opacity disabled:opacity-50 sm:pl-12"
+                    class="mt-5 flex flex-col gap-3 transition-opacity disabled:opacity-50 sm:mt-7"
                     data-pc-options
                 >
                     <legend class="sr-only">Options</legend>
                     {
                         options.map((o) => (
-                            <label class="grid cursor-pointer grid-cols-[auto_auto_minmax(0,1fr)] items-center gap-x-3 gap-y-2 rounded-3xl bg-snow-50 px-4 py-4 inset-ring inset-ring-gray-200 transition-[box-shadow,background-color] duration-250 hover:bg-gray-50 has-checked:bg-blue-50/50 has-checked:inset-ring-2 has-checked:inset-ring-blue-500 has-disabled:cursor-not-allowed has-disabled:hover:bg-snow-50 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-500 sm:grid-cols-[auto_auto_minmax(0,1fr)_auto] sm:gap-x-5 sm:px-6 sm:py-5">
+                            <label class="pc-row grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 rounded-[18px] bg-snow-50 p-4 inset-ring inset-ring-gray-200 hover:bg-gray-50 has-checked:bg-snow-50 has-checked:inset-ring-transparent has-checked:ring-[1.5px] has-checked:ring-coffee-300 has-disabled:cursor-not-allowed has-disabled:hover:bg-snow-50 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-500 sm:grid-cols-[auto_auto_minmax(0,1fr)_auto] sm:gap-x-5 sm:rounded-3xl sm:px-6 sm:py-5">
                                 <input
-                                    class="peer sr-only"
+                                    class="sr-only"
                                     type="checkbox"
                                     name="pc-option"
                                     value={o.id}
-                                    data-title={o.title}
                                     data-price={o.price ?? ""}
                                 />
                                 <span class="pc-check" aria-hidden="true">
                                     <Check class="size-3" />
                                 </span>
                                 <span
-                                    class="inline-flex size-10 items-center justify-center rounded-xl bg-gray-100 text-gray-700"
+                                    class="pc-opt-icon hidden size-10 items-center justify-center rounded-xl bg-gray-100 text-gray-500 sm:inline-flex"
                                     aria-hidden="true"
                                 >
                                     {o.id === "animations" && <AnimationRepeat class="size-5" />}
@@ -339,25 +335,19 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
                                     {o.id === "cms" && <ViewAll class="size-5" />}
                                     {o.id === "ads" && <BadgeDollar class="size-5" />}
                                 </span>
-                                <span class="min-w-0">
-                                    <span class="block text-base font-medium leading-snug text-gray-900">
+                                <span class="flex min-w-0 flex-col gap-0.5">
+                                    <span class="text-[15px] leading-[21px] font-[450] text-gray-900 sm:text-base">
                                         {o.title}
                                     </span>
-                                    <span class="mt-0.5 block text-sm font-light leading-snug text-gray-500">
+                                    <span class="text-[13px] leading-[1.45] text-gray-500 sm:text-sm">
                                         {o.text}
                                     </span>
                                 </span>
-                                <span class="col-start-3 whitespace-nowrap text-gray-900 sm:col-start-4 sm:row-start-1 sm:text-right">
-                                    {o.price === null ? (
-                                        <span class="text-xl font-medium tracking-tight sm:text-2xl">Sur devis</span>
-                                    ) : (
-                                        <>
-                                            <span class="text-xl font-medium tracking-tight tabular-nums sm:text-2xl">
-                                                +{fr(o.price)}
-                                            </span>
-                                            <span class="text-sm text-gray-500"> € HT</span>
-                                        </>
-                                    )}
+                                <span class="flex items-baseline justify-end gap-2 whitespace-nowrap">
+                                    <strong class="text-xl leading-8 font-[450] tracking-[-0.02em] text-gray-900 tabular-nums sm:text-2xl">
+                                        {o.price === null ? "Sur devis" : `+${fr(o.price)}`}
+                                    </strong>
+                                    {o.price !== null && <span class="text-sm text-gray-500">€ HT</span>}
                                 </span>
                             </label>
                         ))
@@ -366,137 +356,148 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
             </div>
         </div>
 
-        <div class="flex flex-col gap-4 lg:sticky lg:top-24">
+        <div class="flex flex-col gap-3.5 lg:sticky lg:top-24">
             <aside
-                class="rounded-4xl bg-snow-50 p-6 inset-ring inset-ring-gray-200 sm:p-8"
+                class="relative flex flex-col overflow-hidden rounded-[1.75rem] bg-snow-50 after:pointer-events-none after:absolute after:inset-0 after:z-20 after:rounded-[inherit] after:inset-ring after:inset-ring-gray-200 sm:rounded-[2.25rem]"
                 aria-label="Récapitulatif"
                 data-pc-summary
             >
-                <p class="text-xl font-medium leading-tight tracking-tight text-gray-900">
-                    Votre projet
-                </p>
-                <p class="mt-1.5 text-sm font-light text-gray-500">
-                    Tout ce que vous avez choisi, en un devis.
-                </p>
+                <div class="relative z-10 flex flex-col px-5 pt-6 sm:px-8 sm:pt-8">
+                    <p class="text-xl leading-[21px] font-[450] tracking-[-0.02em] text-gray-900">
+                        Votre projet
+                    </p>
+                    <p class="mt-1.5 text-sm leading-normal text-gray-500">
+                        Tout ce que vous avez choisi, en un devis.
+                    </p>
 
-                <dl class="mt-6">
-                    <div class="pc-line" data-pc-line-format>
-                        <dt>
-                            <span data-pc-format-name>Site vitrine</span>
-                            <small class="flex flex-wrap items-center gap-1.5">
-                                <span data-pc-format-sub>5 pages incluses</span>
-                                <span class="pc-prov" data-pc-format-prov hidden>provisoire</span>
-                            </small>
-                        </dt>
-                        <dd data-pc-format-price>2 000 €</dd>
-                    </div>
-                    <div class="pc-line" data-pc-line-pages hidden>
-                        <dt>
-                            Pages supplémentaires
-                            <small class="flex flex-wrap items-center gap-1.5">
-                                <span data-pc-pages-sub>2 × 200 € HT</span>
-                                <span class="pc-prov">provisoire</span>
-                            </small>
-                        </dt>
-                        <dd data-pc-pages-price>400 €</dd>
-                    </div>
-                    {
-                        options.map((o) => (
-                            <div class="pc-line" data-pc-line-option={o.id} hidden>
-                                <dt>
-                                    {o.title}
-                                    <small>Option</small>
-                                </dt>
-                                <dd>{o.price === null ? "Sur devis" : `${fr(o.price)} €`}</dd>
-                            </div>
-                        ))
-                    }
-                    <div class="pc-line" data-pc-line-none>
-                        <dt>
-                            Options
-                            <small>Optionnel</small>
-                        </dt>
-                        <dd class="text-gray-400!">—</dd>
-                    </div>
-                </dl>
+                    <dl class="mt-6">
+                        <div class="pc-line">
+                            <dt>
+                                Format
+                                <small data-pc-format-sub>{vitrine.sub}</small>
+                            </dt>
+                            <dd>
+                                <span class="pc-l">
+                                    <span data-pc-format-name>{vitrine.name}</span>
+                                    <b data-pc-format-price>{fr(vitrine.base)} €</b>
+                                </span>
+                            </dd>
+                        </div>
+                        <div class="pc-line" data-pc-line-pages hidden>
+                            <dt>
+                                Pages en plus
+                                <small>200 € HT la page</small>
+                            </dt>
+                            <dd>
+                                <span class="pc-l">
+                                    <span data-pc-pages-count>× 1</span>
+                                    <b data-pc-pages-price>200 €</b>
+                                </span>
+                            </dd>
+                        </div>
+                        <div class="pc-line">
+                            <dt>
+                                Options
+                                <small data-pc-options-sub>Optionnel</small>
+                            </dt>
+                            <dd>
+                                {
+                                    options.map((o) => (
+                                        <span class="pc-l" data-pc-line-option={o.id} hidden>
+                                            <span>{o.short}</span>
+                                            <b>{o.price === null ? "Sur devis" : `${fr(o.price)} €`}</b>
+                                        </span>
+                                    ))
+                                }
+                                <span data-pc-line-none>—</span>
+                            </dd>
+                        </div>
+                    </dl>
 
-                <div class="flex items-baseline justify-between gap-4 border-t border-gray-100 pt-5">
-                    <span class="text-[15px] text-gray-700">Total</span>
-                    <span class="flex items-baseline gap-1.5 whitespace-nowrap">
+                    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-gray-100 pt-5">
+                        <span class="text-[15px] text-gray-700">Total</span>
                         <strong
-                            class="text-[2.75rem] font-medium leading-[1.15] tracking-[-0.03em] text-gray-900 tabular-nums"
-                            data-pc-total
+                            class="ml-auto flex items-baseline gap-1.5 text-[2.25rem] leading-[44px] font-[450] tracking-[-0.03em] whitespace-nowrap text-gray-900 tabular-nums sm:text-[2.75rem] sm:leading-[52px]"
+                            data-pc-total-wrap
                         >
-                            2 000
+                            <span data-pc-total>{fr(vitrine.base)}</span>
+                            <small class="text-[15px] font-[450] tracking-normal text-gray-500" data-pc-unit>€ HT</small>
                         </strong>
-                        <small class="text-[15px] font-medium text-gray-500" data-pc-unit>€ HT</small>
-                    </span>
-                </div>
-                <p class="mt-1 text-right text-[13px] text-gray-500" data-pc-total-hint hidden></p>
-                <p class="mt-3 text-[13px] leading-relaxed text-gray-500" data-pc-note>
-                    Livré en 10 jours à 5 semaines selon périmètre. Prix
-                    indicatif hors taxes.
-                </p>
-
-                <button
-                    aria-controls="cal-drawer"
-                    aria-haspopup="dialog"
-                    class="pc-cta mt-5 flex min-h-14 w-full items-center justify-center gap-4 rounded-xl px-6 py-3 text-base font-normal"
-                    data-cal-location="pricing-configurator"
-                    data-cal-open
-                    type="button"
-                >
-                    <WaveText text="Parlons de votre projet" trigger="parent" />
-                    <WaveIcon style="--wui-wave-icon-size: 1rem;" direction="right" trigger="parent">
-                        <ArrowRight class="size-full" aria-hidden="true" />
-                    </WaveIcon>
-                </button>
-
-                <figure class="mt-6 flex gap-3 rounded-2xl bg-gray-100 p-4">
-                    <Image
-                        src={quentinPhoto}
-                        alt={quentin.imageAlt ?? ""}
-                        width={80}
-                        height={80}
-                        class="size-10 shrink-0 rounded-full object-cover"
-                    />
-                    <div class="min-w-0">
-                        <blockquote class="text-[13px] leading-[1.5] text-gray-700">
-                            « {quentin.excerpt} »
-                        </blockquote>
-                        <figcaption class="mt-2 text-xs font-medium text-gray-900">
-                            {quentin.name}
-                        </figcaption>
                     </div>
-                </figure>
+                    <p class="text-right text-[13px] text-gray-500" data-pc-total-hint hidden></p>
+                    <p class="mt-2 min-h-[42px] text-[13px] leading-[1.6] text-gray-500" data-pc-note>
+                        Livré en 10 jours à 5 semaines selon périmètre. Prix
+                        indicatif hors taxes.
+                    </p>
+
+                    <button
+                        aria-controls="cal-drawer"
+                        aria-haspopup="dialog"
+                        class="pc-cta mt-5 flex h-[52px] w-full items-center justify-center gap-3 rounded-xl px-6 text-[15px] font-[450]"
+                        data-cal-location="pricing-configurator"
+                        data-cal-open
+                        type="button"
+                    >
+                        <WaveText text="Parlons de votre projet" trigger="parent" />
+                        <WaveIcon style="--wui-wave-icon-size: 0.875rem;" direction="right" trigger="parent">
+                            <ArrowRight class="size-full" aria-hidden="true" />
+                        </WaveIcon>
+                    </button>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute inset-x-0 bottom-0 h-[230px] overflow-hidden" aria-hidden="true">
+                        <Image
+                            src={lefellicHome}
+                            alt=""
+                            widths={[420, 840]}
+                            sizes="420px"
+                            class="size-full object-cover object-right-bottom"
+                        />
+                        <span class="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-snow-50 from-30% to-transparent" />
+                    </div>
+                    <figure class="relative mx-3 mt-20 mb-3 flex items-center gap-2.5 rounded-2xl bg-white/80 px-4 py-3 inset-ring inset-ring-gray-900/5 backdrop-blur-lg sm:mt-[120px]">
+                        <Image
+                            src={quentinPhoto}
+                            alt={quentin.imageAlt ?? ""}
+                            width={48}
+                            height={48}
+                            class="size-6 shrink-0 rounded-full object-cover"
+                        />
+                        <figcaption class="text-[13px] leading-[1.5] text-gray-500">
+                            <strong class="block font-[450] text-gray-900">
+                                «&nbsp;Des échanges fluides et constructifs&nbsp;»
+                            </strong>
+                            SARL Le Fellic
+                        </figcaption>
+                    </figure>
+                </div>
             </aside>
 
             <a
-                class="group relative mx-auto table text-sm font-medium text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                class="inline-flex items-center gap-1.5 self-center text-sm font-[450] text-gray-900 underline-offset-[3px] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
                 href="#faq"
             >
                 Voir ce qui fait varier un devis
-                <span
-                    class="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-gray-900 transition-transform duration-300 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
-                    aria-hidden="true"></span>
+                <ArrowRight class="size-3.5" aria-hidden="true" />
             </a>
         </div>
     </div>
 
     <div
-        class="pc-bar fixed inset-x-3 bottom-3 z-40 flex items-center justify-between gap-3 rounded-2xl bg-snow-50/95 p-2 pl-4 inset-ring inset-ring-gray-200 backdrop-blur-md lg:hidden"
+        class="pc-bar fixed inset-x-2 bottom-2 z-40 flex items-center justify-between gap-3 rounded-[20px] bg-snow-50/95 py-2.5 pr-2.5 pl-4 inset-ring inset-ring-gray-200 backdrop-blur-lg lg:hidden"
         data-pc-bar
         aria-hidden="true"
     >
         <span class="min-w-0">
             <span class="block text-xs text-gray-500">Total estimé</span>
-            <span class="flex items-baseline gap-1 whitespace-nowrap">
-                <strong class="text-xl font-medium tracking-tight text-gray-900 tabular-nums" data-pc-bar-total>2 000</strong>
-                <small class="text-xs font-medium text-gray-500" data-pc-bar-unit>€ HT</small>
+            <span class="flex items-baseline gap-1 whitespace-nowrap" data-pc-bar-wrap>
+                <strong class="text-xl font-[450] tracking-tight text-gray-900 tabular-nums" data-pc-bar-total>{fr(vitrine.base)}</strong>
+                <small class="text-xs font-[450] text-gray-500" data-pc-bar-unit>€ HT</small>
             </span>
         </span>
         <button
-            class="pc-cta flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-xl px-5 text-[15px] font-normal"
+            class="pc-cta flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-xl px-5 text-[15px] font-[450]"
             data-cal-location="pricing-configurator-bar"
             data-cal-open
             aria-controls="cal-drawer"
@@ -513,8 +514,6 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
 </section>
 
 <script>
-    import { animate, utils } from "animejs";
-
     const fr = new Intl.NumberFormat("fr-FR");
     const EXTRA_PAGE = 200;
     const MAX_PAGES = 30;
@@ -539,17 +538,14 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
         const pagesOut = $("[data-pc-pages]");
         const totals = [$("[data-pc-total]"), $("[data-pc-bar-total]")];
         const units = [$("[data-pc-unit]"), $("[data-pc-bar-unit]")];
+        const totalWraps = [$("[data-pc-total-wrap]"), $("[data-pc-bar-wrap]")];
         const hint = $("[data-pc-total-hint]");
         const note = $("[data-pc-note]");
+        const desc = $("[data-pc-desc]");
 
         let pages = 5;
-        const shown = { value: 2000 };
-        let anim: ReturnType<typeof animate> | undefined;
         const reduce = () =>
             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-        const paint = (v: number) =>
-            totals.forEach((t) => (t.textContent = fr.format(Math.round(v))));
 
         const update = () => {
             const f = formats.find((i) => i.checked)!;
@@ -561,6 +557,7 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
             pages = Math.max(pages, includedPages || 1);
             const extra = mode === "extra" ? pages - includedPages : 0;
             counter.toggleAttribute("data-disabled", mode !== "extra");
+            counter.toggleAttribute("data-extra", extra > 0);
             minus.disabled = mode !== "extra" || pages <= includedPages;
             plus.disabled = mode !== "extra" || pages >= MAX_PAGES;
             pagesOut.textContent =
@@ -571,30 +568,33 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
                     : mode === "fixed"
                       ? "Une landing page tient sur une seule page."
                       : "Le nombre d'écrans se définit pendant le cadrage.";
-            $("[data-pc-counter-prov]").hidden = mode !== "extra";
+            const descChanged = desc.textContent !== d.text;
+            desc.textContent = d.text!;
 
             optionsSet.disabled = base === null;
             const active = base === null ? [] : opts.filter((o) => o.checked);
 
             $("[data-pc-format-name]").textContent = d.name!;
             $("[data-pc-format-sub]").textContent = d.sub!;
-            $("[data-pc-format-prov]").hidden = base === null;
             $("[data-pc-format-price]").textContent =
                 base === null ? "Sur devis" : `${fr.format(base)} €`;
             $("[data-pc-line-pages]").hidden = extra <= 0;
-            $("[data-pc-pages-sub]").textContent = `${extra} × ${EXTRA_PAGE} € HT`;
+            $("[data-pc-pages-count]").textContent = `× ${extra}`;
             $("[data-pc-pages-price]").textContent = `${fr.format(extra * EXTRA_PAGE)} €`;
             opts.forEach((o) => {
                 $(`[data-pc-line-option="${o.value}"]`).hidden = !active.includes(o);
             });
             $("[data-pc-line-none]").hidden = active.length > 0;
+            $("[data-pc-options-sub]").textContent =
+                active.length === 0
+                    ? "Optionnel"
+                    : `${active.length} choisie${active.length > 1 ? "s" : ""}`;
 
-            const quoteOption = active.find((o) => !o.dataset.price);
             const sum =
                 (base ?? 0) +
                 extra * EXTRA_PAGE +
                 active.reduce((s, o) => s + (Number(o.dataset.price) || 0), 0);
-            const isQuote = base === null || !!quoteOption;
+            const isQuote = base === null || active.some((o) => !o.dataset.price);
 
             hint.hidden = !isQuote;
             hint.textContent =
@@ -606,25 +606,18 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
                     ? "Planning défini après lecture du périmètre. Prix hors taxes."
                     : "Livré en 10 jours à 5 semaines selon périmètre. Prix indicatif hors taxes.";
 
-            anim?.cancel();
+            const next = isQuote ? "Sur devis" : fr.format(sum);
+            const totalChanged = totals[0].textContent !== next;
+            totals.forEach((t) => (t.textContent = next));
             units.forEach((u) => (u.hidden = isQuote));
-            if (isQuote) {
-                totals.forEach((t) => (t.textContent = "Sur devis"));
-                shown.value = sum;
-                return;
-            }
-            if (reduce()) {
-                shown.value = sum;
-                paint(sum);
-                return;
-            }
-            anim = animate(shown, {
-                value: sum,
-                duration: 720,
-                ease: "out(4)",
-                modifier: utils.round(0),
-                onRender: () => paint(shown.value),
-            });
+            if (reduce()) return;
+            const fade = (el: HTMLElement) =>
+                el.animate(
+                    [{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }],
+                    { duration: 400, easing: "ease" },
+                );
+            if (totalChanged) totalWraps.forEach(fade);
+            if (descChanged) fade(desc);
         };
 
         root.addEventListener("change", update);
@@ -668,9 +661,7 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
         font-weight: 500;
         height: 2rem;
         justify-content: center;
-        position: relative;
         width: 2rem;
-        z-index: 1;
     }
 
     @media (min-width: 640px) {
@@ -680,7 +671,7 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
                 var(--color-gray-200)
             );
             border-radius: 2px;
-            bottom: -0.25rem;
+            bottom: -2rem;
             content: "";
             left: 15px;
             position: absolute;
@@ -689,89 +680,94 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
         }
     }
 
+    .pc-tile,
+    .pc-row {
+        transition:
+            box-shadow 250ms,
+            background-color 250ms,
+            translate 250ms;
+    }
+
+    .pc-tile:has(:checked) {
+        translate: 0 -1px;
+    }
+
+    .pc-icon {
+        filter: grayscale(0.35) saturate(0.85);
+        transition:
+            filter 250ms,
+            transform 250ms;
+    }
+
+    .pc-tile:hover .pc-icon,
+    .pc-tile:has(:checked) .pc-icon {
+        filter: none;
+        transform: scale(1.08) rotate(-4deg);
+    }
+
     .pc-radio {
-        border: 1.5px solid var(--color-gray-300);
+        background: var(--color-snow-50);
         border-radius: 999px;
+        box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
         flex: none;
         height: 18px;
-        transition:
-            border-width 200ms,
-            border-color 200ms;
+        transition: box-shadow 200ms;
         width: 18px;
     }
 
-    .pc-tile {
-        column-gap: 0.875rem;
-        grid-template-areas:
-            "icon name radio"
-            "icon price price"
-            "sub sub sub"
-            "desc desc desc";
-        grid-template-columns: auto minmax(0, 1fr) auto;
+    .pc-tile:has(:checked) .pc-radio {
+        box-shadow: inset 0 0 0 5px var(--color-coffee-300);
     }
 
-    @media (min-width: 640px) {
-        .pc-tile {
-            grid-row: span 5;
-            grid-template-areas:
-                "icon radio"
-                "name name"
-                "price price"
-                "sub sub"
-                "desc desc";
-            grid-template-columns: minmax(0, 1fr) auto;
-            grid-template-rows: subgrid;
-            row-gap: 0;
-        }
+    .pc-meter > i {
+        background: var(--color-gray-300);
+        border-radius: inherit;
+        display: block;
+        height: 100%;
+        transition: background-color 200ms;
     }
 
-    .pc-tile input:checked ~ .pc-radio {
-        border-color: var(--color-blue-500);
-        border-width: 5px;
+    .pc-tile:has(:checked) .pc-meter > i {
+        background: var(--color-blue-500);
     }
 
     .pc-check {
         align-items: center;
-        border: 1.5px solid var(--color-gray-300);
-        border-radius: 6px;
+        background: var(--color-snow-50);
+        border-radius: 999px;
+        box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
         color: transparent;
         display: inline-flex;
         height: 18px;
         justify-content: center;
         transition:
             background-color 200ms,
-            border-color 200ms,
+            box-shadow 200ms,
             color 200ms;
         width: 18px;
     }
 
-    input:checked + .pc-check {
-        background: var(--color-blue-500);
-        border-color: var(--color-blue-500);
+    .pc-row:has(:checked) .pc-check {
+        background: var(--color-coffee-300);
+        box-shadow: inset 0 0 0 1.5px var(--color-coffee-300);
         color: var(--color-snow-50);
     }
 
-    .pc-prov {
-        background: #fef3c7;
-        border-radius: 999px;
-        color: #92400e;
-        display: inline-flex;
-        font-size: 10px;
-        font-weight: 500;
-        letter-spacing: 0.01em;
-        line-height: 1;
-        padding: 3px 6px;
-        white-space: nowrap;
+    .pc-opt-icon {
+        transition:
+            background-color 250ms,
+            color 250ms;
     }
 
-    .pc-prov[hidden] {
-        display: none;
+    .pc-row:has(:checked) .pc-opt-icon {
+        background: var(--color-blue-50);
+        color: var(--color-blue-500);
     }
 
     .pc-step-btn {
         align-items: center;
         background: var(--color-snow-50);
-        border-radius: 0.625rem;
+        border-radius: 9px;
         box-shadow: inset 0 0 0 1px var(--color-gray-200);
         color: var(--color-gray-900);
         display: inline-flex;
@@ -795,6 +791,18 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
         outline-offset: 2px;
     }
 
+    .pc-out {
+        transition: color 200ms;
+    }
+
+    [data-pc-counter][data-extra] .pc-out {
+        color: var(--color-blue-500);
+    }
+
+    .pc-included {
+        interpolate-size: allow-keywords;
+    }
+
     .pc-included::details-content {
         block-size: 0;
         overflow: hidden;
@@ -807,29 +815,31 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
         block-size: auto;
     }
 
-    .pc-included {
-        interpolate-size: allow-keywords;
+    .pc-included-list {
+        opacity: 0;
+        transition: opacity 300ms;
+    }
+
+    .pc-included[open] .pc-included-list {
+        opacity: 1;
+    }
+
+    .pc-toggle {
+        transition: rotate 300ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
     }
 
     .pc-line {
+        align-items: flex-start;
         border-top: 1px solid var(--color-gray-100);
         display: flex;
-        gap: 1rem;
+        flex-wrap: wrap;
+        gap: 4px 1rem;
         justify-content: space-between;
-        padding: 0.875rem 0;
-        transition:
-            opacity 300ms,
-            translate 300ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
+        padding: 1rem 0;
     }
 
-    @starting-style {
-        .pc-line {
-            opacity: 0;
-            translate: 0 -4px;
-        }
-    }
-
-    .pc-line[hidden] {
+    .pc-line[hidden],
+    .pc-l[hidden] {
         display: none;
     }
 
@@ -838,9 +848,9 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
         display: flex;
         flex-direction: column;
         font-size: 15px;
-        font-weight: 500;
+        font-weight: 450;
         gap: 2px;
-        line-height: 1.35;
+        line-height: 21px;
         min-width: 0;
     }
 
@@ -848,15 +858,44 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
         color: var(--color-gray-400);
         font-size: 13px;
         font-weight: 400;
+        white-space: nowrap;
     }
 
     .pc-line dd {
-        color: var(--color-gray-900);
+        color: var(--color-gray-700);
+        display: flex;
+        flex-direction: column;
         font-size: 15px;
-        font-variant-numeric: tabular-nums;
-        font-weight: 500;
-        line-height: 1.35;
+        gap: 4px;
+        line-height: 21px;
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .pc-l {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        transition:
+            opacity 300ms,
+            translate 300ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
         white-space: nowrap;
+    }
+
+    @starting-style {
+        .pc-l,
+        .pc-line {
+            opacity: 0;
+            translate: 0 -4px;
+        }
+    }
+
+    .pc-l b {
+        color: var(--color-gray-900);
+        font-variant-numeric: tabular-nums;
+        font-weight: 450;
+        min-width: 56px;
+        text-align: right;
     }
 
     .pc-cta {
@@ -895,8 +934,8 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
         opacity: 0;
         pointer-events: none;
         transition:
-            opacity 240ms,
-            translate 320ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
+            opacity 250ms,
+            translate 250ms;
         translate: 0 1rem;
     }
 
@@ -911,11 +950,27 @@ const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .pc-line,
+        .pc-tile,
+        .pc-row,
+        .pc-icon,
+        .pc-radio,
+        .pc-check,
+        .pc-toggle,
+        .pc-l,
         .pc-bar,
         .pc-cta::before,
+        .pc-included-list,
         .pc-included::details-content {
             transition: none;
+        }
+
+        .pc-tile:has(:checked) {
+            translate: none;
+        }
+
+        .pc-tile:hover .pc-icon,
+        .pc-tile:has(:checked) .pc-icon {
+            transform: none;
         }
     }
 </style>
