@@ -725,35 +725,6 @@ const vitrine = formats[1];
             0 0 0 1px rgb(188 196 207 / 0.55),
             0 2px 4px -2px rgb(31 38 52 / 0.1),
             0 18px 36px -18px rgb(31 38 52 / 0.32);
-        --pc-rest-bg: linear-gradient(
-            180deg,
-            var(--color-snow-400),
-            var(--color-gray-100)
-        );
-        --pc-rest-shadow:
-            inset 0 1px 0 rgb(255 255 255 / 0.7),
-            inset 0 -1px 0 rgb(31 38 52 / 0.03),
-            0 1px 2px rgb(31 38 52 / 0.05);
-        --pc-hover-shadow:
-            inset 0 1px 0 rgb(255 255 255 / 0.8),
-            0 0 0 1px rgb(188 196 207 / 0.35),
-            0 8px 18px -10px rgb(31 38 52 / 0.2);
-        /* Recessed well (unchecked controls) and dark raised knob (checked). */
-        --pc-well-bg: color-mix(
-            in srgb,
-            var(--color-gray-200) 55%,
-            var(--color-gray-100)
-        );
-        --pc-well-shadow:
-            inset 0 1px 2px rgb(31 38 52 / 0.22),
-            inset 0 0 0 0.5px rgb(31 38 52 / 0.06),
-            0 1px 0 rgb(255 255 255 / 0.9);
-        --pc-ink-bg: linear-gradient(180deg, #303948, var(--color-coffee-300));
-        --pc-ink-shadow:
-            inset 0 1px 0 rgb(255 255 255 / 0.16),
-            0 1px 2px rgb(31 38 52 / 0.3);
-        /* Engraved divider: dark hairline with a light line under it. */
-        --pc-groove: inset 0 1px 0 rgb(255 255 255 / 0.65);
         --pc-knob-bg: var(--color-gray-100);
         --pc-knob-shadow:
             inset 0 1px 0 rgb(255 255 255 / 0.7),
@@ -810,7 +781,7 @@ const vitrine = formats[1];
     .pc-stage {
         align-items: start;
         display: grid;
-        gap: 40px;
+        gap: 56px;
         grid-template-columns: minmax(0, 1fr) 360px;
         margin-top: 64px;
     }
@@ -1006,9 +977,8 @@ const vitrine = formats[1];
     }
 
     .pc-tile {
-        background: var(--pc-rest-bg);
+        background: var(--pc-card);
         border-radius: 22px;
-        box-shadow: var(--pc-rest-shadow);
         cursor: pointer;
         display: flex;
         flex-direction: column;
@@ -1020,18 +990,12 @@ const vitrine = formats[1];
             transform 0.25s;
     }
 
-    .pc-tile:hover,
-    .pc-row:hover,
-    .pc-none:hover {
-        box-shadow: var(--pc-hover-shadow);
-    }
-
     .pc-tile:hover {
-        transform: translateY(-1px);
+        background: var(--pc-card-hover);
     }
 
     .pc-tile:has(:checked) {
-        background: var(--pc-rest-bg);
+        background: var(--pc-card);
         box-shadow: var(--pc-lift-shadow);
         transform: translateY(-2px);
     }
@@ -1085,9 +1049,9 @@ const vitrine = formats[1];
     }
 
     .pc-radio {
-        background: var(--pc-well-bg);
+        background: transparent;
         border-radius: 50%;
-        box-shadow: var(--pc-well-shadow);
+        box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
         flex: 0 0 auto;
         height: 18px;
         transition: box-shadow 0.2s;
@@ -1100,10 +1064,7 @@ const vitrine = formats[1];
 
     .pc-tile:has(:checked) .pc-radio,
     .pc-none[aria-pressed="true"] .pc-radio {
-        background:
-            radial-gradient(circle, var(--color-snow-300) 0 3px, transparent 3.5px),
-            var(--pc-ink-bg);
-        box-shadow: var(--pc-ink-shadow);
+        box-shadow: inset 0 0 0 5px var(--color-coffee-300);
     }
 
     .pc-tile-price {
@@ -1143,8 +1104,7 @@ const vitrine = formats[1];
 
     .pc-feat-check {
         align-items: center;
-        background: var(--pc-well-bg);
-        box-shadow: var(--pc-well-shadow);
+        background: var(--color-gray-200);
         border-radius: 50%;
         color: var(--color-gray-700);
         display: inline-flex;
@@ -1158,15 +1118,13 @@ const vitrine = formats[1];
     }
 
     .pc-tile:has(:checked) .pc-feat-check {
-        background: var(--pc-ink-bg);
-        box-shadow: var(--pc-ink-shadow);
+        background: var(--color-coffee-300);
         color: var(--color-snow-50);
     }
 
     .pc-included {
-        background: var(--pc-rest-bg);
+        background: var(--pc-card);
         border-radius: 18px;
-        box-shadow: var(--pc-rest-shadow);
         interpolate-size: allow-keywords;
         margin-top: 20px;
     }
@@ -1250,9 +1208,8 @@ const vitrine = formats[1];
     }
 
     .pc-team {
-        background: var(--pc-rest-bg);
+        background: var(--pc-card);
         border-radius: 18px;
-        box-shadow: var(--pc-rest-shadow);
         margin-top: 20px;
         padding: 16px 18px;
         transition: opacity 0.2s;
@@ -1305,9 +1262,8 @@ const vitrine = formats[1];
 
     .pc-row {
         align-items: center;
-        background: var(--pc-rest-bg);
+        background: var(--pc-card);
         border-radius: 22px;
-        box-shadow: var(--pc-rest-shadow);
         cursor: pointer;
         display: flex;
         gap: 20px;
@@ -1317,8 +1273,12 @@ const vitrine = formats[1];
             background-color 0.25s;
     }
 
+    .pc-row:hover {
+        background: var(--pc-card-hover);
+    }
+
     .pc-row:has(:checked) {
-        background: var(--pc-rest-bg);
+        background: var(--pc-card);
         box-shadow: var(--pc-lift-shadow);
     }
 
@@ -1329,9 +1289,9 @@ const vitrine = formats[1];
 
     .pc-check {
         align-items: center;
-        background: var(--pc-well-bg);
+        background: transparent;
         border-radius: 5px;
-        box-shadow: var(--pc-well-shadow);
+        box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
         color: transparent;
         display: inline-flex;
         flex: 0 0 auto;
@@ -1345,8 +1305,8 @@ const vitrine = formats[1];
     }
 
     .pc-row:has(:checked) .pc-check {
-        background: var(--pc-ink-bg);
-        box-shadow: var(--pc-ink-shadow);
+        background: var(--color-coffee-300);
+        box-shadow: inset 0 0 0 1.5px var(--color-coffee-300);
         color: var(--color-snow-50);
     }
 
@@ -1415,9 +1375,8 @@ const vitrine = formats[1];
 
     .pc-none {
         align-items: center;
-        background: var(--pc-rest-bg);
+        background: var(--pc-card);
         border-radius: 18px;
-        box-shadow: var(--pc-rest-shadow);
         cursor: pointer;
         display: flex;
         gap: 12px;
@@ -1430,7 +1389,7 @@ const vitrine = formats[1];
     }
 
     .pc-none[aria-pressed="true"] {
-        background: var(--pc-rest-bg);
+        background: var(--pc-card);
         box-shadow: var(--pc-lift-shadow);
     }
 
@@ -1452,9 +1411,7 @@ const vitrine = formats[1];
     }
 
     .pc-summary {
-        background: var(--pc-lift-bg);
         border-radius: 36px;
-        box-shadow: var(--pc-lift-shadow);
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -1469,7 +1426,7 @@ const vitrine = formats[1];
     .pc-sum-card {
         display: flex;
         flex-direction: column;
-        padding: 32px 32px 0;
+        padding: 32px 0 0;
         position: relative;
     }
 
@@ -1491,8 +1448,7 @@ const vitrine = formats[1];
 
     .pc-lines > div {
         align-items: flex-start;
-        border-top: 1px solid rgb(31 38 52 / 0.07);
-        box-shadow: var(--pc-groove);
+        border-top: 1px solid var(--color-gray-100);
         display: flex;
         gap: 16px;
         justify-content: space-between;
@@ -1542,8 +1498,7 @@ const vitrine = formats[1];
 
     .pc-total {
         align-items: baseline;
-        border-top: 1px solid rgb(31 38 52 / 0.07);
-        box-shadow: var(--pc-groove);
+        border-top: 1px solid var(--color-gray-100);
         display: flex;
         flex-wrap: wrap;
         gap: 4px 16px;
@@ -1601,11 +1556,7 @@ const vitrine = formats[1];
     }
 
     .pc-cta::before {
-        background: var(--pc-ink-bg);
-        box-shadow:
-            inset 0 1px 0 rgb(255 255 255 / 0.14),
-            0 1px 2px rgb(31 38 52 / 0.2),
-            0 10px 20px -12px rgb(31 38 52 / 0.4);
+        background: var(--color-coffee-300);
         border-radius: inherit;
         content: "";
         inset: 0;
@@ -1668,7 +1619,7 @@ const vitrine = formats[1];
         }
 
         .pc-stage {
-            gap: 32px;
+            gap: 44px;
         }
 
         .pc-step {
@@ -1886,7 +1837,7 @@ const vitrine = formats[1];
         }
 
         .pc-sum-card {
-            padding: 24px 20px 0;
+            padding: 24px 0 0;
         }
 
         .pc-lines > div {
