@@ -1,0 +1,273 @@
+---
+// Filtres de la liste d'articles, rendus côté serveur et pilotés par un petit
+// script sans framework (auparavant un composant React chargé au démarrage,
+// ~65 ko gzip de runtime pour une recherche et quelques boutons).
+import { getTagIconSvg } from "@/lib/articleTagIcons";
+
+interface Props {
+    tags: string[];
+    years: string[];
+}
+
+const { tags, years } = Astro.props;
+
+const COLLAPSED_TAG_COUNT = 4;
+const TAG_LIST_ID = "article-tag-list";
+
+const filterSelectClass =
+    "h-11 w-full appearance-none rounded-xl border border-gray-100 bg-snow-50 px-3 pr-10 text-left text-sm font-light text-gray-900 transition-colors hover:border-gray-200 focus-visible:border-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500";
+const tagButtonBaseClass =
+    "article-tag-pill relative isolate inline-flex cursor-pointer items-center gap-2 rounded-xl bg-transparent px-3.5 py-2 text-sm font-normal leading-none shadow-[0_16px_34px_-23px_rgba(34,42,55,0.58)] transition-[box-shadow,color] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:rounded-xl before:transition-transform before:duration-500 before:ease-out hover:shadow-[0_24px_48px_-26px_rgba(34,42,55,0.68)] hover:before:scale-[1.06] focus-visible:shadow-[0_24px_48px_-26px_rgba(34,42,55,0.68)] focus-visible:before:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-blue-500";
+const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
+---
+
+<form
+    aria-label="Filtrer les articles"
+    class="mb-10 grid w-full max-w-4xl gap-4"
+    data-article-filters
+    data-tags={JSON.stringify(tags)}
+    data-years={JSON.stringify(years)}
+>
+    <div
+        class="grid w-full max-w-[40.5rem] grid-cols-[minmax(0,28rem)_minmax(9.5rem,11.5rem)] gap-3"
+    >
+        <div>
+            <label class="sr-only" for="article-search">Rechercher un article</label>
+            <input
+                class="h-11 w-full rounded-xl border border-gray-100 bg-snow-50 px-3 text-sm font-light text-gray-900 transition-colors placeholder:text-gray-600 hover:border-gray-200 focus-visible:border-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                id="article-search"
+                name="search"
+                placeholder="Rechercher"
+                type="search"
+                autocomplete="off"
+                data-article-search
+            />
+        </div>
+        <div class="relative">
+            <label class="sr-only" for="article-year">Filtrer par date</label>
+            <select class={filterSelectClass} id="article-year" data-article-year>
+                <option value="all">Toutes les dates</option>
+                {years.map((year) => <option value={year}>{year}</option>)}
+            </select>
+            <span
+                class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-400"
+            >
+                <svg
+                    aria-hidden="true"
+                    class="size-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.8"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="m6 9 6 6 6-6"></path>
+                </svg>
+            </span>
+        </div>
+    </div>
+    <fieldset class="flex max-w-4xl min-w-0 flex-wrap gap-2" id={TAG_LIST_ID}>
+        <legend class="sr-only">Filtrer par tag</legend>
+        {
+            tags.map((tagName, index) => (
+                <button
+                    aria-pressed="false"
+                    class:list={[tagButtonBaseClass, "text-gray-900 before:bg-snow-50"]}
+                    type="button"
+                    data-article-tag={tagName}
+                    data-collapsible={index >= COLLAPSED_TAG_COUNT ? "" : undefined}
+                    hidden={index >= COLLAPSED_TAG_COUNT}
+                >
+                    <span
+                        class="article-tag-pill__icon inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
+                        set:html={getTagIconSvg(tagName)}
+                    />
+                    {tagName}
+                </button>
+            ))
+        }
+        {
+            hiddenTagCount > 0 && (
+                <button
+                    aria-controls={TAG_LIST_ID}
+                    aria-expanded="false"
+                    class:list={[tagButtonBaseClass, "text-gray-900 before:bg-snow-50"]}
+                    type="button"
+                    data-article-tag-toggle
+                    data-hidden-count={hiddenTagCount}
+                >
+                    +{hiddenTagCount}
+                    <span class="sr-only">{hiddenTagCount > 1 ? " tags" : " tag"}</span>
+                </button>
+            )
+        }
+    </fieldset>
+</form>
+
+<script>
+    import { filterArticles, readFiltersFromUrl, writeFiltersToUrl } from "@/lib/articleFilters";
+
+    const ACTIVE = ["text-snow-50", "before:bg-blue-500"];
+    const INACTIVE = ["text-gray-900", "before:bg-snow-50"];
+
+    const initArticleFilters = () => {
+        const form = document.querySelector<HTMLFormElement>("[data-article-filters]");
+        if (!form || form.dataset.ready === "true") return;
+        form.dataset.ready = "true";
+
+        const root = form.closest<HTMLElement>("[data-articles-page]");
+        const search = form.querySelector<HTMLInputElement>("[data-article-search]");
+        const year = form.querySelector<HTMLSelectElement>("[data-article-year]");
+        const tagButtons = [...form.querySelectorAll<HTMLButtonElement>("[data-article-tag]")];
+        const toggle = form.querySelector<HTMLButtonElement>("[data-article-tag-toggle]");
+        if (!root || !search || !year) return;
+
+        const tags: string[] = JSON.parse(form.dataset.tags ?? "[]");
+        const years: string[] = JSON.parse(form.dataset.years ?? "[]");
+        const state = { ...readFiltersFromUrl(window.location.search, tags, years), expanded: false };
+
+        const renderTags = () => {
+            for (const button of tagButtons) {
+                const isActive = button.dataset.articleTag === state.tag;
+                button.setAttribute("aria-pressed", String(isActive));
+                button.classList.remove(...(isActive ? INACTIVE : ACTIVE));
+                button.classList.add(...(isActive ? ACTIVE : INACTIVE));
+                const icon = button.querySelector(".article-tag-pill__icon");
+                icon?.classList.toggle("text-snow-50", isActive);
+                icon?.classList.toggle("text-blue-500", !isActive);
+                // Le tag actif reste visible même quand la liste est repliée.
+                if (Object.hasOwn(button.dataset, "collapsible")) {
+                    button.hidden = !(state.expanded || isActive);
+                }
+            }
+            if (!toggle) return;
+            const hidden = tagButtons.filter((button) => button.hidden).length;
+            toggle.hidden = !state.expanded && hidden === 0;
+            toggle.setAttribute("aria-expanded", String(state.expanded));
+            toggle.innerHTML = state.expanded
+                ? "Moins"
+                : `+${hidden}<span class="sr-only">${hidden > 1 ? " tags" : " tag"}</span>`;
+        };
+
+        const apply = () => {
+            renderTags();
+            const items = [...root.querySelectorAll<HTMLElement>("[data-article]")];
+            const visible = filterArticles(
+                items.map((item) => ({
+                    description: item.dataset.description ?? "",
+                    tags: (item.dataset.tags ?? "").split("|"),
+                    title: item.dataset.title ?? "",
+                    year: item.dataset.year ?? "",
+                })),
+                state
+            );
+            let visibleCount = 0;
+            items.forEach((item, index) => {
+                const isVisible = visible[index] ?? true;
+                item.hidden = !isVisible;
+                if (!isVisible) return;
+                item.style.setProperty("--article-index", String(visibleCount));
+                item.classList.remove("is-filtered-in");
+                void item.offsetWidth;
+                item.classList.add("is-filtered-in");
+                visibleCount += 1;
+            });
+            root.querySelector("[data-article-empty]")?.classList.toggle("hidden", visibleCount > 0);
+        };
+
+        const syncUrl = () => {
+            const next = writeFiltersToUrl(window.location.href, state);
+            const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+            if (next !== current) window.history.replaceState({}, "", next);
+        };
+
+        const syncFromUrl = () => {
+            Object.assign(state, readFiltersFromUrl(window.location.search, tags, years));
+            search.value = state.search;
+            year.value = state.year;
+            apply();
+        };
+
+        form.addEventListener("submit", (event) => event.preventDefault());
+        search.addEventListener("input", () => {
+            state.search = search.value;
+            apply();
+            syncUrl();
+        });
+        year.addEventListener("change", () => {
+            state.year = year.value;
+            apply();
+            syncUrl();
+        });
+        for (const button of tagButtons) {
+            button.addEventListener("click", () => {
+                const value = button.dataset.articleTag ?? "all";
+                state.tag = state.tag === value ? "all" : value;
+                apply();
+                syncUrl();
+            });
+        }
+        toggle?.addEventListener("click", () => {
+            state.expanded = !state.expanded;
+            renderTags();
+        });
+        window.addEventListener("popstate", syncFromUrl);
+        document.addEventListener(
+            "astro:before-swap",
+            () => window.removeEventListener("popstate", syncFromUrl),
+            { once: true }
+        );
+
+        syncFromUrl();
+    };
+
+    initArticleFilters();
+    document.addEventListener("astro:page-load", initArticleFilters);
+</script>
+
+<style is:global>
+    .article-tag-pill__icon {
+        transform-origin: 50% 55%;
+    }
+
+    @media (hover: hover) {
+        .article-tag-pill:hover .article-tag-pill__icon {
+            animation: article-tag-icon-jitter 620ms cubic-bezier(0.22, 1.16, 0.36, 1) both;
+        }
+    }
+
+    .article-tag-pill:focus-visible .article-tag-pill__icon {
+        animation: article-tag-icon-jitter 620ms cubic-bezier(0.22, 1.16, 0.36, 1) both;
+    }
+
+    @keyframes article-tag-icon-jitter {
+        0%,
+        100% {
+            transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+        }
+        16% {
+            transform: translate3d(0.5px, -0.5px, 0) rotate(-5deg) scale(1.04);
+        }
+        32% {
+            transform: translate3d(-0.5px, 0.5px, 0) rotate(4deg) scale(1.02);
+        }
+        48% {
+            transform: translate3d(0.35px, 0, 0) rotate(-3deg) scale(1.03);
+        }
+        68% {
+            transform: translate3d(-0.2px, -0.2px, 0) rotate(2deg) scale(1.01);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .article-tag-pill::before {
+            transition: none;
+        }
+
+        .article-tag-pill:hover .article-tag-pill__icon,
+        .article-tag-pill:focus-visible .article-tag-pill__icon {
+            animation: none;
+        }
+    }
+</style>

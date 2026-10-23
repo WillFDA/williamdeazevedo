@@ -1,6 +1,7 @@
 ---
 import FadeReveal from "@/components/animations/FadeReveal.astro";
-import ArticleFilters from "@/components/articles/ArticleFilters";
+import ArticleFilters from "@/components/articles/ArticleFilters.astro";
+import ArticleImage from "@/components/articles/ArticleImage.astro";
 import Layout from "@/layout/Layout.astro";
 import { formatArticleDate, getVisibleArticles } from "@/lib/articles";
 import { getTagIconSvg } from "@/lib/articleTagIcons";
@@ -65,7 +66,7 @@ const years = [
                 ) : (
                     <div>
                         <FadeReveal delay={0.3}>
-                            <ArticleFilters client:load tags={tags} years={years} />
+                            <ArticleFilters tags={tags} years={years} />
                         </FadeReveal>
                         <ul class="grid gap-4 md:grid-cols-2" data-article-list>
                             {articles.map((article, index) => (
@@ -84,12 +85,12 @@ const years = [
                                     >
                                         <span class="relative mb-5 block aspect-video w-full shrink-0 overflow-hidden rounded-lg bg-gray-200">
                                             {article.data.image ? (
-                                                <img
+                                                <ArticleImage
                                                     class="size-full object-cover"
                                                     src={article.data.image.src}
                                                     alt={article.data.image.alt}
-                                                    loading="lazy"
-                                                    decoding="async"
+                                                    sizes="(min-width: 768px) 50vw, 100vw"
+                                                    widths={[480, 800, 1200]}
                                                 />
                                             ) : (
                                                 <span class="block size-full bg-gray-200"></span>

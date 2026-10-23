@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import FadeRevealOnScroll from "@/components/animations/FadeRevealOnScroll.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
@@ -172,12 +173,14 @@ const breadcrumbJsonLd = {
                         <section id="apercu-du-projet" class="scroll-mt-28">
                             <h2 class="sr-only">Aperçu du projet</h2>
                             <figure class="relative overflow-hidden rounded-3xl shadow-[0_24px_70px_-54px_rgba(34,42,55,0.5)]">
-                                <img
+                                <Image
                                     src={project.media.poster}
                                     alt={`Aperçu du projet ${project.title}`}
                                     class="aspect-video w-full object-cover"
+                                    widths={[640, 1024, 1600]}
+                                    sizes="(min-width: 1024px) 46rem, 100vw"
+                                    loading="eager"
                                     fetchpriority="high"
-                                    decoding="async"
                                 />
                             </figure>
                         </section>
@@ -197,7 +200,7 @@ const breadcrumbJsonLd = {
                                     muted
                                     playsinline
                                     preload="metadata"
-                                    poster={project.media.poster}
+                                    poster={project.media.poster.src}
                                     aria-label={`Vidéo du projet ${project.title}`}
                                     class="aspect-video w-full object-cover"
                                     data-realisation-video
@@ -241,12 +244,13 @@ const breadcrumbJsonLd = {
                             {galleryItems.map((item, index) => (
                                 <FadeRevealOnScroll>
                                     <figure class="overflow-hidden rounded-3xl shadow-[0_20px_60px_-54px_rgba(34,42,55,0.42)]">
-                                        <img
+                                        <Image
                                             src={item.src}
                                             alt={item.alt}
                                             class="w-full object-cover"
+                                            widths={[640, 1024, 1600]}
+                                            sizes="(min-width: 1024px) 46rem, 100vw"
                                             loading={index === 0 ? "eager" : "lazy"}
-                                            decoding="async"
                                         />
                                     </figure>
                                 </FadeRevealOnScroll>

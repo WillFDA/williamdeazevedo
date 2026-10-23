@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { render } from "astro:content";
+import ArticleImage from "@/components/articles/ArticleImage.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
@@ -201,21 +202,22 @@ const faqJsonLd = faq?.length
             </header>
         </FadeReveal>
 
-        <FadeReveal delay={0.2}>
-            <div class="mx-auto mb-14 aspect-video w-full max-w-5xl overflow-hidden rounded-lg bg-gray-200">
-                {image ? (
-                    <img
-                        class="size-full object-cover"
-                        src={image.src}
-                        alt={image.alt}
-                        loading="eager"
-                        decoding="async"
-                    />
-                ) : (
-                    <span class="block size-full bg-gray-200"></span>
-                )}
-            </div>
-        </FadeReveal>
+        {/* Couverture hors FadeReveal : c'est l'élément LCP, elle doit être
+            peinte dès le premier rendu, sans fondu. */}
+        <div class="mx-auto mb-14 aspect-video w-full max-w-5xl overflow-hidden rounded-lg bg-gray-200">
+            {image ? (
+                <ArticleImage
+                    class="size-full object-cover"
+                    src={image.src}
+                    alt={image.alt}
+                    sizes="(min-width: 1024px) 1024px, 100vw"
+                    loading="eager"
+                    fetchpriority="high"
+                />
+            ) : (
+                <span class="block size-full bg-gray-200"></span>
+            )}
+        </div>
 
         <div class="article-body-shell mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(13rem,16rem)] lg:gap-12">
             <div class="hidden lg:block" aria-hidden="true"></div>

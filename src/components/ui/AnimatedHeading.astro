@@ -9,17 +9,32 @@ export type AnimatedHeadingPart = {
 type Props = Omit<HTMLAttributes<"h1">, "class"> & {
     as?: "h1" | "h2";
     class?: string;
+    /**
+     * false : les mots glissent sans partir de l'opacité 0. À utiliser pour le
+     * titre principal d'un hero, qui est souvent l'élément LCP : un texte
+     * invisible au premier rendu retarde la mesure LCP.
+     */
+    fade?: boolean;
     parts: readonly AnimatedHeadingPart[];
 };
 
-const { as = "h1", class: className, parts, ...attributes } = Astro.props as Props;
+const {
+    as = "h1",
+    class: className,
+    fade = true,
+    parts,
+    ...attributes
+} = Astro.props as Props;
 const Tag = as;
 
 const isMultiWordPill = (part: AnimatedHeadingPart) =>
     part.pill === true && /\s/.test(part.text.trim());
 ---
 
-<Tag {...attributes} class={className}>
+<Tag
+    {...attributes}
+    class:list={[className, !fade && "animated-heading--no-fade"]}
+>
     {
         parts.map((part, index) => (
             <Fragment>
@@ -54,6 +69,10 @@ const isMultiWordPill = (part: AnimatedHeadingPart) =>
             backwards;
         animation-delay: calc(var(--animated-heading-index, 0) * 48ms);
         display: inline-block;
+    }
+
+    .animated-heading--no-fade .animated-heading__word {
+        animation-name: animated-heading-word-slide;
     }
 
     .animated-heading__pill-word {
@@ -92,6 +111,16 @@ const isMultiWordPill = (part: AnimatedHeadingPart) =>
         to {
             filter: none;
             opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes animated-heading-word-slide {
+        from {
+            transform: translateY(0.32em);
+        }
+
+        to {
             transform: none;
         }
     }
