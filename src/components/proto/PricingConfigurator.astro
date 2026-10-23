@@ -691,6 +691,8 @@ const vitrine = formats[1];
     }
 
     .pc {
+        --pc-card-shadow:
+            0 0 18px rgb(31 38 52 / 0.05), 0 16px 40px -24px rgb(31 38 52 / 0.22);
         --w5: 370;
         --w4: 260;
         color: var(--color-gray-900);
@@ -750,8 +752,8 @@ const vitrine = formats[1];
 
     .pc-steps {
         background: var(--color-snow-50);
-        border: 1px solid var(--color-gray-200);
         border-radius: 36px;
+        box-shadow: var(--pc-card-shadow);
         display: flex;
         flex-direction: column;
         min-width: 0;
@@ -1348,8 +1350,8 @@ const vitrine = formats[1];
 
     .pc-summary {
         background: var(--color-snow-50);
-        border: 1px solid var(--color-gray-200);
         border-radius: 36px;
+        box-shadow: var(--pc-card-shadow);
         display: flex;
         flex-direction: column;
         overflow: hidden;
