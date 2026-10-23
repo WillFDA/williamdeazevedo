@@ -1,0 +1,29 @@
+---
+import GlobeIcon from "@/components/icons/nucleo/globe-outline.svg";
+import SparkleIcon from "@/components/icons/nucleo/sparkle-3-fill.svg";
+import WindowLayoutIcon from "@/components/icons/nucleo/window-layout-fill.svg";
+import WindowPaintbrushIcon from "@/components/icons/nucleo/window-paintbrush-fill.svg";
+import WindowPointerIcon from "@/components/icons/nucleo/window-pointer-fill.svg";
+import type { Project } from "@/data/projects";
+
+interface Props {
+    tag: Project["tags"][number];
+}
+
+const { tag } = Astro.props;
+
+const projectTagIcons = {
+    globe: GlobeIcon,
+    sparkle: SparkleIcon,
+    "window-layout": WindowLayoutIcon,
+    "window-paintbrush": WindowPaintbrushIcon,
+    "window-pointer": WindowPointerIcon,
+} as const;
+
+const Icon = projectTagIcons[tag.icon];
+---
+
+<span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-4 py-2 text-sm font-normal leading-none text-blue-500 shadow-[0_12px_30px_-24px_rgba(34,42,55,0.45)]">
+    <Icon class="size-4" aria-hidden="true" />
+    <span>{tag.label}</span>
+</span>
