@@ -8,6 +8,11 @@
 # dans Cloudflare (Workers & Pages > projet > Settings > Builds > Deploy Hooks),
 # puis enregistrer son URL dans le secret GitHub CLOUDFLARE_DEPLOY_HOOK_URL.
 # Tant que le secret est absent, le workflow s'arrête sans erreur.
+#
+# GitHub n'exécute les `schedule` que depuis la branche par défaut du dépôt
+# (aujourd'hui `develop`) : ce fichier doit aussi y être, ou la branche par
+# défaut passer à `2026`. Le déclenchement manuel marche depuis n'importe
+# quelle branche.
 name: Publication quotidienne
 
 on:
