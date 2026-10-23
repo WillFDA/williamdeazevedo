@@ -1,0 +1,17 @@
+---
+import { getTagIconSvg } from "@/lib/articleTagIcons";
+
+interface Props {
+    tag: string;
+}
+
+const { tag } = Astro.props;
+---
+
+<span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]">
+    <span
+        class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
+        set:html={getTagIconSvg(tag)}
+    />
+    {tag}
+</span>

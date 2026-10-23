@@ -1,9 +1,9 @@
 ---
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ArticleFilters from "@/components/articles/ArticleFilters";
+import ArticleTag from "@/components/articles/ArticleTag.astro";
 import Layout from "@/layout/Layout.astro";
 import { formatArticleDate, getVisibleArticles } from "@/lib/articles";
-import { getTagIconSvg } from "@/lib/articleTagIcons";
 
 const articles = await getVisibleArticles();
 const heroTitleParts = [
@@ -114,13 +114,7 @@ const years = [
                                             {article.data.tags.length > 0 && (
                                                 <div class="mt-5 flex flex-wrap gap-2">
                                                     {article.data.tags.map((tag) => (
-                                                        <span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]">
-                                                            <span
-                                                                class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
-                                                                set:html={getTagIconSvg(tag)}
-                                                            />
-                                                            {tag}
-                                                        </span>
+                                                        <ArticleTag tag={tag} />
                                                     ))}
                                                 </div>
                                             )}
