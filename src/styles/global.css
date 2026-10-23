@@ -102,6 +102,8 @@ body {
   --border: #d9dee6;
   --ring: #3e60d4;
   --radius: 0.625rem;
+  /* Soft lift shared by every pill and pill-like field (tags, search). */
+  --shadow-pill: 0 4px 12px -8px rgba(31, 38, 52, 0.26);
 }
 
 @theme inline {
