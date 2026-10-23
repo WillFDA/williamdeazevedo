@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import williamPortrait from "@/assets/williamdeazevedo.webp";
 import ArrowRight from "./icons/nucleo/arrow-right-fill.svg";
 import Accordion from "./ui/Accordion.astro";
 import WaveIcon from "./ui/WaveIcon.astro";
@@ -111,11 +113,11 @@ const faqItems = Array.from(items ?? getDefaultFaqItems());
 
 const accordionClasses = {
     content:
-        "px-5 pb-5 pr-14 text-base font-light leading-normal text-gray-600 sm:px-6 sm:pr-16",
+        "px-5 pb-5 pr-14 text-base font-light leading-snug text-gray-600 sm:px-6 sm:pr-16",
     icon: "text-gray-900",
-    item: "bg-gray-100 shadow-sm ring-1 ring-gray-200",
+    item: "bg-gray-100",
     summary:
-        "px-5 py-4 text-base font-normal leading-tight text-gray-900 sm:px-6",
+        "px-5 py-5 text-base font-medium leading-6 text-gray-900 sm:px-6",
 };
 ---
 
@@ -128,47 +130,82 @@ const accordionClasses = {
     ]}
     aria-labelledby={`${id}-title`}
 >
-    <div class="mx-auto flex max-w-4xl flex-col items-center text-center">
-        <h2 id={`${id}-title`} class="section-heading">{title}</h2>
-        {
-            description && (
-                <p class="section-subheading mt-5 max-w-2xl">
-                    {description}
-                </p>
-            )
-        }
-    </div>
-
-    <Accordion
-        class="mx-auto mt-12 max-w-4xl"
-        items={faqItems}
-        itemClass={accordionClasses.item}
-        summaryClass={accordionClasses.summary}
-        contentClass={accordionClasses.content}
-        iconClass={accordionClasses.icon}
-    />
-
-    {
-        showCta && (
-            <div class="mt-10 flex justify-center">
-                <button
-                    aria-controls="cal-drawer"
-                    aria-haspopup="dialog"
-                    class="faq-cta inline-flex min-h-14 items-center justify-center gap-5 rounded-xl bg-coffee-300 px-8 py-3 text-base font-normal text-snow-50 shadow-lg transition-transform hover:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
-                    data-cal-location={ctaLocation}
-                    data-cal-open
-                    type="button"
+    <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
+        {/* `contents` below lg lets the contact card drop under the questions on mobile. */}
+        <div class="contents lg:sticky lg:top-24 lg:flex lg:flex-col lg:gap-8 lg:self-start">
+            <div>
+                <h2
+                    id={`${id}-title`}
+                    class="section-heading text-left text-[clamp(2.35rem,3.9vw,3.45rem)]"
                 >
-                    <WaveText text={ctaLabel} trigger="parent" />
-                    <WaveIcon
-                        style="--wui-wave-icon-size: 1rem;"
-                        direction="right"
-                        trigger="parent"
-                    >
-                        <ArrowRight class="size-full" aria-hidden="true" />
-                    </WaveIcon>
-                </button>
+                    {title}
+                </h2>
+                {
+                    description && (
+                        <p class="section-subheading mx-0 mt-5 text-left">
+                            {description}
+                        </p>
+                    )
+                }
             </div>
-        )
-    }
+
+            {
+                showCta && (
+                    <div class="order-last rounded-3xl bg-gray-100 p-6 sm:p-8 lg:order-none">
+                        <Image
+                            class="size-12 rounded-xl object-cover"
+                            src={williamPortrait}
+                            alt="William De Azevedo"
+                            width={96}
+                            height={96}
+                        />
+                        <p class="mt-6 text-xl font-medium leading-tight text-gray-900">
+                            Vous ne trouvez pas votre réponse ?
+                        </p>
+                        <p class="mt-2 text-base font-light leading-normal text-gray-600">
+                            Expliquez-moi votre situation, je vous dis par
+                            où commencer.
+                        </p>
+                        <button
+                            aria-controls="cal-drawer"
+                            aria-haspopup="dialog"
+                            class="faq-cta mt-6 inline-flex min-h-14 items-center justify-center gap-5 rounded-xl bg-coffee-300 px-8 py-3 text-base font-normal text-snow-50 transition-transform hover:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                            data-cal-location={ctaLocation}
+                            data-cal-open
+                            type="button"
+                        >
+                            <WaveText text={ctaLabel} trigger="parent" />
+                            <WaveIcon
+                                style="--wui-wave-icon-size: 1rem;"
+                                direction="right"
+                                trigger="parent"
+                            >
+                                <ArrowRight
+                                    class="size-full"
+                                    aria-hidden="true"
+                                />
+                            </WaveIcon>
+                        </button>
+                        <p class="mt-5 text-sm font-light leading-normal text-gray-500">
+                            Ou écrivez-moi à{" "}
+                            <a
+                                class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                href="mailto:william.deazevedopro@gmail.com"
+                            >
+                                william.deazevedopro@gmail.com
+                            </a>
+                        </p>
+                    </div>
+                )
+            }
+        </div>
+
+        <Accordion
+            items={faqItems}
+            itemClass={accordionClasses.item}
+            summaryClass={accordionClasses.summary}
+            contentClass={accordionClasses.content}
+            iconClass={accordionClasses.icon}
+        />
+    </div>
 </section>
