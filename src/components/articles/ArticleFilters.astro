@@ -156,7 +156,7 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
             const visible = filterArticles(
                 items.map((item) => ({
                     description: item.dataset.description ?? "",
-                    tags: (item.dataset.tags ?? "").split("|"),
+                    tags: (item.dataset.tags ?? "").split("|").filter(Boolean),
                     title: item.dataset.title ?? "",
                     year: item.dataset.year ?? "",
                 })),
@@ -179,7 +179,8 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
         const syncUrl = () => {
             const next = writeFiltersToUrl(window.location.href, state);
             const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-            if (next !== current) window.history.replaceState({}, "", next);
+            // Le ClientRouter range son index et le scroll dans history.state : on le garde.
+            if (next !== current) window.history.replaceState(window.history.state, "", next);
         };
 
         const syncFromUrl = () => {

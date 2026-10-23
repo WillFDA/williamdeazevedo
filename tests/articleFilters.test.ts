@@ -55,3 +55,33 @@ test("unknown url values fall back to all, and the url round-trips", () => {
     })
   ).toBe("/articles/?x=1&search=seo&tag=SEO#a");
 });
+
+test("an article without tags never matches a tag filter", () => {
+  const untagged = [
+    { description: "", tags: [], title: "Sans tag", year: "2026" },
+  ];
+  expect(
+    filterArticles(untagged, { search: "", tag: "SEO", year: "all" })
+  ).toEqual([false]);
+  expect(
+    filterArticles(untagged, { search: "sans", tag: "all", year: "all" })
+  ).toEqual([true]);
+});
+
+test("back to « all » and an empty search removes the parameters", () => {
+  expect(
+    writeFiltersToUrl(
+      "https://williamdeazevedo.fr/articles/?search=seo&tag=SEO&year=2026",
+      { search: "  ", tag: "all", year: "all" }
+    )
+  ).toBe("/articles/");
+});
+
+test("a tag in the url is matched without case or accents", () => {
+  expect(readFiltersFromUrl("?tag=seo", ["SEO", "Référencement"], []).tag).toBe(
+    "SEO"
+  );
+  expect(
+    readFiltersFromUrl("?tag=referencement", ["SEO", "Référencement"], []).tag
+  ).toBe("Référencement");
+});

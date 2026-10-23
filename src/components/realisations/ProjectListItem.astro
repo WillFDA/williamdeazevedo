@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
 import GlobeIcon from "@/components/icons/nucleo/globe-outline.svg";
 import SparkleIcon from "@/components/icons/nucleo/sparkle-3-fill.svg";
@@ -43,9 +43,10 @@ const projectTagIcons = {
                 class="group block overflow-hidden rounded-3xl bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
                 href={`/realisations/${project.id}/`}
             >
-                <Image
+                <Picture
                     src={project.media.poster}
                     alt={`Aperçu du projet ${project.title}`}
+                    formats={["avif", "webp"]}
                     class="aspect-video w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                     widths={[640, 1024, 1600]}
                     sizes="(min-width: 1280px) 80rem, 100vw"

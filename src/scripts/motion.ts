@@ -114,7 +114,13 @@ export const playOnceInView = (
 const buildTimeline = (
   steps: readonly MotionStep[],
   options: Parameters<typeof createTimeline>[0],
-  defaultEase: string
+  defaultEase: string,
+  /**
+   * Masque (visibility: hidden) les éléments qui partent d'une opacité 0
+   * jusqu'au début de leur étape : un lien encore invisible ne reçoit ni le
+   * focus clavier ni la lecture d'écran (équivalent de l'autoAlpha de GSAP).
+   */
+  hideUntilBegin = false
 ): { elements: HTMLElement[]; timeline: Timeline } => {
   const timeline = createTimeline(options);
   const elements: HTMLElement[] = [];
@@ -123,11 +129,18 @@ const buildTimeline = (
     const targets = toElements(step.targets);
     if (targets.length === 0) continue;
     elements.push(...targets);
+    const hide = hideUntilBegin && step.from.opacity === 0;
     utils.set(targets, fromValues(step.from));
+    if (hide) for (const target of targets) target.style.visibility = "hidden";
     const params: AnimationParams = {
       duration: step.duration * 1000,
       ease: step.ease ?? defaultEase,
     };
+    if (hide) {
+      params.onBegin = () => {
+        for (const target of targets) target.style.removeProperty("visibility");
+      };
+    }
     const to = toValues(step.from);
     for (const [key, value] of Object.entries(step.from)) {
       params[key] = [value, to[key]] as [number | string, number | string];
@@ -169,7 +182,8 @@ export const createScrollReveal = (
         callbacks.onComplete?.();
       },
     },
-    "out(3)"
+    "out(3)",
+    true
   );
   elements = built;
   callbacks.extend?.(timeline);

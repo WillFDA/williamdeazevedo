@@ -611,28 +611,31 @@ const {
         color: rgb(100 116 139);
     }
 
+    /* Propriété « rotate » individuelle : elle se combine avec le transform
+       inline posé par anime.js pendant l'apparition (un transform: rotate()
+       serait écrasé et les cartes apparaîtraient droites). */
     .messy-card--performance {
         left: 5%;
         top: 18%;
-        transform: rotate(-5deg);
+        rotate: -5deg;
     }
 
     .messy-card--accessibility {
         right: 3%;
         top: 36%;
-        transform: rotate(4deg);
+        rotate: 4deg;
     }
 
     .messy-card--text {
         left: 8%;
         top: 55%;
-        transform: rotate(-2deg);
+        rotate: -2deg;
     }
 
     .messy-card--ai {
         right: 7%;
         top: 76%;
-        transform: rotate(5deg);
+        rotate: 5deg;
     }
 
     .clear-pill {

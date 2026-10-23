@@ -19,8 +19,12 @@ export type FilterableArticle = {
 export const normalize = (value: string) =>
   value.toLowerCase().normalize("NFD").replaceAll(COMBINING_MARKS, "");
 
-const getAllowedValue = (value: string | null, allowed: string[]) =>
-  value && allowed.includes(value) ? value : ALL_VALUE;
+/** Valeur canonique de la liste, comparée sans casse ni accents. */
+const getAllowedValue = (value: string | null, allowed: string[]) => {
+  if (!value) return ALL_VALUE;
+  const wanted = normalize(value);
+  return allowed.find((item) => normalize(item) === wanted) ?? ALL_VALUE;
+};
 
 export const readFiltersFromUrl = (
   search: string,
@@ -56,7 +60,7 @@ export const filterArticles = (
   const selectedYear = state.year === ALL_VALUE ? "" : state.year;
 
   return articles.map((article) => {
-    const itemTags = article.tags.map(normalize);
+    const itemTags = article.tags.filter(Boolean).map(normalize);
     const matchesQuery =
       query.length === 0 ||
       normalize(article.title).includes(query) ||
