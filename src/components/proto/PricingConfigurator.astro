@@ -1,0 +1,921 @@
+---
+import { Image } from "astro:assets";
+import CapabilityIcon from "@/components/ui/CapabilityIcon.astro";
+import WaveIcon from "@/components/ui/WaveIcon.astro";
+import WaveText from "@/components/ui/WaveText.astro";
+import AnimationRepeat from "@/components/icons/nucleo/animation-repeat-fill.svg";
+import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
+import BadgeDollar from "@/components/icons/nucleo/badge-dollar-fill.svg";
+import Check from "@/components/icons/nucleo/check-2-outline.svg";
+import Msgs from "@/components/icons/nucleo/msgs-fill.svg";
+import ViewAll from "@/components/icons/nucleo/view-all-fill.svg";
+import Xmark from "@/components/icons/nucleo/xmark-fill.svg";
+import quentinPhoto from "@/assets/temoignages/quentin-le-fellic.webp";
+import { temoignages } from "@/data/temoignage";
+import { iconToneClasses } from "@/lib/iconTones";
+
+const fr = (n: number) => new Intl.NumberFormat("fr-FR").format(n);
+
+const formats = [
+    {
+        id: "landing",
+        name: "Landing page",
+        icon: "conversion",
+        tone: "blue",
+        text: "Une page centrée sur une offre, une campagne ou une prise de rendez-vous.",
+        base: 1200,
+        baseProvisional: true,
+        included: 1,
+        pages: "fixed",
+        sub: "1 page",
+        subProvisional: false,
+    },
+    {
+        id: "vitrine",
+        name: "Site vitrine",
+        icon: "ux",
+        tone: "violet",
+        text: "Plusieurs pages pour présenter vos services, vos preuves et faciliter le contact.",
+        base: 2000,
+        baseProvisional: false,
+        included: 5,
+        pages: "extra",
+        sub: "5 pages incluses",
+        subProvisional: true,
+    },
+    {
+        id: "refonte",
+        name: "Refonte",
+        icon: "refonte",
+        tone: "cyan",
+        text: "On reprend l'existant : structure, contenus, design, performance et redirections.",
+        base: 2500,
+        baseProvisional: true,
+        included: 5,
+        pages: "extra",
+        sub: "5 pages incluses",
+        subProvisional: true,
+    },
+    {
+        id: "interface",
+        name: "Interface produit",
+        icon: "cms",
+        tone: "indigo",
+        text: "SaaS, dashboard, espace client ou outil métier.",
+        base: null,
+        baseProvisional: false,
+        included: 0,
+        pages: "none",
+        sub: "Cadrage dès 900\u00a0€\u00a0HT",
+        subProvisional: false,
+    },
+] as const;
+
+const options = [
+    {
+        id: "animations",
+        title: "Animations",
+        text: "Transitions, apparitions au scroll et micro-interactions soignées.",
+        price: 500,
+    },
+    {
+        id: "form",
+        title: "Formulaire de contact personnalisé",
+        text: "Champs sur mesure, envoi par e-mail et anti-spam.",
+        price: 500,
+    },
+    {
+        id: "cms",
+        title: "CMS / contenus modifiables",
+        text: "Vous publiez textes, projets et articles sans toucher au code.",
+        price: 1000,
+    },
+    {
+        id: "ads",
+        title: "Google Ads",
+        text: "Pages et suivi de conversion prêts pour vos campagnes.",
+        price: null,
+    },
+] as const;
+
+const included = [
+    "Cadrage du besoin et des objectifs",
+    "Structure des pages et hiérarchie des contenus",
+    "Design responsive",
+    "Développement front-end",
+    "SEO technique initial",
+    "Performance et accessibilité de base",
+    "Formulaire ou action de contact",
+    "Mise en ligne et vérifications",
+];
+
+const quentin = temoignages.find((t) => t.id === "quentin-le-fellic")!;
+---
+
+<section
+    id="tarifs"
+    class="mx-auto w-full max-w-7xl px-4 py-12 sm:px-8 md:py-16"
+    aria-labelledby="pc-title"
+    data-pc
+>
+    <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-12">
+        <h2
+            id="pc-title"
+            class="section-heading max-w-2xl text-left text-[clamp(2.35rem,3.9vw,3.45rem)] text-balance"
+        >
+            Choisissez votre projet. Voyez ce qu'il coûte.
+        </h2>
+        <p class="section-subheading mx-0 max-w-sm text-left md:pb-1.5">
+            Prix hors taxes, indicatifs. Le devis final confirme le périmètre
+            après un premier échange.
+        </p>
+    </div>
+
+    <p class="mt-6 flex items-center gap-2 text-[13px] text-gray-500">
+        <span class="pc-prov">provisoire</span>
+        Prototype : montant inventé, à valider avant mise en ligne.
+    </p>
+
+    <div
+        class="mt-6 grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_21rem] xl:grid-cols-[minmax(0,1fr)_22.5rem]"
+    >
+        <div
+            class="rounded-4xl bg-snow-50 px-4 py-1 inset-ring inset-ring-gray-200 sm:px-8 xl:px-10"
+            data-pc-steps
+        >
+            <div class="pc-step relative py-7 sm:py-8">
+                <div class="flex items-start gap-4">
+                    <span class="pc-num">01</span>
+                    <div class="min-w-0">
+                        <h3 class="text-xl font-medium leading-7 tracking-tight text-gray-900 sm:text-2xl">
+                            Votre format
+                        </h3>
+                        <p class="mt-1 max-w-lg text-[15px] font-light leading-normal text-gray-600">
+                            Le point de départ du budget. Les pages et les
+                            options s'ajoutent ensuite.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6 sm:pl-12">
+                    <div
+                        class="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4"
+                        role="radiogroup"
+                        aria-label="Format du projet"
+                    >
+                        {
+                            formats.map((f) => (
+                                <label class="pc-tile relative grid cursor-pointer rounded-3xl bg-snow-50 p-[18px] inset-ring inset-ring-gray-200 transition-[box-shadow,background-color] duration-250 hover:bg-gray-50 has-checked:bg-blue-50/50 has-checked:inset-ring-2 has-checked:inset-ring-blue-500 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-500">
+                                    <input
+                                        class="peer sr-only"
+                                        type="radio"
+                                        name="pc-format"
+                                        value={f.id}
+                                        checked={f.id === "vitrine"}
+                                        data-name={f.name}
+                                        data-base={f.base ?? ""}
+                                        data-included={f.included}
+                                        data-pages={f.pages}
+                                        data-sub={f.sub}
+                                    />
+                                    <span
+                                        class:list={[
+                                            "[grid-area:icon] inline-flex size-9 items-center justify-center rounded-lg text-snow-50",
+                                            iconToneClasses[f.tone],
+                                        ]}
+                                        aria-hidden="true"
+                                    >
+                                        <CapabilityIcon icon={f.icon} class="size-5" />
+                                    </span>
+                                    <span class="pc-radio [grid-area:radio]" aria-hidden="true" />
+                                    <span class="[grid-area:name] text-base font-medium leading-tight text-gray-900 sm:mt-4">
+                                        {f.name}
+                                    </span>
+                                    <span class="[grid-area:price] flex items-baseline gap-1 whitespace-nowrap text-gray-900 sm:mt-2.5">
+                                        {f.base === null ? (
+                                            <span class="text-[1.375rem] font-medium leading-8 tracking-[-0.03em] sm:text-[1.625rem] sm:leading-9">
+                                                Sur devis
+                                            </span>
+                                        ) : (
+                                            <>
+                                                <span class="text-[13px] text-gray-500">dès</span>
+                                                <span class="text-[1.375rem] font-medium leading-8 tracking-[-0.03em] tabular-nums sm:text-[1.625rem] sm:leading-9">
+                                                    {fr(f.base)}
+                                                </span>
+                                                <span class="text-[13px] text-gray-500">€ HT</span>
+                                            </>
+                                        )}
+                                    </span>
+                                    <span class="[grid-area:sub] mt-1 flex flex-wrap content-start items-center gap-x-1.5 gap-y-1 text-[13px] leading-5 text-gray-500 sm:mt-0">
+                                        {f.baseProvisional && <span class="pc-prov">provisoire</span>}
+                                        <span>{f.sub}</span>
+                                        {f.subProvisional && <span class="pc-prov">provisoire</span>}
+                                    </span>
+                                    <span class="[grid-area:desc] mt-3 border-t border-gray-100 pt-3 text-[13px] font-light leading-[1.45] text-gray-600 sm:mt-4 sm:pt-3.5">
+                                        {f.text}
+                                    </span>
+                                </label>
+                            ))
+                        }
+                    </div>
+
+                    <details class="pc-included group mt-3 rounded-2xl bg-snow-50 inset-ring inset-ring-gray-200">
+                        <summary class="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-[18px] py-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 [&::-webkit-details-marker]:hidden">
+                            <span class="text-[15px] font-medium text-gray-900">
+                                Inclus dans chaque site
+                            </span>
+                            <span class="text-[13px] text-gray-500">8 éléments</span>
+                            <span class="ml-auto inline-flex size-7 items-center justify-center rounded-lg bg-gray-100 text-gray-900 transition-colors group-hover:bg-gray-200/70">
+                                <Xmark
+                                    class="size-3 rotate-45 transition-transform duration-300 group-open:rotate-0"
+                                    aria-hidden="true"
+                                />
+                            </span>
+                        </summary>
+                        <ul class="grid gap-x-4 gap-y-3 px-[18px] pt-1 pb-[18px] sm:grid-cols-2 xl:grid-cols-3">
+                            {
+                                included.map((item) => (
+                                    <li class="flex items-start gap-2 text-[13px] leading-5 text-gray-700">
+                                        <Check class="mt-0.5 size-4 shrink-0 text-blue-500" aria-hidden="true" />
+                                        {item}
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </details>
+
+                    <div
+                        class="mt-3 flex items-center justify-between gap-4 rounded-2xl px-[18px] py-4 inset-ring inset-ring-gray-200 transition-opacity data-disabled:opacity-55"
+                        data-pc-counter
+                    >
+                        <div class="min-w-0">
+                            <p class="text-[15px] font-medium leading-snug text-gray-900">
+                                Nombre de pages
+                            </p>
+                            <p class="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] leading-5 text-gray-500">
+                                <span data-pc-counter-text>
+                                    5 pages incluses, puis +200 € HT par page.
+                                </span>
+                                <span class="pc-prov" data-pc-counter-prov>provisoire</span>
+                            </p>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-0.5 rounded-xl bg-gray-100 p-[3px]">
+                            <button
+                                class="pc-step-btn"
+                                type="button"
+                                aria-label="Retirer une page"
+                                data-pc-minus
+                            >
+                                <span class="h-[1.5px] w-3 rounded-full bg-current" />
+                            </button>
+                            <output
+                                class="w-8 text-center text-[15px] font-medium tabular-nums text-gray-900"
+                                aria-live="polite"
+                                data-pc-pages
+                            >
+                                5
+                            </output>
+                            <button
+                                class="pc-step-btn"
+                                type="button"
+                                aria-label="Ajouter une page"
+                                data-pc-plus
+                            >
+                                <span class="relative h-[1.5px] w-3 rounded-full bg-current after:absolute after:inset-0 after:rotate-90 after:rounded-full after:bg-current" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pc-step group/opts relative pt-3 pb-7 sm:pb-9">
+                <div class="flex items-start gap-4">
+                    <span class="pc-num">02</span>
+                    <div class="min-w-0">
+                        <h3 class="flex flex-wrap items-center gap-2.5 text-xl font-medium leading-7 tracking-tight text-gray-900 sm:text-2xl">
+                            Vos options
+                            <span class="rounded-full px-2.5 py-0.5 text-xs font-normal leading-5 tracking-normal text-gray-500 inset-ring inset-ring-gray-200">
+                                Optionnel
+                            </span>
+                        </h3>
+                        <p class="mt-1 max-w-lg text-[15px] font-light leading-normal text-gray-600">
+                            <span class="group-has-[fieldset:disabled]/opts:hidden">
+                                À ajouter maintenant ou plus tard, sans refaire
+                                le site.
+                            </span>
+                            <span class="hidden group-has-[fieldset:disabled]/opts:inline">
+                                Pour une interface produit, tout se chiffre au
+                                cadrage.
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <fieldset
+                    class="mt-6 grid gap-3 transition-opacity disabled:opacity-50 sm:pl-12"
+                    data-pc-options
+                >
+                    <legend class="sr-only">Options</legend>
+                    {
+                        options.map((o) => (
+                            <label class="grid cursor-pointer grid-cols-[auto_auto_minmax(0,1fr)] items-center gap-x-3 gap-y-2 rounded-3xl bg-snow-50 px-4 py-4 inset-ring inset-ring-gray-200 transition-[box-shadow,background-color] duration-250 hover:bg-gray-50 has-checked:bg-blue-50/50 has-checked:inset-ring-2 has-checked:inset-ring-blue-500 has-disabled:cursor-not-allowed has-disabled:hover:bg-snow-50 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-500 sm:grid-cols-[auto_auto_minmax(0,1fr)_auto] sm:gap-x-5 sm:px-6 sm:py-5">
+                                <input
+                                    class="peer sr-only"
+                                    type="checkbox"
+                                    name="pc-option"
+                                    value={o.id}
+                                    data-title={o.title}
+                                    data-price={o.price ?? ""}
+                                />
+                                <span class="pc-check" aria-hidden="true">
+                                    <Check class="size-3" />
+                                </span>
+                                <span
+                                    class="inline-flex size-10 items-center justify-center rounded-xl bg-gray-100 text-gray-700"
+                                    aria-hidden="true"
+                                >
+                                    {o.id === "animations" && <AnimationRepeat class="size-5" />}
+                                    {o.id === "form" && <Msgs class="size-5" />}
+                                    {o.id === "cms" && <ViewAll class="size-5" />}
+                                    {o.id === "ads" && <BadgeDollar class="size-5" />}
+                                </span>
+                                <span class="min-w-0">
+                                    <span class="block text-base font-medium leading-snug text-gray-900">
+                                        {o.title}
+                                    </span>
+                                    <span class="mt-0.5 block text-sm font-light leading-snug text-gray-500">
+                                        {o.text}
+                                    </span>
+                                </span>
+                                <span class="col-start-3 whitespace-nowrap text-gray-900 sm:col-start-4 sm:row-start-1 sm:text-right">
+                                    {o.price === null ? (
+                                        <span class="text-xl font-medium tracking-tight sm:text-2xl">Sur devis</span>
+                                    ) : (
+                                        <>
+                                            <span class="text-xl font-medium tracking-tight tabular-nums sm:text-2xl">
+                                                +{fr(o.price)}
+                                            </span>
+                                            <span class="text-sm text-gray-500"> € HT</span>
+                                        </>
+                                    )}
+                                </span>
+                            </label>
+                        ))
+                    }
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4 lg:sticky lg:top-24">
+            <aside
+                class="rounded-4xl bg-snow-50 p-6 inset-ring inset-ring-gray-200 sm:p-8"
+                aria-label="Récapitulatif"
+                data-pc-summary
+            >
+                <p class="text-xl font-medium leading-tight tracking-tight text-gray-900">
+                    Votre projet
+                </p>
+                <p class="mt-1.5 text-sm font-light text-gray-500">
+                    Tout ce que vous avez choisi, en un devis.
+                </p>
+
+                <dl class="mt-6">
+                    <div class="pc-line" data-pc-line-format>
+                        <dt>
+                            <span data-pc-format-name>Site vitrine</span>
+                            <small class="flex flex-wrap items-center gap-1.5">
+                                <span data-pc-format-sub>5 pages incluses</span>
+                                <span class="pc-prov" data-pc-format-prov hidden>provisoire</span>
+                            </small>
+                        </dt>
+                        <dd data-pc-format-price>2 000 €</dd>
+                    </div>
+                    <div class="pc-line" data-pc-line-pages hidden>
+                        <dt>
+                            Pages supplémentaires
+                            <small class="flex flex-wrap items-center gap-1.5">
+                                <span data-pc-pages-sub>2 × 200 € HT</span>
+                                <span class="pc-prov">provisoire</span>
+                            </small>
+                        </dt>
+                        <dd data-pc-pages-price>400 €</dd>
+                    </div>
+                    {
+                        options.map((o) => (
+                            <div class="pc-line" data-pc-line-option={o.id} hidden>
+                                <dt>
+                                    {o.title}
+                                    <small>Option</small>
+                                </dt>
+                                <dd>{o.price === null ? "Sur devis" : `${fr(o.price)} €`}</dd>
+                            </div>
+                        ))
+                    }
+                    <div class="pc-line" data-pc-line-none>
+                        <dt>
+                            Options
+                            <small>Optionnel</small>
+                        </dt>
+                        <dd class="text-gray-400!">—</dd>
+                    </div>
+                </dl>
+
+                <div class="flex items-baseline justify-between gap-4 border-t border-gray-100 pt-5">
+                    <span class="text-[15px] text-gray-700">Total</span>
+                    <span class="flex items-baseline gap-1.5 whitespace-nowrap">
+                        <strong
+                            class="text-[2.75rem] font-medium leading-[1.15] tracking-[-0.03em] text-gray-900 tabular-nums"
+                            data-pc-total
+                        >
+                            2 000
+                        </strong>
+                        <small class="text-[15px] font-medium text-gray-500" data-pc-unit>€ HT</small>
+                    </span>
+                </div>
+                <p class="mt-1 text-right text-[13px] text-gray-500" data-pc-total-hint hidden></p>
+                <p class="mt-3 text-[13px] leading-relaxed text-gray-500" data-pc-note>
+                    Livré en 10 jours à 5 semaines selon périmètre. Prix
+                    indicatif hors taxes.
+                </p>
+
+                <button
+                    aria-controls="cal-drawer"
+                    aria-haspopup="dialog"
+                    class="pc-cta mt-5 flex min-h-14 w-full items-center justify-center gap-4 rounded-xl px-6 py-3 text-base font-normal"
+                    data-cal-location="pricing-configurator"
+                    data-cal-open
+                    type="button"
+                >
+                    <WaveText text="Parlons de votre projet" trigger="parent" />
+                    <WaveIcon style="--wui-wave-icon-size: 1rem;" direction="right" trigger="parent">
+                        <ArrowRight class="size-full" aria-hidden="true" />
+                    </WaveIcon>
+                </button>
+
+                <figure class="mt-6 flex gap-3 rounded-2xl bg-gray-100 p-4">
+                    <Image
+                        src={quentinPhoto}
+                        alt={quentin.imageAlt ?? ""}
+                        width={80}
+                        height={80}
+                        class="size-10 shrink-0 rounded-full object-cover"
+                    />
+                    <div class="min-w-0">
+                        <blockquote class="text-[13px] leading-[1.5] text-gray-700">
+                            « {quentin.excerpt} »
+                        </blockquote>
+                        <figcaption class="mt-2 text-xs font-medium text-gray-900">
+                            {quentin.name}
+                        </figcaption>
+                    </div>
+                </figure>
+            </aside>
+
+            <a
+                class="group relative mx-auto table text-sm font-medium text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                href="#faq"
+            >
+                Voir ce qui fait varier un devis
+                <span
+                    class="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-gray-900 transition-transform duration-300 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
+                    aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+
+    <div
+        class="pc-bar fixed inset-x-3 bottom-3 z-40 flex items-center justify-between gap-3 rounded-2xl bg-snow-50/95 p-2 pl-4 inset-ring inset-ring-gray-200 backdrop-blur-md lg:hidden"
+        data-pc-bar
+        aria-hidden="true"
+    >
+        <span class="min-w-0">
+            <span class="block text-xs text-gray-500">Total estimé</span>
+            <span class="flex items-baseline gap-1 whitespace-nowrap">
+                <strong class="text-xl font-medium tracking-tight text-gray-900 tabular-nums" data-pc-bar-total>2 000</strong>
+                <small class="text-xs font-medium text-gray-500" data-pc-bar-unit>€ HT</small>
+            </span>
+        </span>
+        <button
+            class="pc-cta flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-xl px-5 text-[15px] font-normal"
+            data-cal-location="pricing-configurator-bar"
+            data-cal-open
+            aria-controls="cal-drawer"
+            aria-haspopup="dialog"
+            tabindex="-1"
+            type="button"
+        >
+            <WaveText text="Parlons-en" trigger="parent" />
+            <WaveIcon style="--wui-wave-icon-size: 0.875rem;" direction="right" trigger="parent">
+                <ArrowRight class="size-full" aria-hidden="true" />
+            </WaveIcon>
+        </button>
+    </div>
+</section>
+
+<script>
+    import { animate, utils } from "animejs";
+
+    const fr = new Intl.NumberFormat("fr-FR");
+    const EXTRA_PAGE = 200;
+    const MAX_PAGES = 30;
+
+    const init = () => {
+        const root = document.querySelector<HTMLElement>("[data-pc]");
+        if (!root || root.dataset.ready) return;
+        root.dataset.ready = "true";
+
+        const $ = <T extends Element = HTMLElement>(sel: string) =>
+            root.querySelector<T>(sel)!;
+        const formats = [
+            ...root.querySelectorAll<HTMLInputElement>('input[name="pc-format"]'),
+        ];
+        const opts = [
+            ...root.querySelectorAll<HTMLInputElement>('input[name="pc-option"]'),
+        ];
+        const optionsSet = $<HTMLFieldSetElement>("[data-pc-options]");
+        const counter = $("[data-pc-counter]");
+        const minus = $<HTMLButtonElement>("[data-pc-minus]");
+        const plus = $<HTMLButtonElement>("[data-pc-plus]");
+        const pagesOut = $("[data-pc-pages]");
+        const totals = [$("[data-pc-total]"), $("[data-pc-bar-total]")];
+        const units = [$("[data-pc-unit]"), $("[data-pc-bar-unit]")];
+        const hint = $("[data-pc-total-hint]");
+        const note = $("[data-pc-note]");
+
+        let pages = 5;
+        const shown = { value: 2000 };
+        let anim: ReturnType<typeof animate> | undefined;
+        const reduce = () =>
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const paint = (v: number) =>
+            totals.forEach((t) => (t.textContent = fr.format(Math.round(v))));
+
+        const update = () => {
+            const f = formats.find((i) => i.checked)!;
+            const d = f.dataset;
+            const base = d.base ? Number(d.base) : null;
+            const includedPages = Number(d.included);
+            const mode = d.pages;
+
+            pages = Math.max(pages, includedPages || 1);
+            const extra = mode === "extra" ? pages - includedPages : 0;
+            counter.toggleAttribute("data-disabled", mode !== "extra");
+            minus.disabled = mode !== "extra" || pages <= includedPages;
+            plus.disabled = mode !== "extra" || pages >= MAX_PAGES;
+            pagesOut.textContent =
+                mode === "fixed" ? "1" : mode === "none" ? "—" : String(pages);
+            $("[data-pc-counter-text]").textContent =
+                mode === "extra"
+                    ? `${d.name} : ${includedPages} pages incluses, puis +${EXTRA_PAGE} € HT par page.`
+                    : mode === "fixed"
+                      ? "Une landing page tient sur une seule page."
+                      : "Le nombre d'écrans se définit pendant le cadrage.";
+            $("[data-pc-counter-prov]").hidden = mode !== "extra";
+
+            optionsSet.disabled = base === null;
+            const active = base === null ? [] : opts.filter((o) => o.checked);
+
+            $("[data-pc-format-name]").textContent = d.name!;
+            $("[data-pc-format-sub]").textContent = d.sub!;
+            $("[data-pc-format-prov]").hidden = base === null;
+            $("[data-pc-format-price]").textContent =
+                base === null ? "Sur devis" : `${fr.format(base)} €`;
+            $("[data-pc-line-pages]").hidden = extra <= 0;
+            $("[data-pc-pages-sub]").textContent = `${extra} × ${EXTRA_PAGE} € HT`;
+            $("[data-pc-pages-price]").textContent = `${fr.format(extra * EXTRA_PAGE)} €`;
+            opts.forEach((o) => {
+                $(`[data-pc-line-option="${o.value}"]`).hidden = !active.includes(o);
+            });
+            $("[data-pc-line-none]").hidden = active.length > 0;
+
+            const quoteOption = active.find((o) => !o.dataset.price);
+            const sum =
+                (base ?? 0) +
+                extra * EXTRA_PAGE +
+                active.reduce((s, o) => s + (Number(o.dataset.price) || 0), 0);
+            const isQuote = base === null || !!quoteOption;
+
+            hint.hidden = !isQuote;
+            hint.textContent =
+                base === null
+                    ? "Cadrage dès 900 € HT"
+                    : `${fr.format(sum)} € HT + Google Ads sur devis`;
+            note.textContent =
+                base === null
+                    ? "Planning défini après lecture du périmètre. Prix hors taxes."
+                    : "Livré en 10 jours à 5 semaines selon périmètre. Prix indicatif hors taxes.";
+
+            anim?.cancel();
+            units.forEach((u) => (u.hidden = isQuote));
+            if (isQuote) {
+                totals.forEach((t) => (t.textContent = "Sur devis"));
+                shown.value = sum;
+                return;
+            }
+            if (reduce()) {
+                shown.value = sum;
+                paint(sum);
+                return;
+            }
+            anim = animate(shown, {
+                value: sum,
+                duration: 720,
+                ease: "out(4)",
+                modifier: utils.round(0),
+                onRender: () => paint(shown.value),
+            });
+        };
+
+        root.addEventListener("change", update);
+        minus.addEventListener("click", () => {
+            pages -= 1;
+            update();
+        });
+        plus.addEventListener("click", () => {
+            pages += 1;
+            update();
+        });
+        update();
+
+        const bar = $("[data-pc-bar]");
+        const seen = new Map<Element, boolean>();
+        const steps = $("[data-pc-steps]");
+        const summary = $("[data-pc-summary]");
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => seen.set(e.target, e.isIntersecting));
+            bar.toggleAttribute(
+                "data-visible",
+                !!seen.get(steps) && !seen.get(summary),
+            );
+        });
+        io.observe(steps);
+        io.observe(summary);
+    };
+
+    document.addEventListener("astro:page-load", init);
+</script>
+
+<style>
+    .pc-num {
+        align-items: center;
+        background: var(--color-coffee-300);
+        border-radius: 999px;
+        color: var(--color-snow-50);
+        display: inline-flex;
+        flex: none;
+        font-size: 0.75rem;
+        font-weight: 500;
+        height: 2rem;
+        justify-content: center;
+        position: relative;
+        width: 2rem;
+        z-index: 1;
+    }
+
+    @media (min-width: 640px) {
+        .pc-step:first-child::after {
+            background: linear-gradient(
+                var(--color-coffee-300),
+                var(--color-gray-200)
+            );
+            border-radius: 2px;
+            bottom: -0.25rem;
+            content: "";
+            left: 15px;
+            position: absolute;
+            top: 4.5rem;
+            width: 2px;
+        }
+    }
+
+    .pc-radio {
+        border: 1.5px solid var(--color-gray-300);
+        border-radius: 999px;
+        flex: none;
+        height: 18px;
+        transition:
+            border-width 200ms,
+            border-color 200ms;
+        width: 18px;
+    }
+
+    .pc-tile {
+        column-gap: 0.875rem;
+        grid-template-areas:
+            "icon name radio"
+            "icon price price"
+            "sub sub sub"
+            "desc desc desc";
+        grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+
+    @media (min-width: 640px) {
+        .pc-tile {
+            grid-row: span 5;
+            grid-template-areas:
+                "icon radio"
+                "name name"
+                "price price"
+                "sub sub"
+                "desc desc";
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-rows: subgrid;
+            row-gap: 0;
+        }
+    }
+
+    .pc-tile input:checked ~ .pc-radio {
+        border-color: var(--color-blue-500);
+        border-width: 5px;
+    }
+
+    .pc-check {
+        align-items: center;
+        border: 1.5px solid var(--color-gray-300);
+        border-radius: 6px;
+        color: transparent;
+        display: inline-flex;
+        height: 18px;
+        justify-content: center;
+        transition:
+            background-color 200ms,
+            border-color 200ms,
+            color 200ms;
+        width: 18px;
+    }
+
+    input:checked + .pc-check {
+        background: var(--color-blue-500);
+        border-color: var(--color-blue-500);
+        color: var(--color-snow-50);
+    }
+
+    .pc-prov {
+        background: #fef3c7;
+        border-radius: 999px;
+        color: #92400e;
+        display: inline-flex;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        line-height: 1;
+        padding: 3px 6px;
+        white-space: nowrap;
+    }
+
+    .pc-prov[hidden] {
+        display: none;
+    }
+
+    .pc-step-btn {
+        align-items: center;
+        background: var(--color-snow-50);
+        border-radius: 0.625rem;
+        box-shadow: inset 0 0 0 1px var(--color-gray-200);
+        color: var(--color-gray-900);
+        display: inline-flex;
+        height: 2rem;
+        justify-content: center;
+        transition:
+            background-color 200ms,
+            color 200ms;
+        width: 2rem;
+    }
+
+    .pc-step-btn:disabled {
+        background: transparent;
+        box-shadow: none;
+        color: var(--color-gray-300);
+        cursor: default;
+    }
+
+    .pc-step-btn:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 2px;
+    }
+
+    .pc-included::details-content {
+        block-size: 0;
+        overflow: hidden;
+        transition:
+            block-size 300ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1)),
+            content-visibility 300ms allow-discrete;
+    }
+
+    .pc-included[open]::details-content {
+        block-size: auto;
+    }
+
+    .pc-included {
+        interpolate-size: allow-keywords;
+    }
+
+    .pc-line {
+        border-top: 1px solid var(--color-gray-100);
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        padding: 0.875rem 0;
+        transition:
+            opacity 300ms,
+            translate 300ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+
+    @starting-style {
+        .pc-line {
+            opacity: 0;
+            translate: 0 -4px;
+        }
+    }
+
+    .pc-line[hidden] {
+        display: none;
+    }
+
+    .pc-line dt {
+        color: var(--color-gray-900);
+        display: flex;
+        flex-direction: column;
+        font-size: 15px;
+        font-weight: 500;
+        gap: 2px;
+        line-height: 1.35;
+        min-width: 0;
+    }
+
+    .pc-line dt small {
+        color: var(--color-gray-400);
+        font-size: 13px;
+        font-weight: 400;
+    }
+
+    .pc-line dd {
+        color: var(--color-gray-900);
+        font-size: 15px;
+        font-variant-numeric: tabular-nums;
+        font-weight: 500;
+        line-height: 1.35;
+        white-space: nowrap;
+    }
+
+    .pc-cta {
+        color: var(--color-snow-50);
+        isolation: isolate;
+        position: relative;
+    }
+
+    .pc-cta::before {
+        background: var(--color-coffee-300);
+        border-radius: inherit;
+        content: "";
+        inset: 0;
+        position: absolute;
+        transition: transform 520ms
+            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
+        z-index: -1;
+    }
+
+    @media (hover: hover) {
+        .pc-cta:hover::before {
+            transform: scale(0.95);
+        }
+    }
+
+    .pc-cta:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 3px;
+    }
+
+    .pc-cta:focus-visible::before {
+        transform: scale(0.95);
+    }
+
+    .pc-bar {
+        opacity: 0;
+        pointer-events: none;
+        transition:
+            opacity 240ms,
+            translate 320ms var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
+        translate: 0 1rem;
+    }
+
+    .pc-bar[data-visible] {
+        opacity: 1;
+        pointer-events: auto;
+        translate: 0 0;
+    }
+
+    :global(body:has([data-pc-bar][data-visible]) .floating-email) {
+        visibility: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .pc-line,
+        .pc-bar,
+        .pc-cta::before,
+        .pc-included::details-content {
+            transition: none;
+        }
+    }
+</style>
