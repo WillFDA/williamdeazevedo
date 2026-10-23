@@ -73,7 +73,9 @@ body {
   --color-gray-700: #404957;
   --color-gray-800: #2f3642;
   --color-gray-900: #1f2634;
-  --color-surface-100: #f2f5f8;
+  /* Gris des surfaces (cartes FAQ, panneaux, tableaux) : source unique.
+     Utilitaire Tailwind : bg-surface-muted ; CSS : var(--color-surface-muted). */
+  --color-surface-muted: var(--color-gray-100);
   --color-snow-50: #ffffff;
   --color-snow-100: #fbfcfe;
   --color-snow-200: #f8fafc;

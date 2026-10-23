@@ -71,7 +71,7 @@ const testimonials = getPublishedTestimonials().map((testimonial) => ({
                 {testimonials.map(
                     ({ image, imageAlt, initials, name, project, quote }) => (
                         <article class="embla__slide">
-                            <figure class="testimonial-card flex h-full flex-col rounded-3xl bg-gray-100 p-6 sm:p-8">
+                            <figure class="testimonial-card flex h-full flex-col rounded-3xl bg-surface-muted p-6 sm:p-8">
                                 <div class="flex flex-wrap gap-2">
                                     {project.tags.map((tag) => (
                                         <ProjectTag tag={tag} />
