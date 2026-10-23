@@ -63,7 +63,7 @@ const [featured, ...rest] = articles.slice(0, 5);
                             </span>
                             <span class="mt-5 flex flex-wrap items-center gap-3">
                                 {featured.data.tags[0] && (
-                                    <ArticleTag tag={featured.data.tags[0]} />
+                                    <ArticleTag active tag={featured.data.tags[0]} />
                                 )}
                                 <time
                                     class="text-sm font-normal text-gray-500"
@@ -96,12 +96,12 @@ const [featured, ...rest] = articles.slice(0, 5);
                             {rest.map((article) => (
                                 <li>
                                     <a
-                                        class="group flex items-center gap-6 rounded-2xl bg-gray-100 p-5 text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 sm:p-6"
+                                        class="group flex items-center gap-6 rounded-2xl bg-snow-50 p-5 text-gray-900 no-underline transition-colors duration-300 hover:bg-gray-100 focus-visible:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 sm:p-6"
                                         href={`/articles/${article.id}/`}
                                     >
                                         <div class="min-w-0 flex-1">
                                             {article.data.tags[0] && (
-                                                <ArticleTag tag={article.data.tags[0]} />
+                                                <ArticleTag active tag={article.data.tags[0]} />
                                             )}
                                             <h3 class="mt-4 text-xl font-normal leading-snug text-gray-900 text-pretty">
                                                 {article.data.title}
