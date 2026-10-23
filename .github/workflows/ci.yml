@@ -34,6 +34,6 @@ jobs:
       - run: bun run test
       - run: bun run build
       - run: bun run check:editorial
-      # Preuve du consentement : aucune requête Google avant un choix (e2e/).
+      # e2e/ : consentement, menu, Cal.com, redirections (wrangler) et axe.
       - run: bun x playwright install --with-deps chromium
       - run: bun run test:e2e
