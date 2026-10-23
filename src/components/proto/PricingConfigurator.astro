@@ -710,21 +710,15 @@ const vitrine = formats[1];
     }
 
     .pc {
-        /* Tonal card system, grays only: flat at rest, one step darker on
-           hover, lifted when selected (light-gray gradient, top highlight,
-           hairline contour, deeper shadow). */
+        /* Flat tonal card system, grays only: gray-100 at rest, one step
+           darker on hover, lighter gray with a hairline contour and a soft
+           shadow when selected. */
         --pc-card: var(--color-gray-100);
         --pc-card-hover: var(--color-coffee-50);
-        --pc-lift-bg: linear-gradient(
-            180deg,
-            var(--color-snow-300),
-            var(--color-gray-100)
-        );
+        --pc-lift-bg: var(--color-snow-300);
         --pc-lift-shadow:
-            inset 0 1px 0 rgb(255 255 255 / 0.75),
             0 0 0 1px rgb(188 196 207 / 0.55),
-            0 2px 4px -2px rgb(31 38 52 / 0.1),
-            0 18px 36px -18px rgb(31 38 52 / 0.32);
+            0 18px 36px -18px rgb(31 38 52 / 0.28);
         --pc-knob-bg: var(--color-gray-100);
         --pc-knob-shadow:
             inset 0 1px 0 rgb(255 255 255 / 0.7),
@@ -781,7 +775,7 @@ const vitrine = formats[1];
     .pc-stage {
         align-items: start;
         display: grid;
-        gap: 56px;
+        gap: 40px;
         grid-template-columns: minmax(0, 1fr) 360px;
         margin-top: 64px;
     }
@@ -1411,6 +1405,7 @@ const vitrine = formats[1];
     }
 
     .pc-summary {
+        background: var(--pc-card);
         border-radius: 36px;
         display: flex;
         flex-direction: column;
@@ -1426,7 +1421,7 @@ const vitrine = formats[1];
     .pc-sum-card {
         display: flex;
         flex-direction: column;
-        padding: 32px 0 0;
+        padding: 32px 32px 0;
         position: relative;
     }
 
@@ -1448,7 +1443,7 @@ const vitrine = formats[1];
 
     .pc-lines > div {
         align-items: flex-start;
-        border-top: 1px solid var(--color-gray-100);
+        border-top: 1px solid var(--color-gray-200);
         display: flex;
         gap: 16px;
         justify-content: space-between;
@@ -1498,7 +1493,7 @@ const vitrine = formats[1];
 
     .pc-total {
         align-items: baseline;
-        border-top: 1px solid var(--color-gray-100);
+        border-top: 1px solid var(--color-gray-200);
         display: flex;
         flex-wrap: wrap;
         gap: 4px 16px;
@@ -1619,7 +1614,7 @@ const vitrine = formats[1];
         }
 
         .pc-stage {
-            gap: 44px;
+            gap: 32px;
         }
 
         .pc-step {
@@ -1837,7 +1832,7 @@ const vitrine = formats[1];
         }
 
         .pc-sum-card {
-            padding: 24px 0 0;
+            padding: 24px 20px 0;
         }
 
         .pc-lines > div {
