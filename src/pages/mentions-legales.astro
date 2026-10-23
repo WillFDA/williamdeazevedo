@@ -3,12 +3,16 @@ import FadeReveal from "@/components/animations/FadeReveal.astro";
 import Layout from "../layout/Layout.astro";
 
 const audienceEnabled = import.meta.env.PUBLIC_RYBBIT_EXEMPT_AUDIENCE === "true";
+// Siège à Achères depuis octobre 2026. Le transfert doit aussi être déclaré au
+// guichet unique (INPI), qui met à jour le RNE et l'INSEE : un nouveau SIRET
+// (même SIREN, autre NIC) sera alors attribué. Mettre à jour la ligne
+// « SIRET du siège » ci-dessous dès réception de l'avis de situation.
 const sections = [
     {
         id: "editeur",
         title: "Éditeur",
         paragraphs: [
-            "Ce site est édité par William Ferreira De Azevedo, entrepreneur individuel (EI) exerçant sous le régime de la micro-entreprise, dont le siège est situé au 62 rue Michel Giraux, 78670 Villennes-sur-Seine, France.",
+            "Ce site est édité par William Ferreira De Azevedo, entrepreneur individuel (EI) exerçant sous le régime de la micro-entreprise, dont le siège est situé au 3 rue des Tourelles, 78260 Achères, France, depuis octobre 2026.",
         ],
     },
     {
@@ -28,7 +32,6 @@ const sections = [
         title: "Contact",
         paragraphs: [
             "Pour toute demande, vous pouvez écrire à william.deazevedopro@gmail.com ou appeler le 07 62 74 60 21.",
-            "Adresse de correspondance : 3 rue des Tourelles, 78260 Achères, France.",
         ],
     },
     {

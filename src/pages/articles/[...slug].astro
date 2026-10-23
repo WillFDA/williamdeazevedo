@@ -1,4 +1,5 @@
 ---
+import { serializeJsonLd } from "@/lib/jsonLd";
 import { Image } from "astro:assets";
 import { render } from "astro:content";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
@@ -25,17 +26,33 @@ interface Props {
 
 const { article } = Astro.props;
 const { Content, headings } = await render(article);
-const { author, description, faq, image, pubDate, seoTitle, tags, title, updatedDate } =
-    article.data;
+const {
+    author,
+    description,
+    faq,
+    image,
+    pubDate,
+    seoTitle,
+    tags,
+    title,
+    titleBreak,
+    updatedDate,
+} = article.data;
 const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 
-const articleTitleBreak = "2 000 euros";
-const shouldSplitArticleTitle =
-    article.id === "site-600-euros-vs-site-2000-euros" &&
-    title.includes(articleTitleBreak);
-const [articleTitleStart, articleTitleEnd = ""] = shouldSplitArticleTitle
-    ? title.split(articleTitleBreak)
-    : [title, ""];
+// Retour à la ligne choisi dans le frontmatter (`titleBreak`), plus de titre
+// codé en dur ici. Un `titleBreak` absent du titre fait échouer le build.
+if (titleBreak && !title.includes(titleBreak)) {
+    throw new Error(
+        `Article « ${article.id} » : titleBreak « ${titleBreak} » introuvable dans le titre.`,
+    );
+}
+const titleBreakIndex = titleBreak ? title.indexOf(titleBreak) : -1;
+const shouldSplitArticleTitle = titleBreakIndex > 0;
+const articleTitleStart = shouldSplitArticleTitle
+    ? title.slice(0, titleBreakIndex)
+    : title;
+const articleTitleEnd = shouldSplitArticleTitle ? title.slice(titleBreakIndex) : "";
 
 const siteUrl = Astro.site ?? new URL(Astro.url.origin);
 // Même @id que le nœud Person du Layout, pour que Google relie les entités.
@@ -59,7 +76,7 @@ const jsonLd = {
         "@type": "Person",
         ...(author === "William De Azevedo" && { "@id": personId }),
         name: author,
-        url: siteUrl.href,
+        url: new URL("/about/", siteUrl).href,
     },
     publisher: {
         "@type": "Person",
@@ -117,7 +134,10 @@ const faqJsonLd = faq?.length
     article={{
         publishedTime: pubDate.toISOString(),
         modifiedTime: (updatedDate ?? pubDate).toISOString(),
-        author,
+        authorUrl:
+            author === "William De Azevedo"
+                ? new URL("/about/", siteUrl).href
+                : undefined,
         tags,
     }}
 >
@@ -126,18 +146,18 @@ const faqJsonLd = faq?.length
     <script
         type="application/ld+json"
         is:inline
-        set:html={JSON.stringify(jsonLd)}
+        set:html={serializeJsonLd(jsonLd)}
     />
     <script
         type="application/ld+json"
         is:inline
-        set:html={JSON.stringify(breadcrumbJsonLd)}
+        set:html={serializeJsonLd(breadcrumbJsonLd)}
     />
     {faqJsonLd && (
         <script
             type="application/ld+json"
             is:inline
-            set:html={JSON.stringify(faqJsonLd)}
+            set:html={serializeJsonLd(faqJsonLd)}
         />
     )}
 
@@ -159,7 +179,7 @@ const faqJsonLd = faq?.length
                         <>
                             {articleTitleStart.trim()}
                             <br class="hidden sm:block" />{" "}
-                            <span>{articleTitleBreak + articleTitleEnd}</span>
+                            <span>{articleTitleEnd}</span>
                         </>
                     ) : (
                         title

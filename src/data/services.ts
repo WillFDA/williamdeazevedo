@@ -1,3 +1,5 @@
+import { localAreaLabel } from "./business";
+
 export type ServiceCapabilityIcon =
   | "cms"
   | "conversion"
@@ -64,6 +66,8 @@ export type Service = {
   heroPillPhrases?: string[];
   included: string[];
   intro: string;
+  /** Affiche « Freelance basé à Achères (78), Yvelines » dans le H1. */
+  localHeading?: boolean;
   navLabel: string;
   rootPath?: string;
   problem: {
@@ -88,7 +92,8 @@ export const services: Service[] = [
     rootPath: "/creation-site-vitrine/",
     navLabel: "Création site vitrine",
     title: "Création de site vitrine",
-    seoTitle: "Création de site vitrine freelance - William De Azevedo",
+    seoTitle: `Création de site vitrine à ${localAreaLabel} - William De Azevedo`,
+    localHeading: true,
     description:
       "Création de sites vitrines rapides, accessibles et pensés pour rassurer avant le premier contact. Accompagnement design, contenu, SEO technique et développement front-end.",
     seoDescription:
@@ -225,7 +230,8 @@ export const services: Service[] = [
     rootPath: "/refonte-site-internet/",
     navLabel: "Refonte site internet",
     title: "Refonte de site internet",
-    seoTitle: "Refonte de site internet freelance - William De Azevedo",
+    seoTitle: `Refonte de site internet à ${localAreaLabel} - William De Azevedo`,
+    localHeading: true,
     description:
       "Refonte de site internet pour clarifier votre offre, moderniser votre interface et améliorer performance, SEO technique et conversion.",
     eyebrow: "Refonte web",
@@ -466,7 +472,8 @@ export const services: Service[] = [
     rootPath: "/creation-site-internet-artisan/",
     navLabel: "Site artisan",
     title: "Création de site internet artisan",
-    seoTitle: "Création de site internet artisan - William De Azevedo",
+    seoTitle: `Site internet artisan à ${localAreaLabel} - William De Azevedo`,
+    localHeading: true,
     description:
       "Création de site internet pour artisan : site vitrine rapide, mobile, rassurant, avec réalisations, zone d'intervention, formulaire et base SEO locale.",
     eyebrow: "Site artisan",
@@ -597,7 +604,8 @@ export const services: Service[] = [
     rootPath: "/creation-site-internet-professionnel/",
     navLabel: "Site professionnel",
     title: "Création de site internet professionnel",
-    seoTitle: "Création de site internet professionnel - William De Azevedo",
+    seoTitle: `Site internet professionnel à ${localAreaLabel} - William De Azevedo`,
+    localHeading: true,
     description:
       "Création de site internet professionnel pour indépendants, petites structures et équipes produit : stratégie, design, développement front-end, performance, accessibilité et SEO technique.",
     seoDescription:
