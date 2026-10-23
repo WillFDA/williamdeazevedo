@@ -7,29 +7,14 @@ const COMBINING_MARKS = /[\u0300-\u036F]/g;
 const COLLAPSED_TAG_COUNT = 4;
 const TAG_LIST_ID = "article-tag-list";
 
-type FilterOption = {
-  label: string;
-  value: string;
-};
-
-type FilterSelectProps = {
-  id: string;
-  label: string;
-  onValueChange: (value: string) => void;
-  options: FilterOption[];
-  value: string;
-};
-
 type Props = {
+  pageSize: number;
   tags: string[];
-  years: string[];
 };
 
 const normalize = (value: string) =>
   value.toLowerCase().normalize("NFD").replaceAll(COMBINING_MARKS, "");
 
-const filterSelectClass =
-  "h-11 w-full appearance-none rounded-xl border border-gray-100 bg-snow-50 px-3 pr-10 text-left text-sm font-light text-gray-900 transition-colors hover:border-gray-200 focus-visible:border-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500";
 const tagButtonBaseClass =
   "pill article-tag-pill relative isolate cursor-pointer bg-transparent transition-colors duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:rounded-xl before:transition-transform before:duration-500 before:ease-out hover:before:scale-[1.06] focus-visible:before:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-blue-500";
 const tagButtonActiveClass = "text-snow-50 before:bg-blue-500";
@@ -38,79 +23,50 @@ const tagButtonInactiveClass = "before:bg-snow-50";
 const getAllowedValue = (value: string | null, allowedValues: string[]) =>
   value && allowedValues.includes(value) ? value : ALL_VALUE;
 
-const getFiltersFromUrl = (tags: string[], years: string[]) => {
+const getFiltersFromUrl = (tags: string[]) => {
   const params = new URLSearchParams(window.location.search);
 
   return {
     search: params.get("search") ?? "",
     tag: getAllowedValue(params.get("tag"), tags),
-    year: getAllowedValue(params.get("year"), years),
   };
 };
 
-function ChevronIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="size-4"
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.8"
-      viewBox="0 0 24 24"
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
+const matchesFilters = (
+  item: HTMLElement,
+  query: string,
+  selectedTag: string
+) => {
+  const title = normalize(item.dataset.title ?? "");
+  const description = normalize(item.dataset.description ?? "");
+  const itemTags = (item.dataset.tags ?? "").split("|").map(normalize);
+  const matchesQuery =
+    query.length === 0 ||
+    title.includes(query) ||
+    description.includes(query) ||
+    itemTags.join(" ").includes(query);
 
-function FilterSelect({
-  id,
-  label,
-  onValueChange,
-  options,
-  value,
-}: FilterSelectProps) {
   return (
-    <div className="relative">
-      <label className="sr-only" htmlFor={id}>
-        {label}
-      </label>
-      <select
-        className={filterSelectClass}
-        id={id}
-        onChange={(event) => onValueChange(event.currentTarget.value)}
-        value={value}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-400">
-        <ChevronIcon />
-      </span>
-    </div>
+    matchesQuery && (selectedTag.length === 0 || itemTags.includes(selectedTag))
   );
-}
+};
 
-export default function ArticleFilters({ tags, years }: Props) {
+export default function ArticleFilters({ pageSize, tags }: Props) {
   const [search, setSearch] = useState("");
   const [tag, setTag] = useState(ALL_VALUE);
-  const [year, setYear] = useState(ALL_VALUE);
+  const [limit, setLimit] = useState(pageSize);
   const [isUrlReady, setIsUrlReady] = useState(false);
   const [isTagListExpanded, setIsTagListExpanded] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  // Index du premier article révélé par « Voir plus », à focaliser.
+  const focusIndexRef = useRef<number | null>(null);
 
   useEffect(() => {
     const syncFromUrl = () => {
-      const filters = getFiltersFromUrl(tags, years);
+      const filters = getFiltersFromUrl(tags);
 
       setSearch(filters.search);
       setTag(filters.tag);
-      setYear(filters.year);
       setIsUrlReady(true);
     };
 
@@ -119,7 +75,7 @@ export default function ArticleFilters({ tags, years }: Props) {
     window.addEventListener("popstate", syncFromUrl);
 
     return () => window.removeEventListener("popstate", syncFromUrl);
-  }, [tags, years]);
+  }, [tags]);
 
   useEffect(() => {
     if (!isUrlReady) return;
@@ -138,60 +94,71 @@ export default function ArticleFilters({ tags, years }: Props) {
       url.searchParams.set("tag", tag);
     }
 
-    if (year === ALL_VALUE) {
-      url.searchParams.delete("year");
-    } else {
-      url.searchParams.set("year", year);
-    }
-
     const nextUrl = `${url.pathname}${url.search}${url.hash}`;
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
 
     if (nextUrl !== currentUrl) {
       window.history.replaceState({}, "", nextUrl);
     }
-  }, [isUrlReady, search, tag, year]);
+  }, [isUrlReady, search, tag]);
 
   useEffect(() => {
     const root = formRef.current?.closest<HTMLElement>("[data-articles-page]");
     if (!root) return;
 
     const empty = root.querySelector<HTMLElement>("[data-article-empty]");
+    const more = root.querySelector<HTMLElement>("[data-article-more]");
     const items = [...root.querySelectorAll<HTMLElement>("[data-article]")];
     const query = normalize(search.trim());
     const selectedTag = tag === ALL_VALUE ? "" : normalize(tag);
-    const selectedYear = year === ALL_VALUE ? "" : year;
-    let visibleCount = 0;
+    // Une recherche affiche tous les résultats ; sinon on pagine.
+    const max = query.length > 0 ? Number.POSITIVE_INFINITY : limit;
+    let matchCount = 0;
+    let revealedCount = 0;
 
     for (const item of items) {
-      const title = normalize(item.dataset.title ?? "");
-      const description = normalize(item.dataset.description ?? "");
-      const itemTags = (item.dataset.tags ?? "").split("|").map(normalize);
-      const searchableTags = itemTags.join(" ");
-      const matchesQuery =
-        query.length === 0 ||
-        title.includes(query) ||
-        description.includes(query) ||
-        searchableTags.includes(query);
-      const matchesTag =
-        selectedTag.length === 0 || itemTags.includes(selectedTag);
-      const matchesYear =
-        selectedYear.length === 0 || item.dataset.year === selectedYear;
-      const isVisible = matchesQuery && matchesTag && matchesYear;
+      const isMatch = matchesFilters(item, query, selectedTag);
+      const isVisible = isMatch && matchCount < max;
+      const wasHidden = item.hidden;
 
       item.hidden = !isVisible;
 
-      if (!isVisible) continue;
+      if (isMatch && matchCount === focusIndexRef.current) {
+        item.querySelector("a")?.focus();
+      }
+      if (isMatch) matchCount += 1;
 
-      item.style.setProperty("--article-index", String(visibleCount));
+      // Seuls les articles qui apparaissent sont animés.
+      if (!(isVisible && wasHidden)) continue;
+
+      item.style.setProperty("--article-index", String(revealedCount));
       item.classList.remove("is-filtered-in");
       void item.offsetWidth;
       item.classList.add("is-filtered-in");
-      visibleCount += 1;
+      revealedCount += 1;
     }
 
-    empty?.classList.toggle("hidden", visibleCount > 0);
-  }, [search, tag, year]);
+    focusIndexRef.current = null;
+    empty?.classList.toggle("hidden", matchCount > 0);
+    if (more) more.hidden = matchCount <= max;
+  }, [limit, search, tag]);
+
+  useEffect(() => {
+    const more = formRef.current
+      ?.closest<HTMLElement>("[data-articles-page]")
+      ?.querySelector<HTMLElement>("[data-article-more]");
+    if (!more) return;
+
+    const showMore = () =>
+      setLimit((current) => {
+        focusIndexRef.current = current;
+        return current + pageSize;
+      });
+
+    more.addEventListener("click", showMore);
+
+    return () => more.removeEventListener("click", showMore);
+  }, [pageSize]);
 
   // Le tag actif reste visible même quand la liste est repliée.
   const visibleTags = isTagListExpanded
@@ -202,11 +169,6 @@ export default function ArticleFilters({ tags, years }: Props) {
   const hiddenTagCount = tags.length - visibleTags.length;
   const hasToggle = isTagListExpanded || hiddenTagCount > 0;
 
-  const yearOptions = [
-    { label: "Toutes les dates", value: ALL_VALUE },
-    ...years.map((yearValue) => ({ label: yearValue, value: yearValue })),
-  ];
-
   return (
     <form
       aria-label="Filtrer les articles"
@@ -214,27 +176,18 @@ export default function ArticleFilters({ tags, years }: Props) {
       onSubmit={(event) => event.preventDefault()}
       ref={formRef}
     >
-      <div className="grid w-full max-w-[40.5rem] grid-cols-[minmax(0,28rem)_minmax(9.5rem,11.5rem)] gap-3">
-        <div>
-          <label className="sr-only" htmlFor="article-search">
-            Rechercher un article
-          </label>
-          <input
-            className="h-11 w-full rounded-xl border border-gray-100 bg-snow-50 px-3 text-sm font-light text-gray-900 transition-colors placeholder:text-gray-600 hover:border-gray-200 focus-visible:border-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-            id="article-search"
-            name="search"
-            onChange={(event) => setSearch(event.currentTarget.value)}
-            placeholder="Rechercher"
-            type="search"
-            value={search}
-          />
-        </div>
-        <FilterSelect
-          id="article-year"
-          label="Filtrer par date"
-          onValueChange={setYear}
-          options={yearOptions}
-          value={year}
+      <div className="w-full max-w-[28rem]">
+        <label className="sr-only" htmlFor="article-search">
+          Rechercher un article
+        </label>
+        <input
+          className="shadow-pill h-11 w-full rounded-xl bg-snow-50 px-3 text-sm font-light text-gray-900 placeholder:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          id="article-search"
+          name="search"
+          onChange={(event) => setSearch(event.currentTarget.value)}
+          placeholder="Rechercher"
+          type="search"
+          value={search}
         />
       </div>
       <fieldset

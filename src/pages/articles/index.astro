@@ -2,6 +2,9 @@
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ArticleFilters from "@/components/articles/ArticleFilters";
 import ArticleTag from "@/components/articles/ArticleTag.astro";
+import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
+import WaveIcon from "@/components/ui/WaveIcon.astro";
+import WaveText from "@/components/ui/WaveText.astro";
 import Layout from "@/layout/Layout.astro";
 import { formatArticleDate, getVisibleArticles } from "@/lib/articles";
 
@@ -18,11 +21,8 @@ const heroTitleParts = [
 const tags = [
     ...new Set(articles.flatMap((article) => article.data.tags)),
 ].toSorted((a, b) => a.localeCompare(b, "fr"));
-const years = [
-    ...new Set(
-        articles.map((article) => String(article.data.pubDate.getFullYear())),
-    ),
-].toSorted((a, b) => Number(b) - Number(a));
+// 3 rangées pleines de la grille à 2 colonnes.
+const PAGE_SIZE = 6;
 ---
 
 <Layout
@@ -65,7 +65,11 @@ const years = [
                 ) : (
                     <div>
                         <FadeReveal delay={0.3}>
-                            <ArticleFilters client:load tags={tags} years={years} />
+                            <ArticleFilters
+                                client:load
+                                pageSize={PAGE_SIZE}
+                                tags={tags}
+                            />
                         </FadeReveal>
                         <ul class="grid gap-4 md:grid-cols-2" data-article-list>
                             {articles.map((article, index) => (
@@ -76,7 +80,7 @@ const years = [
                                     data-title={article.data.title}
                                     data-description={article.data.description}
                                     data-tags={article.data.tags.join("|")}
-                                    data-year={article.data.pubDate.getFullYear()}
+                                    hidden={index >= PAGE_SIZE}
                                 >
                                     <a
                                         class="article-card group flex h-full flex-col text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
@@ -129,6 +133,29 @@ const years = [
                         >
                             Aucun article trouvé.
                         </p>
+                        {articles.length > PAGE_SIZE && (
+                            <div class="mt-12 flex justify-center">
+                                <button
+                                    class="service-method-button flex min-h-14 w-full max-w-full cursor-pointer items-center justify-center gap-4 rounded-xl px-8 py-3 text-base font-normal sm:w-auto sm:px-10"
+                                    type="button"
+                                    data-article-more
+                                >
+                                    <WaveText
+                                        class="relative z-10"
+                                        text="Voir plus"
+                                        trigger="parent"
+                                    />
+                                    <WaveIcon
+                                        class="relative z-10"
+                                        style="--wui-wave-icon-size: 1rem;"
+                                        direction="down"
+                                        trigger="parent"
+                                    >
+                                        <ArrowRight class="size-full rotate-90" aria-hidden="true" />
+                                    </WaveIcon>
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )
             }
