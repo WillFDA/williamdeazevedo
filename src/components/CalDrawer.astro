@@ -154,10 +154,16 @@ const calLink = String(
             callback: (event: CalBookingEvent) => {
                 const booking = event.detail?.data ?? {};
 
-                // Google Tag Manager : conversion prise de rendez-vous.
-                const w = window as Window & { dataLayer?: unknown[] };
-                w.dataLayer ||= [];
-                w.dataLayer.push({ event: "prise_rdv" });
+                // Google Tag Manager : conversion prise de rendez-vous, seulement
+                // si GTM est chargé (donc après un accord dans le bandeau).
+                const w = window as Window & {
+                    dataLayer?: unknown[];
+                    __wuiGtmLoaded?: boolean;
+                };
+                if (w.__wuiGtmLoaded) {
+                    w.dataLayer ||= [];
+                    w.dataLayer.push({ event: "prise_rdv" });
+                }
 
                 trackAnalytics("cal_booking_success", {
                     cal_link: calLink,

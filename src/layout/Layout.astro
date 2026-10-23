@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import GoogleTagManager from "../components/tracking/GoogleTagManager.astro";
-import GoogleTagManagerNoscript from "../components/tracking/GoogleTagManagerNoscript.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import CalDrawer from "../components/CalDrawer.astro";
@@ -222,7 +221,6 @@ const websiteJsonLd = {
         <title>{title}</title>
     </head>
     <body class="min-h-screen min-w-0 flex flex-col">
-        <GoogleTagManagerNoscript />
         <a
             class="skip-link fixed top-3 left-3 z-[100] rounded-[0.7rem] bg-coffee-300 px-4 py-2.5 text-sm text-snow-50 no-underline"
             href="#main-content"
