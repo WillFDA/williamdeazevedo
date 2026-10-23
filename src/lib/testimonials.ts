@@ -19,6 +19,7 @@ export const getPublishedTestimonials = () =>
       return {
         ...testimonial,
         href: project.href,
+        project,
         image: testimonial.imageFile
           ? testimonialImages[`../assets/temoignages/${testimonial.imageFile}`]
               ?.default

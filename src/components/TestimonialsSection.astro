@@ -1,89 +1,175 @@
 ---
 import { Image } from "astro:assets";
-import Carousel from "./Carousel.astro";
+import Carousel from "@/components/Carousel.astro";
+import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
+import ProjectTag from "@/components/realisations/ProjectTag.astro";
+import WaveIcon from "@/components/ui/WaveIcon.astro";
+import WaveText from "@/components/ui/WaveText.astro";
 import { getPublishedTestimonials } from "@/lib/testimonials";
 
-const testimonials = getPublishedTestimonials();
+const splitQuote = (text: string, excerpt?: string) => {
+    const start = excerpt ? text.indexOf(excerpt) : -1;
+
+    return excerpt && start !== -1
+        ? {
+              before: text.slice(0, start),
+              highlight: excerpt,
+              after: text.slice(start + excerpt.length),
+          }
+        : { before: text };
+};
+
+const testimonials = getPublishedTestimonials().map((testimonial) => ({
+    ...testimonial,
+    quote: splitQuote(testimonial.text, testimonial.excerpt),
+}));
 ---
 
 {
     testimonials.length > 0 && (
         <section
             class="client-testimonials mx-auto w-full max-w-7xl px-4 py-12 sm:px-8 md:py-16"
-            aria-label="Témoignages clients"
+            aria-labelledby="testimonials-title"
         >
-            <div>
-                <Carousel
-                    class="testimonial-carousel"
-                    autoplay
-                    autoplayDelay={6500}
-                    compactControls
-                    showAutoplayInterface={false}
+            <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <div class="flex max-w-3xl flex-col gap-4">
+                    <h2
+                        id="testimonials-title"
+                        class="section-heading text-left text-[clamp(2.35rem,3.9vw,3.45rem)]"
+                    >
+                        Ce que mes clients disent de leur site
+                    </h2>
+                    <p class="section-subheading mx-0 text-left">
+                        Des entreprises accompagnées du cadrage à la mise en
+                        ligne, et ce qu'elles en retiennent.
+                    </p>
+                </div>
+                <a
+                    class="service-method-button flex min-h-14 w-full max-w-full shrink-0 items-center justify-center gap-4 rounded-xl px-8 py-3 text-base font-normal sm:w-auto sm:px-10"
+                    href="/realisations/"
                 >
-                    {testimonials.map((testimonial, index) => (
+                    <WaveText
+                        class="relative z-10"
+                        text="Voir mes réalisations"
+                        trigger="parent"
+                    />
+                    <WaveIcon
+                        class="relative z-10"
+                        style="--wui-wave-icon-size: 1rem;"
+                        direction="right"
+                        trigger="parent"
+                    >
+                        <ArrowRight class="size-full" aria-hidden="true" />
+                    </WaveIcon>
+                </a>
+            </div>
+
+            <Carousel
+                class="testimonial-carousel mt-10 md:mt-14"
+                compactControls
+            >
+                {testimonials.map(
+                    ({ image, imageAlt, initials, name, project, quote }) => (
                         <article class="embla__slide">
-                            <figure class="testimonial-card mx-auto grid w-full max-w-5xl items-center gap-8 rounded-3xl p-0 text-center md:grid-cols-[18rem_1fr] md:p-6 md:text-left lg:p-8">
-                                <div class="testimonial-card__media mx-auto w-full max-w-56 overflow-hidden rounded-3xl bg-snow-600 shadow-lg md:max-w-none">
-                                    {testimonial.image ? (
-                                        <Image
-                                            class="block size-full object-cover"
-                                            src={testimonial.image}
-                                            alt={testimonial.imageAlt ?? ""}
-                                            width={384}
-                                            height={480}
-                                            loading={
-                                                index === 0 ? "eager" : "lazy"
-                                            }
-                                        />
-                                    ) : (
-                                        <div class="flex size-full items-center justify-center text-4xl font-medium text-gray-900">
-                                            {testimonial.initials}
-                                        </div>
-                                    )}
+                            <figure class="testimonial-card flex h-full flex-col rounded-3xl bg-gray-100 p-6 sm:p-8">
+                                <div class="flex flex-wrap gap-2">
+                                    {project.tags.map((tag) => (
+                                        <ProjectTag tag={tag} />
+                                    ))}
                                 </div>
 
-                                <figcaption class="flex flex-col items-center gap-4 md:items-start">
-                                    <a
-                                        class="text-2xl font-medium leading-tight text-gray-900 no-underline underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
-                                        href={testimonial.href}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {testimonial.name}
-                                    </a>
-                                    <blockquote class="m-0 text-lg font-light leading-normal text-gray-700 sm:text-xl">
-                                        “{testimonial.text}”
-                                    </blockquote>
+                                <blockquote class="mt-6 text-lg font-light leading-relaxed text-gray-600 sm:text-xl">
+                                    “{quote.before}{
+                                        quote.highlight && (
+                                            <span class="font-normal text-gray-900">
+                                                {quote.highlight}
+                                            </span>
+                                        )
+                                    }{quote.after}”
+                                </blockquote>
+
+                                <figcaption class="mt-auto flex items-end justify-between gap-6 pt-8">
+                                    <div>
+                                        <p class="text-base font-medium text-gray-900">
+                                            {name}
+                                        </p>
+                                        <p class="text-sm text-gray-500">
+                                            {project.title}
+                                        </p>
+                                        <a
+                                            class="mt-3 inline-flex items-center gap-2 text-sm text-blue-500 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                            href={`/realisations/${project.id}/`}
+                                        >
+                                            <WaveText
+                                                text="Découvrir ce projet"
+                                                trigger="parent"
+                                            />
+                                            <WaveIcon
+                                                style="--wui-wave-icon-size: 0.875rem;"
+                                                direction="right"
+                                                trigger="parent"
+                                            >
+                                                <ArrowRight
+                                                    class="size-full"
+                                                    aria-hidden="true"
+                                                />
+                                            </WaveIcon>
+                                        </a>
+                                    </div>
+                                    {image ? (
+                                        <Image
+                                            class="size-16 shrink-0 rounded-xl object-cover"
+                                            src={image}
+                                            alt={imageAlt ?? ""}
+                                            width={128}
+                                            height={128}
+                                        />
+                                    ) : (
+                                        <div class="flex size-16 shrink-0 items-center justify-center rounded-xl bg-snow-50 text-base font-medium text-gray-900">
+                                            {initials}
+                                        </div>
+                                    )}
                                 </figcaption>
                             </figure>
                         </article>
-                    ))}
-                </Carousel>
-            </div>
+                    ),
+                )}
+            </Carousel>
         </section>
     )
 }
 
 <style>
+    /* Embla only scrolls when the slides overflow the viewport: two narrower
+       cards would both fit and the arrows would do nothing. */
     .client-testimonials :global(.embla) {
-        --slide-size: min(100%, 72rem);
+        --slide-size: min(100% - var(--slide-spacing), 52rem);
+    }
+
+    /* Hides each slide's leading padding so the cards line up with the
+       heading. `position: relative` keeps the container's offsetLeft at 0,
+       which Embla compares with the slides' offsets. */
+    .client-testimonials :global(.embla__viewport) {
+        margin-left: calc(var(--slide-spacing) * -1);
+        position: relative;
     }
 
     .client-testimonials :global(.embla__slide) {
         aspect-ratio: auto;
     }
 
-    .testimonial-card__media {
-        aspect-ratio: 4 / 5;
+    .testimonial-card {
+        transition: opacity 520ms
+            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
     }
 
-    .client-testimonials :global(.testimonial-carousel .embla__controls) {
-        display: none;
+    .embla__slide[aria-hidden="true"] .testimonial-card {
+        opacity: 0.45;
     }
 
-    @media (min-width: 768px) {
-        .testimonial-card__media {
-            aspect-ratio: 3 / 4;
+    @media (prefers-reduced-motion: reduce) {
+        .testimonial-card {
+            transition: none;
         }
     }
 </style>
