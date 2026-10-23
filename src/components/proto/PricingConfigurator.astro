@@ -24,6 +24,12 @@ const formats = [
         included: 1,
         pages: "fixed",
         sub: "1 page",
+        features: [
+            "Une page ciblée",
+            "Design sur mesure",
+            "Formulaire de contact",
+            "En ligne en 10 jours",
+        ],
     },
     {
         id: "vitrine",
@@ -34,6 +40,12 @@ const formats = [
         included: 5,
         pages: "extra",
         sub: "5 pages incluses",
+        features: [
+            "5 pages incluses",
+            "Design sur mesure",
+            "SEO technique de base",
+            "Formulaire de contact",
+        ],
     },
     {
         id: "refonte",
@@ -44,6 +56,12 @@ const formats = [
         included: 5,
         pages: "extra",
         sub: "5 pages incluses",
+        features: [
+            "5 pages reprises",
+            "Contenus migrés",
+            "Redirections pour le SEO",
+            "Design modernisé",
+        ],
     },
     {
         id: "interface",
@@ -55,10 +73,14 @@ const formats = [
         pages: "none",
         sub: "Cadrage dès 900 € HT",
         summary: "Au cadrage",
+        features: [
+            "Écrans et parcours cadrés",
+            "Rôles, états et données",
+            "Design système",
+            "Développement front-end",
+        ],
     },
 ] as const;
-
-const maxIncluded = Math.max(...formats.map((f) => f.included));
 
 const options = [
     {
@@ -219,22 +241,19 @@ const vitrine = formats[1];
                                                     : "prix de départ HT"}
                                             </span>
                                         </span>
-                                        <span class="pc-budget">
-                                            <span>Pages incluses</span>
-                                            <b>
-                                                {f.pages === "none"
-                                                    ? "au cadrage"
-                                                    : f.included}
-                                            </b>
-                                        </span>
-                                        <span
-                                            class="pc-meter"
-                                            aria-hidden="true"
-                                        >
-                                            <i
-                                                style={`width: ${(f.included / maxIncluded) * 100}%`}
-                                            />
-                                        </span>
+                                        <ul class="pc-feats">
+                                            {f.features.map((item) => (
+                                                <li>
+                                                    <span
+                                                        class="pc-feat-check"
+                                                        aria-hidden="true"
+                                                    >
+                                                        <Check class="size-2.5" />
+                                                    </span>
+                                                    {item}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </label>
                                 </div>
                             ))
@@ -691,6 +710,25 @@ const vitrine = formats[1];
     }
 
     .pc {
+        /* Tonal card system, grays only: flat at rest, one step darker on
+           hover, lifted when selected (light-gray gradient, top highlight,
+           hairline contour, deeper shadow). */
+        --pc-card: var(--color-gray-100);
+        --pc-card-hover: var(--color-coffee-50);
+        --pc-lift-bg: linear-gradient(
+            180deg,
+            var(--color-snow-300),
+            var(--color-gray-100)
+        );
+        --pc-lift-shadow:
+            inset 0 1px 0 rgb(255 255 255 / 0.75),
+            0 0 0 1px rgb(188 196 207 / 0.55),
+            0 2px 4px -2px rgb(31 38 52 / 0.1),
+            0 18px 36px -18px rgb(31 38 52 / 0.32);
+        --pc-knob-bg: var(--color-gray-100);
+        --pc-knob-shadow:
+            inset 0 1px 0 rgb(255 255 255 / 0.7),
+            0 1px 2px rgb(31 38 52 / 0.12);
         --w5: 370;
         --w4: 260;
         color: var(--color-gray-900);
@@ -823,7 +861,7 @@ const vitrine = formats[1];
     }
 
     .pc-optional {
-        border: 1px solid var(--color-gray-200);
+        background: var(--color-gray-100);
         border-radius: 80px;
         color: var(--color-gray-500);
         font-size: 12px;
@@ -835,7 +873,7 @@ const vitrine = formats[1];
     .pc-nav,
     .pc-stepper {
         align-items: center;
-        background: var(--color-gray-100);
+        background: var(--color-coffee-50);
         border-radius: 12px;
         display: flex;
         flex: 0 0 auto;
@@ -849,7 +887,8 @@ const vitrine = formats[1];
 
     .pc-btn {
         align-items: center;
-        background: var(--color-snow-50);
+        background: var(--pc-knob-bg);
+        box-shadow: var(--pc-knob-shadow);
         border-radius: 9px;
         color: var(--color-gray-900);
         cursor: pointer;
@@ -864,6 +903,7 @@ const vitrine = formats[1];
 
     .pc-btn:disabled {
         background: transparent;
+        box-shadow: none;
         color: var(--color-gray-300);
         cursor: default;
     }
@@ -873,10 +913,10 @@ const vitrine = formats[1];
         outline-offset: 2px;
     }
 
-    /* The viewport bleeds 5px sideways and 6px vertically so the selected
-       ring, its lift and the focus outline are not clipped. */
+    /* The viewport bleeds 5px sideways, 8px above and 40px below so the
+       selected card's lift, shadow and focus outline are not clipped. */
     .pc-vp {
-        margin: 22px -5px -6px;
+        margin: 20px -5px -40px;
         mask-image: linear-gradient(
             to right,
             transparent,
@@ -885,7 +925,7 @@ const vitrine = formats[1];
             transparent
         );
         overflow: hidden;
-        padding: 6px 0;
+        padding: 8px 0 40px;
         transition:
             --pc-fade-l 0.3s,
             --pc-fade-r 0.3s;
@@ -910,15 +950,40 @@ const vitrine = formats[1];
         padding: 0 5px;
     }
 
+    .pc-tile,
+    .pc-row,
+    .pc-none {
+        isolation: isolate;
+        position: relative;
+    }
+
+    .pc-tile::before,
+    .pc-row::before,
+    .pc-none::before {
+        background: var(--pc-lift-bg);
+        border-radius: inherit;
+        content: "";
+        inset: 0;
+        opacity: 0;
+        position: absolute;
+        transition: opacity 0.3s;
+        z-index: -1;
+    }
+
+    .pc-tile:has(:checked)::before,
+    .pc-row:has(:checked)::before,
+    .pc-none[aria-pressed="true"]::before {
+        opacity: 1;
+    }
+
     .pc-tile {
-        background: var(--color-snow-50);
+        background: var(--pc-card);
         border-radius: 22px;
-        box-shadow: inset 0 0 0 1px var(--color-gray-200);
         cursor: pointer;
         display: flex;
         flex-direction: column;
         height: 100%;
-        padding: 18px;
+        padding: 22px 20px;
         transition:
             box-shadow 0.25s,
             background-color 0.25s,
@@ -926,12 +991,12 @@ const vitrine = formats[1];
     }
 
     .pc-tile:hover {
-        background: var(--color-gray-50);
+        background: var(--pc-card-hover);
     }
 
     .pc-tile:has(:checked) {
-        background: var(--color-snow-50);
-        box-shadow: 0 0 0 1.5px var(--color-coffee-300);
+        background: var(--pc-card);
+        box-shadow: var(--pc-lift-shadow);
         transform: translateY(-2px);
     }
 
@@ -984,7 +1049,7 @@ const vitrine = formats[1];
     }
 
     .pc-radio {
-        background: var(--color-snow-50);
+        background: transparent;
         border-radius: 50%;
         box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
         flex: 0 0 auto;
@@ -1005,7 +1070,7 @@ const vitrine = formats[1];
     .pc-tile-price {
         display: flex;
         flex-direction: column;
-        margin-top: 14px;
+        margin-top: 20px;
     }
 
     .pc-tile-price strong {
@@ -1021,45 +1086,45 @@ const vitrine = formats[1];
         font-size: 13px;
     }
 
-    .pc-budget {
-        color: var(--color-gray-500);
+    .pc-feats {
         display: flex;
-        font-size: 12px;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .pc-feats li {
+        align-items: flex-start;
+        color: var(--color-gray-700);
+        display: flex;
+        font-size: 13px;
         gap: 8px;
-        justify-content: space-between;
-        margin-top: 14px;
+        line-height: 18px;
     }
 
-    .pc-budget b {
-        color: var(--color-gray-900);
-        font-weight: var(--w5);
+    .pc-feat-check {
+        align-items: center;
+        background: var(--color-gray-200);
+        border-radius: 50%;
+        color: var(--color-gray-700);
+        display: inline-flex;
+        flex: 0 0 auto;
+        height: 18px;
+        justify-content: center;
+        transition:
+            background-color 0.2s,
+            color 0.2s;
+        width: 18px;
     }
 
-    .pc-meter {
-        background: var(--color-gray-100);
-        border-radius: 4px;
-        display: block;
-        height: 3px;
-        margin-top: 8px;
-        overflow: hidden;
-    }
-
-    .pc-meter i {
-        background: var(--color-gray-400);
-        border-radius: inherit;
-        display: block;
-        height: 100%;
-        transition: background-color 0.2s;
-    }
-
-    .pc-tile:has(:checked) .pc-meter i {
-        background: var(--color-blue-500);
+    .pc-tile:has(:checked) .pc-feat-check {
+        background: var(--color-coffee-300);
+        color: var(--color-snow-50);
     }
 
     .pc-included {
-        background: var(--color-snow-50);
+        background: var(--pc-card);
         border-radius: 18px;
-        box-shadow: inset 0 0 0 1px var(--color-gray-200);
         interpolate-size: allow-keywords;
         margin-top: 20px;
     }
@@ -1090,7 +1155,8 @@ const vitrine = formats[1];
 
     .pc-toggle {
         align-items: center;
-        background: var(--color-gray-100);
+        background: var(--pc-knob-bg);
+        box-shadow: var(--pc-knob-shadow);
         border-radius: 9px;
         display: inline-flex;
         flex: 0 0 auto;
@@ -1101,7 +1167,7 @@ const vitrine = formats[1];
     }
 
     .pc-included summary:hover .pc-toggle {
-        background: var(--color-gray-200);
+        background: var(--color-snow-300);
     }
 
     .pc-toggle-v {
@@ -1142,7 +1208,7 @@ const vitrine = formats[1];
     }
 
     .pc-team {
-        border: 1px solid var(--color-gray-200);
+        background: var(--pc-card);
         border-radius: 18px;
         margin-top: 20px;
         padding: 16px 18px;
@@ -1173,6 +1239,7 @@ const vitrine = formats[1];
         margin-top: 2px;
     }
 
+
     .pc-stepper output {
         font-size: 15px;
         font-weight: var(--w5);
@@ -1195,9 +1262,8 @@ const vitrine = formats[1];
 
     .pc-row {
         align-items: center;
-        background: var(--color-snow-50);
+        background: var(--pc-card);
         border-radius: 22px;
-        box-shadow: inset 0 0 0 1px var(--color-gray-200);
         cursor: pointer;
         display: flex;
         gap: 20px;
@@ -1208,12 +1274,12 @@ const vitrine = formats[1];
     }
 
     .pc-row:hover {
-        background: var(--color-gray-50);
+        background: var(--pc-card-hover);
     }
 
     .pc-row:has(:checked) {
-        background: var(--color-snow-50);
-        box-shadow: 0 0 0 1.5px var(--color-coffee-300);
+        background: var(--pc-card);
+        box-shadow: var(--pc-lift-shadow);
     }
 
     .pc-rows:disabled .pc-row,
@@ -1223,7 +1289,7 @@ const vitrine = formats[1];
 
     .pc-check {
         align-items: center;
-        background: var(--color-snow-50);
+        background: transparent;
         border-radius: 5px;
         box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
         color: transparent;
@@ -1309,7 +1375,7 @@ const vitrine = formats[1];
 
     .pc-none {
         align-items: center;
-        background: var(--color-gray-50);
+        background: var(--pc-card);
         border-radius: 18px;
         cursor: pointer;
         display: flex;
@@ -1323,8 +1389,8 @@ const vitrine = formats[1];
     }
 
     .pc-none[aria-pressed="true"] {
-        background: var(--color-snow-50);
-        box-shadow: inset 0 0 0 1px var(--color-gray-200);
+        background: var(--pc-card);
+        box-shadow: var(--pc-lift-shadow);
     }
 
     .pc-none strong {
@@ -1690,7 +1756,7 @@ const vitrine = formats[1];
 
         .pc-tile {
             border-radius: 18px;
-            padding: 14px;
+            padding: 18px 16px;
         }
 
         .pc-object {
@@ -1705,11 +1771,6 @@ const vitrine = formats[1];
 
         .pc-tile-price span {
             font-size: 12px;
-        }
-
-        .pc-budget {
-            font-size: 11px;
-            white-space: nowrap;
         }
 
         .pc-included summary,
