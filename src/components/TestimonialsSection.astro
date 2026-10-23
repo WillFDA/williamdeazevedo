@@ -35,7 +35,7 @@ const testimonials = getPublishedTestimonials().map((testimonial) => ({
                 <div class="flex max-w-3xl flex-col gap-4">
                     <h2
                         id="testimonials-title"
-                        class="section-heading text-left text-[clamp(2.35rem,3.9vw,3.45rem)]"
+                        class="section-heading section-heading--left"
                     >
                         Ce que mes clients disent de leur site
                     </h2>
@@ -81,54 +81,57 @@ const testimonials = getPublishedTestimonials().map((testimonial) => ({
                                 <blockquote class="mt-6 text-lg font-light leading-relaxed text-gray-600 sm:text-xl">
                                     “{quote.before}{
                                         quote.highlight && (
-                                            <span class="font-normal text-gray-900">
+                                            <span class="text-gray-900">
                                                 {quote.highlight}
                                             </span>
                                         )
                                     }{quote.after}”
                                 </blockquote>
 
-                                <figcaption class="mt-auto flex items-end justify-between gap-6 pt-8">
-                                    <div>
-                                        <p class="text-base font-medium text-gray-900">
-                                            {name}
-                                        </p>
-                                        <p class="text-sm text-gray-500">
-                                            {project.title}
-                                        </p>
-                                        <a
-                                            class="mt-3 inline-flex items-center gap-2 text-sm text-blue-500 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
-                                            href={`/realisations/${project.id}/`}
-                                        >
-                                            <WaveText
-                                                text="Découvrir ce projet"
-                                                trigger="parent"
-                                            />
-                                            <WaveIcon
-                                                style="--wui-wave-icon-size: 0.875rem;"
-                                                direction="right"
-                                                trigger="parent"
-                                            >
-                                                <ArrowRight
-                                                    class="size-full"
-                                                    aria-hidden="true"
-                                                />
-                                            </WaveIcon>
-                                        </a>
-                                    </div>
-                                    {image ? (
-                                        <Image
-                                            class="size-16 shrink-0 rounded-xl object-cover"
-                                            src={image}
-                                            alt={imageAlt ?? ""}
-                                            width={128}
-                                            height={128}
-                                        />
-                                    ) : (
-                                        <div class="flex size-16 shrink-0 items-center justify-center rounded-xl bg-snow-50 text-base font-medium text-gray-900">
-                                            {initials}
+                                {/* Identity first in the DOM: on top on mobile, flipped to the right of the CTA from sm. */}
+                                <figcaption class="mt-auto flex flex-col gap-5 pt-8 sm:flex-row-reverse sm:items-center sm:justify-between">
+                                    <div class="flex flex-row-reverse items-center justify-end gap-4 sm:flex-row">
+                                        <div class="sm:text-right">
+                                            <p class="text-base font-medium text-gray-900">
+                                                {name}
+                                            </p>
+                                            <p class="text-sm text-gray-500">
+                                                {project.title}
+                                            </p>
                                         </div>
-                                    )}
+                                        {image ? (
+                                            <Image
+                                                class="size-16 shrink-0 rounded-xl object-cover"
+                                                src={image}
+                                                alt={imageAlt ?? ""}
+                                                width={128}
+                                                height={128}
+                                            />
+                                        ) : (
+                                            <div class="flex size-16 shrink-0 items-center justify-center rounded-xl bg-snow-50 text-base font-medium text-gray-900">
+                                                {initials}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <a
+                                        class="hero-button hero-button--primary flex min-h-14 w-full items-center justify-center gap-5 rounded-xl px-8 py-3 text-base font-normal sm:w-auto"
+                                        href={`/realisations/${project.id}/`}
+                                    >
+                                        <WaveText
+                                            text="Découvrir ce projet"
+                                            trigger="parent"
+                                        />
+                                        <WaveIcon
+                                            style="--wui-wave-icon-size: 1rem;"
+                                            direction="right"
+                                            trigger="parent"
+                                        >
+                                            <ArrowRight
+                                                class="size-full"
+                                                aria-hidden="true"
+                                            />
+                                        </WaveIcon>
+                                    </a>
                                 </figcaption>
                             </figure>
                         </article>

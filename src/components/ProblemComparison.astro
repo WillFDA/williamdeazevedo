@@ -115,7 +115,7 @@ const {
     data-section-reveal="false"
 >
     <div class="flex max-w-4xl flex-col items-start gap-4 text-left">
-        <h2 id="problem-comparison-title" class="section-heading problem-comparison-heading">
+        <h2 id="problem-comparison-title" class="section-heading section-heading--left">
             {
                 headingLines.map((line, index) => (
                     <span
@@ -580,13 +580,7 @@ const {
 </script>
 
 <style>
-    .problem-comparison-heading {
-        font-size: clamp(2.35rem, 3.9vw, 3.45rem);
-        max-width: 54rem;
-        text-align: left;
-    }
-
-    .problem-comparison-heading [data-problem-heading-line] {
+    #problem-comparison-title [data-problem-heading-line] {
         display: block;
     }
 
