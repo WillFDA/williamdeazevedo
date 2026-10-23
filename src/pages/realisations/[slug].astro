@@ -1,4 +1,5 @@
 ---
+import { serializeJsonLd } from "@/lib/jsonLd";
 import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
@@ -110,12 +111,12 @@ const breadcrumbJsonLd = {
     <script
         type="application/ld+json"
         is:inline
-        set:html={JSON.stringify(creativeWorkJsonLd)}
+        set:html={serializeJsonLd(creativeWorkJsonLd)}
     />
     <script
         type="application/ld+json"
         is:inline
-        set:html={JSON.stringify(breadcrumbJsonLd)}
+        set:html={serializeJsonLd(breadcrumbJsonLd)}
     />
 
     <main

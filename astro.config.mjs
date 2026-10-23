@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+
 // @ts-check
 import { satteri } from "@astrojs/markdown-satteri";
 import mdx from "@astrojs/mdx";
@@ -8,11 +10,26 @@ import { defineConfig } from "astro/config";
 
 import hastAccessibleTables from "./scripts/hast-accessible-tables.mjs";
 import hastStaticTaskLists from "./scripts/hast-static-task-lists.mjs";
+import {
+  createSitemapSerializer,
+  readArticleDates,
+  seoRedirects,
+} from "./scripts/seo-build.mjs";
+
+const articleDates = readArticleDates(
+  fileURLToPath(new URL("src/content/articles/", import.meta.url))
+);
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://williamdeazevedo.fr/",
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({ serialize: createSitemapSerializer(articleDates) }),
+    // Après sitemap : complète dist/_redirects (301 barre finale, /blog/<slug>).
+    seoRedirects(),
+  ],
 
   // <ClientRouter /> turns prefetch ON by default (prefetchAll, hover strategy)
   // — exactly the hover-time, full-page fetching that made the homepage hover

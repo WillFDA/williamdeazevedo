@@ -1,4 +1,5 @@
 ---
+import { businessPhone } from "@/data/business";
 import Phone from "./icons/phone.svg";
 import ChevronUp from "./icons/nucleo/chevron-up-fill.svg";
 import CodeEditor from "./icons/nucleo/code-editor-fill.svg";
@@ -14,8 +15,8 @@ interface Props {
 }
 
 const { pathName } = Astro.props;
-const phoneDisplay = "07 62 74 60 21";
-const phoneHref = "tel:+33762746021";
+const phoneDisplay = businessPhone.display;
+const phoneHref = `tel:${businessPhone.e164}`;
 const navItems = [
     { href: "/", id: "home", label: "Accueil" },
     { href: "/services/", id: "services", label: "Services" },

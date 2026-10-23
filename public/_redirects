@@ -8,7 +8,7 @@
 # src/content/articles/premier-side-project-motivai.mdx). Avant la règle splat.
 /blog/mon-premier-post /articles/premier-side-project-motivai/ 301
 /blog/mon-premier-post/ /articles/premier-side-project-motivai/ 301
-/blog/* /articles/ 301
 
-# Barre finale : redirection permanente au lieu du 307 automatique.
-/about /about/ 301
+# La suite est générée au build par scripts/seo-build.mjs (seoRedirects) :
+# /page -> /page/ en 301 pour chaque page construite, /blog/<slug> vers
+# l'article du même nom, puis /blog/* -> /articles/ en dernier recours.
