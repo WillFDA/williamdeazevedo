@@ -5,13 +5,15 @@
 
 // Refuser et accepter partagent la même taille et la même forme (exigence
 // CNIL) ; seule la couleur change (principal / secondaire gris).
+// Sur mobile, bandeau compact (boutons côte à côte, plus bas) pour ne pas
+// masquer l'appel à l'action du hero.
 const choiceClass =
-    "hero-button flex min-h-14 w-full cursor-pointer items-center justify-center rounded-xl px-8 py-3 text-base font-normal";
+    "hero-button flex min-h-11 w-full cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-sm font-normal sm:min-h-14 sm:px-8 sm:py-3 sm:text-base";
 ---
 
 <div
     id="cookie-banner"
-    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-3 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] sm:right-auto sm:bottom-4 sm:left-4 sm:max-w-sm"
+    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-3 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-3 text-xs sm:p-4 sm:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] sm:right-auto sm:bottom-4 sm:left-4 sm:max-w-sm"
     role="dialog"
     aria-modal="false"
     aria-labelledby="cookie-banner-title"
@@ -20,7 +22,7 @@ const choiceClass =
     hidden
     transition:persist
 >
-    <h2 id="cookie-banner-title" class="text-base font-medium">Cookies</h2>
+    <h2 id="cookie-banner-title" class="text-sm font-medium sm:text-base">Cookies</h2>
     <p id="cookie-banner-text" class="mt-1 leading-relaxed text-gray-700">
         Avec votre accord, Google Analytics mesure l'audience et Google Ads
         mesure l'efficacité des annonces. Rien n'est chargé avant votre choix,
@@ -61,7 +63,7 @@ const choiceClass =
             </span>
         </label>
     </fieldset>
-    <div class="mt-4 flex flex-col gap-3">
+    <div class="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:grid-cols-1 sm:gap-3">
         <button
             class:list={[choiceClass, "hero-button--secondary"]}
             type="button"
@@ -77,7 +79,7 @@ const choiceClass =
             Accepter
         </button>
         <button
-            class="cursor-pointer self-center text-sm underline underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            class="col-span-2 cursor-pointer justify-self-center text-xs underline sm:col-span-1 sm:text-sm underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             type="button"
             aria-expanded="false"
             data-cookie-customize
@@ -85,7 +87,7 @@ const choiceClass =
             Choisir par finalité
         </button>
         <button
-            class:list={[choiceClass, "hero-button--secondary"]}
+            class:list={[choiceClass, "hero-button--secondary col-span-2 sm:col-span-1"]}
             type="button"
             data-cookie-choice="custom"
             hidden

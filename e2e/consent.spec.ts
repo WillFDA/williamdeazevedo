@@ -117,3 +117,23 @@ test("the GTM noscript iframe is gone", async ({ page }) => {
   await page.goto("/");
   expect(await page.content()).not.toContain("googletagmanager.com/ns.html");
 });
+
+test("on mobile the banner stays compact and leaves the hero call to action visible", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const dialog = banner(page);
+  await expect(dialog).toBeVisible();
+  const cta = page
+    .locator("main :is(a, button)", { hasText: "Parlons de votre projet" })
+    .first();
+  const [bannerBox, ctaBox] = await Promise.all([
+    dialog.boundingBox(),
+    cta.boundingBox(),
+  ]);
+  expect(bannerBox && ctaBox).toBeTruthy();
+  if (!bannerBox || !ctaBox) return;
+  expect(bannerBox.height).toBeLessThan(240);
+  expect(ctaBox.y + ctaBox.height).toBeLessThanOrEqual(bannerBox.y);
+});

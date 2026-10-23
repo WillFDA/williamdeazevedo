@@ -62,3 +62,21 @@ test("outbound event URLs exclude query strings and fragments", () => {
     })
   ).toEqual({ url: "https://example.com/contact", location: "footer" });
 });
+
+test("event properties never carry an email address or a phone number", () => {
+  expect(
+    sanitizeTrackingProperties({
+      label: "Écrire à william.deazevedopro@gmail.com",
+      location: "Appeler le 07 62 74 60 21",
+      email: "someone@example.com",
+      phone: "+33762746021",
+      count: 3,
+    })
+  ).toEqual({
+    label: "Écrire à [email]",
+    location: "Appeler le [tel]",
+    email: "[retiré]",
+    phone: "[retiré]",
+    count: 3,
+  });
+});

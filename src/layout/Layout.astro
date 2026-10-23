@@ -330,19 +330,15 @@ const websiteJsonLd = {
                     path: window.location.pathname || "/",
                 };
 
+                // Ni adresse email ni numéro dans les événements : seul
+                // l'intention de contact (libellé, emplacement, page) est mesurée.
                 if (url.protocol === "mailto:") {
-                    trackContactIntent("contact_email_click", {
-                        ...baseProperties,
-                        email: normalizeTrackingValue(url.pathname),
-                    });
+                    trackContactIntent("contact_email_click", baseProperties);
                     return;
                 }
 
                 if (url.protocol === "tel:") {
-                    trackContactIntent("contact_phone_click", {
-                        ...baseProperties,
-                        phone: normalizeTrackingValue(url.pathname),
-                    });
+                    trackContactIntent("contact_phone_click", baseProperties);
                     return;
                 }
 
