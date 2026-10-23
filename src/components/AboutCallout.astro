@@ -163,131 +163,63 @@ const aboutPoints = [
 </DarkCalloutShell>
 
 <script>
-    import { gsap } from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-    gsap.registerPlugin(ScrollTrigger);
+    import {
+        createScrollReveal,
+        prefersReducedMotion,
+        queryAll,
+    } from "@/scripts/motion";
 
     const activeAboutCalloutMotion = new WeakMap<HTMLElement, () => void>();
 
     const cleanupAboutCallouts = () => {
-        document
-            .querySelectorAll<HTMLElement>("[data-about-callout]")
-            .forEach((callout) => {
-                activeAboutCalloutMotion.get(callout)?.();
-                activeAboutCalloutMotion.delete(callout);
-                delete callout.dataset.aboutCalloutReady;
-            });
+        for (const callout of queryAll(document, "[data-about-callout]")) {
+            activeAboutCalloutMotion.get(callout)?.();
+            activeAboutCalloutMotion.delete(callout);
+            delete callout.dataset.aboutCalloutReady;
+        }
     };
 
     const initAboutCallouts = () => {
-        let didCreateMotion = false;
+        for (const callout of queryAll(document, "[data-about-callout]")) {
+            if (callout.dataset.aboutCalloutReady === "true") continue;
+            callout.dataset.aboutCalloutReady = "true";
+            if (prefersReducedMotion()) continue;
 
-        document
-            .querySelectorAll<HTMLElement>("[data-about-callout]")
-            .forEach((callout) => {
-                if (callout.dataset.aboutCalloutReady === "true") return;
-                callout.dataset.aboutCalloutReady = "true";
-
-                if (
-                    window.matchMedia("(prefers-reduced-motion: reduce)")
-                        .matches
-                ) {
-                    return;
-                }
-
-                const context = gsap.context(() => {
-                    const words = gsap.utils.toArray<HTMLElement>(
-                        "[data-about-callout-word]",
-                        callout,
-                    );
-                    const copy = callout.querySelector<HTMLElement>(
+            const motion = createScrollReveal(callout, [
+                {
+                    at: 0,
+                    duration: 0.5,
+                    from: { opacity: 0, scale: 0.985, y: 18 },
+                    stagger: 0.025,
+                    targets: queryAll(callout, "[data-about-callout-word]"),
+                },
+                {
+                    at: 0.1,
+                    duration: 0.44,
+                    from: { opacity: 0, y: 14 },
+                    targets: callout.querySelector<HTMLElement>(
                         "[data-about-callout-copy]",
-                    );
-                    const cards = gsap.utils.toArray<HTMLElement>(
-                        "[data-about-callout-card]",
-                        callout,
-                    );
-                    const cta = callout.querySelector<HTMLElement>(
+                    ),
+                },
+                {
+                    at: 0.16,
+                    duration: 0.52,
+                    from: { opacity: 0, scale: 0.985, y: 22 },
+                    stagger: 0.07,
+                    targets: queryAll(callout, "[data-about-callout-card]"),
+                },
+                {
+                    at: 0.24,
+                    duration: 0.46,
+                    from: { opacity: 0, scale: 0.985, y: 14 },
+                    targets: callout.querySelector<HTMLElement>(
                         "[data-about-callout-cta]",
-                    );
-                    const animatedElements = [
-                        ...words,
-                        ...(copy ? [copy] : []),
-                        ...cards,
-                        ...(cta ? [cta] : []),
-                    ];
+                    ),
+                },
+            ]);
 
-                    const timeline = gsap.timeline({
-                        defaults: { ease: "power3.out" },
-                        scrollTrigger: {
-                            trigger: callout,
-                            start: "top 80%",
-                            once: true,
-                            toggleActions: "play none none none",
-                        },
-                        onComplete: () => {
-                            gsap.set(animatedElements, {
-                                clearProps: "opacity,transform,visibility",
-                            });
-                        },
-                    });
-
-                    timeline.fromTo(
-                        words,
-                        { autoAlpha: 0, y: 18, scale: 0.985 },
-                        {
-                            autoAlpha: 1,
-                            y: 0,
-                            scale: 1,
-                            duration: 0.5,
-                            stagger: 0.025,
-                        },
-                        0,
-                    );
-
-                    if (copy) {
-                        timeline.fromTo(
-                            copy,
-                            { autoAlpha: 0, y: 14 },
-                            { autoAlpha: 1, y: 0, duration: 0.44 },
-                            0.1,
-                        );
-                    }
-
-                    timeline.fromTo(
-                        cards,
-                        { autoAlpha: 0, y: 22, scale: 0.985 },
-                        {
-                            autoAlpha: 1,
-                            y: 0,
-                            scale: 1,
-                            duration: 0.52,
-                            stagger: 0.07,
-                        },
-                        0.16,
-                    );
-
-                    if (cta) {
-                        timeline.fromTo(
-                            cta,
-                            { autoAlpha: 0, y: 14, scale: 0.985 },
-                            {
-                                autoAlpha: 1,
-                                y: 0,
-                                scale: 1,
-                                duration: 0.46,
-                            },
-                            0.24,
-                        );
-                    }
-                }, callout);
-
-                activeAboutCalloutMotion.set(callout, () => context.revert());
-                didCreateMotion = true;
-            });
-
-        if (didCreateMotion) ScrollTrigger.refresh();
+            activeAboutCalloutMotion.set(callout, motion.revert);
+        }
     };
 
     initAboutCallouts();
