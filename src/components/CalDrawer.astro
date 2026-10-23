@@ -9,7 +9,7 @@ const calLink = String(
 
 <dialog
     aria-label="Planifier un créneau"
-    class="cal-drawer fixed overflow-hidden rounded-lg border-0 p-0 text-snow-50"
+    class="cal-drawer fixed overflow-hidden rounded-lg border-0 p-0 text-gray-900"
     data-cal-drawer
     id="cal-drawer"
     transition:persist
@@ -17,7 +17,7 @@ const calLink = String(
     <div class="cal-drawer__header flex items-center justify-end p-4">
         <button
             aria-label="Fermer"
-            class="cal-drawer__close inline-flex size-11 items-center justify-center rounded-lg border-0 bg-white/10 p-0 text-snow-50"
+            class="cal-drawer__close inline-flex size-11 items-center justify-center rounded-lg border-0 bg-gray-900/5 p-0 text-gray-900"
             data-cal-close
             type="button"
         >
@@ -37,7 +37,7 @@ const calLink = String(
             </svg>
         </button>
     </div>
-    <p class="px-4 pb-3 text-sm text-snow-50/80">Le calendrier est fourni par Cal.com. Vos coordonnées servent à organiser le rendez-vous. <a class="underline" href="/mentions-legales/#reservation">Confidentialité</a></p>
+    <p class="px-4 pb-3 text-sm text-gray-600">Le calendrier est fourni par Cal.com. Vos coordonnées servent à organiser le rendez-vous. <a class="underline" href="/mentions-legales/#reservation">Confidentialité</a></p>
     <div
         aria-label="Réserver un appel avec William De Azevedo"
         class="cal-drawer__embed mx-auto h-full min-h-0 w-full overflow-auto"
@@ -133,21 +133,15 @@ const calLink = String(
 
         const cal = loadCalEmbed();
         cal("init", { origin: "https://cal.com" });
+        // Thème clair, aligné sur le reste du site. La langue (français) et le
+        // premier jour de la semaine (lundi) se règlent dans le compte Cal.com
+        // (Paramètres > Général) : l'embed n'expose aucune option pour les forcer.
         cal("ui", {
-            cssVarsPerTheme: {
-                dark: {
-                    "cal-bg": "#141016",
-                    "cal-bg-muted": "#171219",
-                    "cal-bg-subtle": "#1f1822",
-                    "cal-border": "#2a2230",
-                    "cal-border-subtle": "#2a2230",
-                },
-            },
+            layout: "month_view",
             styles: {
-                body: { background: "#141016" },
-                eventTypeListItem: { background: "#1f1822" },
+                body: { background: "#ffffff" },
             },
-            theme: "dark",
+            theme: "light",
         });
         cal("on", {
             action: "bookingSuccessfulV2",
@@ -180,7 +174,11 @@ const calLink = String(
         configureCalEmbed(calLink);
         loadCalEmbed()("inline", {
             calLink,
-            config: { theme: "dark", "ui.color-scheme": "dark" },
+            config: {
+                layout: "month_view",
+                theme: "light",
+                "ui.color-scheme": "light",
+            },
             elementOrSelector: inlineEmbed,
         });
         isCalEmbedded = true;
@@ -225,6 +223,22 @@ const calLink = String(
         closeCalDrawer();
     });
 
+    // Préchargement à l'intention : survol ou focus d'un bouton de réservation.
+    // embed.js et la page Cal.com se chargent avant le clic, le tiroir s'ouvre
+    // donc sur un calendrier déjà prêt.
+    function preloadOnIntent(event: Event) {
+        if (isCalConfigured) return;
+        const target = event.target;
+        if (!(target instanceof Element) || !target.closest("[data-cal-open]")) {
+            return;
+        }
+        const calLink = getCalLink();
+        if (calLink) configureCalEmbed(calLink);
+    }
+
+    document.addEventListener("pointerover", preloadOnIntent, { passive: true });
+    document.addEventListener("focusin", preloadOnIntent);
+
     document.addEventListener("click", (event) => {
         const target = event.target;
         if (!(target instanceof Element)) return;
@@ -256,7 +270,8 @@ const calLink = String(
     }
 
     .cal-drawer {
-        background: #141016;
+        background: var(--color-snow-50);
+        box-shadow: 0 24px 60px -32px rgb(34 42 55 / 0.45);
         height: calc(100dvh - 2rem);
         inset: 1rem 1rem 1rem auto;
         margin: auto 0 auto auto;
@@ -277,7 +292,9 @@ const calLink = String(
     .cal-drawer[open] {
         animation: cal-drawer-in 440ms cubic-bezier(0.16, 1, 0.3, 1);
         display: grid;
-        grid-template-rows: auto minmax(0, 1fr);
+        /* En-tête, mention de confidentialité, puis le calendrier qui prend
+           toute la hauteur restante. */
+        grid-template-rows: auto auto minmax(0, 1fr);
     }
 
     .cal-drawer[open]::backdrop {

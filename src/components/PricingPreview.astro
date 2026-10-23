@@ -92,7 +92,7 @@ const pricingCards = [
                         <h3 class="mb-4 text-2xl font-normal leading-none tracking-tight text-inherit">
                             {card.title}
                         </h3>
-                        <p class="text-xl font-light tracking-tight text-snow-50/80">
+                        <p class="text-xl font-light tracking-tight text-snow-50">
                             {card.subtitle}
                         </p>
                     </div>
@@ -101,7 +101,7 @@ const pricingCards = [
                         {"priceValue" in card ? (
                             <strong class="flex flex-col gap-1 font-semibold leading-none tracking-tight text-inherit">
                                 <span
-                                    class="text-sm font-light leading-none tracking-tight text-snow-50/70"
+                                    class="text-sm font-light leading-none tracking-tight text-snow-50/90"
                                     data-pricing-prefix
                                 >
                                     À partir de
@@ -123,11 +123,11 @@ const pricingCards = [
                             </strong>
                         )}
                         {"budget" in card && (
-                            <span class="text-sm font-light tracking-tight text-snow-50/75">
+                            <span class="text-sm font-light tracking-tight text-snow-50/90">
                                 {card.budget}
                             </span>
                         )}
-                        <span class="text-sm font-light tracking-tight text-snow-50/75">
+                        <span class="text-sm font-light tracking-tight text-snow-50/90">
                             {card.delay}
                         </span>
                     </div>
