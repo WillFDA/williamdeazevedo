@@ -80,3 +80,21 @@ test("event properties never carry an email address or a phone number", () => {
     count: 3,
   });
 });
+
+test("phone masking targets French numbers only, not other long numbers", () => {
+  for (const phone of [
+    "07 62 74 60 21",
+    "07.62.74.60.21",
+    "0762746021",
+    "+33 7 62 74 60 21",
+    "+33 (0)7 62 74 60 21",
+    "0033762746021",
+  ])
+    expect(sanitizeTrackingProperties({ label: `Tel ${phone}` })).toEqual({
+      label: "Tel [tel]",
+    });
+  for (const other of ["SIRET 12345678900012", "id 20261023", "1500 €"])
+    expect(sanitizeTrackingProperties({ label: other })).toEqual({
+      label: other,
+    });
+});

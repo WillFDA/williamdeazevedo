@@ -21,8 +21,10 @@
         window.__wuiGtmListenersReady = true;
         // Rien n'est empilé tant que GTM n'est pas chargé (pas de consentement) :
         // ces événements ne doivent pas être rejoués après un accord ultérieur.
-        const push = (data) => {
-            if (!window.__wuiGtmLoaded) return;
+        // Chaque événement exige aussi sa finalité : page vue = audience,
+        // clics contact (conversions Google Ads) = publicité.
+        const push = (purpose, data) => {
+            if (!window.__wuiGtmLoaded || !window.__wuiConsent?.[purpose]) return;
             window.dataLayer ||= [];
             window.dataLayer.push(data);
         };
@@ -42,7 +44,7 @@
             }
             const referrer = lastUrl;
             lastUrl = window.location.href;
-            push({
+            push("analytics", {
                 event: "page_view_virtual",
                 page_location: window.location.href,
                 page_referrer: referrer,
@@ -59,8 +61,8 @@
                 const link = target.closest("a[href]");
                 if (!link) return;
                 const href = (link.getAttribute("href") || "").trim().toLowerCase();
-                if (href.startsWith("tel:")) push({ event: "clic_telephone" });
-                else if (href.startsWith("mailto:")) push({ event: "clic_email" });
+                if (href.startsWith("tel:")) push("ads", { event: "clic_telephone" });
+                else if (href.startsWith("mailto:")) push("ads", { event: "clic_email" });
             },
             { capture: true },
         );

@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 
 import {
+  isWithdrawal,
   parseStoredConsent,
   serializeConsent,
   toConsentModeUpdate,
@@ -65,4 +66,15 @@ test("Consent Mode signals follow each purpose separately", () => {
     ad_personalization: "denied",
     analytics_storage: "granted",
   });
+});
+
+test("withdrawing a purpose granted earlier requires a full reload", () => {
+  const both = { analytics: true, ads: true };
+  const none = { analytics: false, ads: false };
+  expect(isWithdrawal(undefined, none)).toBe(false);
+  expect(isWithdrawal(none, both)).toBe(false);
+  expect(isWithdrawal({ analytics: true, ads: false }, both)).toBe(false);
+  expect(isWithdrawal(both, none)).toBe(true);
+  expect(isWithdrawal(both, { analytics: true, ads: false })).toBe(true);
+  expect(isWithdrawal(both, { analytics: false, ads: true })).toBe(true);
 });

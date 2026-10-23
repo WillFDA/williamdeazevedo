@@ -15,7 +15,10 @@ const getAnalyticsWindow = () => window as AnalyticsWindow;
 // Une adresse email ou un numéro de téléphone ne doit jamais partir dans un
 // événement, même via le libellé d'un lien (« Appeler le 07 … »).
 const EMAIL_PATTERN = /[^\s@<>()"']+@[^\s@<>()"']+\.[a-z]{2,}/gi;
-const PHONE_PATTERN = /\+?\d(?:[\s.()-]*\d){7,}/g;
+// Numéros français (0X XX XX XX XX, +33 / 0033), isolés : un SIRET ou un
+// identifiant numérique plus long n'est pas pris pour un numéro.
+const PHONE_PATTERN =
+  /(?<![\d+])(?:(?:\+|00)33[\s.-]*(?:\(0\)[\s.-]*)?|0)[1-9](?:[\s.-]*\d{2}){4}(?!\d)/g;
 
 export const redactContactDetails = (value: string) =>
   value.replaceAll(EMAIL_PATTERN, "[email]").replaceAll(PHONE_PATTERN, "[tel]");

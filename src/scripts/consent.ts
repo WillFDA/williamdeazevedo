@@ -78,6 +78,8 @@ type GtagWindow = Window & {
   dataLayer?: unknown[];
   gtag?: (...args: unknown[]) => void;
   __wuiGtmLoaded?: boolean;
+  /** Choix appliqué dans ce document (lu par les déclencheurs d'événements). */
+  __wuiConsent?: ConsentChoice;
 };
 
 const gtagWindow = () => window as GtagWindow;
@@ -135,19 +137,39 @@ export const readConsent = (): ConsentChoice | null => {
   }
 };
 
+/**
+ * Vrai si une finalité accordée auparavant est retirée. GTM ne peut pas être
+ * déchargé d'un document (le ClientRouter garde le même document entre les
+ * pages) : seul un rechargement complet garantit qu'aucune balise de cette
+ * finalité ne part plus.
+ */
+export const isWithdrawal = (
+  previous: ConsentChoice | undefined,
+  next: ConsentChoice
+) =>
+  Boolean(previous) &&
+  ((previous?.analytics === true && !next.analytics) ||
+    (previous?.ads === true && !next.ads));
+
+/** Finalité accordée dans ce document (GTM chargé et choix en cours). */
+export const hasConsentFor = (purpose: keyof ConsentChoice) => {
+  const w = gtagWindow();
+  return Boolean(w.__wuiGtmLoaded && w.__wuiConsent?.[purpose]);
+};
+
 /** Applique un choix (nouveau ou restauré) sans l'enregistrer. */
 export const applyConsent = (choice: ConsentChoice) => {
   const w = gtagWindow();
-  if (choice.analytics || choice.ads) {
-    if (w.__wuiGtmLoaded)
-      w.gtag?.("consent", "update", toConsentModeUpdate(choice));
-    else loadGoogleTagManager(choice);
-  } else if (w.__wuiGtmLoaded) {
-    // Retrait du consentement après un accord dans la même page.
+  const withdrawn = w.__wuiGtmLoaded && isWithdrawal(w.__wuiConsent, choice);
+  w.__wuiConsent = { ...choice };
+  if (w.__wuiGtmLoaded)
     w.gtag?.("consent", "update", toConsentModeUpdate(choice));
-  }
+  else if (choice.analytics || choice.ads) loadGoogleTagManager(choice);
   if (!choice.analytics) clearCookies(/^(?:_ga|_gid|_gat)/);
   if (!choice.ads) clearCookies(/^(?:_gcl|_gac)/);
+  // Retrait après un accord dans le même document : rechargement complet pour
+  // décharger GTM (sinon GA4 / Ads continueraient d'envoyer des pings).
+  if (withdrawn) window.location.reload();
 };
 
 export const saveConsent = (choice: ConsentChoice) => {
