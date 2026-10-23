@@ -34,6 +34,19 @@ jobs:
       - run: bun run test
       - run: bun run build
       - run: bun run check:editorial
-      # e2e/ : consentement, menu, Cal.com, redirections (wrangler) et axe.
+      # Tests navigateur (e2e/*.spec.ts) : Chromium via astro preview, et
+      # redirections sur le runtime Workers local (wrangler).
+      - name: Cache des navigateurs Playwright
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
       - run: bun x playwright install --with-deps chromium
       - run: bun run test:e2e
+      - name: Traces Playwright en cas d'échec
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7

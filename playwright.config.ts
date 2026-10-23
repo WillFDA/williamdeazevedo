@@ -38,7 +38,7 @@ export default defineConfig({
       timeout: 60_000,
     },
     {
-      command: `bun x wrangler@4.152.0 dev --local --ip 127.0.0.1 --port ${workersPort}`,
+      command: `bun x wrangler dev -c wrangler.e2e.jsonc --local --ip 127.0.0.1 --port ${workersPort}`,
       env: { WRANGLER_SEND_METRICS: "false" },
       url: `http://127.0.0.1:${workersPort}/`,
       reuseExistingServer: !process.env.CI,

@@ -40,6 +40,7 @@ const calLink = String(
     <p class="px-4 pb-3 text-sm text-gray-600">Le calendrier est fourni par Cal.com. Vos coordonnées servent à organiser le rendez-vous. <a class="underline" href="/mentions-legales/#reservation">Confidentialité</a></p>
     <div
         aria-label="Réserver un appel avec William De Azevedo"
+        role="region"
         class="cal-drawer__embed mx-auto h-full min-h-0 w-full overflow-auto"
         data-cal-inline
         data-cal-link={calLink}
@@ -161,7 +162,8 @@ const calLink = String(
                 });
             },
         });
-        cal("preload", { calLink });
+        // Pas de cal("preload") : il ouvre une iframe modale cachée en plus de
+        // l'iframe inline du tiroir, soit la page Cal.com chargée deux fois.
         isCalConfigured = true;
     }
 
@@ -223,21 +225,41 @@ const calLink = String(
         closeCalDrawer();
     });
 
-    // Préchargement à l'intention : survol ou focus d'un bouton de réservation.
-    // embed.js et la page Cal.com se chargent avant le clic, le tiroir s'ouvre
-    // donc sur un calendrier déjà prêt.
-    function preloadOnIntent(event: Event) {
-        if (isCalConfigured) return;
-        const target = event.target;
-        if (!(target instanceof Element) || !target.closest("[data-cal-open]")) {
-            return;
-        }
-        const calLink = getCalLink();
-        if (calLink) configureCalEmbed(calLink);
+    // Préchargement de embed.js quand la souris s'arrête sur un bouton de
+    // réservation (200 ms) : un simple passage ou un Tab au clavier ne
+    // contacte pas Cal.com. Au clavier et au toucher, tout part au clic.
+    const intentDelayMs = 200;
+    let intentTimer = 0;
+
+    function isCalButton(target: EventTarget | null) {
+        return target instanceof Element && Boolean(target.closest("[data-cal-open]"));
     }
 
-    document.addEventListener("pointerover", preloadOnIntent, { passive: true });
-    document.addEventListener("focusin", preloadOnIntent);
+    document.addEventListener(
+        "pointerover",
+        (event) => {
+            if (isCalConfigured || event.pointerType !== "mouse" || !isCalButton(event.target)) {
+                return;
+            }
+            window.clearTimeout(intentTimer);
+            intentTimer = window.setTimeout(() => {
+                const calLink = getCalLink();
+                if (calLink) configureCalEmbed(calLink);
+            }, intentDelayMs);
+        },
+        { passive: true },
+    );
+
+    document.addEventListener(
+        "pointerout",
+        (event) => {
+            if (!isCalButton(event.target)) return;
+            const button = (event.target as Element).closest("[data-cal-open]");
+            if (event.relatedTarget instanceof Node && button?.contains(event.relatedTarget)) return;
+            window.clearTimeout(intentTimer);
+        },
+        { passive: true },
+    );
 
     document.addEventListener("click", (event) => {
         const target = event.target;

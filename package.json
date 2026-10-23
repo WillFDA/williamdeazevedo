@@ -41,7 +41,8 @@
     "oxfmt": "^0.74.0",
     "oxlint": "^1.89.0",
     "typescript": "^5.9.3",
-    "ultracite": "^8.0.1"
+    "ultracite": "^8.0.1",
+    "wrangler": "4.152.0"
   },
   "overrides": {
     "vite": "^8.3.1"

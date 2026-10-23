@@ -89,26 +89,26 @@ const items = navItems.map((item) => {
                 <BrandMark class="h-5 w-auto" />
             </a>
             <div class="flex items-center gap-2">
-            <a
-                aria-label={`Appeler William au ${phoneDisplay}`}
-                class="mobile-call-button"
-                data-analytics-location="mobile-header-bar"
-                href={phoneHref}
-            >
-                <Phone class="size-4 shrink-0" aria-hidden="true" />
-                <span class="mobile-call-button__label">Appeler</span>
-            </a>
-            <button
-                class="mobile-menu-button"
-                type="button"
-                aria-controls="mobile-menu"
-                aria-expanded="false"
-                aria-label="Ouvrir le menu"
-                data-mobile-menu-button
-            >
-                <span></span>
-                <span></span>
-            </button>
+                <a
+                    aria-label={`Appeler William au ${phoneDisplay}`}
+                    class="mobile-call-button"
+                    data-analytics-location="mobile-header-bar"
+                    href={phoneHref}
+                >
+                    <Phone class="size-4 shrink-0" aria-hidden="true" />
+                    <span class="mobile-call-button__label">Appeler</span>
+                </a>
+                <button
+                    class="mobile-menu-button"
+                    type="button"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false"
+                    aria-label="Ouvrir le menu"
+                    data-mobile-menu-button
+                >
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
         <a
@@ -955,8 +955,16 @@ const items = navItems.map((item) => {
         windowWithHeaderBg.__wuiHeaderBgReady = true;
     }
 
-    // Durée de la transition de hauteur du menu mobile (voir .mobile-menu).
-    const MOBILE_MENU_TRANSITION_MS = 360;
+    // Durée de la plus longue transition du menu mobile, lue dans la CSS
+    // (.mobile-menu) pour ne pas la recopier ici.
+    const transitionMs = (element: HTMLElement) =>
+        Math.max(
+            0,
+            ...getComputedStyle(element)
+                .transitionDuration.split(",")
+                .map((value) => Number.parseFloat(value) * (value.trim().endsWith("ms") ? 1 : 1000))
+                .filter(Number.isFinite),
+        );
     const pendingMenuTransitions = new WeakMap<HTMLElement, () => void>();
 
     // Exécute `done` à la fin de la transition de hauteur, avec un filet de
@@ -986,7 +994,7 @@ const items = navItems.map((item) => {
         menu.addEventListener("transitionend", transition.onEnd);
         transition.fallbackTimer = window.setTimeout(
             transition.finish,
-            MOBILE_MENU_TRANSITION_MS + 120,
+            transitionMs(menu) + 120,
         );
         pendingMenuTransitions.set(menu, transition.cancel);
     };
@@ -1075,7 +1083,18 @@ const items = navItems.map((item) => {
 
         const next = event.relatedTarget;
         if (next instanceof Node && dropdown.contains(next)) return;
+        // La souris qui sort ne rouvre pas un menu qui garde le focus clavier.
+        if (event.type === "pointerout" && dropdown.contains(document.activeElement)) return;
         delete dropdown.dataset.dismissed;
+    };
+
+    // Après Échap, un Tab vers les liens du panneau le rend de nouveau
+    // visible : pas de focus sur un lien invisible.
+    const revealNavDropdownOnFocus = (event: FocusEvent) => {
+        if (!(event.target instanceof Element)) return;
+        if (!event.target.closest(".nav-dropdown__panel")) return;
+        const dropdown = event.target.closest<HTMLElement>("[data-nav-dropdown]");
+        if (dropdown) delete dropdown.dataset.dismissed;
     };
 
     if (!windowWithHeaderBg.__wuiMobileNavReady) {
@@ -1111,6 +1130,7 @@ const items = navItems.map((item) => {
         });
 
         document.addEventListener("focusout", resetNavDropdown);
+        document.addEventListener("focusin", revealNavDropdownOnFocus);
         document.addEventListener("pointerout", resetNavDropdown);
 
         document.addEventListener("keydown", (event) => {

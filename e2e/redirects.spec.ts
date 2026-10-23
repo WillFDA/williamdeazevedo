@@ -15,31 +15,53 @@ const rules: Rule[] = readFileSync("dist/_redirects", "utf-8")
     return { from, status: Number(status), to };
   });
 
-const exactRules = rules.filter((rule) => !rule.from.includes("*"));
+const isPattern = (from: string) => /[*:]/.test(from);
+const exactRules = rules.filter((rule) => !isPattern(rule.from));
+
+// Source Cloudflare (`*`, `:param`) en expression régulière.
+const matcherOf = (from: string) =>
+  new RegExp(
+    `^${from
+      .replaceAll(/[.+?^${}()|[\]\\]/g, String.raw`\$&`)
+      .replaceAll("*", ".*")
+      .replaceAll(/:[A-Za-z]\w*/g, "[^/]+")}$`
+  );
+
+// Une cible peut être un chemin ou une URL absolue.
+const expectLocation = (location: string | undefined, to: string) => {
+  if (/^https?:\/\//.test(to)) {
+    expect(location).toBe(to);
+    return;
+  }
+  expect(new URL(location ?? "", "http://x").pathname).toBe(to);
+};
 
 test("toutes les redirections sont permanentes (301)", () => {
   expect(rules.length).toBeGreaterThan(0);
   expect(rules.filter((rule) => rule.status !== 301)).toEqual([]);
 });
 
-test("les règles exactes passent avant les règles génériques", () => {
-  const firstSplat = rules.findIndex((rule) => rule.from.includes("*"));
-  if (firstSplat === -1) return;
-  const lateExact = rules
-    .slice(firstSplat + 1)
-    .filter(
-      (rule) => !rule.from.includes("*") && rule.from.startsWith("/blog")
-    );
-  expect(lateExact).toEqual([]);
+test("aucune règle exacte n'est masquée par un joker placé avant elle", () => {
+  const shadowed = rules.flatMap((rule, index) =>
+    isPattern(rule.from)
+      ? []
+      : rules
+          .slice(0, index)
+          .filter(
+            (earlier) =>
+              isPattern(earlier.from) && matcherOf(earlier.from).test(rule.from)
+          )
+          .map((earlier) => `${rule.from} masquée par ${earlier.from}`)
+  );
+  expect(shadowed).toEqual([]);
 });
 
 for (const rule of exactRules) {
   test(`${rule.from} → ${rule.to} (301, cible en 200)`, async ({ request }) => {
     const response = await request.get(rule.from, { maxRedirects: 0 });
     expect(response.status()).toBe(rule.status);
-    expect(
-      new URL(response.headers().location ?? "", "http://x").pathname
-    ).toBe(rule.to);
+    expectLocation(response.headers().location, rule.to);
+    if (/^https?:\/\//.test(rule.to)) return;
     const target = await request.get(rule.to, { maxRedirects: 0 });
     expect(target.status()).toBe(200);
   });
