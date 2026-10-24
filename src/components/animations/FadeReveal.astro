@@ -6,12 +6,18 @@ type Props = Omit<HTMLAttributes<"div">, "class"> & {
     animate?: boolean;
     class?: string;
     delay?: number | string;
+    /**
+     * false : glissement seul, sans opacité ni flou au départ. Pour le texte du
+     * hero, qui doit être peint dès le premier rendu (LCP).
+     */
+    fade?: boolean;
 };
 
 const {
     animate = true,
     class: classAttribute,
     delay = 0,
+    fade = true,
     style,
     ...restProps
 } = Astro.props as Props;
@@ -19,7 +25,11 @@ const {
 
 <div
     {...restProps}
-    class={joinClasses(animate && "fade-reveal", classAttribute)}
+    class={joinClasses(
+        animate && "fade-reveal",
+        animate && !fade && "fade-reveal--slide",
+        classAttribute,
+    )}
     style={buildRevealStyle(delay, style, animate)}
 >
     <slot />
@@ -29,6 +39,19 @@ const {
     .fade-reveal {
         animation: fade-reveal 950ms cubic-bezier(0.16, 1, 0.3, 1)
             var(--fade-delay, 0s) backwards;
+    }
+
+    .fade-reveal--slide {
+        animation-name: fade-reveal-slide;
+    }
+
+    @keyframes fade-reveal-slide {
+        from {
+            transform: translate3d(0, 1.1rem, 0);
+        }
+        to {
+            transform: none;
+        }
     }
 
     @keyframes fade-reveal {

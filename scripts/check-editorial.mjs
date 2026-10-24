@@ -26,12 +26,14 @@ const slugs = [
   "choisir-developpeur-web",
   "application-metier-sur-mesure-btp",
   "maintenance-site-web",
+  "hebergement-site-vitrine",
   "arborescence-site-web",
   "rgpd-formulaire-de-contact",
   "seo-local",
   "site-non-securise",
   "site-pas-sur-google",
   "wix-ou-wordpress",
+  "site-one-page",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
