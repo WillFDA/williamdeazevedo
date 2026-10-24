@@ -45,9 +45,9 @@ const siteUrl = project.href;
 
 const galleryItems = [...(project.gallery ?? []), ...gallery];
 const tocItems = [
-    ...(project.media.type !== "placeholder"
-        ? [{ depth: 2, slug: "apercu-du-projet", text: "Aperçu du projet" }]
-        : []),
+    ...(project.media.type === "placeholder"
+        ? []
+        : [{ depth: 2, slug: "apercu-du-projet", text: "Aperçu du projet" }]),
     ...headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3),
     ...(galleryItems.length > 0
         ? [{ depth: 2, slug: "captures-du-projet", text: "Captures du projet" }]
@@ -102,7 +102,7 @@ const breadcrumbJsonLd = {
 ---
 
 <Layout
-    title={`${title} - William De Azevedo`}
+    title={`${title} : étude de cas - William De Azevedo`}
     description={project.seoDescription ?? description}
 >
     <ReadingProgress />
@@ -123,7 +123,7 @@ const breadcrumbJsonLd = {
         data-reading-progress-root
     >
         <FadeReveal delay={0.16}>
-            <header class="mx-auto mt-10 flex max-w-4xl flex-col items-center gap-5 text-center">
+            <header class="mx-auto flex sm:mt-10 max-w-4xl flex-col items-center gap-5 text-center">
                 <a
                     class="group mb-2 inline-flex min-h-11 items-center gap-3 rounded-xl px-1 text-sm font-normal text-gray-600 no-underline transition-colors hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 md:text-base"
                     href="/realisations/"

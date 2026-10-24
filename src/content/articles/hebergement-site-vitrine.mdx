@@ -1,0 +1,200 @@
+---
+title: "Hébergement d’un site vitrine : où, à quel nom, et qui s’en occupe ?"
+seoTitle: "Hébergement site vitrine : à quel nom, qui gère quoi ?"
+description: "Où héberger le site vitrine de votre entreprise, à quel nom, et qui s’en occupe ? Le guide TPE et artisans pour ne pas rester bloqué chez un prestataire."
+image:
+  src: "/articles/hebergement-site-vitrine/cover.webp"
+  alt: "Trois cartes. Domaine, l’adresse du site : titulaire votre entreprise, échéance notée, rappels lus par vous, renouvelé par une personne nommée. Hébergement, le terrain : contrat à votre nom, prestataire invité, HTTPS inclus, sauvegardes testées. Site, la maison : accès les vôtres, copie remise, mises à jour au contrat, départ prévu par écrit."
+pubDate: 2026-10-22
+author: "William De Azevedo"
+draft: false
+faq:
+  - question: "Faut-il payer un hébergement pour un site vitrine ?"
+    answer: "Le plus souvent, oui : un site doit être stocké sur un serveur pour être visible. L’hébergement est facturé à part ou inclus dans un abonnement tout compris. Dans tous les cas, le compte doit être au nom de votre entreprise."
+  - question: "L’hébergement doit-il être au nom de mon entreprise ou de mon prestataire ?"
+    answer: "Au nom de votre entreprise, comme le nom de domaine. Votre prestataire peut tout gérer avec un accès délégué que vous lui donnez et que vous pouvez lui retirer. Si le contrat est à son nom, partir suppose son accord et sa coopération."
+  - question: "Comment savoir qui est propriétaire de mon nom de domaine ?"
+    answer: "Pour un .fr, cherchez votre nom de domaine dans le Whois de l’Afnic : si le titulaire est une société, son nom s’affiche ; si c’est une personne physique, ses données sont masquées par défaut, et seul le titulaire peut obtenir de l’Afnic une attestation de titularité. Pour un .com, le titulaire est souvent masqué dans l’outil de recherche de l’ICANN : vérifiez dans votre compte chez le bureau d’enregistrement."
+  - question: "Que se passe-t-il si j’oublie de renouveler mon hébergement ou mon nom de domaine ?"
+    answer: "Pour l’hébergement, cela dépend du contrat : le site peut être coupé, puis les fichiers supprimés. Pour le nom de domaine, le site et les e-mails cessent de fonctionner ; un .fr non renouvelé est supprimé, puis peut encore être restauré pendant une période de rédemption de 30 jours, par le même bureau d’enregistrement. Ensuite, n’importe qui peut l’enregistrer."
+  - question: "Mon site est hébergé hors de l’Union européenne : est-ce un problème ?"
+    answer: "Ce n’est pas interdit. Le RGPD autorise les transferts de données personnelles hors de l’Union s’ils sont encadrés, par exemple vers une entreprise américaine certifiée au cadre de protection des données UE–États-Unis, reconnu à ce jour par la Commission européenne. Vérifiez la garantie que votre hébergeur met en avant et indiquez ce transfert dans votre information sur la confidentialité."
+  - question: "Mon prestataire « s’occupe de l’hébergement » : que dois-je vérifier ?"
+    answer: "Vérifiez trois choses : au nom de qui sont le contrat d’hébergement et le nom de domaine, si vous avez vos propres identifiants, et qui surveille les échéances. Demandez-lui aussi une copie récente du site. S’il refuse ou ne sait pas répondre, refaites la demande par écrit, sans attendre."
+tags: ["site vitrine", "maintenance", "tpe"]
+---
+
+**Pour un site vitrine, un hébergement simple suffit : une offre mutualisée chez un hébergeur sérieux ou, pour un site statique, une plateforme d’hébergement statique avec CDN. Le choix de l’hébergeur compte moins que trois points : le contrat d’hébergement et le nom de domaine doivent être au nom de votre entreprise, vous devez avoir vos propres accès, et une personne doit être chargée par écrit des renouvellements, des sauvegardes et du certificat HTTPS. Votre prestataire peut tout gérer pour vous, avec des accès que vous pouvez lui retirer.**
+
+Quand on cherche un hébergement pour un site vitrine, on tombe surtout sur des pages d’hébergeurs et des comparatifs de formules, écrits pour quelqu’un qui va tout installer seul. Or la plupart des dirigeants de TPE et des artisans veulent simplement un site qui fonctionne, et la certitude de ne pas le perdre le jour où ils changent de prestataire.
+
+Je suis développeur web et designer freelance à Achères (78). Je crée des sites, mais je ne revends pas d’hébergement : vous ne trouverez ici ni classement d’hébergeurs, ni lien affilié, ni tarif. Seulement ce qu’il faut vérifier pour garder la main sur votre site.
+
+## Hébergement, nom de domaine, site : trois choses que vous pouvez posséder séparément
+
+On dit « mon site », mais il y a trois éléments, parfois chez trois fournisseurs différents :
+
+- **le nom de domaine, c’est l’adresse** : `votreentreprise.fr`. Il se réserve auprès d’un bureau d’enregistrement, pour une durée de un à dix ans dans le cas d’un `.fr` ;
+- **l’hébergement, c’est le terrain** : l’espace sur un serveur où le site est stocké et d’où il est servi aux visiteurs ;
+- **le site, c’est la maison** : le design, le code, les textes et les photos.
+
+On peut changer de terrain sans changer d’adresse, ou refaire la maison sans déménager. Le lien technique entre les trois, les DNS, est expliqué dans l’article sur [le changement de prestataire web](/articles/changer-prestataire-web/).
+
+## De quoi un site vitrine a vraiment besoin
+
+Un site vitrine présente votre activité et un moyen de vous contacter. Il ne traite pas de paiement et reçoit rarement beaucoup de visites à la fois. Ses besoins techniques sont donc modestes :
+
+- **être disponible** : le site répond, de jour comme de nuit, sans coupures répétées ;
+- **un certificat HTTPS inclus et renouvelé automatiquement** : sans lui, les navigateurs affichent « Non sécurisé ». Si c’est déjà le cas, voici [les causes et qui doit intervenir](/articles/site-non-securise/) ;
+- **des sauvegardes régulières**, et surtout restaurables : une sauvegarde qu’on n’a jamais essayé de remettre en place ne prouve rien ;
+- **un support joignable**, en français si c’est votre langue de travail, quand quelque chose ne va pas ;
+- **un site rapide sur mobile**, ce qui dépend autant de la façon dont il est construit que de l’hébergement.
+
+Il n’a besoin ni d’un espace illimité, ni d’un serveur dédié ou d’un VPS, ni de toutes les options proposées à la commande.
+
+## Mutualisé, plateforme statique, site « tout compris » : quel hébergement pour quel site ?
+
+Le bon type d’hébergement dépend de la façon dont votre site est construit, pas de la taille de votre entreprise.
+
+| Type de site | Hébergement adapté | Ce qu’il faut vérifier |
+| --- | --- | --- |
+| Site WordPress ou autre CMS classique | Hébergement mutualisé | Sauvegardes, mises à jour du langage du serveur (PHP), qui s’en charge |
+| Site codé sur mesure, sans base de données (site statique) | Plateforme d’hébergement statique avec CDN | Compte à votre nom, accès au code source |
+| Site créé avec un constructeur ou un abonnement tout compris | Inclus dans l’abonnement | Ce que vous pouvez récupérer si vous partez |
+
+### Hébergement mutualisé : pour un site WordPress ou un CMS classique
+
+Le site partage un serveur avec d’autres sites, et l’hébergeur s’occupe de la machine. C’est la formule courante pour un site WordPress, qui fonctionne avec PHP et une base de données : quelqu’un doit suivre leurs mises à jour, comme celles du site.
+
+### Plateforme d’hébergement statique avec CDN : pour un site codé sur mesure
+
+Un site statique est un ensemble de pages déjà prêtes, sans base de données à interroger à chaque visite. Il peut être servi par une plateforme spécialisée, qui le copie sur des serveurs répartis dans le monde (un CDN) pour l’afficher vite, où que soit le visiteur. Il y a aussi moins de logiciels à mettre à jour côté serveur.
+
+C’est le cas du site sur lequel vous lisez cet article : il est statique et hébergé par Cloudflare, comme l’indiquent ses [mentions légales](/mentions-legales/).
+
+### Constructeur ou abonnement tout compris : pratique, mais lié à la plateforme
+
+Avec un constructeur en ligne ou une offre de site en abonnement, l’hébergement est inclus. C’est simple tant que vous restez. En revanche, le site dépend de la plateforme ou du prestataire : avant de signer, demandez ce que vous pourrez emporter le jour où vous partirez. Pour comparer ces formules à un site créé pour vous, lisez [ce qui sépare deux niveaux d’offre](/articles/site-600-euros-vs-site-2000-euros/).
+
+## À quel nom souscrire l’hébergement et le nom de domaine ?
+
+C’est une question souvent oubliée au moment de signer. Réponse : **au nom de votre entreprise**, pour les deux.
+
+### Le piège du compte ouvert au nom du prestataire
+
+Pour aller vite, certains prestataires réservent le nom de domaine et l’hébergement sur leur propre compte, puis refacturent. Votre site dépend alors entièrement de votre prestataire : commode tant que la relation se passe bien, bloquant le jour où vous voulez partir ou où il ne répond plus. Il faut obtenir sa coopération pour récupérer un nom de domaine qui porte pourtant le nom de votre entreprise.
+
+### Titulaire, contact technique, payeur : ce qui compte vraiment
+
+Pour un nom de domaine, plusieurs rôles sont enregistrés, et ils ne se valent pas. Selon l’Afnic, qui gère le `.fr`, **le titulaire est la personne physique ou morale qui détient les droits et les responsabilités** liés au nom de domaine. Le contact administratif, s’il n’est pas le titulaire, n’a aucun droit sur le nom. Le contact technique est en principe le bureau d’enregistrement. Et celui qui paie la facture n’est pas forcément le titulaire.
+
+Autrement dit, être le propriétaire d’un nom de domaine, c’est en être le titulaire. En toute rigueur, un nom de domaine ne s’achète d’ailleurs pas : l’Afnic parle d’un droit d’utilisation exclusif, pour une durée donnée, à renouveler.
+
+Pour savoir qui est titulaire du vôtre, cherchez-le dans le [Whois de l’Afnic](https://www.afnic.fr/noms-de-domaine/tout-savoir/whois-trouver-un-nom-de-domaine/) pour un `.fr`, ou dans l’[outil de recherche de l’ICANN](https://lookup.icann.org/fr) pour un `.com`, où il est souvent masqué (vérifiez alors dans votre compte chez le bureau d’enregistrement). Le titulaire doit être votre entreprise. Si c’est votre prestataire, réglez la question maintenant, à froid, plutôt que le jour d’un désaccord.
+
+### Le bon montage : un compte à votre nom, un prestataire invité
+
+Le montage qui protège tout le monde est simple :
+
+- le compte chez le bureau d’enregistrement et le compte d’hébergement sont ouverts **au nom de votre entreprise**, avec un moyen de paiement de l’entreprise ;
+- l’adresse e-mail de récupération est **une adresse que vous lisez**, pas celle du prestataire, ni une adresse en `@votreentreprise.fr`, qui tomberait avec le domaine ;
+- le prestataire est **ajouté comme utilisateur** ou reçoit un accès délégué, que vous pouvez retirer sans lui demander la permission.
+
+Votre prestataire garde tout ce qu’il lui faut pour travailler, et vous gardez la clé.
+
+## Qui s’occupe de quoi : vous, l’hébergeur ou le prestataire ?
+
+Un site vitrine tient grâce à de petites tâches, dont beaucoup reviennent une fois par an. Le risque n’est pas qu’elles soient difficiles : c’est que chacun pense qu’un autre s’en occupe.
+
+| Tâche | Qui s’en charge souvent | Ce qu’il faut écrire dans le devis ou le contrat |
+| --- | --- | --- |
+| Renouvellement du nom de domaine | Le bureau d’enregistrement, si le renouvellement automatique est activé et le paiement valide | Qui surveille l’échéance et reçoit les rappels |
+| Renouvellement de l’hébergement | L’hébergeur, selon le contrat | Date d’échéance, au nom de qui, qui est prévenu |
+| Certificat HTTPS | L’hébergeur ou la plateforme, souvent automatiquement | Qui vérifie qu’il se renouvelle bien |
+| Sauvegardes | L’hébergeur, le prestataire, ou personne | Fréquence, lieu de stockage, test de restauration |
+| Mises à jour du site | Le prestataire, dans un contrat de maintenance | Ce qui est inclus et dans quel délai |
+| E-mails professionnels | L’hébergeur, le bureau d’enregistrement ou un service à part | Chez qui ils sont, et qui les configure en cas de changement |
+| Mention de l’hébergeur dans les mentions légales | Vous, en tant qu’éditeur du site, souvent avec l’aide du prestataire | Qui la met à jour si l’hébergeur change |
+
+La mention de l’hébergeur est obligatoire sur un site professionnel : son nom ou sa dénomination, son adresse et son téléphone. Attention, l’hébergeur n’est pas forcément l’agence qui a créé le site : l’article sur les [mentions légales d’un site professionnel](/articles/mentions-legales-site-internet-professionnel/) explique comment les distinguer.
+
+### Nom de domaine expiré : ce qui se passe quand personne ne renouvelle
+
+C’est l’oubli le plus brutal. Quand un nom de domaine expire, **le site et les e-mails qui en dépendent cessent de fonctionner**, parfois dès le jour de l’échéance.
+
+Pour un `.fr`, l’Afnic précise que, sans nouvelle de votre part au moment du renouvellement, le bureau d’enregistrement demande la suppression du nom de domaine. Commence alors une période de rédemption de 30 jours : le nom peut encore être restauré, à l’identique, par le même bureau d’enregistrement. Passé ce délai, la suppression est définitive et n’importe qui peut enregistrer votre nom.
+
+Pour un `.com` et les autres extensions génériques, l’ICANN impose aux bureaux d’enregistrement d’envoyer au moins deux rappels avant l’échéance, environ un mois puis une semaine avant, à l’adresse e-mail du titulaire. Encore faut-il que ces rappels arrivent dans une boîte que quelqu’un lit. Selon le bureau d’enregistrement, un délai de grâce de 1 à 45 jours peut suivre l’expiration ; une fois le nom supprimé, il reste en général une période de rédemption de 30 jours.
+
+La surveillance des échéances, les sauvegardes, les mises à jour et le contrat de maintenance sont détaillés dans l’article sur la [maintenance de site web](/articles/maintenance-site-web/).
+
+## Ne pas rester bloqué : ce qu’il faut avoir en main dès la mise en ligne
+
+Le meilleur moment pour préparer un départ, c’est le jour où tout va bien. Rassemblez ce « kit de sortie » dès la mise en ligne :
+
+- **les identifiants** du compte d’hébergement et du compte chez le bureau d’enregistrement, à votre nom ;
+- **une copie récente du site** : les fichiers, et la base de données s’il y en a une ;
+- **la liste des comptes liés au site** : formulaire de contact, statistiques, Google Search Console, fiche Google, outil de réservation ;
+- **les échéances** du nom de domaine et de l’hébergement, notées dans votre agenda.
+
+### Un exemple : le prestataire qui disparaît
+
+Prenons un cas imaginaire. Une entreprise de paysage a confié son site à un prestataire, qui a tout ouvert sur son propre compte et lui refacture chaque année « l’hébergement ». Puis le prestataire cesse son activité sans prévenir. À l’échéance, personne ne renouvelle le nom de domaine : le site disparaît, et les adresses e-mail liées à ce nom de domaine professionnel ne reçoivent plus rien.
+
+Titulaire du domaine, avec ses propres accès et une copie du site, elle aurait pu renouveler elle-même et confier le site à quelqu’un d’autre. Sans cela, elle doit retrouver le bureau d’enregistrement et l’hébergeur, et voir avec eux ce qui est encore possible avant que n’importe qui puisse enregistrer le nom.
+
+Si vous êtes déjà dans cette situation, ou si vous voulez simplement changer d’hébergeur ou de prestataire, la procédure complète est ici : [changer de prestataire web](/articles/changer-prestataire-web/). Après un déménagement, vérifiez que votre site reste bien visible : voici [comment savoir si Google le trouve encore](/articles/site-pas-sur-google/). Si vous changez aussi de structure ou d’outil, c’est une [refonte de site internet](/refonte-site-internet/).
+
+## Les 6 questions à poser avant de signer
+
+Pour un nouveau site comme pour un site repris par un nouveau prestataire, posez ces six questions et gardez les réponses par écrit :
+
+1. **Au nom de qui seront l’hébergement et le nom de domaine ?** La réponse attendue : votre entreprise.
+2. **Aurai-je mes propres accès administrateur ?** Pas un mot de passe partagé, mais un compte à vous.
+3. **Qui paie et surveille les renouvellements, et à quelle échéance ?**
+4. **Le certificat HTTPS et les sauvegardes sont-ils inclus, et qui vérifie qu’ils fonctionnent ?**
+5. **Que se passe-t-il si nous arrêtons de travailler ensemble ?** Ce que vous récupérez, sous quelle forme, dans quel délai.
+6. **Où sont stockées les données du formulaire de contact ?** Elles relèvent du RGPD : voici [ce qu’il faut prévoir pour le formulaire](/articles/rgpd-formulaire-de-contact/).
+
+Ces questions complètent celles du guide pour [choisir un développeur web](/articles/choisir-developpeur-web/), qui couvre aussi le devis, la technologie et les droits sur le code et les visuels.
+
+## Votre site vitrine, hébergé à votre nom dès le départ
+
+Quand je crée un site vitrine, le nom de domaine et l’hébergement sont au nom de mon client, et je lui explique comment ils sont mis en place. Je suis basé à Achères, dans les Yvelines, et je travaille aussi avec des clients à distance.
+
+Découvrez comment je conçois un [site vitrine](/creation-site-vitrine/), ou parcourez mes [services](/services/). Votre site actuel est hébergé « quelque part » sans que vous sachiez où ? Prenez rendez-vous : nous ferons le point, sans engagement.
+
+## Questions fréquentes
+
+### Faut-il payer un hébergement pour un site vitrine ?
+
+Le plus souvent, oui : un site doit être stocké sur un serveur pour être visible. L’hébergement est facturé à part ou inclus dans un abonnement tout compris. Dans tous les cas, le compte doit être au nom de votre entreprise. Pour le budget du site lui-même, voyez [l’article qui compare deux niveaux d’offre](/articles/site-600-euros-vs-site-2000-euros/).
+
+### L’hébergement doit-il être au nom de mon entreprise ou de mon prestataire ?
+
+Au nom de votre entreprise, comme le nom de domaine. Votre prestataire peut tout gérer avec un accès délégué que vous lui donnez et que vous pouvez lui retirer. Si le contrat est à son nom, partir suppose son accord et sa coopération.
+
+### Comment savoir qui est propriétaire de mon nom de domaine ?
+
+Pour un .fr, cherchez votre nom de domaine dans le Whois de l’Afnic : si le titulaire est une société, son nom s’affiche ; si c’est une personne physique, ses données sont masquées par défaut, et seul le titulaire peut obtenir de l’Afnic une attestation de titularité. Pour un .com, le titulaire est souvent masqué dans l’outil de recherche de l’ICANN : vérifiez dans votre compte chez le bureau d’enregistrement.
+
+### Que se passe-t-il si j’oublie de renouveler mon hébergement ou mon nom de domaine ?
+
+Pour l’hébergement, cela dépend du contrat : le site peut être coupé, puis les fichiers supprimés. Pour le nom de domaine, le site et les e-mails cessent de fonctionner ; un .fr non renouvelé est supprimé, puis peut encore être restauré pendant une période de rédemption de 30 jours, par le même bureau d’enregistrement. Ensuite, n’importe qui peut l’enregistrer.
+
+### Mon site est hébergé hors de l’Union européenne : est-ce un problème ?
+
+Ce n’est pas interdit. Le RGPD autorise les transferts de données personnelles hors de l’Union s’ils sont encadrés, par exemple vers une entreprise américaine certifiée au cadre de protection des données UE–États-Unis, reconnu à ce jour par la Commission européenne. Vérifiez la garantie que votre hébergeur met en avant et indiquez ce transfert dans votre information sur la confidentialité.
+
+### Mon prestataire « s’occupe de l’hébergement » : que dois-je vérifier ?
+
+Vérifiez trois choses : au nom de qui sont le contrat d’hébergement et le nom de domaine, si vous avez vos propres identifiants, et qui surveille les échéances. Demandez-lui aussi une copie récente du site. S’il refuse ou ne sait pas répondre, refaites la demande par écrit, sans attendre.
+
+## Sources officielles
+
+- [Afnic : FAQ sur les noms de domaine](https://www.afnic.fr/noms-de-domaine/faq/) (titulaire et contact administratif, diffusion restreinte, attestation de titularité, période de rédemption), lu le 22/10/2026
+- [Afnic : l’essentiel pour gérer son nom de domaine](https://www.afnic.fr/noms-de-domaine/tout-savoir/gerer-son-nom-de-domaine/) (droit d’utilisation de un à dix ans, renouvellement, suppression et rédemption de 30 jours), lu le 22/10/2026
+- [Afnic : Whois, trouver un nom de domaine](https://www.afnic.fr/noms-de-domaine/tout-savoir/whois-trouver-un-nom-de-domaine/) et [ICANN : outil de recherche des noms de domaine](https://lookup.icann.org/fr)
+- [ICANN : 5 choses à savoir sur la politique de récupération des noms expirés (ERRP)](https://www.icann.org/resources/pages/registrant-about-errp-2018-12-07-en) (rappels avant échéance, délai de grâce, rédemption de 30 jours), en anglais, lu le 22/10/2026
+- [Service Public Entreprendre : mentions obligatoires sur le site internet d’une entreprise](https://entreprendre.service-public.gouv.fr/vosdroits/F37351) (identité de l’hébergeur : nom, adresse, téléphone), vérifié le 13/10/2026 par l’administration, lu le 22/10/2026
+- [Commission européenne : transferts de données UE–États-Unis](https://commission.europa.eu/law/law-topic/data-protection/international-dimension-data-protection/eu-us-data-transfers_fr) (décision d’adéquation du 10 juillet 2023), en anglais, lu le 22/10/2026

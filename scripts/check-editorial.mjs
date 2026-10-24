@@ -23,7 +23,17 @@ const slugs = [
   "changer-prestataire-web",
   "audit-seo",
   "landing-page",
+  "choisir-developpeur-web",
   "application-metier-sur-mesure-btp",
+  "maintenance-site-web",
+  "hebergement-site-vitrine",
+  "arborescence-site-web",
+  "rgpd-formulaire-de-contact",
+  "seo-local",
+  "site-non-securise",
+  "site-pas-sur-google",
+  "wix-ou-wordpress",
+  "site-one-page",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
@@ -108,6 +118,36 @@ for (const slug of slugs) {
     schemas.some((schema) => schema["@type"] === "BreadcrumbList"),
     `${slug}: breadcrumbs`
   );
+  const faqPage = schemas.find((schema) => schema["@type"] === "FAQPage");
+  if (/^faq:/m.test(frontmatter) || faqPage) {
+    assert.ok(faqPage?.mainEntity?.length, `${slug}: FAQPage schema`);
+    const visibleText = html
+      .replaceAll(/<script\b[\s\S]*?<\/script>/g, " ")
+      .replaceAll(/<[^>]+>/g, "")
+      .replaceAll(/&nbsp;|\s+/g, " ")
+      .replaceAll(/&#39;|&#x27;/g, "'")
+      .replaceAll("&quot;", '"')
+      .replaceAll("&lt;", "<")
+      .replaceAll("&gt;", ">")
+      .replaceAll("&amp;", "&");
+    // Both ways: every visible question of the FAQ section is in the schema.
+    const faqSection = html
+      .split(/<h2\b[^>]*>\s*Questions fréquentes\s*<\/h2>/)[1]
+      ?.split(/<h2\b/)[0];
+    assert.equal(
+      (faqSection?.match(/<h3\b/g) || []).length,
+      faqPage.mainEntity.length,
+      `${slug}: FAQPage must list every visible FAQ question`
+    );
+    for (const entry of faqPage.mainEntity) {
+      for (const text of [entry.name, entry.acceptedAnswer?.text]) {
+        assert.ok(
+          visibleText.includes(text),
+          `${slug}: FAQPage text not visible on the page: ${text}`
+        );
+      }
+    }
+  }
   const person = schemas.find((schema) => schema["@type"] === "Person");
   assert.ok(
     person?.image.endsWith("/pictures/william-low.png"),

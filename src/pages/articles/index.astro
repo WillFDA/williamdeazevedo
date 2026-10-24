@@ -1,14 +1,9 @@
 ---
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ArticleFilters from "@/components/articles/ArticleFilters";
-import BadgeDollar from "@/components/icons/nucleo/badge-dollar-fill.svg";
-import BoltSpeed from "@/components/icons/nucleo/bolt-speed-fill.svg";
-import Sparkle from "@/components/icons/nucleo/sparkle-3-fill.svg";
-import Star from "@/components/icons/nucleo/star-fill.svg";
-import Target from "@/components/icons/nucleo/target-fill.svg";
-import WindowPointer from "@/components/icons/nucleo/window-pointer-fill.svg";
 import Layout from "@/layout/Layout.astro";
 import { formatArticleDate, getVisibleArticles } from "@/lib/articles";
+import { getTagIconSvg } from "@/lib/articleTagIcons";
 
 const articles = await getVisibleArticles();
 const heroTitleParts = [
@@ -28,18 +23,6 @@ const years = [
         articles.map((article) => String(article.data.pubDate.getFullYear())),
     ),
 ].toSorted((a, b) => Number(b) - Number(a));
-
-const getTagIcon = (tag: string) => {
-    const normalizedTag = tag.toLowerCase();
-
-    if (normalizedTag.includes("pricing")) return BadgeDollar;
-    if (normalizedTag.includes("conversion")) return Target;
-    if (normalizedTag.includes("ia")) return Sparkle;
-    if (normalizedTag.includes("motivation")) return Star;
-    if (normalizedTag.includes("side")) return BoltSpeed;
-
-    return WindowPointer;
-};
 ---
 
 <Layout
@@ -130,21 +113,15 @@ const getTagIcon = (tag: string) => {
 
                                             {article.data.tags.length > 0 && (
                                                 <div class="mt-5 flex flex-wrap gap-2">
-                                                    {article.data.tags.map((tag) => {
-                                                        const TagIcon = getTagIcon(tag);
-
-                                                        return (
-                                                            <span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]">
-                                                                <span class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500">
-                                                                    <TagIcon
-                                                                        class="size-full"
-                                                                        aria-hidden="true"
-                                                                    />
-                                                                </span>
-                                                                {tag}
-                                                            </span>
-                                                        );
-                                                    })}
+                                                    {article.data.tags.map((tag) => (
+                                                        <span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]">
+                                                            <span
+                                                                class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
+                                                                set:html={getTagIconSvg(tag)}
+                                                            />
+                                                            {tag}
+                                                        </span>
+                                                    ))}
                                                 </div>
                                             )}
                                         </div>

@@ -24,12 +24,19 @@ const pauseVideo = (video: HTMLVideoElement) => {
   video.preload = "none";
 };
 
+// Un rejet de `video.play()` (autoplay bloqué) ou de `animation.finished`
+// (animation annulée) est attendu : le carrousel reste utilisable sans.
+const ignoreExpectedRejection = () => {
+  // Rejet attendu, rien à faire.
+};
+
+// Remplacé par les vraies fonctions une fois l'autoplay configuré.
+const noop = () => {
+  // Rien à faire tant que l'autoplay n'est pas prêt.
+};
+
 const isInViewport = (entry: IntersectionObserverEntry | undefined) =>
   Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.2);
-
-export function resetCarousels() {
-  Array.from(activeCarouselStates).forEach(destroyCarousel);
-}
 
 function destroyCarousel(state: CarouselState) {
   if (state.destroyed) return;
@@ -46,6 +53,10 @@ function destroyCarousel(state: CarouselState) {
   delete state.wrapperNode.dataset.carouselAutoplayVisible;
   carouselStateByRoot.delete(state.wrapperNode);
   activeCarouselStates.delete(state);
+}
+
+export function resetCarousels() {
+  Array.from(activeCarouselStates).forEach(destroyCarousel);
 }
 
 export function initCarousel(wrapperNode: HTMLElement) {
@@ -87,8 +98,8 @@ export function initCarousel(wrapperNode: HTMLElement) {
   let lastDispatchedIndex = emblaApi.selectedScrollSnap();
   let isSettled = true;
   let canUpdateVideos = true;
-  let scheduleAutoplay = () => {};
-  let cancelAutoplay = () => {};
+  let scheduleAutoplay = noop;
+  let cancelAutoplay = noop;
 
   const syncSlideAccessibility = () => {
     const activeIndex = emblaApi.selectedScrollSnap();
@@ -115,7 +126,7 @@ export function initCarousel(wrapperNode: HTMLElement) {
     const play = () => {
       if (video.dataset.carouselActive !== "true") return;
 
-      void video.play().catch(() => {});
+      void video.play().catch(ignoreExpectedRejection);
     };
 
     if (video.readyState < 2 && video.dataset.carouselPlayQueued !== "true") {
@@ -292,7 +303,9 @@ export function initCarousel(wrapperNode: HTMLElement) {
         }
       );
 
-      progressAnimation.finished.then(scrollIfCurrent).catch(() => {});
+      progressAnimation.finished
+        .then(scrollIfCurrent)
+        .catch(ignoreExpectedRejection);
     };
 
     const syncPausedUi = () => {

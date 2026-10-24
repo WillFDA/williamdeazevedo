@@ -31,15 +31,17 @@ const directionVectors = {
 const formatDistance = (distance: number | string) =>
   typeof distance === "number" ? `${distance}%` : distance;
 
-const formatOffset = (axis: -1 | 0 | 1, distance: string) =>
-  axis === 0 ? "0%" : axis === -1 ? `-${distance}` : distance;
+const formatOffset = (axis: -1 | 0 | 1, distance: string) => {
+  if (axis === 0) return "0%";
+  return axis === -1 ? `-${distance}` : distance;
+};
 
 const styleToString = (style: StyleValue | undefined) => {
   if (!style) return "";
   if (typeof style === "string") return style;
 
   return Object.entries(style)
-    .filter((entry): entry is [string, string | number] => entry[1] != null)
+    .filter((entry): entry is [string, string | number] => entry[1] !== null && entry[1] !== undefined)
     .map(([key, value]) => `${key}: ${value};`)
     .join(" ");
 };

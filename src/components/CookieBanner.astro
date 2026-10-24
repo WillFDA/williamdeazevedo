@@ -1,0 +1,196 @@
+---
+// Bandeau de consentement (CNIL) branché sur Consent Mode v2.
+// Le choix est restauré tôt dans tracking/GoogleTagManager.astro : garder la
+// clé "wui-consent" et la durée de 6 mois alignées entre les deux fichiers.
+
+// Refuser et accepter partagent la même taille et la même forme (exigence
+// CNIL) ; seule la couleur change (principal / secondaire gris).
+const choiceClass =
+    "hero-button flex min-h-14 w-full cursor-pointer items-center justify-center rounded-xl px-8 py-3 text-base font-normal";
+---
+
+<div
+    id="cookie-banner"
+    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-3 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] sm:right-auto sm:bottom-4 sm:left-4 sm:max-w-sm"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="cookie-banner-title"
+    aria-describedby="cookie-banner-text"
+    tabindex="-1"
+    hidden
+    transition:persist
+>
+    <h2 id="cookie-banner-title" class="text-base font-medium">Cookies</h2>
+    <p id="cookie-banner-text" class="mt-1 leading-relaxed text-gray-700">
+        Avec votre accord, Google dépose des cookies de mesure d'audience et
+        de publicité. Vous pouvez changer d'avis à tout moment.
+        <a
+            class="underline underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            href="/mentions-legales/#cookies">En savoir plus</a
+        >
+    </p>
+    <div class="mt-4 flex flex-col gap-3">
+        <button
+            class:list={[choiceClass, "hero-button--secondary"]}
+            type="button"
+            data-cookie-choice="denied"
+        >
+            Tout refuser
+        </button>
+        <button
+            class:list={[choiceClass, "hero-button--primary"]}
+            type="button"
+            data-cookie-choice="granted"
+        >
+            Accepter
+        </button>
+    </div>
+</div>
+
+<style is:global>
+    #cookie-banner .hero-button {
+        --hero-button-bg: var(--color-snow-600);
+        --hero-button-border: transparent;
+        --hero-button-color: var(--color-coffee-300);
+
+        color: var(--hero-button-color);
+        isolation: isolate;
+        position: relative;
+    }
+
+    #cookie-banner .hero-button::before {
+        background: var(--hero-button-bg);
+        border: 1px solid var(--hero-button-border);
+        border-radius: inherit;
+        content: "";
+        inset: 0;
+        position: absolute;
+        transform: scale(1);
+        transition: transform 520ms
+            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
+        z-index: -1;
+    }
+
+    #cookie-banner .hero-button:focus-visible::before {
+        transform: scale(0.95);
+    }
+
+    @media (hover: hover) {
+        #cookie-banner .hero-button:hover::before {
+            transform: scale(0.95);
+        }
+    }
+
+    #cookie-banner .hero-button:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 3px;
+    }
+
+    #cookie-banner .hero-button--primary {
+        --hero-button-bg: var(--color-coffee-300);
+        --hero-button-border: var(--color-coffee-300);
+        --hero-button-color: var(--color-snow-50);
+    }
+
+    #cookie-banner .hero-button--secondary {
+        --hero-button-bg: var(--color-gray-100);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        #cookie-banner .hero-button::before {
+            transition: none;
+        }
+    }
+</style>
+
+<script>
+    type ConsentValue = "granted" | "denied";
+
+    const STORAGE_KEY = "wui-consent";
+    const consentWindow = window as Window & {
+        gtag?: (...args: unknown[]) => void;
+        dataLayer?: unknown[];
+        __wuiCookieBannerReady?: boolean;
+    };
+
+    const readChoice = (): ConsentValue | null => {
+        try {
+            const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
+            if (!stored) return null;
+            const expiry = new Date(stored.at);
+            expiry.setMonth(expiry.getMonth() + 6);
+            return Date.now() < expiry.getTime() ? stored.value : null;
+        } catch {
+            return null;
+        }
+    };
+
+    // Au refus, retire les cookies Google déjà posés (domaine courant et parent).
+    const clearGoogleCookies = () => {
+        const domain = window.location.hostname.replace(/^www\./, "");
+        for (const entry of document.cookie.split(";")) {
+            const name = entry.split("=")[0].trim();
+            if (!/^(?:_ga|_gid|_gat|_gcl)/.test(name)) continue;
+            for (const scope of ["", `;domain=${domain}`, `;domain=.${domain}`]) {
+                // oxlint-disable-next-line unicorn/no-document-cookie -- Cookie Store API absente de Firefox < 140 et Safari < 18.4 : document.cookie reste le seul moyen d'effacer _ga partout.
+                document.cookie = `${name}=;max-age=0;path=/${scope}`;
+            }
+        }
+    };
+
+    const banner = () => document.getElementById("cookie-banner");
+    let returnFocus: HTMLElement | null = null;
+
+    const saveChoice = (value: ConsentValue) => {
+        try {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify({ value, at: new Date().toISOString() }),
+            );
+        } catch {
+            // Stockage indisponible (navigation privée) : le choix vaut pour cette page.
+        }
+        consentWindow.gtag?.("consent", "update", {
+            ad_storage: value,
+            ad_user_data: value,
+            ad_personalization: value,
+            analytics_storage: value,
+        });
+        consentWindow.dataLayer?.push({ event: "consent_update", consent: value });
+        if (value === "denied") clearGoogleCookies();
+
+        const element = banner();
+        if (element) element.hidden = true;
+        returnFocus?.focus();
+        returnFocus = null;
+    };
+
+    if (!consentWindow.__wuiCookieBannerReady) {
+        consentWindow.__wuiCookieBannerReady = true;
+
+        document.addEventListener("click", (event) => {
+            const target = event.target;
+            if (!(target instanceof Element)) return;
+
+            const choice = target.closest<HTMLElement>("[data-cookie-choice]");
+            if (choice) {
+                saveChoice(choice.dataset.cookieChoice as ConsentValue);
+                return;
+            }
+
+            const opener = target.closest<HTMLElement>("[data-cookie-settings]");
+            const element = banner();
+            if (!opener || !element) return;
+            returnFocus = opener;
+            element.hidden = false;
+            element.focus();
+        });
+
+        // Se déclenche aussi au premier chargement ; ré-affiche le bandeau si
+        // le choix a expiré pendant la navigation.
+        document.addEventListener("astro:page-load", () => {
+            const element = banner();
+            if (element && !readChoice()) element.hidden = false;
+        });
+    }
+</script>

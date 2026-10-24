@@ -6,11 +6,11 @@ import WindowPaintbrush from "./icons/nucleo/window-paintbrush-fill.svg";
 import WindowPointer from "./icons/nucleo/window-pointer-fill.svg";
 
 export type ExpertiseShowcaseItem = {
-  description: string[];
+  description: readonly string[];
   icon: "site" | "refresh" | "code" | "ux" | "performance";
   id: string;
   label: string;
-  pills: string[];
+  pills: readonly string[];
   title: string;
 };
 
@@ -200,7 +200,7 @@ const titleWords = title.split(" ");
 
   gsap.registerPlugin(ScrollTrigger);
 
-  function initExpertiseShowcase(root) {
+  function initExpertiseShowcase(root: Element) {
     if (!(root instanceof HTMLElement) || root.dataset.expertiseReady) return;
 
     const tabs = Array.from(
@@ -216,25 +216,31 @@ const titleWords = title.split(" ");
       "is-stack-3",
       "is-exiting",
     ];
-    const visualStackTimers = new WeakMap();
-    const visualSwitchTimers = new WeakMap();
-    let activePanel;
+    const visualStackTimers = new WeakMap<
+      HTMLElement,
+      { intervalId: number; timeoutId: number | undefined }
+    >();
+    const visualSwitchTimers = new WeakMap<HTMLElement, number>();
+    let activePanel: HTMLElement | undefined;
     let canRunVisualStack = reducedMotion.matches;
     let hasEnteredViewport = reducedMotion.matches;
-    let motionContext;
+    let motionContext: gsap.Context | undefined;
 
-    const getVisualItems = (panel) =>
+    const getVisualItems = (panel: HTMLElement) =>
       Array.from(panel.querySelectorAll(".expertise-showcase__visual-item"))
         .filter((item) => item instanceof HTMLElement);
 
-    const clearVisualStack = (items) => {
+    const clearVisualStack = (items: HTMLElement[]) => {
       items.forEach((item) => item.classList.remove(...visualStackClasses));
     };
 
     const renderVisualStack = (
-      panel,
+      panel: HTMLElement,
       startIndex = 0,
-      { exitingIndex, visibleDepth = 4 } = {},
+      {
+        exitingIndex,
+        visibleDepth = 4,
+      }: { exitingIndex?: number; visibleDepth?: number } = {},
     ) => {
       const visualItems = getVisualItems(panel);
       if (visualItems.length === 0) return;
@@ -248,14 +254,14 @@ const titleWords = title.split(" ");
         );
       }
 
-      if (Number.isInteger(exitingIndex)) {
+      if (exitingIndex !== undefined && Number.isInteger(exitingIndex)) {
         visualItems[exitingIndex % visualItems.length]?.classList.add(
           "is-exiting",
         );
       }
     };
 
-    const stopVisualStack = (panel) => {
+    const stopVisualStack = (panel: HTMLElement) => {
       const timers = visualStackTimers.get(panel);
       if (timers?.intervalId) window.clearInterval(timers.intervalId);
       if (timers?.timeoutId) window.clearTimeout(timers.timeoutId);
@@ -267,7 +273,7 @@ const titleWords = title.split(" ");
       clearVisualStack(getVisualItems(panel));
     };
 
-    const playVisualSwitch = (panel) => {
+    const playVisualSwitch = (panel: HTMLElement) => {
       panel.classList.remove("is-switching");
       void panel.offsetWidth;
       panel.classList.add("is-switching");
@@ -280,7 +286,7 @@ const titleWords = title.split(" ");
       visualSwitchTimers.set(panel, switchTimer);
     };
 
-    const startVisualStack = (panel) => {
+    const startVisualStack = (panel: Element) => {
       if (!(panel instanceof HTMLElement)) return;
 
       stopVisualStack(panel);
@@ -323,7 +329,7 @@ const titleWords = title.split(" ");
       });
     };
 
-    const moveIndicator = (tab) => {
+    const moveIndicator = (tab: Element | undefined) => {
       if (!(indicator instanceof HTMLElement) || !(tab instanceof HTMLElement))
         return;
 
@@ -331,8 +337,8 @@ const titleWords = title.split(" ");
       indicator.style.setProperty("--indicator-h", `${tab.offsetHeight}px`);
     };
 
-    const activate = (id, animateSwitch = hasEnteredViewport) => {
-      let activeTab;
+    const activate = (id: string, animateSwitch = hasEnteredViewport) => {
+      let activeTab: HTMLButtonElement | undefined;
       activePanel = undefined;
 
       tabs.forEach((tab) => {

@@ -1,19 +1,15 @@
 ---
 import { Image } from "astro:assets";
 import { render } from "astro:content";
-import BadgeDollar from "@/components/icons/nucleo/badge-dollar-fill.svg";
-import BoltSpeed from "@/components/icons/nucleo/bolt-speed-fill.svg";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
-import Sparkle from "@/components/icons/nucleo/sparkle-3-fill.svg";
-import Star from "@/components/icons/nucleo/star-fill.svg";
+import ServiceCallout from "@/components/articles/ServiceCallout.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
-import Target from "@/components/icons/nucleo/target-fill.svg";
-import WindowPointer from "@/components/icons/nucleo/window-pointer-fill.svg";
 import williamPortrait from "@/assets/williamdeazevedo.webp";
 import Layout from "@/layout/Layout.astro";
 import { type Article, formatArticleDate, getVisibleArticles } from "@/lib/articles";
+import { getTagIconSvg } from "@/lib/articleTagIcons";
 
 export async function getStaticPaths() {
     const articles = await getVisibleArticles();
@@ -29,7 +25,7 @@ interface Props {
 
 const { article } = Astro.props;
 const { Content, headings } = await render(article);
-const { author, description, image, pubDate, seoTitle, tags, title, updatedDate } =
+const { author, description, faq, image, pubDate, seoTitle, tags, title, updatedDate } =
     article.data;
 const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 
@@ -98,17 +94,17 @@ const breadcrumbJsonLd = {
     ],
 };
 
-const getTagIcon = (tag: string) => {
-    const normalizedTag = tag.toLowerCase();
-
-    if (normalizedTag.includes("pricing")) return BadgeDollar;
-    if (normalizedTag.includes("conversion")) return Target;
-    if (normalizedTag.includes("ia")) return Sparkle;
-    if (normalizedTag.includes("motivation")) return Star;
-    if (normalizedTag.includes("side")) return BoltSpeed;
-
-    return WindowPointer;
-};
+const faqJsonLd = faq?.length
+    ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faq.map(({ question, answer }) => ({
+              "@type": "Question",
+              name: question,
+              acceptedAnswer: { "@type": "Answer", text: answer },
+          })),
+      }
+    : undefined;
 ---
 
 <Layout
@@ -137,6 +133,13 @@ const getTagIcon = (tag: string) => {
         is:inline
         set:html={JSON.stringify(breadcrumbJsonLd)}
     />
+    {faqJsonLd && (
+        <script
+            type="application/ld+json"
+            is:inline
+            set:html={JSON.stringify(faqJsonLd)}
+        />
+    )}
 
     <article
         class="mx-auto w-full max-w-6xl px-4 py-12 md:px-6 md:py-16"
@@ -165,21 +168,15 @@ const getTagIcon = (tag: string) => {
                 <p class="page-subheading">{description}</p>
                 {tags.length > 0 && (
                     <div class="mt-5 flex flex-wrap justify-center gap-2">
-                        {tags.map((tag) => {
-                            const TagIcon = getTagIcon(tag);
-
-                            return (
-                                <span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]">
-                                    <span class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500">
-                                        <TagIcon
-                                            class="size-full"
-                                            aria-hidden="true"
-                                        />
-                                    </span>
-                                    {tag}
-                                </span>
-                            );
-                        })}
+                        {tags.map((tag) => (
+                            <span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]">
+                                <span
+                                    class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
+                                    set:html={getTagIconSvg(tag)}
+                                />
+                                {tag}
+                            </span>
+                        ))}
                     </div>
                 )}
                 <div class="mt-6 flex items-center justify-center gap-3">
@@ -227,6 +224,7 @@ const getTagIcon = (tag: string) => {
                 <div class="article-prose min-w-0">
                     <Content />
                 </div>
+                <ServiceCallout articleId={article.id} />
             </FadeReveal>
 
             <aside class="article-toc-column order-first lg:order-none">
@@ -399,20 +397,51 @@ const getTagIcon = (tag: string) => {
 
     .article-table-scroll {
         background: var(--color-snow-50);
+        border-radius: 1.25rem;
         border: 1px solid var(--color-gray-200);
-        border-radius: 1rem;
-        margin-block: 1.75rem;
+        box-shadow: 0 1.25rem 2.5rem -2rem rgba(34, 42, 55, 0.35);
+        margin-block: 2rem;
         max-width: 100%;
         overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-color: var(--color-gray-500) transparent;
+        scrollbar-width: thin;
+    }
+
+    /* Scroll hint: the right edge fades while more columns remain hidden.
+       Scroll-driven animation only; without support the table simply scrolls. */
+    @supports (animation-timeline: scroll(self inline)) {
+        .article-table-scroll {
+            /* Longhands on purpose: Lightning CSS would merge a shorthand
+               into a form Chrome rejects. */
+            animation-name: article-table-hint;
+            animation-timing-function: linear;
+            animation-fill-mode: both;
+            animation-timeline: scroll(self inline);
+        }
+
+        @keyframes article-table-hint {
+            from,
+            95% {
+                mask-image: linear-gradient(to right, #000 calc(100% - 3rem), transparent);
+            }
+
+            to {
+                mask-image: none;
+            }
+        }
     }
 
     .article-table-scroll:focus-visible {
+        /* The fade mask would clip the focus ring. */
+        animation-name: none;
         outline: 2px solid var(--color-blue-500);
         outline-offset: 4px;
     }
 
     .article-prose table {
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 0;
         font-size: 0.875rem;
         line-height: 1.55;
         width: 100%;
@@ -421,7 +450,7 @@ const getTagIcon = (tag: string) => {
     .article-prose th,
     .article-prose td {
         min-width: 9rem;
-        padding: 0.85rem 1rem;
+        padding: 0.9rem 1.1rem;
         text-align: left;
         vertical-align: top;
     }
@@ -433,25 +462,56 @@ const getTagIcon = (tag: string) => {
 
     .article-prose td {
         border-top: 1px solid var(--color-gray-100);
+        color: var(--color-gray-700);
+        transition: background-color 160ms ease;
+    }
+
+    .article-prose tbody tr:nth-child(even) td {
+        background: var(--color-surface-100);
+    }
+
+    @media (hover: hover) {
+        .article-prose tbody tr:hover td {
+            background: color-mix(in srgb, var(--color-blue-50) 60%, white);
+        }
     }
 
     .article-prose td:first-child {
         color: var(--color-gray-900);
-        font-weight: 500;
+        font-weight: 600;
     }
 
-    .article-prose th {
-        background: var(--color-surface-100);
-        color: var(--color-gray-600);
-        font-size: 0.75rem;
+    .article-prose thead th {
+        background: var(--color-blue-500);
+        color: var(--color-snow-50);
+        font-size: 0.8125rem;
         font-weight: 500;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        letter-spacing: 0.01em;
+    }
+
+    .article-prose td strong {
+        font-weight: 600;
+    }
+
+    .article-prose thead th :is(strong, a, a:hover) {
+        color: inherit;
+    }
+
+    .article-prose td :not(pre) > code {
+        background: var(--color-snow-50);
+        box-shadow: inset 0 0 0 1px var(--color-gray-200);
     }
 
     .article-prose tbody tr:last-child:has(strong) td {
         background: var(--color-blue-50);
-        border-top-color: var(--color-blue-100);
+        border-top: 1px solid var(--color-blue-100);
+        color: var(--color-gray-900);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .article-prose td {
+            transition: none;
+        }
     }
 
     .article-prose hr {
