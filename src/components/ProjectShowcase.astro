@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import Carousel from "./Carousel.astro";
 import ProjectIntro from "./ProjectIntro.astro";
 import { projects } from "@/data/projects";
@@ -44,12 +45,13 @@ const {
                         aria-hidden="true"
                     >
                         {project.media.type !== "placeholder" && (
-                            <img
+                            <Image
                                 src={project.media.poster}
                                 alt=""
                                 class="block h-full w-full object-cover"
+                                widths={[480, 800, 1200]}
+                                sizes="(min-width: 1024px) 40rem, 90vw"
                                 loading="lazy"
-                                decoding="async"
                             />
                         )}
                     </div>

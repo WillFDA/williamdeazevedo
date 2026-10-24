@@ -195,10 +195,11 @@ const titleWords = title.split(" ");
 </section>
 
 <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
+  import {
+    createScrollReveal,
+    queryAll,
+    type ScrollReveal,
+  } from "@/scripts/motion";
 
   function initExpertiseShowcase(root: Element) {
     if (!(root instanceof HTMLElement) || root.dataset.expertiseReady) return;
@@ -224,7 +225,7 @@ const titleWords = title.split(" ");
     let activePanel: HTMLElement | undefined;
     let canRunVisualStack = reducedMotion.matches;
     let hasEnteredViewport = reducedMotion.matches;
-    let motionContext: gsap.Context | undefined;
+    let motion: ScrollReveal | undefined;
 
     const getVisualItems = (panel: HTMLElement) =>
       Array.from(panel.querySelectorAll(".expertise-showcase__visual-item"))
@@ -401,140 +402,79 @@ const titleWords = title.split(" ");
     root.dataset.expertiseReady = "true";
 
     if (!reducedMotion.matches) {
-      motionContext = gsap.context(() => {
-        const headingWords = gsap.utils.toArray(
-          "[data-expertise-heading-word]",
-          root,
-        );
-        const introDescription = root.querySelector(
-          "[data-expertise-description]",
-        );
-        const tabsContainer = root.querySelector("[data-expertise-tabs]");
-        const initialVisual = activePanel?.querySelector(
-          "[data-expertise-visual]",
-        );
-        const contentTitle = activePanel?.querySelector(
-          "[data-expertise-content-title]",
-        );
-        const contentCopy = activePanel
-          ? gsap.utils.toArray(
-              "[data-expertise-content-copy]",
-              activePanel,
-            )
-          : [];
-        const contentPills = activePanel
-          ? gsap.utils.toArray(
-              "[data-expertise-content-pill]",
-              activePanel,
-            )
-          : [];
-        const animatedElements = [
-          ...headingWords,
-          ...(introDescription ? [introDescription] : []),
-          ...(tabsContainer ? [tabsContainer] : []),
-          ...(initialVisual ? [initialVisual] : []),
-          ...(contentTitle ? [contentTitle] : []),
-          ...contentCopy,
-          ...contentPills,
-        ];
-
-        const timeline = gsap.timeline({
-          defaults: { ease: "power3.out" },
-          scrollTrigger: {
-            trigger: root,
-            start: "top 80%",
-            once: true,
-            toggleActions: "play none none none",
+      motion = createScrollReveal(
+        root,
+        [
+          {
+            at: 0,
+            duration: 0.5,
+            from: { opacity: 0, scale: 0.985, y: 18 },
+            stagger: 0.025,
+            targets: queryAll(root, "[data-expertise-heading-word]"),
           },
-          onStart: () => {
+          {
+            at: 0.1,
+            duration: 0.44,
+            from: { opacity: 0, y: 14 },
+            targets: root.querySelector<HTMLElement>(
+              "[data-expertise-description]",
+            ),
+          },
+          {
+            at: 0.14,
+            duration: 0.44,
+            from: { opacity: 0, x: -12 },
+            targets: root.querySelector<HTMLElement>("[data-expertise-tabs]"),
+          },
+          {
+            at: 0.16,
+            duration: 0.52,
+            from: { opacity: 0, scale: 0.985, y: 20 },
+            targets: activePanel?.querySelector<HTMLElement>(
+              "[data-expertise-visual]",
+            ),
+          },
+          {
+            at: 0.18,
+            duration: 0.5,
+            from: { opacity: 0, x: 16 },
+            targets: activePanel?.querySelector<HTMLElement>(
+              "[data-expertise-content-title]",
+            ),
+          },
+          {
+            at: 0.22,
+            duration: 0.46,
+            from: { opacity: 0, x: 14 },
+            stagger: 0.06,
+            targets: activePanel
+              ? queryAll(activePanel, "[data-expertise-content-copy]")
+              : [],
+          },
+          {
+            at: 0.28,
+            duration: 0.42,
+            from: { opacity: 0, scale: 0.97, y: 10 },
+            stagger: 0.05,
+            targets: activePanel
+              ? queryAll(activePanel, "[data-expertise-content-pill]")
+              : [],
+          },
+        ],
+        {
+          onBegin: () => {
             hasEnteredViewport = true;
           },
           onComplete: () => {
             canRunVisualStack = true;
             if (activePanel) startVisualStack(activePanel);
-            gsap.set(animatedElements, {
-              clearProps: "opacity,transform,visibility",
-            });
           },
-        });
-
-        timeline.from(
-          headingWords,
-          {
-            autoAlpha: 0,
-            y: 18,
-            scale: 0.985,
-            duration: 0.5,
-            stagger: 0.025,
-          },
-          0,
-        );
-
-        if (introDescription) {
-          timeline.from(
-            introDescription,
-            { autoAlpha: 0, y: 14, duration: 0.44 },
-            0.1,
-          );
-        }
-
-        if (tabsContainer) {
-          timeline.from(
-            tabsContainer,
-            {
-              autoAlpha: 0,
-              x: -12,
-              duration: 0.44,
-            },
-            0.14,
-          );
-        }
-
-        if (initialVisual) {
-          timeline.from(
-            initialVisual,
-            { autoAlpha: 0, y: 20, scale: 0.985, duration: 0.52 },
-            0.16,
-          );
-        }
-
-        if (contentTitle) {
-          timeline.from(
-            contentTitle,
-            { autoAlpha: 0, x: 16, duration: 0.5 },
-            0.18,
-          );
-        }
-
-        timeline.from(
-          contentCopy,
-          {
-            autoAlpha: 0,
-            x: 14,
-            duration: 0.46,
-            stagger: 0.06,
-          },
-          0.22,
-        );
-
-        timeline.from(
-          contentPills,
-          {
-            autoAlpha: 0,
-            y: 10,
-            scale: 0.97,
-            duration: 0.42,
-            stagger: 0.05,
-          },
-          0.28,
-        );
-      }, root);
-
-      ScrollTrigger.refresh();
+        },
+      );
     }
 
     const cleanupShowcase = () => {
-      motionContext?.revert();
+      motion?.revert();
       stopAllVisualStacks();
       delete root.dataset.expertiseReady;
     };
