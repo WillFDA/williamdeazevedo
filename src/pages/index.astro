@@ -13,9 +13,11 @@ import TestimonialsSection from "../components/TestimonialsSection.astro";
 import ArrowRight from "../components/icons/nucleo/arrow-right-fill.svg";
 import SearchContent from "../components/icons/nucleo/search-content-2-fill.svg";
 import Star from "../components/icons/nucleo/star-fill.svg";
+import { Image } from "astro:assets";
 import WaveIcon from "../components/ui/WaveIcon.astro";
 import WaveText from "../components/ui/WaveText.astro";
 import AnimatedHeading from "../components/ui/AnimatedHeading.astro";
+import { getPublishedTestimonials } from "@/lib/testimonials";
 
 export const prerender = true;
 
@@ -135,11 +137,13 @@ const expertiseItems = [
         ],
     },
 ] as const;
+
+const displayedTestimonials = getPublishedTestimonials();
 ---
 
 <Layout>
     <section
-        class="mx-auto flex w-full min-w-0 max-w-5xl flex-col gap-6 px-2 pb-4 sm:px-4"
+        class="mx-auto flex w-full min-w-0 max-w-5xl flex-col gap-6 px-2 sm:px-4"
         data-section-reveal="false"
     >
         <a
@@ -201,6 +205,63 @@ const expertiseItems = [
                 >
             </div>
         </FadeReveal>
+        <FadeReveal animate={false}>
+            <div
+                class="testimonial-rotator mx-auto mb-4 mt-0 text-center text-xs"
+                data-testimonial-rotator
+                data-testimonial-interval="5500"
+            >
+                {
+                    displayedTestimonials.map((temoignage, index) => (
+                        <figure
+                            class:list={[
+                                "testimonial-rotator__item",
+                                index === 0 && "is-active",
+                            ]}
+                            data-testimonial-item
+                            data-testimonial-initial={
+                                index === 0 ? true : undefined
+                            }
+                            aria-hidden={index === 0 ? undefined : "true"}
+                            inert={index === 0 ? undefined : true}
+                        >
+                            <blockquote class="mx-auto max-w-md text-base font-normal leading-normal text-gray-900">
+                                “{temoignage.excerpt ?? temoignage.text}”
+                            </blockquote>
+                            <div class="testimonial-rotator__person flex items-center justify-center gap-3">
+                                <div class="testimonial-rotator__avatar inline-flex size-10 items-center justify-center overflow-hidden rounded-full bg-snow-600 text-xs font-medium text-gray-900">
+                                    {temoignage.image ? (
+                                        <Image
+                                            class="block size-full object-cover"
+                                            src={temoignage.image}
+                                            alt={temoignage.imageAlt ?? ""}
+                                            width={64}
+                                            height={64}
+                                            loading={
+                                                index === 0 ? "eager" : "lazy"
+                                            }
+                                        />
+                                    ) : (
+                                        <span>{temoignage.initials}</span>
+                                    )}
+                                </div>
+                                <figcaption class="testimonial-rotator__author text-left text-sm font-medium leading-tight text-gray-900">
+                                    <a
+                                        class="text-inherit no-underline underline-offset-2 focus-visible:underline"
+                                        href={temoignage.href}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        aria-label={`Voir le site de ${temoignage.name}`}
+                                    >
+                                        {temoignage.name}
+                                    </a>
+                                </figcaption>
+                            </div>
+                        </figure>
+                    ))
+                }
+            </div>
+        </FadeReveal>
     </section>
     <CapabilitiesStrip />
     <ProblemComparison />
@@ -238,6 +299,179 @@ const expertiseItems = [
     <LatestArticles />
 </Layout>
 
+<script>
+    type HomeInteractionState = {
+        destroy: () => void;
+    };
+
+    const windowWithHomeInteractions = window as Window & {
+        __wuiHomeInteractionLifecycleReady?: boolean;
+        __wuiHomeInteractionStates?: Set<HomeInteractionState>;
+    };
+    const activeHomeInteractionStates =
+        windowWithHomeInteractions.__wuiHomeInteractionStates ??
+        new Set<HomeInteractionState>();
+    windowWithHomeInteractions.__wuiHomeInteractionStates =
+        activeHomeInteractionStates;
+
+    function registerHomeInteractionCleanup(destroy: () => void) {
+        const state: HomeInteractionState = {
+            destroy: () => {
+                if (!activeHomeInteractionStates.delete(state)) return;
+                destroy();
+            },
+        };
+
+        activeHomeInteractionStates.add(state);
+    }
+
+    function resetHomeInteractions() {
+        Array.from(activeHomeInteractionStates).forEach((state) =>
+            state.destroy(),
+        );
+    }
+
+    const initTestimonialRotators = () => {
+        document
+            .querySelectorAll<HTMLElement>("[data-testimonial-rotator]")
+            .forEach((root) => {
+                if (root.dataset.testimonialRotatorReady === "true") return;
+
+                const items = Array.from(
+                    root.querySelectorAll<HTMLElement>(
+                        "[data-testimonial-item]",
+                    ),
+                );
+
+                if (items.length < 2) return;
+
+                if (
+                    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ) {
+                    items.forEach((item, index) => {
+                        const isActive = index === 0;
+                        item.classList.toggle("is-active", isActive);
+                        item.setAttribute("aria-hidden", String(!isActive));
+                        item.toggleAttribute("inert", !isActive);
+                    });
+                    return;
+                }
+
+                const interval = Math.max(
+                    1200,
+                    Number.parseInt(root.dataset.testimonialInterval ?? "", 10) ||
+                        5500,
+                );
+                let activeIndex = items.findIndex((item) =>
+                    item.classList.contains("is-active"),
+                );
+                let hasAutoplayStarted = false;
+                let isPausedByInteraction = false;
+                let timeout: number | undefined;
+
+                if (activeIndex < 0) activeIndex = 0;
+
+                const setActiveItem = (nextIndex: number) => {
+                    if (nextIndex !== 0) {
+                        const initialItem = items[0];
+                        if (initialItem) {
+                            delete initialItem.dataset.testimonialInitial;
+                        }
+                    }
+
+                    activeIndex = nextIndex;
+                    items.forEach((item, index) => {
+                        const isActive = index === activeIndex;
+
+                        item.classList.toggle("is-active", isActive);
+                        item.setAttribute("aria-hidden", String(!isActive));
+                        // inert removes the hidden testimonial (and its link)
+                        // from the a11y tree AND tab order, so aria-hidden no
+                        // longer wraps a focusable descendant.
+                        item.toggleAttribute("inert", !isActive);
+                    });
+                };
+
+                const schedule = () => {
+                    window.clearTimeout(timeout);
+                    if (isPausedByInteraction) return;
+
+                    timeout = window.setTimeout(() => {
+                        if (!document.hidden) {
+                            setActiveItem((activeIndex + 1) % items.length);
+                        }
+
+                        schedule();
+                    }, interval);
+                };
+
+                const pause = () => {
+                    isPausedByInteraction = true;
+                    window.clearTimeout(timeout);
+                };
+                const resume = () => {
+                    isPausedByInteraction = false;
+                    if (hasAutoplayStarted) schedule();
+                };
+                const resumeAfterFocus = (event: FocusEvent) => {
+                    if (
+                        event.relatedTarget instanceof Node &&
+                        root.contains(event.relatedTarget)
+                    ) {
+                        return;
+                    }
+
+                    resume();
+                };
+                // Un seul signal pour retirer d'un coup les trois écouteurs d'attente.
+                const waitingForInteraction = new AbortController();
+                const stopWaitingForInteraction = () =>
+                    waitingForInteraction.abort();
+                const startAutoplay = () => {
+                    if (hasAutoplayStarted) return;
+
+                    hasAutoplayStarted = true;
+                    stopWaitingForInteraction();
+                    schedule();
+                };
+
+                root.dataset.testimonialRotatorReady = "true";
+                setActiveItem(activeIndex);
+                root.addEventListener("focusin", pause);
+                root.addEventListener("focusout", resumeAfterFocus);
+                root.addEventListener("mouseenter", pause);
+                root.addEventListener("mouseleave", resume);
+                window.addEventListener("click", startAutoplay, {
+                    signal: waitingForInteraction.signal,
+                });
+                window.addEventListener("keydown", startAutoplay, {
+                    signal: waitingForInteraction.signal,
+                });
+                window.addEventListener("scroll", startAutoplay, {
+                    passive: true,
+                    signal: waitingForInteraction.signal,
+                });
+                registerHomeInteractionCleanup(() => {
+                    window.clearTimeout(timeout);
+                    stopWaitingForInteraction();
+                    root.removeEventListener("focusin", pause);
+                    root.removeEventListener("focusout", resumeAfterFocus);
+                    root.removeEventListener("mouseenter", pause);
+                    root.removeEventListener("mouseleave", resume);
+                    delete root.dataset.testimonialRotatorReady;
+                });
+            });
+    };
+
+    initTestimonialRotators();
+
+    if (windowWithHomeInteractions.__wuiHomeInteractionLifecycleReady !== true) {
+        windowWithHomeInteractions.__wuiHomeInteractionLifecycleReady = true;
+        document.addEventListener("astro:before-swap", resetHomeInteractions);
+        document.addEventListener("astro:page-load", initTestimonialRotators);
+    }
+</script>
+
 <style>
     [data-hero-eyebrow] {
         animation: hero-eyebrow-fade 780ms cubic-bezier(0.2, 0, 0, 1)
@@ -256,12 +490,170 @@ const expertiseItems = [
         }
     }
 
+    .testimonial-rotator {
+        display: grid;
+        min-height: 8.5rem;
+        place-items: center;
+        width: min(100%, 30rem);
+    }
+
+    .testimonial-rotator__item {
+        align-items: center;
+        display: flex;
+        filter: blur(6px);
+        flex-direction: column;
+        gap: 1rem;
+        grid-area: 1 / 1;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(0.35rem);
+        transition:
+            opacity 360ms cubic-bezier(0.2, 0, 0, 1),
+            filter 520ms cubic-bezier(0.2, 0, 0, 1),
+            transform 520ms cubic-bezier(0.2, 0, 0, 1);
+        width: 100%;
+    }
+
+    .testimonial-rotator__item.is-active {
+        filter: none;
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+    }
+
+    .testimonial-rotator__item.is-active blockquote,
+    .testimonial-rotator__item.is-active .testimonial-rotator__person {
+        animation: testimonial-content-in 920ms cubic-bezier(0.22, 1.16, 0.36, 1)
+            backwards;
+    }
+
+    .testimonial-rotator__item.is-active blockquote {
+        animation-delay: 120ms;
+    }
+
+    .testimonial-rotator__item.is-active .testimonial-rotator__person {
+        animation-delay: 360ms;
+    }
+
+    .testimonial-rotator__item[data-testimonial-initial] {
+        animation: testimonial-initial-card-in 440ms
+            cubic-bezier(0.16, 1, 0.3, 1) both;
+        transform-origin: 50% 35%;
+    }
+
+    .testimonial-rotator__item[data-testimonial-initial] blockquote {
+        animation: testimonial-initial-copy-in 420ms
+            cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .testimonial-rotator__item[data-testimonial-initial]
+        .testimonial-rotator__person {
+        animation: testimonial-initial-person-in 480ms
+            cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+    }
+
+    .testimonial-rotator__item[data-testimonial-initial]
+        .testimonial-rotator__avatar {
+        animation: testimonial-initial-avatar-in 520ms
+            cubic-bezier(0.22, 1.24, 0.36, 1) 90ms both;
+    }
+
+    .testimonial-rotator__item[data-testimonial-initial]
+        .testimonial-rotator__author {
+        animation: testimonial-initial-author-in 460ms
+            cubic-bezier(0.16, 1, 0.3, 1) 130ms both;
+    }
+
+    @keyframes testimonial-initial-card-in {
+        from {
+            opacity: 0.78;
+            transform: translateY(0.55rem) scale(0.992);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes testimonial-initial-copy-in {
+        from {
+            transform: translateY(0.4rem);
+        }
+
+        to {
+            transform: none;
+        }
+    }
+
+    @keyframes testimonial-initial-person-in {
+        from {
+            opacity: 0.68;
+            transform: translateY(0.5rem);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes testimonial-initial-avatar-in {
+        from {
+            opacity: 0.72;
+            transform: scale(0.84);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes testimonial-initial-author-in {
+        from {
+            opacity: 0.72;
+            transform: translateX(-0.35rem);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes testimonial-content-in {
+        from {
+            filter: blur(8px);
+            opacity: 0;
+            transform: translateY(-0.65rem);
+        }
+
+        to {
+            filter: none;
+            opacity: 1;
+            transform: none;
+        }
+    }
+
     @media (scripting: none), (prefers-reduced-motion: reduce) {
         [data-hero-eyebrow] {
             animation: none;
         }
-    }
 
+        .testimonial-rotator__item {
+            animation: none;
+            transition: none;
+        }
+
+        .testimonial-rotator__avatar,
+        .testimonial-rotator__author,
+        .testimonial-rotator__person,
+        .testimonial-rotator blockquote {
+            animation: none;
+        }
+
+    }
     .expertise-cta {
         background: transparent;
         border: 0;
