@@ -149,26 +149,25 @@ const outcome = {
 };
 
 const crossBadge =
-    "inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-snow-50 text-gray-700 ring-1 ring-gray-300";
+    "inline-flex size-7 shrink-0 items-center justify-center rounded-lg bg-snow-50 text-gray-600 ring-1 ring-gray-200";
 const checkBadge =
-    "inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-blue-500 text-snow-50 shadow-[0_6px_14px_-8px_rgba(62,96,212,0.9)]";
-const cheapChip =
-    "mb-4 inline-flex size-9 items-center justify-center rounded-lg bg-snow-50 text-gray-600 ring-1 ring-gray-300";
+    "inline-flex size-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-500";
+const cheapChip = `mb-4 inline-flex size-9 items-center justify-center rounded-lg text-snow-50 ${iconToneClasses.slate}`;
 const withMeChip = `mb-4 inline-flex size-9 items-center justify-center rounded-lg text-snow-50 ${iconToneClasses.blue}`;
 // À la taille des pastilles, les deux icônes ont un trait trop fin pour
 // rester lisibles : on l'épaissit.
-const crossIcon = "size-3 [&_path]:stroke-current [&_path]:stroke-[1.2]";
-const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
+const crossIcon = "size-3.5 [&_path]:stroke-current [&_path]:stroke-[1.2]";
+const checkIcon = "size-4 [&_g]:stroke-[1.75]";
 ---
 
 <section
-    class="pricing-comparison relative left-1/2 w-[calc(100dvw-2rem)] max-w-7xl -translate-x-1/2 rounded-4xl bg-surface-muted px-4 py-14 sm:px-8 md:py-20"
+    class="pricing-comparison relative left-1/2 w-[calc(100dvw-1rem)] max-w-7xl -translate-x-1/2 rounded-3xl bg-surface-muted px-4 py-14 sm:w-[calc(100dvw-2rem)] sm:px-8 sm:py-20 md:rounded-4xl md:py-24"
     aria-labelledby={headingId}
     data-section-reveal="false"
 >
     <FadeRevealOnScroll>
-        <div class="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
-            <span class="rounded-full bg-snow-50 px-4 py-2 text-sm font-normal text-gray-900 shadow-lg">
+        <div class="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+            <span class="pill mb-1">
                 Comparaison
             </span>
             <AnimatedHeading
@@ -187,7 +186,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
     </FadeRevealOnScroll>
 
     <FadeRevealOnScroll
-        class="mx-auto mt-16 hidden max-w-5xl lg:block"
+        class="mx-auto mt-14 hidden max-w-5xl lg:block"
         delay={0.08}
     >
         <div class="relative">
@@ -221,7 +220,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                             <span class="block text-xl font-medium leading-tight text-gray-900">
                                 {columns.cheap.title}
                             </span>
-                            <span class="mt-1.5 block text-sm font-normal leading-snug text-gray-600">
+                            <span class="mt-2 block text-sm font-normal leading-normal text-gray-600">
                                 {columns.cheap.note}
                             </span>
                         </th>
@@ -232,7 +231,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                             <span class="block text-xl font-medium leading-tight text-gray-900">
                                 {columns.withMe.title}
                             </span>
-                            <span class="mt-1.5 block text-sm font-normal leading-snug text-gray-600">
+                            <span class="mt-2 block text-sm font-normal leading-normal text-gray-600">
                                 {columns.withMe.note}
                             </span>
                         </th>
@@ -249,7 +248,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                                     style={`--row-index: ${rowIndex}`}
                                 >
                                     <th
-                                        class="border-b border-gray-300/70 py-5 pr-6 font-normal"
+                                        class="border-b border-gray-200 py-5 pr-6 font-normal"
                                         scope="row"
                                     >
                                         <span class="flex items-center gap-4">
@@ -263,19 +262,19 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                                                 <Icon class="size-5" />
                                             </span>
                                             <span class="leading-snug">
-                                                <span class="block text-base text-gray-900">
+                                                <span class="block text-base font-medium text-gray-900">
                                                     {row.label}
                                                 </span>
                                                 {row.detail && (
-                                                    <span class="mt-0.5 block text-sm text-gray-600">
+                                                    <span class="mt-1 block text-sm font-normal text-gray-600">
                                                         {row.detail}
                                                     </span>
                                                 )}
                                             </span>
                                         </span>
                                     </th>
-                                    <td class="border-b border-gray-300/70 px-6 py-5">
-                                        <span class="flex items-start gap-3 text-[0.9375rem] leading-snug text-gray-600">
+                                    <td class="border-b border-gray-200 px-6 py-5">
+                                        <span class="flex items-start gap-3 text-base font-light leading-normal text-gray-600">
                                             <span
                                                 class={crossBadge}
                                                 aria-hidden="true"
@@ -288,7 +287,7 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                                         </span>
                                     </td>
                                     <td class="comparison-card-cell px-8 py-5">
-                                        <span class="flex items-start gap-3 text-base leading-snug text-gray-900">
+                                        <span class="flex items-start gap-3 text-base font-normal leading-normal text-gray-900">
                                             <span
                                                 class={checkBadge}
                                                 aria-hidden="true"
@@ -316,15 +315,15 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                         >
                             {outcome.label}
                         </th>
-                        <td class="px-6 py-7 text-lg font-normal leading-snug text-gray-700">
+                        <td class="px-6 py-7 text-lg font-light leading-snug text-gray-600">
                             {outcome.cheap}
                         </td>
                         <td class="px-4 pt-4">
-                            <div class="rounded-3xl bg-blue-500 px-6 py-5 text-snow-50 shadow-[0_22px_44px_-26px_rgba(62,96,212,0.95)]">
+                            <div class="rounded-3xl bg-blue-500 p-6 text-snow-50 shadow-[0_28px_70px_-48px_rgba(66,102,219,0.85)]">
                                 <strong class="block text-lg font-medium leading-snug">
                                     {outcome.withMe}
                                 </strong>
-                                <span class="mt-2 block text-sm font-normal leading-snug">
+                                <span class="mt-2 block text-sm font-light leading-normal text-snow-50/80">
                                     {outcome.withMeNote}
                                 </span>
                             </div>
@@ -335,26 +334,26 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
         </div>
     </FadeRevealOnScroll>
 
-    <div class="mx-auto mt-12 grid max-w-xl gap-5 md:max-w-4xl md:grid-cols-2 lg:hidden">
+    <div class="mx-auto mt-10 grid max-w-xl gap-4 md:mt-14 md:max-w-4xl md:grid-cols-2 lg:hidden">
         <FadeRevealOnScroll class="flex" delay={0.06}>
-            <article class="w-full rounded-3xl bg-snow-50/60 p-6">
+            <article class="w-full rounded-3xl bg-snow-50 p-6 ring-1 ring-snow-600 sm:p-8">
                 <span class={cheapChip} aria-hidden="true">
                     <Sparkle class="size-5" />
                 </span>
                 <h3 class="text-xl font-medium leading-tight text-gray-900">
                     {columns.cheap.title}
                 </h3>
-                <p class="mt-1.5 text-sm leading-snug text-gray-600">
+                <p class="mt-2 text-base font-light leading-normal text-gray-600">
                     {columns.cheap.note}
                 </p>
-                <dl class="mt-5 divide-y divide-gray-200">
+                <dl class="mt-6 divide-y divide-gray-200">
                     {
                         rows.map((row) => (
-                            <div class="py-3.5">
-                                <dt class="text-sm font-medium leading-snug text-gray-900">
+                            <div class="py-4">
+                                <dt class="text-base font-medium leading-snug text-gray-900">
                                     {row.label}
                                 </dt>
-                                <dd class="mt-1.5 flex items-start gap-3 text-sm leading-snug text-gray-600">
+                                <dd class="mt-2 flex items-start gap-3 text-base font-light leading-normal text-gray-600">
                                     <span class={crossBadge} aria-hidden="true">
                                         <XMarkIcon class={crossIcon} />
                                     </span>
@@ -363,11 +362,11 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                             </div>
                         ))
                     }
-                    <div class="mt-3 rounded-2xl bg-surface-muted px-5 py-4">
-                        <dt class="text-sm leading-snug text-gray-600">
+                    <div class="mt-4 rounded-2xl bg-surface-muted p-5">
+                        <dt class="text-sm font-normal text-gray-600">
                             {outcome.label}
                         </dt>
-                        <dd class="mt-1 text-lg font-medium leading-snug text-gray-900">
+                        <dd class="mt-1.5 text-lg font-medium leading-tight text-gray-900">
                             {outcome.cheap}
                         </dd>
                     </div>
@@ -375,24 +374,24 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
             </article>
         </FadeRevealOnScroll>
         <FadeRevealOnScroll class="flex" delay={0.12}>
-            <article class="comparison-card w-full rounded-3xl bg-snow-50 p-6">
+            <article class="comparison-card w-full rounded-3xl bg-snow-50 p-6 sm:p-8">
                 <span class={withMeChip} aria-hidden="true">
                     <WindowPointer class="size-5" />
                 </span>
                 <h3 class="text-xl font-medium leading-tight text-gray-900">
                     {columns.withMe.title}
                 </h3>
-                <p class="mt-1.5 text-sm leading-snug text-gray-600">
+                <p class="mt-2 text-base font-light leading-normal text-gray-600">
                     {columns.withMe.note}
                 </p>
-                <dl class="mt-5 divide-y divide-gray-200">
+                <dl class="mt-6 divide-y divide-gray-200">
                     {
                         rows.map((row) => (
-                            <div class="py-3.5">
-                                <dt class="text-sm font-medium leading-snug text-gray-900">
+                            <div class="py-4">
+                                <dt class="text-base font-medium leading-snug text-gray-900">
                                     {row.label}
                                 </dt>
-                                <dd class="mt-1.5 flex items-start gap-3 text-sm leading-snug text-gray-700">
+                                <dd class="mt-2 flex items-start gap-3 text-base font-normal leading-normal text-gray-900">
                                     <span class={checkBadge} aria-hidden="true">
                                         <CheckIcon class={checkIcon} />
                                     </span>
@@ -401,12 +400,12 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                             </div>
                         ))
                     }
-                    <div class="mt-3 rounded-2xl bg-blue-500 px-5 py-4 text-snow-50">
-                        <dt class="text-sm leading-snug">{outcome.label}</dt>
-                        <dd class="mt-1 text-lg font-medium leading-snug">
+                    <div class="mt-4 rounded-2xl bg-blue-500 p-5 text-snow-50 shadow-[0_28px_70px_-48px_rgba(66,102,219,0.85)]">
+                        <dt class="text-sm font-normal text-snow-50/80">{outcome.label}</dt>
+                        <dd class="mt-1.5 text-lg font-medium leading-tight">
                             {outcome.withMe}
                         </dd>
-                        <dd class="mt-2 text-sm leading-snug">
+                        <dd class="mt-2 text-sm font-light leading-normal text-snow-50/80">
                             {outcome.withMeNote}
                         </dd>
                     </div>
@@ -416,21 +415,21 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
     </div>
 
     <FadeRevealOnScroll
-        class="mx-auto mt-14 max-w-xl md:max-w-4xl lg:mt-20 lg:max-w-5xl"
+        class="mx-auto mt-4 max-w-xl md:mt-4 md:max-w-4xl lg:mt-10 lg:max-w-5xl"
         delay={0.1}
     >
-        <div class="grid gap-6 border-t border-gray-300/70 pt-8 lg:grid-cols-[30fr_70fr] lg:gap-0">
+        <div class="grid gap-6 rounded-3xl bg-snow-50 p-6 ring-1 ring-snow-600 sm:p-8 lg:grid-cols-[30fr_70fr] lg:gap-0 lg:rounded-none lg:border-t lg:border-gray-200 lg:bg-transparent lg:p-0 lg:pt-8 lg:ring-0">
             <div class="lg:pr-6">
-                <h3 class="text-base font-medium leading-tight text-gray-900">
+                <h3 class="text-lg font-medium leading-tight text-gray-900">
                     Et le budget ?
                 </h3>
-                <p class="mt-1.5 text-sm leading-snug text-gray-600">
+                <p class="mt-2 text-sm font-normal leading-normal text-gray-600">
                     Coût estimé sur 3{nbsp}ans
                 </p>
             </div>
-            <dl class="grid gap-6 sm:grid-cols-2 lg:grid-cols-[34fr_36fr] lg:gap-0">
+            <dl class="grid gap-6 border-t border-gray-200 pt-6 sm:grid-cols-2 lg:grid-cols-[34fr_36fr] lg:gap-0 lg:border-t-0 lg:pt-0">
                 <div class="lg:px-6">
-                    <dt class="text-sm font-medium text-gray-900">
+                    <dt class="text-base font-medium text-gray-900">
                         {columns.cheap.title}
                     </dt>
                     <dd class="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -440,28 +439,28 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
                                 {costs.anchor}
                             </s>
                         </span>
-                        <span class="text-lg font-medium leading-tight text-gray-900">
+                        <span class="text-xl font-medium leading-tight text-gray-900 [font-variant-numeric:tabular-nums]">
                             <span class="sr-only">Coût estimé :</span>
                             {costs.total}
                         </span>
                     </dd>
-                    <dd class="mt-1 text-sm leading-snug text-gray-600">
+                    <dd class="mt-1.5 text-sm font-normal leading-normal text-gray-600">
                         sur 3{nbsp}ans, abonnement en cours
                     </dd>
-                    <dd class="mt-2 text-sm leading-relaxed text-gray-600">
+                    <dd class="mt-3 text-sm font-normal leading-relaxed text-gray-600">
                         Mise en place puis abonnement de {costs.monthly}{nbsp};
                         hébergement et modifications souvent inclus tant que
                         l'abonnement court.
                     </dd>
                 </div>
                 <div class="lg:px-8">
-                    <dt class="text-sm font-medium text-gray-900">
+                    <dt class="text-base font-medium text-gray-900">
                         {columns.withMe.title}
                     </dt>
-                    <dd class="mt-1.5 text-lg font-medium leading-tight text-blue-600">
+                    <dd class="mt-1.5 text-xl font-medium leading-tight text-blue-500">
                         {costs.withMe}
                     </dd>
-                    <dd class="mt-1 text-sm leading-snug text-gray-600">
+                    <dd class="mt-1.5 text-sm font-normal leading-normal text-gray-600">
                         {costs.withMeNote}
                     </dd>
                 </div>
@@ -470,19 +469,19 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
     </FadeRevealOnScroll>
 
     <FadeRevealOnScroll delay={0.12}>
-        <p class="mx-auto mt-10 max-w-2xl text-center text-[0.8125rem] leading-relaxed text-gray-600">
+        <p class="mx-auto mt-8 max-w-2xl text-center text-sm font-normal leading-relaxed text-gray-600 md:mt-10">
             Côté site à 600{nbsp}€, il s'agit de tendances générales : chaque offre
             est différente. Coûts indicatifs d'après un relevé d'offres
             publiques de sites à bas prix et par abonnement, consulté le
             14{nbsp}octobre 2026, sans agence citée. Pour le détail, lisez
             l'article{" "}
             <a
-                class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:text-blue-500 focus-visible:text-blue-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
                 href="/articles/site-600-euros-vs-site-2000-euros/"
                 >site à 600{nbsp}€ ou site à 2{nbsp}000{nbsp}€</a
             >.
         </p>
-        <div class="mt-6 flex justify-center">
+        <div class="mt-8 flex justify-center">
             <CalButton
                 class="rounded-xl text-base font-normal"
                 label="Parler de mon projet"
