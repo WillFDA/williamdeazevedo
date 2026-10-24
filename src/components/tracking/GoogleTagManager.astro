@@ -1,0 +1,127 @@
+---
+// Google Tag Manager + Consent Mode v2.
+// Placé tout en haut du <head> dans src/layout/Layout.astro.
+// Zaraz (Cloudflare) n'est PAS touché ici : il est géré côté dashboard.
+const GTM_ID = "GTM-TCZVQQ29";
+---
+
+{/* 1. Consent Mode v2 : valeurs par défaut AVANT le chargement de GTM. */}
+<script is:inline>
+    /*
+     * Script inline, non transpilé : il reste en ES5 (var, ||, catch avec
+     * binding) pour que les valeurs par défaut « denied » soient posées sur tout
+     * navigateur qui charge GTM : le bloc 2 s'exécute même si celui-ci échoue,
+     * une erreur de syntaxe ici chargerait donc GTM sans consentement par défaut.
+     */
+    /* oxlint-disable logical-assignment-operators, no-var, vars-on-top, unicorn/prefer-optional-catch-binding -- script inline ES5, voir ci-dessus */
+    window.dataLayer = window.dataLayer || [];
+    // Stub gtag fourni par Google (Consent Mode) : gtag.js lit l'objet
+    // `arguments` tel quel, un tableau issu de ...args casserait le consentement.
+    function gtag() {
+        // oxlint-disable-next-line prefer-rest-params -- forme imposée par Google.
+        dataLayer.push(arguments);
+    }
+    window.gtag = window.gtag || gtag;
+    if (!window.__wuiConsentDefaultSet) {
+        window.__wuiConsentDefaultSet = true;
+        gtag("consent", "default", {
+            ad_storage: "denied",
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+            analytics_storage: "denied",
+            wait_for_update: 500,
+        });
+
+        // Ré-applique le choix mémorisé par CookieBanner.astro (même clé, même
+        // durée de 6 mois) avant le chargement de GTM.
+        try {
+            var stored = JSON.parse(localStorage.getItem("wui-consent") || "null");
+            if (
+                stored &&
+                stored.value === "granted" &&
+                Date.now() < new Date(stored.at).setMonth(new Date(stored.at).getMonth() + 6)
+            ) {
+                gtag("consent", "update", {
+                    ad_storage: "granted",
+                    ad_user_data: "granted",
+                    ad_personalization: "granted",
+                    analytics_storage: "granted",
+                });
+            }
+        } catch (error) {
+            // Stockage illisible (navigation privée, JSON corrompu) : on garde « denied ».
+        }
+    }
+</script>
+
+{/* 2. Snippet GTM, protégé contre un double chargement avec le ClientRouter. */}
+<script is:inline define:vars={{ GTM_ID }}>
+    /*
+     * Snippet officiel Google Tag Manager, recopié tel quel (seule la garde
+     * __wuiGtmLoaded est ajoutée). On ne le réécrit pas pour pouvoir le comparer
+     * au snippet de la console GTM : les règles de style sont coupées ici seulement.
+     */
+    /* oxlint-disable func-names, logical-assignment-operators, no-var, vars-on-top, one-var, sort-vars, no-negated-condition, unicorn/no-negated-condition, prefer-template, unicorn/prefer-date-now, eqeqeq -- snippet fourni par Google */
+    (function (w, d, s, l, i) {
+        if (w.__wuiGtmLoaded) return;
+        w.__wuiGtmLoaded = true;
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", GTM_ID);
+    /* oxlint-enable func-names, logical-assignment-operators, no-var, vars-on-top, one-var, sort-vars, no-negated-condition, unicorn/no-negated-condition, prefer-template, unicorn/prefer-date-now, eqeqeq */
+</script>
+
+{/* 3. Pages virtuelles + clics contact (listeners délégués, posés une seule fois). */}
+<script is:inline>
+    if (!window.__wuiGtmListenersReady) {
+        window.__wuiGtmListenersReady = true;
+        const push = (data) => {
+            window.dataLayer ||= [];
+            window.dataLayer.push(data);
+        };
+
+        // astro:page-load se déclenche aussi au chargement initial : on l'ignore,
+        // car la page vue initiale est déjà couverte par le déclencheur
+        // "All Pages / Initialisation" de GTM. Seules les navigations
+        // ClientRouter suivantes poussent page_view_virtual.
+        // page_location / page_referrer : la doc GA4 SPA insiste sur un referrer
+        // correct entre pages virtuelles.
+        let isFirstLoad = true;
+        let lastUrl = window.location.href;
+        document.addEventListener("astro:page-load", () => {
+            if (isFirstLoad) {
+                isFirstLoad = false;
+                return;
+            }
+            const referrer = lastUrl;
+            lastUrl = window.location.href;
+            push({
+                event: "page_view_virtual",
+                page_location: window.location.href,
+                page_referrer: referrer,
+                page_path: window.location.pathname + window.location.search,
+                page_title: document.title,
+            });
+        });
+
+        document.addEventListener(
+            "click",
+            (event) => {
+                const target = event.target;
+                if (!(target instanceof Element)) return;
+                const link = target.closest("a[href]");
+                if (!link) return;
+                const href = (link.getAttribute("href") || "").trim().toLowerCase();
+                if (href.startsWith("tel:")) push({ event: "clic_telephone" });
+                else if (href.startsWith("mailto:")) push({ event: "clic_email" });
+            },
+            { capture: true },
+        );
+    }
+</script>

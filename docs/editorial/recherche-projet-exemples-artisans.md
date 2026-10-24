@@ -51,9 +51,9 @@ Un brief directement copiable pour une TPE, avec champs « à définir ensemble 
 
 Les chemins Markdown existaient mais les fichiers publics manquaient à la reprise. Copies strictement identiques des captures du dépôt ajoutées sous `public/articles/exemples-sites-vitrines/` :
 
-| Fichier                 | SHA-256 identique source/copie                                     |
-| ----------------------- | ------------------------------------------------------------------ |
-| `lefellic-home.webp`    | `40853873845b31dcd0af4b81444a8ac9f9eaf30beaba8cde29860059c7cc3e1b` |
+| Fichier | SHA-256 identique source/copie |
+| --- | --- |
+| `lefellic-home.webp` | `40853873845b31dcd0af4b81444a8ac9f9eaf30beaba8cde29860059c7cc3e1b` |
 | `persistance-home.webp` | `b7e2900bcd186bc21bc880aab3e56dec3b8953b215b2e33b36b0132dd400ca74` |
 
 Il s'agit de captures existantes, pas d'une nouvelle observation des sites externes au jour de publication. La couverture est une illustration pédagogique schématique distincte des deux captures ; son alternative reprend exactement le manifeste.

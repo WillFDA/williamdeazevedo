@@ -1,8 +1,11 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import GoogleTagManager from "../components/tracking/GoogleTagManager.astro";
+import GoogleTagManagerNoscript from "../components/tracking/GoogleTagManagerNoscript.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import CalDrawer from "../components/CalDrawer.astro";
+import CookieBanner from "../components/CookieBanner.astro";
 import FloatingEmailBubble from "../components/FloatingEmailBubble.astro";
 import TopContactBanner from "../components/TopContactBanner.astro";
 import "../styles/global.css";
@@ -43,6 +46,7 @@ const phoneValue = String(import.meta.env.PUBLIC_PHONE_HREF ?? phoneDisplay)
 const phoneHref = phoneValue ? `tel:${phoneValue}` : "";
 
 const personId = new URL("/#person", siteUrl).href;
+const businessId = new URL("/#business", siteUrl).href;
 
 const personJsonLd = {
     "@context": "https://schema.org",
@@ -72,13 +76,39 @@ const personJsonLd = {
     ],
     address: {
         "@type": "PostalAddress",
+        addressLocality: "Achères",
+        postalCode: "78260",
         addressRegion: "Île-de-France",
         addressCountry: "FR",
     },
-    worksFor: {
-        "@type": "Organization",
-        name: "William De Azevedo — Développeur freelance",
+    worksFor: { "@id": businessId },
+};
+
+// Activité locale (ProfessionalService) : uniquement des faits vérifiables.
+// Pas d'horaires ni de note : rien de publié ne les justifie.
+const businessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": businessId,
+    name: "William De Azevedo — Développeur web freelance",
+    url: siteUrl.href,
+    image: new URL("/pictures/william-low.png", siteUrl).href,
+    description:
+        "Création de site vitrine, refonte de site internet et SEO technique pour indépendants, artisans et TPE.",
+    founder: { "@id": personId },
+    address: {
+        "@type": "PostalAddress",
+        addressLocality: "Achères",
+        postalCode: "78260",
+        addressRegion: "Île-de-France",
+        addressCountry: "FR",
     },
+    areaServed: [
+        { "@type": "AdministrativeArea", name: "Yvelines" },
+        { "@type": "AdministrativeArea", name: "Île-de-France" },
+        { "@type": "Country", name: "France" },
+    ],
+    ...(phoneValue ? { telephone: phoneValue } : {}),
 };
 
 // Nom du site pour Google : publié uniquement sur la page d'accueil et relié
@@ -100,6 +130,7 @@ const websiteJsonLd = {
 <html lang="fr">
     <head>
         <meta charset="utf-8" />
+        <GoogleTagManager />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link
@@ -179,9 +210,19 @@ const websiteJsonLd = {
                 />
             )
         }
+        {
+            isHomePage && (
+                <script
+                    type="application/ld+json"
+                    is:inline
+                    set:html={JSON.stringify(businessJsonLd)}
+                />
+            )
+        }
         <title>{title}</title>
     </head>
     <body class="min-h-screen min-w-0 flex flex-col">
+        <GoogleTagManagerNoscript />
         <a
             class="skip-link fixed top-3 left-3 z-[100] rounded-[0.7rem] bg-coffee-300 px-4 py-2.5 text-sm text-snow-50 no-underline"
             href="#main-content"
@@ -193,13 +234,14 @@ const websiteJsonLd = {
         <main
             id="main-content"
             tabindex="-1"
-            class="mt-12 flex-1 flex flex-col gap-8"
+            class="mt-6 flex-1 flex flex-col gap-8 sm:mt-12"
         >
             <slot />
         </main>
         <Footer />
         <CalDrawer />
         <FloatingEmailBubble />
+        <CookieBanner />
         <script>
             import {
                 initFadeInAnimations,

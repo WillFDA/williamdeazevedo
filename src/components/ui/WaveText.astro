@@ -8,6 +8,7 @@ interface Props {
     stagger?: number;
     trigger?: Trigger;
     class?: string;
+    style?: string;
 }
 
 const {
@@ -20,16 +21,20 @@ const {
 } = Astro.props;
 
 const Tag = as;
-let charIndex = 0;
-const splitWords = text.trim()
-    ? text.trim().split(/\s+/).map((word) => ({
-          word,
-          chars: Array.from(word).map((char) => ({
-              char,
-              index: charIndex++,
-          })),
-      }))
-    : [];
+const words = text.trim() ? text.trim().split(/\s+/) : [];
+// Index global de chaque caractère : décalage = nombre de caractères des mots précédents.
+const wordOffsets = words.map((_, wordIndex) =>
+    words
+        .slice(0, wordIndex)
+        .reduce((total, word) => total + Array.from(word).length, 0),
+);
+const splitWords = words.map((word, wordIndex) => ({
+    word,
+    chars: Array.from(word).map((char, charOffset) => ({
+        char,
+        index: wordOffsets[wordIndex] + charOffset,
+    })),
+}));
 ---
 
 <Tag
