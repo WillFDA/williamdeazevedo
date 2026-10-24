@@ -180,7 +180,7 @@ test.describe("consentement cookies déjà donné", () => {
     await page.goto("/");
   });
 
-  test("rien au chargement ni au passage ; la souris arrêtée sur un bouton précharge Cal.com", async ({
+  test("le consentement ne déclenche aucun préchargement : rien au survol ni au focus, Cal.com à l'appui", async ({
     page,
   }) => {
     await page.waitForLoadState("networkidle");
@@ -189,31 +189,20 @@ test.describe("consentement cookies déjà donné", () => {
 
     const open = page.locator('[data-cal-location="hero"]');
     await open.scrollIntoViewIfNeeded();
-    const box = await open.boundingBox();
-    if (!box) throw new Error("bouton de réservation sans boîte");
 
-    // Passage rapide : rien.
-    await page.mouse.move(box.x - 40, box.y + box.height / 2);
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.move(box.x + box.width + 40, box.y + box.height / 2);
-    await page.waitForTimeout(300);
-    expect(calRequests(requests)).toEqual([]);
-
-    // La souris s'arrête sur le bouton : préchargement, tiroir fermé.
+    // Souris arrêtée sur le bouton, puis focus clavier qui y reste.
     await open.hover();
-    await expect.poll(() => requests.includes(EMBED)).toBe(true);
+    await page.waitForTimeout(600);
+    await open.focus();
+    await page.waitForTimeout(600);
+    expect(calRequests(requests)).toEqual([]);
+    await expect(calHints(page)).toHaveCount(0);
     await expect(drawerOf(page)).toBeHidden();
 
+    // L'appui charge Cal.com ; le clic ouvre le tiroir, sans double chargement.
     await open.click();
     await expect(drawerOf(page)).toBeVisible();
-    expect(requests.filter((url) => url === EMBED)).toHaveLength(1);
-  });
-
-  test("le focus clavier qui reste sur un bouton précharge Cal.com", async ({
-    page,
-  }) => {
-    await page.locator('[data-cal-location="hero"]').focus();
     await expect.poll(() => requests.includes(EMBED)).toBe(true);
-    await expect(drawerOf(page)).toBeHidden();
+    expect(requests.filter((url) => url === EMBED)).toHaveLength(1);
   });
 });

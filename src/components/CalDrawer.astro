@@ -74,7 +74,6 @@ const skeletonDays = Array.from({ length: 35 });
 
 <script>
     import { trackAnalytics } from "../scripts/analytics";
-    import { readConsent } from "../scripts/consent";
 
     // File d'attente du snippet Cal.com : les appels sont mis en file jusqu'au
     // chargement de embed.js, qui remplace ensuite window.Cal.
@@ -305,47 +304,6 @@ const skeletonDays = Array.from({ length: 35 });
             mountCalEmbed();
         }
     });
-
-    // Consentement cookies déjà donné (bandeau) : la souris qui s'arrête sur un
-    // bouton de réservation, ou le focus clavier qui y reste, précharge
-    // embed.js (25 ko). Le calendrier lui-même attend l'appui : précharger
-    // toute la page Cal.com (1,9 Mo) au survol n'apportait pas de gain mesurable.
-    // Sans consentement, rien ne part avant l'appui.
-    const preloadDelayMs = 100;
-    let preloadTimer: number | undefined;
-
-    function preloadCalEmbed() {
-        const calLink = getCalLink();
-        if (calLink) configureCalEmbed(calLink);
-    }
-
-    function schedulePreload(target: EventTarget | null) {
-        if (isCalConfigured || !getCalButton(target) || readConsent() !== "granted") {
-            return;
-        }
-        window.clearTimeout(preloadTimer);
-        preloadTimer = window.setTimeout(preloadCalEmbed, preloadDelayMs);
-    }
-
-    function cancelPreload(event: FocusEvent | PointerEvent) {
-        const calOpenButton = getCalButton(event.target);
-        const next = event.relatedTarget;
-        if (!calOpenButton || (next instanceof Node && calOpenButton.contains(next))) {
-            return;
-        }
-        window.clearTimeout(preloadTimer);
-    }
-
-    document.addEventListener(
-        "pointerover",
-        (event) => {
-            if (event.pointerType === "mouse") schedulePreload(event.target);
-        },
-        { passive: true },
-    );
-    document.addEventListener("pointerout", cancelPreload, { passive: true });
-    document.addEventListener("focusin", (event) => schedulePreload(event.target));
-    document.addEventListener("focusout", cancelPreload);
 
     document.addEventListener("click", (event) => {
         const target = event.target;
