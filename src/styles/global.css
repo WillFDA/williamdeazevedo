@@ -264,7 +264,7 @@ body {
   /* Tag pill shared by article tags, project tags and the tag filters.
      Utilities on the element override it (e.g. the active filter colors). */
   .pill {
-    @apply inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-pill;
+    @apply inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm leading-none font-normal text-gray-900 shadow-pill;
   }
 
   .pill-icon {

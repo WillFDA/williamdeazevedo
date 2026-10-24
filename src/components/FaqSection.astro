@@ -130,73 +130,74 @@ const accordionClasses = {
     ]}
     aria-labelledby={`${id}-title`}
 >
-    <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
-        {/* `contents` below lg lets the contact card drop under the questions on mobile. */}
-        <div class="contents lg:sticky lg:top-24 lg:flex lg:flex-col lg:gap-8 lg:self-start">
-            <div>
-                <h2
-                    id={`${id}-title`}
-                    class="section-heading section-heading--left"
-                >
-                    {title}
-                </h2>
-                {
-                    description && (
-                        <p class="section-subheading mx-0 mt-5 text-left">
-                            {description}
-                        </p>
-                    )
-                }
-            </div>
-
+    {/* DOM order matches the mobile order (title, questions, card); from lg the card moves under the title. */}
+    <div
+        class:list={[
+            "mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-x-16 lg:gap-y-8",
+            showCta && "lg:grid-rows-[auto_1fr]",
+        ]}
+    >
+        <div class:list={[!showCta && "lg:sticky lg:top-24 lg:self-start"]}>
+            <h2
+                id={`${id}-title`}
+                class="section-heading section-heading--left"
+            >
+                {title}
+            </h2>
             {
-                showCta && (
-                    <div class="order-last rounded-3xl bg-surface-muted p-6 sm:p-8 lg:order-none">
-                        <Image
-                            class="size-12 rounded-xl object-cover"
-                            src={williamPortrait}
-                            alt="William De Azevedo"
-                            width={96}
-                            height={96}
-                        />
-                        <p class="mt-6 text-xl font-medium leading-tight text-gray-900">
-                            Vous ne trouvez pas votre réponse ?
-                        </p>
-                        <p class="mt-2 text-base font-light leading-normal text-gray-600">
-                            Expliquez-moi votre situation, je vous dis par
-                            où commencer.
-                        </p>
-                        <button
-                            aria-controls="cal-drawer"
-                            aria-haspopup="dialog"
-                            class="faq-cta mt-6 inline-flex min-h-14 items-center justify-center gap-5 rounded-xl bg-coffee-300 px-8 py-3 text-base font-normal text-snow-50 transition-transform hover:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
-                            data-cal-location={ctaLocation}
-                            data-cal-open
-                            type="button"
-                        >
-                            <WaveText text={ctaLabel} trigger="parent" />
-                            <WaveIcon
-                                style="--wui-wave-icon-size: 1rem;"
-                                direction="right"
-                                trigger="parent"
-                            >
-                                <ArrowRight
-                                    class="size-full"
-                                    aria-hidden="true"
-                                />
-                            </WaveIcon>
-                        </button>
-                    </div>
+                description && (
+                    <p class="section-subheading mx-0 mt-5 text-left">
+                        {description}
+                    </p>
                 )
             }
         </div>
 
         <Accordion
+            class={showCta ? "lg:col-start-2 lg:row-span-2 lg:row-start-1" : undefined}
             items={faqItems}
             itemClass={accordionClasses.item}
             summaryClass={accordionClasses.summary}
             contentClass={accordionClasses.content}
             iconClass={accordionClasses.icon}
         />
+
+        {
+            showCta && (
+                <div class="rounded-3xl bg-surface-muted p-6 sm:p-8 lg:sticky lg:top-24 lg:col-start-1 lg:row-start-2 lg:self-start">
+                    <Image
+                        class="size-12 rounded-xl object-cover"
+                        src={williamPortrait}
+                        alt="William De Azevedo"
+                        width={96}
+                        height={96}
+                    />
+                    <p class="mt-6 text-xl font-medium leading-tight text-gray-900">
+                        Vous ne trouvez pas votre réponse ?
+                    </p>
+                    <p class="mt-2 text-base font-light leading-normal text-gray-600">
+                        Expliquez-moi votre situation, je vous dis par où
+                        commencer.
+                    </p>
+                    <button
+                        aria-controls="cal-drawer"
+                        aria-haspopup="dialog"
+                        class="faq-cta mt-6 inline-flex min-h-14 items-center justify-center gap-5 rounded-xl bg-coffee-300 px-8 py-3 text-base font-normal text-snow-50 transition-transform hover:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                        data-cal-location={ctaLocation}
+                        data-cal-open
+                        type="button"
+                    >
+                        <WaveText text={ctaLabel} trigger="parent" />
+                        <WaveIcon
+                            style="--wui-wave-icon-size: 1rem;"
+                            direction="right"
+                            trigger="parent"
+                        >
+                            <ArrowRight class="size-full" aria-hidden="true" />
+                        </WaveIcon>
+                    </button>
+                </div>
+            )
+        }
     </div>
 </section>

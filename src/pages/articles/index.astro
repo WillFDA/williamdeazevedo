@@ -58,7 +58,7 @@ const PAGE_SIZE = 6;
             {
                 articles.length === 0 ? (
                     <FadeReveal delay={0.3}>
-                        <p class="rounded-xl bg-surface-muted p-6 text-center text-base font-normal text-gray-500 ring-1 ring-gray-200">
+                        <p class="rounded-xl bg-surface-muted p-6 text-center text-base font-normal text-gray-600 ring-1 ring-gray-200">
                             Il n'y a rien pour l'instant, reviens bientôt !
                         </p>
                     </FadeReveal>
@@ -80,7 +80,7 @@ const PAGE_SIZE = 6;
                                     data-title={article.data.title}
                                     data-description={article.data.description}
                                     data-tags={article.data.tags.join("|")}
-                                    hidden={index >= PAGE_SIZE}
+                                    data-article-overflow={index >= PAGE_SIZE || undefined}
                                 >
                                     <a
                                         class="article-card group flex h-full flex-col text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
@@ -105,7 +105,7 @@ const PAGE_SIZE = 6;
                                                 {article.data.title}
                                             </h2>
                                             <time
-                                                class="mt-2 block text-xs font-normal leading-none text-gray-500"
+                                                class="mt-2 block text-xs font-normal leading-none text-gray-600"
                                                 datetime={article.data.pubDate.toISOString()}
                                             >
                                                 {formatArticleDate(article.data.pubDate)}
@@ -128,13 +128,13 @@ const PAGE_SIZE = 6;
                             ))}
                         </ul>
                         <p
-                            class="hidden rounded-xl bg-surface-muted p-6 text-center text-base font-normal text-gray-500 ring-1 ring-gray-200"
+                            class="hidden rounded-xl bg-surface-muted p-6 text-center text-base font-normal text-gray-600 ring-1 ring-gray-200"
                             data-article-empty
                         >
                             Aucun article trouvé.
                         </p>
                         {articles.length > PAGE_SIZE && (
-                            <div class="mt-12 flex justify-center">
+                            <div class="article-more mt-12 flex justify-center">
                                 <button
                                     class="service-method-button flex min-h-14 w-full max-w-full cursor-pointer items-center justify-center gap-4 rounded-xl px-8 py-3 text-base font-normal sm:w-auto sm:px-10"
                                     type="button"
@@ -172,6 +172,21 @@ const PAGE_SIZE = 6;
     .article-list-item.is-filtered-in {
         animation-duration: 380ms;
         animation-delay: calc(var(--article-index, 0) * 45ms);
+    }
+
+    /* Without JS every article stays visible and "Voir plus" is useless.
+       Gated on (scripting: enabled) so browsers that do not support the
+       scripting media feature show everything until ArticleFilters runs. */
+    @media (scripting: enabled) {
+        .article-list-item[data-article-overflow] {
+            display: none;
+        }
+    }
+
+    @media (scripting: none) {
+        .article-more {
+            display: none;
+        }
     }
 
     @keyframes article-fade-in {

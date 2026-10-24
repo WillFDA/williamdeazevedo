@@ -119,9 +119,13 @@ export default function ArticleFilters({ pageSize, tags }: Props) {
     for (const item of items) {
       const isMatch = matchesFilters(item, query, selectedTag);
       const isVisible = isMatch && matchCount < max;
-      const wasHidden = item.hidden;
+      // `data-article-overflow` masque en CSS les articles hors première page
+      // avant l'hydratation ; `hidden` prend le relais.
+      const wasHidden =
+        item.hidden || Object.hasOwn(item.dataset, "articleOverflow");
 
       item.hidden = !isVisible;
+      delete item.dataset.articleOverflow;
 
       if (isMatch && matchCount === focusIndexRef.current) {
         item.querySelector("a")?.focus();
@@ -181,7 +185,7 @@ export default function ArticleFilters({ pageSize, tags }: Props) {
           Rechercher un article
         </label>
         <input
-          className="shadow-pill h-11 w-full rounded-xl bg-snow-50 px-3 text-sm font-light text-gray-900 placeholder:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="h-11 w-full rounded-xl bg-snow-50 px-3 text-sm font-light text-gray-900 shadow-pill placeholder:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           id="article-search"
           name="search"
           onChange={(event) => setSearch(event.currentTarget.value)}
