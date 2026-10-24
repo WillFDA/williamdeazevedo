@@ -877,7 +877,7 @@ export const services: Service[] = [
       {
         question: "L'application m'appartient-elle ?",
         answer:
-          "Les conditions de propriété du code et d'hébergement sont fixées dans le devis, avant de commencer. On en parle dès le premier échange.",
+          "Oui. Une fois la facture réglée, le code vous appartient : la cession complète des droits est écrite dans le devis, et le code vous est livré sur un dépôt Git à votre nom. Le nom de domaine et l'hébergement restent eux aussi à votre nom. Vous êtes libre de faire évoluer l'application avec le prestataire de votre choix.",
       },
       {
         question: "Peut-on ajouter de l'IA ?",
