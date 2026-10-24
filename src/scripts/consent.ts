@@ -78,6 +78,35 @@ export const toConsentModeUpdate = (choice: ConsentChoice) => ({
   analytics_storage: state(choice.analytics),
 });
 
+/**
+ * Événement `consent_update` au format de l'ancien bandeau : `consent` reste
+ * la chaîne "granted" / "denied" lue par les déclencheurs GTM existants
+ * ("granted" seulement si toutes les finalités sont acceptées, comme l'ancien
+ * « Accepter »). Le détail par finalité est dans des clés à part.
+ */
+export const toConsentUpdateEvent = (choice: ConsentChoice) => ({
+  event: "consent_update",
+  consent: state(choice.analytics && choice.ads),
+  consent_analytics: state(choice.analytics),
+  consent_ads: state(choice.ads),
+});
+
+// Seuls les paramètres de campagne sont transmis : le reste de la query string
+// (recherche, liens partagés) peut contenir des données personnelles. Même
+// règle que cleanUrl dans tracking/GoogleTagManager.astro (pages virtuelles).
+const KEPT_PARAMS = /^(?:utm_[a-z_]+|gclid)$/;
+
+export const cleanPageUrl = (href: string) => {
+  const url = new URL(href);
+  const kept = new URLSearchParams();
+  for (const [key, value] of url.searchParams) {
+    if (KEPT_PARAMS.test(key)) kept.append(key, value);
+  }
+  url.search = kept.toString();
+  url.hash = "";
+  return url;
+};
+
 type GtagWindow = Window & {
   dataLayer?: unknown[];
   gtag?: (...args: unknown[]) => void;
@@ -116,6 +145,13 @@ const loadGoogleTagManager = (choice: ConsentChoice) => {
   // Sans accord publicité, les balises Ads ne transmettent pas les
   // identifiants de clic (gclid) ni d'autres données publicitaires.
   gtag("set", "ads_data_redaction", true);
+  // Page vue initiale (déclencheur « All Pages ») : même URL nettoyée que les
+  // pages vues virtuelles, posée avant gtm.js.
+  const url = cleanPageUrl(window.location.href);
+  w.dataLayer?.push({
+    page_location: url.href,
+    page_path: url.pathname + url.search,
+  });
   w.dataLayer?.push({ "gtm.start": Date.now(), event: "gtm.js" });
   const script = document.createElement("script");
   script.async = true;
@@ -191,7 +227,7 @@ export const saveConsent = (choice: ConsentChoice) => {
   }
   // Pas de consent_update vers un conteneur sur le point d'être déchargé.
   if (applyConsent(choice)) return;
-  gtagWindow().dataLayer?.push({ event: "consent_update", consent: choice });
+  gtagWindow().dataLayer?.push(toConsentUpdateEvent(choice));
 };
 
 /**

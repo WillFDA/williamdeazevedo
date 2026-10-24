@@ -1,10 +1,12 @@
 import { expect, test } from "bun:test";
 
 import {
+  cleanPageUrl,
   isWithdrawal,
   parseStoredConsent,
   serializeConsent,
   toConsentModeUpdate,
+  toConsentUpdateEvent,
 } from "../src/scripts/consent";
 
 const now = new Date("2026-10-23T12:00:00.000Z").getTime();
@@ -73,6 +75,37 @@ test("Consent Mode signals follow each purpose separately", () => {
     ad_personalization: "denied",
     analytics_storage: "denied",
   });
+});
+
+test("consent_update keeps the legacy string and adds each purpose", () => {
+  // Déclencheurs GTM existants : « consent égale granted ».
+  expect(toConsentUpdateEvent({ analytics: true, ads: true })).toEqual({
+    event: "consent_update",
+    consent: "granted",
+    consent_analytics: "granted",
+    consent_ads: "granted",
+  });
+  expect(toConsentUpdateEvent({ analytics: true, ads: false })).toEqual({
+    event: "consent_update",
+    consent: "denied",
+    consent_analytics: "granted",
+    consent_ads: "denied",
+  });
+  expect(toConsentUpdateEvent({ analytics: false, ads: false })).toMatchObject({
+    consent: "denied",
+  });
+});
+
+test("page URLs only keep campaign parameters", () => {
+  const url = cleanPageUrl(
+    "https://www.williamdeazevedo.fr/articles/?search=jean%40exemple.fr&utm_source=newsletter&gclid=abc#top"
+  );
+  expect(url.href).toBe(
+    "https://www.williamdeazevedo.fr/articles/?utm_source=newsletter&gclid=abc"
+  );
+  expect(cleanPageUrl("https://www.williamdeazevedo.fr/?q=1#a").href).toBe(
+    "https://www.williamdeazevedo.fr/"
+  );
 });
 
 test("withdrawing a purpose granted earlier requires a full reload", () => {

@@ -42,7 +42,8 @@
         // correct entre pages virtuelles.
         // Seuls les paramètres de campagne sont transmis : le reste de la query
         // string (formulaires, liens partagés) peut contenir des données
-        // personnelles.
+        // personnelles. Même règle que cleanPageUrl dans consent.ts, qui pose
+        // l'URL nettoyée de la page vue initiale avant gtm.js.
         const KEPT_PARAMS = /^(?:utm_[a-z_]+|gclid)$/;
         const cleanUrl = (href) => {
             const url = new URL(href);

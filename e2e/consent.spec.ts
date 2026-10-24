@@ -140,6 +140,19 @@ test("« Tout accepter » loads GTM with both purposes granted", async ({
     // Pas de remarketing : jamais accordé, même avec « Tout accepter ».
     ad_personalization: "denied",
   });
+  // Même format que l'ancien bandeau pour les déclencheurs GTM existants.
+  expect(
+    await page.evaluate(() =>
+      (window as unknown as DataLayerWindow).dataLayer?.find(
+        (entry) => (entry as { event?: unknown }).event === "consent_update"
+      )
+    )
+  ).toEqual({
+    event: "consent_update",
+    consent: "granted",
+    consent_analytics: "granted",
+    consent_ads: "granted",
+  });
 
   // Les deux finalités : clic email (conversion Ads) et page vue virtuelle.
   await clickWithoutFollowing(
@@ -155,8 +168,19 @@ test("page views only carry campaign parameters from the query string", async ({
   page,
 }) => {
   await recordGoogleRequests(page);
-  await page.goto("/?email=jean%40exemple.fr&utm_source=newsletter");
+  await page.goto("/?email=jean%40exemple.fr&utm_source=newsletter#contact");
   await banner(page).getByRole("button", { name: "Tout accepter" }).click();
+  // Page vue initiale : URL nettoyée posée avant gtm.js.
+  const initial = await page.evaluate(() =>
+    ((window as unknown as DataLayerWindow).dataLayer ?? []).find(
+      (entry) =>
+        typeof entry === "object" && entry !== null && "page_location" in entry
+    )
+  );
+  expect(initial).toEqual({
+    page_location: expect.stringMatching(/\/\?utm_source=newsletter$/),
+    page_path: "/?utm_source=newsletter",
+  });
   await navigateInApp(page);
   await expect.poll(() => pageViewCount(page)).toBe(1);
   const [view] = await pageViews(page);
