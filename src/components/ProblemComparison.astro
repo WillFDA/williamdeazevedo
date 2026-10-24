@@ -115,7 +115,7 @@ const {
     data-section-reveal="false"
 >
     <div class="flex max-w-4xl flex-col items-start gap-4 text-left">
-        <h2 id="problem-comparison-title" class="section-heading problem-comparison-heading">
+        <h2 id="problem-comparison-title" class="section-heading section-heading--left">
             {
                 headingLines.map((line, index) => (
                     <span
@@ -235,7 +235,7 @@ const {
                 {
                     workingPoints.map((point) => (
                         <li
-                            class="flex flex-col items-start gap-4 rounded-2xl bg-gray-100 p-5 text-base font-normal leading-normal text-gray-900 sm:p-6 lg:flex-row lg:bg-transparent lg:p-0"
+                            class="flex flex-col items-start gap-4 rounded-2xl bg-surface-muted p-5 text-base font-normal leading-normal text-gray-900 sm:p-6 lg:flex-row lg:bg-transparent lg:p-0"
                             data-problem-working-point
                         >
                             <span class="working-point-icon">
@@ -445,18 +445,12 @@ const {
 </script>
 
 <style>
-    .problem-comparison-heading {
-        font-size: clamp(2.35rem, 3.9vw, 3.45rem);
-        max-width: 54rem;
-        text-align: left;
-    }
-
-    .problem-comparison-heading [data-problem-heading-line] {
+    #problem-comparison-title [data-problem-heading-line] {
         display: block;
     }
 
     .comparison-visual {
-        background: var(--color-surface-100);
+        background: var(--color-surface-muted);
         border-radius: 2rem;
         min-height: 27rem;
         overflow: hidden;

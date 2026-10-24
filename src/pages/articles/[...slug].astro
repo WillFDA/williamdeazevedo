@@ -5,12 +5,12 @@ import ArticleImage from "@/components/articles/ArticleImage.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
+import ArticleTag from "@/components/articles/ArticleTag.astro";
 import ServiceCallout from "@/components/articles/ServiceCallout.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import williamPortrait from "@/assets/williamdeazevedo.webp";
 import Layout from "@/layout/Layout.astro";
 import { type Article, formatArticleDate, getVisibleArticles } from "@/lib/articles";
-import { getTagIconSvg } from "@/lib/articleTagIcons";
 
 export async function getStaticPaths() {
     const articles = await getVisibleArticles();
@@ -171,13 +171,7 @@ const faqJsonLd = faq?.length
                 {tags.length > 0 && (
                     <div class="mt-5 flex flex-wrap justify-center gap-2">
                         {tags.map((tag) => (
-                            <span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]">
-                                <span
-                                    class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
-                                    set:html={getTagIconSvg(tag)}
-                                />
-                                {tag}
-                            </span>
+                            <ArticleTag tag={tag} />
                         ))}
                     </div>
                 )}
@@ -470,7 +464,7 @@ const faqJsonLd = faq?.length
     }
 
     .article-prose tbody tr:nth-child(even) td {
-        background: var(--color-surface-100);
+        background: var(--color-surface-muted);
     }
 
     @media (hover: hover) {
