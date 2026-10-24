@@ -5,6 +5,7 @@ import DiagnosticCta from "@/components/DiagnosticCta.astro";
 import FaqSection from "@/components/FaqSection.astro";
 import Marquee from "@/components/Marquee.astro";
 import RelatedServicesBento from "@/components/RelatedServicesBento.astro";
+import ServiceReadingList from "@/components/ServiceReadingList.astro";
 import ServiceDiagnosticToggle from "@/components/ServiceDiagnosticToggle.astro";
 import ServiceTimelineScroll from "@/components/ServiceTimelineScroll.astro";
 import ProjectListItem from "@/components/realisations/ProjectListItem.astro";
@@ -121,12 +122,16 @@ const serviceJsonLd = {
     name: service.title,
     serviceType: service.serviceType,
     description: service.description,
-    areaServed: "France",
+    areaServed: [
+        { "@type": "AdministrativeArea", name: "Yvelines" },
+        { "@type": "AdministrativeArea", name: "Île-de-France" },
+        { "@type": "Country", name: "France" },
+    ],
     url: canonicalUrl.href,
     provider: {
-        "@type": "Person",
-        "@id": new URL("/#person", siteUrl).href,
-        name: "William De Azevedo",
+        "@type": "ProfessionalService",
+        "@id": new URL("/#business", siteUrl).href,
+        name: "William De Azevedo — Développeur web freelance",
         url: new URL("/", siteUrl).href,
     },
 };
@@ -397,6 +402,8 @@ const breadcrumbJsonLd = {
             titleParts={finalCtaTitleParts}
         />
 
+        <slot name="after-cta" />
+
         <div class="flex flex-col gap-8 sm:gap-10">
             <section class="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 text-center">
                 <h2 class="section-heading">
@@ -427,6 +434,8 @@ const breadcrumbJsonLd = {
             />
         </div>
 
+        <ServiceReadingList serviceSlug={service.slug} />
+
         <FaqSection
             id={`${service.slug}-faq`}
             items={service.faq}
@@ -439,47 +448,3 @@ const breadcrumbJsonLd = {
         <RelatedServicesBento services={relatedServices} />
     </div>
 </Layout>
-
-<style>
-    .service-method-button {
-        --service-method-button-bg: var(--color-gray-100);
-        --service-method-button-border: transparent;
-        --service-method-button-color: var(--color-coffee-300);
-
-        color: var(--service-method-button-color);
-        isolation: isolate;
-        overflow: hidden;
-        position: relative;
-        text-decoration: none;
-        z-index: 0;
-    }
-
-    .service-method-button::before {
-        background: var(--service-method-button-bg);
-        border: 1px solid var(--service-method-button-border);
-        border-radius: inherit;
-        content: "";
-        inset: 0;
-        position: absolute;
-        transform: scale(1);
-        transition: transform 520ms
-            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
-        z-index: 0;
-    }
-
-    .service-method-button:focus-visible {
-        outline: 2px solid var(--color-blue-500);
-        outline-offset: 3px;
-    }
-
-    .service-method-button:focus-visible::before {
-        transform: scale(0.95);
-    }
-
-    @media (hover: hover) {
-        .service-method-button:hover::before {
-            transform: scale(0.95);
-        }
-    }
-
-</style>

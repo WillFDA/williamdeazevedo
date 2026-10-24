@@ -18,11 +18,11 @@ La question importante arrive ensuite : ce site présente-t-il fidèlement votre
 
 L’expression « créer avec l’IA » recouvre plusieurs façons de travailler. Avant de comparer des outils, identifiez la responsabilité que vous souhaitez garder.
 
-| Approche                      | Ce que vous obtenez                                             | Ce qu’il faut vérifier                                             |
-| ----------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Approche | Ce que vous obtenez | Ce qu’il faut vérifier |
+| --- | --- | --- |
 | Constructeur de sites avec IA | Une base modifiable dans un éditeur, avec des services intégrés | Fonctions du forfait, domaine, formulaires, possibilités de sortie |
-| Assistant de rédaction        | Une arborescence, des textes et des idées de présentation       | Exactitude, différenciation, intégration dans le site              |
-| Générateur de code            | Des fichiers ou un projet à déployer                            | Fonctionnement, sécurité, hébergement et maintenance               |
+| Assistant de rédaction | Une arborescence, des textes et des idées de présentation | Exactitude, différenciation, intégration dans le site |
+| Générateur de code | Des fichiers ou un projet à déployer | Fonctionnement, sécurité, hébergement et maintenance |
 
 Ces catégories peuvent se chevaucher. Certains outils proposent aussi la publication ou des connexions à des services externes. Regardez donc ce qui est réellement inclus plutôt que le nom de la catégorie.
 

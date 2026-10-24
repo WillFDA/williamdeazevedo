@@ -26,6 +26,12 @@ const articles = defineCollection({
       })
       .optional(),
     author: z.string().default("William De Azevedo"),
+    // Optional FAQ, emitted as FAQPage JSON-LD. Each question and answer must
+    // repeat, word for word, the visible "Questions fréquentes" section of the
+    // article (checked by scripts/check-editorial.mjs).
+    faq: z
+      .array(z.object({ question: z.string(), answer: z.string() }))
+      .optional(),
     // Force-hide an article regardless of its date.
     draft: z.boolean().default(false),
   }),

@@ -3,6 +3,7 @@
 Les captures `home-390.png` (390×844, scrollY 3055) et `home-320.png` (320×844, scrollY 3238) montrent l'accueil au bloc « Hello moi c'est William ». Captures agent-browser/Chromium, inspectées visuellement : largeur originale et cercle flottant, sans rail. Le cercle peut temporairement recouvrir une petite zone de contenu.
 
 Vérifications réalisées :
+
 - Build réussi.
 - Oxlint ciblé réussi ; lint global : 15 erreurs préexistantes, sortie identique à la base avant #83.
 - `node scripts/check-floating-email-mobile.mjs http://127.0.0.1:4334/ http://127.0.0.1:4335/` réussi. La seconde URL sert le build de `24829e0^`, avant #83. Comparaison des largeurs main/sections à 320, 390 et 1440 px ; parcours de l'accueil par pas de 300 px ; mobile visible hors footer ; menu réel ouvert/fermé, dialogue natif ouvert/fermé. Le test a d'abord échoué sur la largeur 244 au lieu de 320, puis sur la disparition mobile, avant correction.

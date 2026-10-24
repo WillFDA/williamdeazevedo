@@ -140,9 +140,17 @@ const linkGroups = [
                 }
             </div>
         </nav>
-        <p class="border-t border-snow-50/15 pt-6 text-xs text-snow-50/60">
-            © {year} William De Azevedo
-        </p>
+        <div class="flex flex-wrap items-center justify-between gap-4 border-t border-snow-50/15 pt-6 text-xs text-snow-50/60">
+            <p>© {year} William De Azevedo</p>
+            <button
+                class="cursor-pointer underline-offset-4 transition-colors hover:text-snow-50 hover:underline focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                aria-controls="cookie-banner"
+                data-cookie-settings
+                type="button"
+            >
+                Gérer les cookies
+            </button>
+        </div>
     </div>
 </footer>
 

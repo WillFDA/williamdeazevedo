@@ -26,11 +26,11 @@ Il faut aussi distinguer ChatGPT des fonctionnalités IA de Google. Les deux peu
 
 La [documentation des robots OpenAI](https://platform.openai.com/docs/bots) distingue notamment ces usages :
 
-| Agent         | Rôle indiqué par OpenAI                                                                      |
-| ------------- | -------------------------------------------------------------------------------------------- |
-| OAI-SearchBot | Exploration destinée aux fonctionnalités de recherche de ChatGPT                             |
-| GPTBot        | Exploration de contenus susceptibles de servir à l’entraînement des modèles                  |
-| ChatGPT-User  | Visites déclenchées par certaines actions d’utilisateurs, pas exploration automatique du web |
+| Agent | Rôle indiqué par OpenAI |
+| --- | --- |
+| OAI-SearchBot | Exploration destinée aux fonctionnalités de recherche de ChatGPT |
+| GPTBot | Exploration de contenus susceptibles de servir à l’entraînement des modèles |
+| ChatGPT-User | Visites déclenchées par certaines actions d’utilisateurs, pas exploration automatique du web |
 
 Les réglages d’OAI-SearchBot et de GPTBot sont indépendants. Vous pouvez autoriser le premier et refuser le second. Autoriser l’entraînement n’est donc pas un passage obligé pour apparaître dans la recherche.
 

@@ -312,9 +312,7 @@ const displayedTestimonials = getPublishedTestimonials();
         activeHomeInteractionStates;
 
     function registerHomeInteractionCleanup(destroy: () => void) {
-        let state: HomeInteractionState;
-
-        state = {
+        const state: HomeInteractionState = {
             destroy: () => {
                 if (!activeHomeInteractionStates.delete(state)) return;
                 destroy();
@@ -422,11 +420,10 @@ const displayedTestimonials = getPublishedTestimonials();
 
                     resume();
                 };
-                const stopWaitingForInteraction = () => {
-                    window.removeEventListener("click", startAutoplay);
-                    window.removeEventListener("keydown", startAutoplay);
-                    window.removeEventListener("scroll", startAutoplay);
-                };
+                // Un seul signal pour retirer d'un coup les trois écouteurs d'attente.
+                const waitingForInteraction = new AbortController();
+                const stopWaitingForInteraction = () =>
+                    waitingForInteraction.abort();
                 const startAutoplay = () => {
                     if (hasAutoplayStarted) return;
 
@@ -441,10 +438,15 @@ const displayedTestimonials = getPublishedTestimonials();
                 root.addEventListener("focusout", resumeAfterFocus);
                 root.addEventListener("mouseenter", pause);
                 root.addEventListener("mouseleave", resume);
-                window.addEventListener("click", startAutoplay);
-                window.addEventListener("keydown", startAutoplay);
+                window.addEventListener("click", startAutoplay, {
+                    signal: waitingForInteraction.signal,
+                });
+                window.addEventListener("keydown", startAutoplay, {
+                    signal: waitingForInteraction.signal,
+                });
                 window.addEventListener("scroll", startAutoplay, {
                     passive: true,
+                    signal: waitingForInteraction.signal,
                 });
                 registerHomeInteractionCleanup(() => {
                     window.clearTimeout(timeout);

@@ -60,12 +60,16 @@ const sceneScaleClasses: Record<ServiceBentoVariant, string> = {
     wide: "",
 };
 
-const descriptionClasses =
-    variant === "support" || variant === "relatedFeature"
-        ? "max-w-xl"
-        : variant === "feature"
-          ? "max-w-md"
-          : "max-w-lg";
+const descriptionWidthClasses: Record<ServiceBentoVariant, string> = {
+    feature: "max-w-md",
+    related: "max-w-lg",
+    relatedCompact: "max-w-lg",
+    relatedFeature: "max-w-xl",
+    small: "max-w-lg",
+    support: "max-w-xl",
+    wide: "max-w-lg",
+};
+const descriptionClasses = descriptionWidthClasses[variant];
 ---
 
 <FadeReveal class={["flex", className].filter(Boolean).join(" ")} delay={delay}>
