@@ -1,4 +1,5 @@
 ---
+import ArticleImage from "@/components/articles/ArticleImage.astro";
 import { getVisibleArticles } from "@/lib/articles";
 import { serviceReadings } from "@/data/serviceArticles";
 
@@ -59,12 +60,12 @@ const headingId = `${serviceSlug}-reading`;
                             href={`/articles/${article.id}/`}
                         >
                             {article.data.image && (
-                                <img
+                                <ArticleImage
                                     class="mb-4 aspect-video w-full rounded-lg object-cover"
                                     src={article.data.image.src}
                                     alt=""
-                                    loading="lazy"
-                                    decoding="async"
+                                    sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 100vw"
+                                    widths={[480, 800]}
                                 />
                             )}
                             <h3 class="text-lg font-normal leading-snug text-gray-900">

@@ -42,32 +42,34 @@ const realisations = defineCollection({
     base: "./src/content/realisations",
     pattern: "**/[^_]*.{md,mdx}",
   }),
-  schema: z.object({
-    projectId: z.string(),
-    siteLabel: z.string().default("Voir le site"),
-    partners: z
-      .array(
-        z
-          .object({
-            label: z.string().optional(),
-            projectId: z.string().optional(),
-            href: z.string().url().optional(),
-            description: z.string().optional(),
+  // `image()` : les captures passent par le pipeline d'images d'Astro.
+  schema: ({ image }) =>
+    z.object({
+      projectId: z.string(),
+      siteLabel: z.string().default("Voir le site"),
+      partners: z
+        .array(
+          z
+            .object({
+              label: z.string().optional(),
+              projectId: z.string().optional(),
+              href: z.string().url().optional(),
+              description: z.string().optional(),
+            })
+            .refine((partner) => partner.href || partner.projectId, {
+              message: "A partner needs either href or projectId.",
+            })
+        )
+        .default([]),
+      gallery: z
+        .array(
+          z.object({
+            src: image(),
+            alt: z.string(),
           })
-          .refine((partner) => partner.href || partner.projectId, {
-            message: "A partner needs either href or projectId.",
-          })
-      )
-      .default([]),
-    gallery: z
-      .array(
-        z.object({
-          src: z.string(),
-          alt: z.string(),
-        })
-      )
-      .default([]),
-  }),
+        )
+        .default([]),
+    }),
 });
 
 export const collections = { articles, realisations };
