@@ -71,7 +71,7 @@ const testimonials = getPublishedTestimonials().map((testimonial) => ({
                 {testimonials.map(
                     ({ image, imageAlt, initials, name, project, quote }) => (
                         <article class="embla__slide">
-                            <figure class="testimonial-card flex h-full flex-col rounded-3xl bg-surface-muted p-6 sm:p-8">
+                            <figure class="testimonial-card flex min-h-full flex-col rounded-3xl bg-surface-muted p-6 sm:p-8">
                                 <div class="flex flex-wrap gap-2">
                                     {project.tags.map((tag) => (
                                         <ProjectTag tag={tag} />
@@ -157,8 +157,13 @@ const testimonials = getPublishedTestimonials().map((testimonial) => ({
         position: relative;
     }
 
-    .client-testimonials :global(.embla__slide) {
-        aspect-ratio: auto;
+    /* Below lg the carousel's 16/9 frame is too short for a quote, which
+       would spill under the arrows: the card follows its content instead.
+       From lg the 16/9 card stays, as a minimum (`min-h-full` on the card). */
+    @media (max-width: 1023px) {
+        .client-testimonials :global(.embla) {
+            --slide-aspect-ratio: auto;
+        }
     }
 
     .testimonial-card {
