@@ -12,7 +12,7 @@ const skeletonDays = Array.from({ length: 35 });
 
 <dialog
     aria-label="Planifier un créneau"
-    class="cal-drawer fixed overflow-hidden rounded-lg border-0 p-0 text-gray-900"
+    class="cal-drawer fixed overflow-hidden rounded-lg border-0 p-0 text-snow-50"
     data-cal-drawer
     id="cal-drawer"
     transition:persist
@@ -20,7 +20,7 @@ const skeletonDays = Array.from({ length: 35 });
     <div class="cal-drawer__header flex items-center justify-end p-4">
         <button
             aria-label="Fermer"
-            class="cal-drawer__close inline-flex size-11 items-center justify-center rounded-lg border-0 bg-gray-900/5 p-0 text-gray-900"
+            class="cal-drawer__close inline-flex size-11 items-center justify-center rounded-lg border-0 bg-white/10 p-0 text-snow-50"
             data-cal-close
             type="button"
         >
@@ -40,7 +40,7 @@ const skeletonDays = Array.from({ length: 35 });
             </svg>
         </button>
     </div>
-    <p class="px-4 pb-3 text-sm text-gray-600">Le calendrier est fourni par Cal.com. Vos coordonnées servent à organiser le rendez-vous. <a class="underline" href="/mentions-legales/#reservation">Confidentialité</a></p>
+    <p class="px-4 pb-3 text-sm text-snow-50/80">Le calendrier est fourni par Cal.com. Vos coordonnées servent à organiser le rendez-vous. <a class="underline" href="/mentions-legales/#reservation">Confidentialité</a></p>
     <div
         aria-busy="true"
         aria-label="Réserver un appel avec William De Azevedo"
@@ -184,15 +184,25 @@ const skeletonDays = Array.from({ length: 35 });
         document
             .querySelector(`script[src="${calEmbedSrc}"]`)
             ?.addEventListener("error", endCalLoading, { once: true });
-        // Thème clair, aligné sur le reste du site. La langue (français) et le
+        // Thème sombre, comme le tiroir et son squelette (pas de flash blanc). La langue (français) et le
         // premier jour de la semaine (lundi) se règlent dans le compte Cal.com
         // (Paramètres > Général) : l'embed n'expose aucune option pour les forcer.
         cal("ui", {
+            cssVarsPerTheme: {
+                dark: {
+                    "cal-bg": "#141016",
+                    "cal-bg-muted": "#171219",
+                    "cal-bg-subtle": "#1f1822",
+                    "cal-border": "#2a2230",
+                    "cal-border-subtle": "#2a2230",
+                },
+            },
             layout: "month_view",
             styles: {
-                body: { background: "#ffffff" },
+                body: { background: "#141016" },
+                eventTypeListItem: { background: "#1f1822" },
             },
-            theme: "light",
+            theme: "dark",
         });
         cal("on", {
             action: "bookingSuccessfulV2",
@@ -228,8 +238,8 @@ const skeletonDays = Array.from({ length: 35 });
             calLink,
             config: {
                 layout: "month_view",
-                theme: "light",
-                "ui.color-scheme": "light",
+                theme: "dark",
+                "ui.color-scheme": "dark",
             },
             elementOrSelector: inlineEmbed,
         });
@@ -336,8 +346,8 @@ const skeletonDays = Array.from({ length: 35 });
     }
 
     .cal-drawer {
-        background: var(--color-snow-50);
-        box-shadow: 0 24px 60px -32px rgb(34 42 55 / 0.45);
+        background: #141016;
+        box-shadow: 0 24px 60px -32px rgb(20 16 22 / 0.6);
         height: calc(100dvh - 2rem);
         inset: 1rem 1rem 1rem auto;
         margin: auto 0 auto auto;
@@ -394,7 +404,7 @@ const skeletonDays = Array.from({ length: 35 });
     }
 
     .cal-drawer__skeleton {
-        background: var(--color-snow-50);
+        background: #141016;
         overflow: hidden;
         z-index: 1;
     }
@@ -410,7 +420,7 @@ const skeletonDays = Array.from({ length: 35 });
 
     .cal-skeleton__bone {
         animation: cal-skeleton-pulse 1.6s ease-in-out infinite;
-        background: rgb(34 42 55 / 0.08);
+        background: rgb(255 255 255 / 0.08);
         border-radius: 0.375rem;
         display: block;
         height: 0.875rem;
