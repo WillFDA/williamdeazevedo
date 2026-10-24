@@ -29,6 +29,16 @@ export type ServiceCapability = {
   tone: ServiceCapabilityTone;
 };
 
+export type ServiceSection = {
+  items?: string[];
+  link?: {
+    href: string;
+    label: string;
+  };
+  paragraphs: string[];
+  title: string;
+};
+
 export type ServiceDiagnostic = {
   afterItems: string[];
   afterLabel?: string;
@@ -71,10 +81,16 @@ export type Service = {
     title: string;
   };
   proof: {
+    article?: {
+      href: string;
+      label: string;
+    };
     projectId: string;
     text: string;
   };
   relatedServices: string[];
+  /** Sections éditoriales supplémentaires (H2), affichées après la preuve. */
+  sections?: ServiceSection[];
   seoTitle: string;
   serviceType: string;
   slug: string;
@@ -327,6 +343,7 @@ export const services: Service[] = [
       "creation-site-vitrine",
       "creation-site-internet-professionnel",
       "developpeur-web-freelance",
+      "developpement-sur-mesure",
     ],
     faq: [
       {
@@ -437,6 +454,7 @@ export const services: Service[] = [
       "creation-site-vitrine",
       "refonte-site-internet",
       "creation-site-internet-professionnel",
+      "developpement-sur-mesure",
     ],
     faq: [
       {
@@ -717,6 +735,154 @@ export const services: Service[] = [
         question: "Que faire si je n'ai pas encore d'identité visuelle ?",
         answer:
           "On peut commencer par cadrer le besoin, mais si vous n'avez ni logo, ni charte, ni visuels, je recommande souvent de travailler avec Persistance Studio pour poser une base solide avant le site.",
+      },
+    ],
+  },
+  {
+    slug: "developpement-sur-mesure",
+    navLabel: "Développement sur mesure",
+    title: "Développement web sur mesure",
+    seoTitle: "Développement web sur mesure - William De Azevedo",
+    description:
+      "Développement web sur mesure pour indépendants et TPE : une application web pensée pour votre façon de travailler, à la place des tableurs et des outils bricolés.",
+    seoDescription:
+      "Développement et application web sur mesure : vos tableurs et outils bricolés deviennent un outil simple, fait pour vous. Parlons de votre besoin.",
+    eyebrow: "Sur mesure",
+    h1: "Développement web sur mesure pour transformer vos tableurs en un outil simple",
+    heroPillPhrases: ["sur mesure", "outil simple"],
+    intro:
+      "Quand un logiciel du marché ne colle pas à votre façon de travailler, je conçois et développe une application web sur mesure, simple et pensée pour vos usages, que vous et votre équipe utiliserez au quotidien.",
+    capabilities: [
+      { icon: "ux", label: "Cadrage du besoin", tone: "violet" },
+      { icon: "web", label: "Application web", tone: "blue" },
+      { icon: "form", label: "Formulaires & saisie", tone: "pink" },
+      { icon: "ia", label: "IA quand elle est utile", tone: "indigo" },
+      { icon: "touch", label: "Mobile & accessibilité", tone: "teal" },
+      { icon: "performance", label: "Performance", tone: "green" },
+      { icon: "cms", label: "Comptes et droits d'accès", tone: "slate" },
+      { icon: "deploy", label: "Mise en ligne", tone: "orange" },
+    ],
+    serviceType: "Développement web sur mesure",
+    problem: {
+      title: "Quand vos outils freinent votre travail",
+      items: [
+        "les mêmes informations sont ressaisies dans plusieurs fichiers",
+        "un tableur partagé devient fragile et difficile à suivre",
+        "aucun logiciel du marché ne correspond vraiment à votre façon de faire",
+        "votre équipe garde des habitudes papier faute d'outil adapté",
+      ],
+    },
+    diagnostic: {
+      title: "Ce qu'une application web sur mesure doit changer",
+      description:
+        "On part de votre façon de travailler, pas d'une liste de fonctionnalités.",
+      beforeItems: [
+        "des tableurs et des outils bricolés qui ne se parlent pas",
+        "des informations ressaisies plusieurs fois",
+        "des logiciels du marché trop larges ou mal adaptés",
+        "un suivi qui dépend de la mémoire d'une seule personne",
+      ],
+      afterItems: [
+        "un outil web pensé pour vos usages réels",
+        "une saisie unique, au bon endroit",
+        "des écrans simples, utilisables sur mobile",
+        "une base propre et maintenable",
+        "une première version utile, puis des évolutions selon vos retours",
+      ],
+    },
+    fit: [
+      "vous gérez une partie de votre activité dans des tableurs qui deviennent ingérables",
+      "vous avez testé des logiciels du marché sans en trouver un qui colle",
+      "vous voulez un outil interne simple plutôt qu'une usine à gaz",
+      "vous êtes prêt à tester une première version et à donner vos retours",
+    ],
+    included: [
+      "cadrage du besoin et des usages réels",
+      "conception des écrans et des parcours",
+      "développement de l'application web",
+      "comptes utilisateurs et droits d'accès si besoin",
+      "mise en ligne et prise en main",
+      "évolutions possibles selon vos retours",
+    ],
+    steps: [
+      "comprendre votre façon de travailler et ce qui bloque",
+      "définir le plus petit outil vraiment utile",
+      "concevoir les écrans et les parcours",
+      "développer, tester avec vous et corriger",
+      "mettre en ligne, accompagner la prise en main, puis faire évoluer l'outil selon vos retours",
+    ],
+    proof: {
+      projectId: "reglet",
+      text: "Réglet est un produit que j'ai conçu et développé de A à Z. Ce n'est pas une commande client, mais il suit la même démarche qu'un projet sur mesure : partir d'un problème de terrain précis, puis construire l'outil qui y répond.",
+      article: {
+        href: "/articles/application-metier-sur-mesure-btp/",
+        label: "Lire le retour d'expérience sur Réglet",
+      },
+    },
+    sections: [
+      {
+        title:
+          "Développement web sur mesure ou logiciel du marché : comment décider",
+        paragraphs: [
+          "Un logiciel du marché reste souvent le bon choix : il est disponible tout de suite, maintenu par un éditeur et payé par abonnement. Le développement d'une application web sur mesure se justifie quand ces outils freinent votre façon de travailler.",
+          "Quelques questions aident à trancher :",
+        ],
+        items: [
+          "Les logiciels existants vous obligent-ils à des contournements permanents ?",
+          "Ressaisissez-vous les mêmes informations dans plusieurs outils ou tableurs ?",
+          "Votre équipe garde-t-elle des habitudes papier parce qu'aucun outil ne colle au terrain ?",
+          "Le besoin est-il assez stable pour justifier un outil construit pour vous ?",
+        ],
+      },
+      {
+        title: "Exemples d'applications web sur mesure pour une TPE",
+        paragraphs: [
+          "Quelques types d'outils que le développement d'une application web sur mesure permet de construire, à adapter à votre activité :",
+        ],
+        items: [
+          "un outil de suivi des demandes et des devis, à la place d'un tableur partagé",
+          "un planning d'interventions consultable par toute l'équipe, y compris sur mobile",
+          "un espace client pour partager des documents et suivre l'avancement d'un dossier",
+          "un formulaire de saisie terrain qui alimente directement un tableau de bord",
+          "un back-office simple pour gérer un catalogue, des stocks ou des réservations",
+        ],
+      },
+      {
+        title: "Budget et délais",
+        paragraphs: [
+          "Un développement web sur mesure est chiffré sur devis : le prix dépend surtout du nombre d'écrans, des types d'utilisateurs, des données à gérer et des outils à connecter. Un cadrage est possible dès 900 € HT, et le planning est défini après lecture du périmètre.",
+        ],
+        link: {
+          href: "/tarifs/",
+          label: "Voir les tarifs",
+        },
+      },
+    ],
+    relatedServices: [
+      "developpeur-web-freelance",
+      "creation-site-internet-professionnel",
+      "refonte-site-internet",
+    ],
+    faq: [
+      {
+        question: "Faut-il forcément un développement sur mesure ?",
+        answer:
+          "Non. Si un logiciel existant couvre l'essentiel de votre besoin, il reste souvent le meilleur choix. Le sur mesure se justifie quand vos outils actuels vous font perdre du temps ou ne collent pas à votre façon de travailler.",
+      },
+      {
+        question: "Par quoi commence un projet sur mesure ?",
+        answer:
+          "Par un échange sur votre façon de travailler et ce qui bloque aujourd'hui. On définit ensuite une première version limitée et utile, plutôt qu'un cahier des charges complet dès le départ.",
+      },
+      {
+        question: "L'application m'appartient-elle ?",
+        answer:
+          "Oui, si vous le souhaitez. Vous pouvez demander la cession complète des droits sur le code : elle est alors écrite dans le devis, et le code vous est livré sur un dépôt Git à votre nom. Le nom de domaine et l'hébergement restent à votre nom. Avec cette cession, vous êtes libre de faire évoluer l'application avec le prestataire de votre choix.",
+      },
+      {
+        question: "Peut-on ajouter de l'IA ?",
+        answer:
+          "Oui, quand elle apporte quelque chose de concret, par exemple pour transformer des notes ou des fichiers en document. Elle n'est pas ajoutée par principe.",
       },
     ],
   },
