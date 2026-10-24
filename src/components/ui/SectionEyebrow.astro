@@ -1,5 +1,7 @@
 ---
-// Libellé de section en Geist Mono, précédé d'un repère bleu.
+// Libellé de section en Geist Mono, précédé d'un repère bleu. En bloc
+// (flex w-fit) : hors d'un parent flex, un inline-flex prendrait la hauteur
+// de ligne du parent et décalerait le titre qui suit.
 interface Props {
     class?: string;
     tone?: "default" | "inverse";
@@ -10,7 +12,7 @@ const { class: className, tone = "default" } = Astro.props;
 
 <p
     class:list={[
-        "inline-flex items-center gap-2.5 font-mono text-xs font-medium uppercase leading-none tracking-[0.08em]",
+        "flex w-fit items-center gap-2.5 font-mono text-xs font-medium uppercase leading-none tracking-[0.08em]",
         tone === "inverse" ? "text-coffee-100" : "text-gray-600",
         className,
     ]}
