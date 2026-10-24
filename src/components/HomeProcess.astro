@@ -1,0 +1,174 @@
+---
+import CalButton from "./CalButton.astro";
+import ServiceTimelineScroll from "./ServiceTimelineScroll.astro";
+import Globe from "./icons/nucleo/globe-outline.svg";
+import SquareChartSearch from "./icons/nucleo/square-chart-search-fill.svg";
+import UserHeart from "./icons/nucleo/user-heart-fill.svg";
+import type { ServiceTimelinePoint } from "@/data/services";
+
+type ProcessStep = ServiceTimelinePoint & {
+    /**
+     * À VALIDER PAR WILLIAM : délai propre à l'étape, affiché seulement une
+     * fois renseigné (ex. « sous 48 h »). Doit rester dans la fourchette
+     * globale « 10 jours à 5 semaines » de PricingPreview.
+     */
+    delay: string | null;
+};
+
+const steps: ProcessStep[] = [
+    {
+        title: "On échange",
+        description:
+            "Un appel de 15 minutes pour comprendre votre activité, vos clients et ce que le site doit provoquer.",
+        delay: null,
+        icon: "search",
+        tone: "sky",
+    },
+    {
+        title: "Cadrage et devis",
+        description:
+            "Pages, contenus, fonctionnalités et budget sont posés par écrit avant de commencer.",
+        delay: null,
+        icon: "ux",
+        tone: "violet",
+    },
+    {
+        title: "Conception et développement",
+        description:
+            "Design, contenus et développement, avec des points de validation réguliers.",
+        delay: null,
+        icon: "refonte",
+        tone: "cyan",
+    },
+    {
+        title: "Mise en ligne",
+        description:
+            "Vérifications sur mobile, mise en ligne, Search Console et mesure des conversions configurées.",
+        delay: null,
+        icon: "deploy",
+        tone: "orange",
+    },
+];
+
+const timelineItems: ServiceTimelinePoint[] = steps.map(
+    ({ delay, description, ...step }) => ({
+        ...step,
+        description: delay ? `${description} Délai : ${delay}.` : description,
+    }),
+);
+
+// Engagements : chacun est déjà affirmé ailleurs sur le site.
+// - Interlocuteur unique : PricingComparison (« Interlocuteur unique ») et FAQ.
+// - Suivi à 30 jours : offres site de services.ts (« point de suivi à 30 jours »).
+// - Domaine à votre nom : tarifs.astro (« Ces postes restent à votre nom »).
+const commitments = [
+    {
+        Icon: UserHeart,
+        title: "Un seul interlocuteur",
+        text: "Vous échangez avec moi du premier appel à la mise en ligne.",
+    },
+    {
+        Icon: SquareChartSearch,
+        title: "Un point de suivi à 30 jours",
+        text: "Après la mise en ligne de votre site, on regarde ensemble Search Console et les demandes reçues.",
+    },
+    {
+        Icon: Globe,
+        title: "Votre domaine reste à votre nom",
+        text: "Nom de domaine, hébergement et outils restent à votre nom : vous gardez la main dessus.",
+    },
+];
+const title = "Comment se déroule un projet de site";
+const description =
+    "Création ou refonte : quatre étapes claires, un site livré en 10 jours à 5 semaines selon le périmètre.";
+---
+
+<section
+    class="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 py-12 sm:px-8 md:py-16"
+    aria-labelledby="home-process-title"
+>
+    <div class="flex flex-col items-center gap-4 text-center">
+        <h2 class="section-heading" id="home-process-title">{title}</h2>
+        <p class="section-subheading">{description}</p>
+    </div>
+
+    <ServiceTimelineScroll
+        description={description}
+        id="home-process-timeline"
+        items={timelineItems}
+        layout="center"
+        showHeader={false}
+        title="Les quatre étapes du projet"
+    />
+
+    <div class="flex flex-col gap-6">
+        <h3
+            class="text-center text-2xl font-normal leading-tight text-gray-900"
+            id="home-commitments-title"
+        >
+            Mes engagements
+        </h3>
+        <ul class="grid gap-4 md:grid-cols-3" aria-labelledby="home-commitments-title">
+            {
+                commitments.map((item) => (
+                    <li class="commitment-card flex flex-col items-start gap-4 rounded-2xl bg-gray-100 p-5 sm:p-6">
+                        <span aria-hidden="true" class="commitment-icon">
+                            <item.Icon class="size-5" />
+                        </span>
+                        <h4 class="text-xl font-normal leading-tight text-gray-900">
+                            {item.title}
+                        </h4>
+                        <p class="mt-3 text-base font-normal leading-relaxed text-gray-600">
+                            {item.text}
+                        </p>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+
+    <div class="flex justify-center">
+        <CalButton
+            class="rounded-xl text-base font-normal"
+            label="Réserver 15 min"
+            location="home-process"
+        />
+    </div>
+</section>
+
+<style>
+    .commitment-icon {
+        align-items: center;
+        background: var(--commitment-icon-bg);
+        border-radius: 0.875em;
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.28),
+            0 12px 24px -16px var(--commitment-icon-shadow);
+        color: var(--color-snow-50);
+        display: inline-flex;
+        flex: none;
+        height: 2rem;
+        justify-content: center;
+        width: 2rem;
+    }
+
+    .commitment-card:nth-child(1) {
+        --commitment-icon-bg: #4169e1;
+        --commitment-icon-shadow: rgba(65, 105, 225, 0.65);
+    }
+
+    .commitment-card:nth-child(2) {
+        --commitment-icon-bg: #6957df;
+        --commitment-icon-shadow: rgba(105, 87, 223, 0.64);
+    }
+
+    .commitment-card:nth-child(3) {
+        --commitment-icon-bg: #557ee8;
+        --commitment-icon-shadow: rgba(85, 126, 232, 0.64);
+    }
+
+    .commitment-icon svg {
+        height: 1.05rem;
+        width: 1.05rem;
+    }
+</style>
