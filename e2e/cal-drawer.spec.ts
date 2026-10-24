@@ -6,26 +6,33 @@ const EMBED = "https://app.cal.com/embed/embed.js";
 const calRequests = (requests: string[]) =>
   requests.filter((url) => url.includes("cal.com"));
 
+let requests: string[] = [];
+
 test.beforeEach(async ({ page }) => {
+  // Interceptions posées avant toute navigation : les appels faits au
+  // chargement sont comptés et aucun tiers n'est réellement contacté.
+  requests = await stubThirdParties(page);
   await page.goto("/");
   await dismissCookieBanner(page);
 });
 
-test("le tiroir Cal.com précharge quand la souris s'arrête, s'ouvre et se ferme", async ({
+test("le tiroir Cal.com ne charge rien avant le clic, s'ouvre et se ferme", async ({
   page,
 }) => {
-  const requests = await stubThirdParties(page);
   await page.waitForLoadState("networkidle");
   expect(calRequests(requests)).toEqual([]);
 
+  // Souris posée sur le bouton : toujours aucun appel à Cal.com.
   const open = page.locator("[data-cal-open]").first();
   await open.scrollIntoViewIfNeeded();
   await open.hover();
-  await expect.poll(() => requests.includes(EMBED)).toBe(true);
+  await page.waitForTimeout(600);
+  expect(calRequests(requests)).toEqual([]);
 
   const drawer = page.getByRole("dialog", { name: "Planifier un créneau" });
   await open.click();
   await expect(drawer).toBeVisible();
+  await expect.poll(() => requests.includes(EMBED)).toBe(true);
   await expect(page.locator("html")).toHaveClass(/cal-drawer-open/);
 
   await drawer.getByRole("button", { name: "Fermer" }).click();
@@ -43,7 +50,6 @@ test("le tiroir Cal.com précharge quand la souris s'arrête, s'ouvre et se ferm
 test("un simple passage de la souris ou du clavier ne contacte pas Cal.com", async ({
   page,
 }) => {
-  const requests = await stubThirdParties(page);
   const open = page.locator("[data-cal-open]").first();
   await open.scrollIntoViewIfNeeded();
 

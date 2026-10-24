@@ -225,42 +225,8 @@ const calLink = String(
         closeCalDrawer();
     });
 
-    // Préchargement de embed.js quand la souris s'arrête sur un bouton de
-    // réservation (200 ms) : un simple passage ou un Tab au clavier ne
-    // contacte pas Cal.com. Au clavier et au toucher, tout part au clic.
-    const intentDelayMs = 200;
-    let intentTimer = 0;
-
-    function isCalButton(target: EventTarget | null) {
-        return target instanceof Element && Boolean(target.closest("[data-cal-open]"));
-    }
-
-    document.addEventListener(
-        "pointerover",
-        (event) => {
-            if (isCalConfigured || event.pointerType !== "mouse" || !isCalButton(event.target)) {
-                return;
-            }
-            window.clearTimeout(intentTimer);
-            intentTimer = window.setTimeout(() => {
-                const calLink = getCalLink();
-                if (calLink) configureCalEmbed(calLink);
-            }, intentDelayMs);
-        },
-        { passive: true },
-    );
-
-    document.addEventListener(
-        "pointerout",
-        (event) => {
-            if (!isCalButton(event.target)) return;
-            const button = (event.target as Element).closest("[data-cal-open]");
-            if (event.relatedTarget instanceof Node && button?.contains(event.relatedTarget)) return;
-            window.clearTimeout(intentTimer);
-        },
-        { passive: true },
-    );
-
+    // Cal.com n'est contacté qu'au clic sur un bouton de réservation : aucun
+    // préchargement au survol, au focus ou au toucher.
     document.addEventListener("click", (event) => {
         const target = event.target;
         if (!(target instanceof Element)) return;
