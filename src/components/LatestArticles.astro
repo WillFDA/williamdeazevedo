@@ -97,7 +97,7 @@ const [featured, ...rest] = articles.slice(0, 5);
                             {rest.map((article) => (
                                 <li>
                                     <a
-                                        class="group flex items-center gap-6 rounded-2xl p-5 text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 sm:p-6"
+                                        class="group flex items-center gap-6 rounded-2xl bg-surface-muted p-5 text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 sm:p-6 lg:bg-transparent"
                                         href={`/articles/${article.id}/`}
                                     >
                                         <div class="min-w-0 flex-1">
@@ -115,7 +115,7 @@ const [featured, ...rest] = articles.slice(0, 5);
                                             </time>
                                         </div>
                                         <span
-                                            class="latest-articles__arrow hidden size-11 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-900 sm:inline-flex"
+                                            class="latest-articles__arrow hidden size-11 shrink-0 items-center justify-center rounded-xl bg-snow-50 text-gray-900 sm:inline-flex lg:bg-gray-100"
                                             aria-hidden="true"
                                         >
                                             <ArrowRight class="size-4" />
