@@ -1,7 +1,8 @@
 ---
 // Bandeau de consentement (CNIL) branché sur Consent Mode v2.
-// Le choix est restauré tôt dans tracking/GoogleTagManager.astro : garder la
-// clé "wui-consent" et la durée de 6 mois alignées entre les deux fichiers.
+// Le choix est lu et écrit via src/scripts/consent.ts, et restauré tôt dans
+// tracking/GoogleTagManager.astro : garder la clé "wui-consent" et la durée de
+// 6 mois alignées entre ces deux fichiers.
 
 // Refuser et accepter partagent la même taille et la même forme (exigence
 // CNIL) ; seule la couleur change (principal / secondaire gris).
@@ -104,25 +105,16 @@ const choiceClass =
 </style>
 
 <script>
-    type ConsentValue = "granted" | "denied";
+    import {
+        CONSENT_STORAGE_KEY,
+        readConsent,
+        type ConsentValue,
+    } from "../scripts/consent";
 
-    const STORAGE_KEY = "wui-consent";
     const consentWindow = window as Window & {
         gtag?: (...args: unknown[]) => void;
         dataLayer?: unknown[];
         __wuiCookieBannerReady?: boolean;
-    };
-
-    const readChoice = (): ConsentValue | null => {
-        try {
-            const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
-            if (!stored) return null;
-            const expiry = new Date(stored.at);
-            expiry.setMonth(expiry.getMonth() + 6);
-            return Date.now() < expiry.getTime() ? stored.value : null;
-        } catch {
-            return null;
-        }
     };
 
     // Au refus, retire les cookies Google déjà posés (domaine courant et parent).
@@ -144,7 +136,7 @@ const choiceClass =
     const saveChoice = (value: ConsentValue) => {
         try {
             localStorage.setItem(
-                STORAGE_KEY,
+                CONSENT_STORAGE_KEY,
                 JSON.stringify({ value, at: new Date().toISOString() }),
             );
         } catch {
@@ -190,7 +182,7 @@ const choiceClass =
         // le choix a expiré pendant la navigation.
         document.addEventListener("astro:page-load", () => {
             const element = banner();
-            if (element && !readChoice()) element.hidden = false;
+            if (element && !readConsent()) element.hidden = false;
         });
     }
 </script>
