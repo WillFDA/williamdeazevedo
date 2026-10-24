@@ -18,8 +18,10 @@ export const serviceReadings: Record<string, ServiceReading> = {
   "creation-site-vitrine": {
     articles: [
       "site-600-euros-vs-site-2000-euros",
+      "hebergement-site-vitrine",
       "prix-site-vitrine",
       "landing-page",
+      "site-one-page",
       "exemples-sites-vitrines",
       "audit-seo",
     ],
@@ -97,6 +99,7 @@ export const articleServices: Record<string, string[]> = {
   "creer-site-internet-ia": ["creation-site-vitrine"],
   "exemples-sites-vitrines": ["creation-site-vitrine"],
   "fiche-google-my-business-artisan": ["creation-site-internet-artisan"],
+  "hebergement-site-vitrine": ["creation-site-vitrine"],
   "landing-page": ["creation-site-vitrine"],
   "mentions-legales-site-internet-professionnel": [
     "creation-site-internet-professionnel",
@@ -108,6 +111,7 @@ export const articleServices: Record<string, string[]> = {
   "seo-local": ["creation-site-internet-artisan"],
   "site-600-euros-vs-site-2000-euros": ["creation-site-vitrine"],
   "site-non-securise": ["refonte-site-internet"],
+  "site-one-page": ["creation-site-vitrine"],
   "site-pas-sur-google": ["refonte-site-internet"],
   "site-internet-artisan-contenus": ["creation-site-internet-artisan"],
   "tester-accessibilite-site-web": ["refonte-site-internet"],

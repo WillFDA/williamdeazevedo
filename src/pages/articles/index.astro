@@ -1,6 +1,7 @@
 ---
 import FadeReveal from "@/components/animations/FadeReveal.astro";
-import ArticleFilters from "@/components/articles/ArticleFilters";
+import ArticleFilters from "@/components/articles/ArticleFilters.astro";
+import ArticleImage from "@/components/articles/ArticleImage.astro";
 import ArticleTag from "@/components/articles/ArticleTag.astro";
 import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
 import WaveIcon from "@/components/ui/WaveIcon.astro";
@@ -30,7 +31,10 @@ const PAGE_SIZE = 6;
     description="Conseils pour rendre un site plus clair, rapide, accessible et crédible : contenu, performance, SEO technique et retours d'expérience freelance."
 >
     <div class="mx-auto w-full max-w-7xl px-4 py-12 sm:px-8 md:py-16">
-        <section class="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
+        <section
+            class="mx-auto flex w-full max-w-5xl flex-col items-center text-center"
+            data-section-reveal="false"
+        >
             <FadeReveal delay={0.1}>
                 <h1
                     class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl"
@@ -65,11 +69,7 @@ const PAGE_SIZE = 6;
                 ) : (
                     <div>
                         <FadeReveal delay={0.3}>
-                            <ArticleFilters
-                                client:load
-                                pageSize={PAGE_SIZE}
-                                tags={tags}
-                            />
+                            <ArticleFilters pageSize={PAGE_SIZE} tags={tags} />
                         </FadeReveal>
                         <ul class="grid gap-4 md:grid-cols-2" data-article-list>
                             {articles.map((article, index) => (
@@ -88,12 +88,12 @@ const PAGE_SIZE = 6;
                                     >
                                         <span class="relative mb-5 block aspect-video w-full shrink-0 overflow-hidden rounded-lg bg-gray-200">
                                             {article.data.image ? (
-                                                <img
+                                                <ArticleImage
                                                     class="size-full object-cover"
                                                     src={article.data.image.src}
                                                     alt={article.data.image.alt}
-                                                    loading="lazy"
-                                                    decoding="async"
+                                                    sizes="(min-width: 768px) 50vw, 100vw"
+                                                    widths={[480, 800, 1200]}
                                                 />
                                             ) : (
                                                 <span class="block size-full bg-gray-200"></span>

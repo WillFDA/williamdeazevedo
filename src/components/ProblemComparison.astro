@@ -259,10 +259,11 @@ const {
 </section>
 
 <script>
-    import { gsap } from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-    gsap.registerPlugin(ScrollTrigger);
+    import {
+        createScrollReveal,
+        prefersReducedMotion,
+        queryAll,
+    } from "@/scripts/motion";
 
     const activeProblemComparisonControllers = new WeakMap<
         HTMLElement,
@@ -276,301 +277,165 @@ const {
             : 0;
     };
 
+    const renderScore = (score: HTMLElement, value: number) => {
+        score.textContent = String(value);
+        score.style.setProperty("--score-progress", `${value}%`);
+    };
+
     const restoreScores = (scores: readonly HTMLElement[]) => {
-        scores.forEach((score) => {
+        for (const score of scores) {
             score.textContent = String(Math.round(getFinalScore(score)));
             score.style.removeProperty("--score-progress");
-        });
+        }
     };
 
     const cleanupProblemComparisons = () => {
-        document
-            .querySelectorAll<HTMLElement>("[data-problem-comparison]")
-            .forEach((section) => {
-                activeProblemComparisonControllers.get(section)?.();
-                activeProblemComparisonControllers.delete(section);
-                delete section.dataset.problemComparisonReady;
-            });
+        for (const section of queryAll(document, "[data-problem-comparison]")) {
+            activeProblemComparisonControllers.get(section)?.();
+            activeProblemComparisonControllers.delete(section);
+            delete section.dataset.problemComparisonReady;
+        }
     };
 
+    // Positions (en secondes) des groupes, reprises de l'ancienne timeline.
+    const LAYOUT_AT = 0.24;
+    const ITEMS_AT = 0.29;
+
     const initProblemComparisons = () => {
-        document
-            .querySelectorAll<HTMLElement>("[data-problem-comparison]")
-            .forEach((section) => {
-                if (section.dataset.problemComparisonReady === "true") return;
-                section.dataset.problemComparisonReady = "true";
+        for (const section of queryAll(document, "[data-problem-comparison]")) {
+            if (section.dataset.problemComparisonReady === "true") continue;
+            section.dataset.problemComparisonReady = "true";
 
-                const scores = gsap.utils.toArray<HTMLElement>(
-                    "[data-problem-score]",
-                    section,
-                );
+            const scores = queryAll(section, "[data-problem-score]");
+            if (prefersReducedMotion()) {
+                restoreScores(scores);
+                continue;
+            }
 
-                if (
-                    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-                ) {
-                    restoreScores(scores);
-                    return;
-                }
+            const messyVisual = section.querySelector<HTMLElement>(
+                '[data-problem-visual="messy"]',
+            );
+            const clearVisual = section.querySelector<HTMLElement>(
+                '[data-problem-visual="clear"]',
+            );
+            const messyCards = queryAll(section, "[data-problem-messy-card]");
 
-                const context = gsap.context(() => {
-                    const headingLines = gsap.utils.toArray<HTMLElement>(
-                        "[data-problem-heading-line]",
-                        section,
-                    );
-                    const subheading = section.querySelector<HTMLElement>(
-                        "[data-problem-subheading]",
-                    );
-                    const messyVisual = section.querySelector<HTMLElement>(
-                        '[data-problem-visual="messy"]',
-                    );
-                    const clearVisual = section.querySelector<HTMLElement>(
-                        '[data-problem-visual="clear"]',
-                    );
-                    const messyLabel = messyVisual?.querySelector<HTMLElement>(
-                        "[data-problem-label]",
-                    );
-                    const clearLabel = clearVisual?.querySelector<HTMLElement>(
-                        "[data-problem-label]",
-                    );
-                    const messyCards = gsap.utils.toArray<HTMLElement>(
-                        "[data-problem-messy-card]",
-                        section,
-                    );
-                    const clearItems = gsap.utils.toArray<HTMLElement>(
-                        "[data-problem-clear-item]",
-                        section,
-                    );
-                    const contentHeading = section.querySelector<HTMLElement>(
-                        "[data-problem-content-heading]",
-                    );
-                    const contentCopy = section.querySelector<HTMLElement>(
-                        "[data-problem-content-copy]",
-                    );
-                    const workingPoints = gsap.utils.toArray<HTMLElement>(
-                        "[data-problem-working-point]",
-                        section,
-                    );
-                    const animatedElements = [
-                        ...headingLines,
-                        subheading,
-                        messyVisual,
-                        clearVisual,
-                        messyLabel,
-                        clearLabel,
-                        ...messyCards,
-                        ...clearItems,
-                        contentHeading,
-                        contentCopy,
-                        ...workingPoints,
-                    ].filter(Boolean) as HTMLElement[];
+            for (const score of scores) renderScore(score, 0);
 
-                    scores.forEach((score) => {
-                        score.textContent = "0";
-                        gsap.set(score, { "--score-progress": "0%" });
-                    });
-
-                    const timeline = gsap.timeline({
-                        defaults: {
-                            duration: 0.52,
-                            ease: "power3.out",
-                        },
-                        scrollTrigger: {
-                            trigger: section,
-                            start: "top 80%",
-                            once: true,
-                        },
-                        onStart: () => {
-                            gsap.set(animatedElements, {
-                                willChange: "opacity, transform",
-                            });
-                        },
-                    });
-
-                    timeline
-                        .addLabel("intro")
-                        .fromTo(
-                            headingLines,
-                            { autoAlpha: 0, y: 20 },
-                            {
-                                autoAlpha: 1,
-                                duration: 0.5,
-                                stagger: 0.04,
-                                y: 0,
-                            },
-                            "intro",
-                        );
-
-                    if (subheading) {
-                        timeline.fromTo(
-                            subheading,
-                            { autoAlpha: 0, y: 14 },
-                            { autoAlpha: 1, duration: 0.42, y: 0 },
-                            "intro+=0.12",
-                        );
-                    }
-
-                    timeline.addLabel("layout", "intro+=0.24");
-
-                    if (messyVisual) {
-                        timeline.fromTo(
-                            messyVisual,
-                            { autoAlpha: 0, scale: 0.985, y: 26 },
-                            {
-                                autoAlpha: 1,
-                                duration: 0.5,
-                                scale: 1,
-                                y: 0,
-                            },
-                            "layout",
-                        );
-                    }
-
-                    if (clearVisual) {
-                        timeline.fromTo(
-                            clearVisual,
-                            { autoAlpha: 0, scale: 0.985, y: 26 },
-                            {
-                                autoAlpha: 1,
-                                duration: 0.5,
-                                scale: 1,
-                                y: 0,
-                            },
-                            "layout",
-                        );
-                    }
-
-                    if (messyLabel) {
-                        timeline.fromTo(
-                            messyLabel,
-                            { autoAlpha: 0, scale: 0.94, y: 10 },
-                            {
-                                autoAlpha: 1,
-                                duration: 0.5,
-                                scale: 1,
-                                y: 0,
-                            },
-                            "layout+=0.05",
-                        );
-                    }
-
-                    if (clearLabel) {
-                        timeline.fromTo(
-                            clearLabel,
-                            { autoAlpha: 0, scale: 0.94, y: 10 },
-                            {
-                                autoAlpha: 1,
-                                duration: 0.44,
-                                scale: 1,
-                                y: 0,
-                            },
-                            "layout+=0.05",
-                        );
-                    }
-
-                    timeline
-                        .addLabel("items", "layout+=0.05")
-                        .fromTo(
-                            messyCards,
-                            { autoAlpha: 0, scale: 0.95, y: 18 },
-                            {
-                                autoAlpha: 1,
-                                duration: 0.46,
-                                scale: 1,
-                                stagger: 0.06,
-                                y: 0,
-                            },
-                            "items",
-                        )
-                        .fromTo(
-                            clearItems,
-                            { autoAlpha: 0, scale: 0.97, y: 14 },
-                            {
-                                autoAlpha: 1,
-                                duration: 0.44,
-                                scale: 1,
-                                stagger: 0.06,
-                                y: 0,
-                            },
-                            "items",
-                        );
-
-                    scores.forEach((score) => {
-                        const finalScore = getFinalScore(score);
-                        const cardIndex = Math.max(
-                            0,
-                            messyCards.findIndex((card) => card.contains(score)),
-                        );
-                        const scoreState = { value: 0 };
-                        let lastRenderedScore = -1;
-
-                        timeline.to(
-                            scoreState,
-                            {
-                                duration: 0.95,
-                                ease: "power2.out",
-                                onUpdate: () => {
-                                    const nextScore = Math.round(scoreState.value);
-                                    if (nextScore === lastRenderedScore) return;
-
-                                    lastRenderedScore = nextScore;
-                                    score.textContent = String(nextScore);
-                                    score.style.setProperty(
-                                        "--score-progress",
-                                        `${nextScore}%`,
-                                    );
+            const motion = createScrollReveal(
+                section,
+                [
+                    {
+                        at: 0,
+                        duration: 0.5,
+                        from: { opacity: 0, y: 20 },
+                        stagger: 0.04,
+                        targets: queryAll(section, "[data-problem-heading-line]"),
+                    },
+                    {
+                        at: 0.12,
+                        duration: 0.42,
+                        from: { opacity: 0, y: 14 },
+                        targets: section.querySelector<HTMLElement>(
+                            "[data-problem-subheading]",
+                        ),
+                    },
+                    {
+                        at: LAYOUT_AT,
+                        duration: 0.5,
+                        from: { opacity: 0, scale: 0.985, y: 26 },
+                        targets: [messyVisual, clearVisual],
+                    },
+                    {
+                        at: ITEMS_AT,
+                        duration: 0.5,
+                        from: { opacity: 0, scale: 0.94, y: 10 },
+                        targets: messyVisual?.querySelector<HTMLElement>(
+                            "[data-problem-label]",
+                        ),
+                    },
+                    {
+                        at: ITEMS_AT,
+                        duration: 0.44,
+                        from: { opacity: 0, scale: 0.94, y: 10 },
+                        targets: clearVisual?.querySelector<HTMLElement>(
+                            "[data-problem-label]",
+                        ),
+                    },
+                    {
+                        at: ITEMS_AT,
+                        duration: 0.46,
+                        from: { opacity: 0, scale: 0.95, y: 18 },
+                        stagger: 0.06,
+                        targets: messyCards,
+                    },
+                    {
+                        at: ITEMS_AT,
+                        duration: 0.44,
+                        from: { opacity: 0, scale: 0.97, y: 14 },
+                        stagger: 0.06,
+                        targets: queryAll(section, "[data-problem-clear-item]"),
+                    },
+                    {
+                        at: ITEMS_AT,
+                        duration: 0.5,
+                        from: { opacity: 0, y: 18 },
+                        targets: section.querySelector<HTMLElement>(
+                            "[data-problem-content-heading]",
+                        ),
+                    },
+                    {
+                        at: ITEMS_AT + 0.06,
+                        duration: 0.44,
+                        from: { opacity: 0, y: 14 },
+                        targets: section.querySelector<HTMLElement>(
+                            "[data-problem-content-copy]",
+                        ),
+                    },
+                    {
+                        at: ITEMS_AT + 0.1,
+                        duration: 0.46,
+                        from: { opacity: 0, x: 12, y: 12 },
+                        stagger: 0.07,
+                        targets: queryAll(section, "[data-problem-working-point]"),
+                    },
+                ],
+                {
+                    // Compteurs de score, chacun après l'apparition de sa carte.
+                    extend: (timeline) => {
+                        for (const score of scores) {
+                            const cardIndex = Math.max(
+                                0,
+                                messyCards.findIndex((card) => card.contains(score)),
+                            );
+                            const state = { value: 0 };
+                            let lastRendered = -1;
+                            timeline.add(
+                                state,
+                                {
+                                    duration: 950,
+                                    ease: "out(2)",
+                                    onUpdate: () => {
+                                        const next = Math.round(state.value);
+                                        if (next === lastRendered) return;
+                                        lastRendered = next;
+                                        renderScore(score, next);
+                                    },
+                                    value: getFinalScore(score),
                                 },
-                                value: finalScore,
-                            },
-                            `items+=${0.08 + cardIndex * 0.06}`,
-                        );
-                    });
+                                (ITEMS_AT + 0.08 + cardIndex * 0.06) * 1000,
+                            );
+                        }
+                    },
+                    onComplete: () => restoreScores(scores),
+                },
+            );
 
-                    timeline.addLabel("content", "layout+=0.05");
-
-                    if (contentHeading) {
-                        timeline.fromTo(
-                            contentHeading,
-                            { autoAlpha: 0, y: 18 },
-                            { autoAlpha: 1, duration: 0.5, y: 0 },
-                            "content",
-                        );
-                    }
-
-                    if (contentCopy) {
-                        timeline.fromTo(
-                            contentCopy,
-                            { autoAlpha: 0, y: 14 },
-                            { autoAlpha: 1, duration: 0.44, y: 0 },
-                            "content+=0.06",
-                        );
-                    }
-
-                    timeline
-                        .fromTo(
-                            workingPoints,
-                            { autoAlpha: 0, x: 12, y: 12 },
-                            {
-                                autoAlpha: 1,
-                                duration: 0.46,
-                                stagger: 0.07,
-                                x: 0,
-                                y: 0,
-                            },
-                            "content+=0.1",
-                        )
-                        .set(animatedElements, {
-                            clearProps: "opacity,transform,visibility,willChange",
-                        })
-                        .call(() => restoreScores(scores));
-                }, section);
-
-                activeProblemComparisonControllers.set(section, () => {
-                    context.revert();
-                    restoreScores(scores);
-                });
+            activeProblemComparisonControllers.set(section, () => {
+                motion.revert();
+                restoreScores(scores);
             });
-
-        ScrollTrigger.refresh();
+        }
     };
 
     initProblemComparisons();
@@ -740,28 +605,31 @@ const {
         color: rgb(100 116 139);
     }
 
+    /* Propriété « rotate » individuelle : elle se combine avec le transform
+       inline posé par anime.js pendant l'apparition (un transform: rotate()
+       serait écrasé et les cartes apparaîtraient droites). */
     .messy-card--performance {
         left: 5%;
         top: 18%;
-        transform: rotate(-5deg);
+        rotate: -5deg;
     }
 
     .messy-card--accessibility {
         right: 3%;
         top: 36%;
-        transform: rotate(4deg);
+        rotate: 4deg;
     }
 
     .messy-card--text {
         left: 8%;
         top: 55%;
-        transform: rotate(-2deg);
+        rotate: -2deg;
     }
 
     .messy-card--ai {
         right: 7%;
         top: 76%;
-        transform: rotate(5deg);
+        rotate: 5deg;
     }
 
     .clear-pill {

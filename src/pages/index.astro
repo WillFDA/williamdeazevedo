@@ -162,9 +162,10 @@ const displayedTestimonials = getPublishedTestimonials();
         </a>
         <AnimatedHeading
             class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl"
+            fade={false}
             parts={heroTitleParts}
         />
-        <FadeReveal delay={0.32}>
+        <FadeReveal delay={0.32} fade={false}>
             <p
                 class="page-subheading max-w-sm sm:max-w-lg"
             >
@@ -173,7 +174,7 @@ const displayedTestimonials = getPublishedTestimonials();
                 référencement naturel.
             </p>
         </FadeReveal>
-        <FadeReveal delay={0.44}>
+        <FadeReveal delay={0.44} fade={false}>
             <div class="mx-auto mt-5 flex w-full max-w-sm flex-col items-center justify-center gap-3 sm:mt-7 sm:max-w-none sm:flex-row sm:gap-8">
                 <button
                     aria-controls="cal-drawer"
