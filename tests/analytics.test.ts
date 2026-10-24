@@ -62,3 +62,39 @@ test("outbound event URLs exclude query strings and fragments", () => {
     })
   ).toEqual({ url: "https://example.com/contact", location: "footer" });
 });
+
+test("event properties never carry an email address or a phone number", () => {
+  expect(
+    sanitizeTrackingProperties({
+      label: "Écrire à william.deazevedopro@gmail.com",
+      location: "Appeler le 07 62 74 60 21",
+      email: "someone@example.com",
+      phone: "+33762746021",
+      count: 3,
+    })
+  ).toEqual({
+    label: "Écrire à [email]",
+    location: "Appeler le [tel]",
+    email: "[retiré]",
+    phone: "[retiré]",
+    count: 3,
+  });
+});
+
+test("phone masking targets French numbers only, not other long numbers", () => {
+  for (const phone of [
+    "07 62 74 60 21",
+    "07.62.74.60.21",
+    "0762746021",
+    "+33 7 62 74 60 21",
+    "+33 (0)7 62 74 60 21",
+    "0033762746021",
+  ])
+    expect(sanitizeTrackingProperties({ label: `Tel ${phone}` })).toEqual({
+      label: "Tel [tel]",
+    });
+  for (const other of ["SIRET 12345678900012", "id 20261023", "1500 €"])
+    expect(sanitizeTrackingProperties({ label: other })).toEqual({
+      label: other,
+    });
+});
