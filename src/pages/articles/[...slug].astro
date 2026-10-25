@@ -1,13 +1,12 @@
 ---
 import { Image } from "astro:assets";
 import { render } from "astro:content";
+import ArticleBody from "@/components/articles/ArticleBody.astro";
 import ArticleImage from "@/components/articles/ArticleImage.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
 import ArticleTag from "@/components/articles/ArticleTag.astro";
-import ServiceCallout from "@/components/articles/ServiceCallout.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
 import williamPortrait from "@/assets/williamdeazevedo.webp";
 import Layout from "@/layout/Layout.astro";
 import { type Article, formatArticleDate, getVisibleArticles } from "@/lib/articles";
@@ -214,20 +213,9 @@ const faqJsonLd = faq?.length
             )}
         </div>
 
-        <div class="article-body-shell mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(13rem,16rem)] lg:gap-12">
-            <div class="hidden lg:block" aria-hidden="true"></div>
-
-            <FadeReveal delay={0.3}>
-                <div class="article-prose min-w-0">
-                    <Content />
-                </div>
-                <ServiceCallout articleId={article.id} />
-            </FadeReveal>
-
-            <aside class="article-toc-column order-first lg:order-none">
-                <TableOfContents items={tocItems} />
-            </aside>
-        </div>
+        <ArticleBody articleId={article.id} tocItems={tocItems}>
+            <Content />
+        </ArticleBody>
     </article>
 </Layout>
 
@@ -274,6 +262,11 @@ const faqJsonLd = faq?.length
         font-weight: 500;
         line-height: 1.45;
         margin-top: 2.25rem;
+        scroll-margin-top: 7rem;
+    }
+
+    /* The FAQ sits outside .article-prose: same offset for its anchors. */
+    .article-faq :is(h2, h3) {
         scroll-margin-top: 7rem;
     }
 

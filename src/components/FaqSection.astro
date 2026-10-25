@@ -7,13 +7,17 @@ import WaveIcon from "./ui/WaveIcon.astro";
 import WaveText from "./ui/WaveText.astro";
 import { getProjectById } from "@/data/projects";
 
+// Plain text (`question`, `answer`) or already rendered HTML (articles).
 type FaqItem = {
-    answer: string;
+    answer?: string;
+    answerHtml?: string;
     link?: {
         href: string;
         label: string;
     };
-    question: string;
+    question?: string;
+    questionHtml?: string;
+    questionId?: string;
 };
 
 interface Props {
@@ -21,11 +25,15 @@ interface Props {
     ctaLabel?: string;
     ctaLocation?: string;
     description?: string;
+    /** Questions become headings of this level (articles: h3 under the h2). */
+    headingLevel?: 3;
     id?: string;
     items?: readonly FaqItem[];
     padded?: boolean;
     showCta?: boolean;
     title?: string;
+    /** id of the h2; defaults to `${id}-title`. */
+    titleId?: string;
 }
 
 const getDefaultFaqItems = () => {
@@ -103,11 +111,13 @@ const {
     ctaLabel = "Parler de mon cas",
     ctaLocation = "faq",
     description,
+    headingLevel,
     id = "faq",
     items,
     padded = true,
     showCta = true,
     title = "FAQ",
+    titleId = `${id}-title`,
 } = Astro.props;
 const faqItems = Array.from(items ?? getDefaultFaqItems());
 
@@ -128,7 +138,7 @@ const accordionClasses = {
         padded ? "px-4 sm:px-8" : "px-0",
         className,
     ]}
-    aria-labelledby={`${id}-title`}
+    aria-labelledby={titleId}
 >
     {/* DOM order matches the mobile order (title, questions, card); from lg the card moves under the title. */}
     <div
@@ -139,7 +149,7 @@ const accordionClasses = {
     >
         <div class:list={[!showCta && "lg:sticky lg:top-24 lg:self-start"]}>
             <h2
-                id={`${id}-title`}
+                id={titleId}
                 class="section-heading section-heading--left"
             >
                 {title}
@@ -154,8 +164,9 @@ const accordionClasses = {
         </div>
 
         <Accordion
-            class={showCta ? "lg:col-start-2 lg:row-span-2 lg:row-start-1" : undefined}
+            class={showCta ? "lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start" : undefined}
             items={faqItems}
+            headingLevel={headingLevel}
             itemClass={accordionClasses.item}
             summaryClass={accordionClasses.summary}
             contentClass={accordionClasses.content}
