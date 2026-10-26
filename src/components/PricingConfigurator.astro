@@ -494,10 +494,7 @@ const vitrine = formats[1];
                     </dl>
 
                     <div class="pc-total">
-                        <span>
-                            Total
-                            <span data-pc-delta aria-hidden="true"></span>
-                        </span>
+                        <span>Total</span>
                         <strong data-pc-total-wrap>
                             <span>
                                 <span class="sr-only" data-pc-total-text>
@@ -608,7 +605,6 @@ const vitrine = formats[1];
         const totalWrap = $("[data-pc-total-wrap]");
         const totalText = $("[data-pc-total-text]");
         const odo = $("[data-pc-odo]");
-        const deltaHost = $("[data-pc-delta]");
         const formatLine = $("[data-pc-format-line]");
         const formatName = $("[data-pc-format-name]");
         const note = $("[data-pc-note]");
@@ -692,23 +688,6 @@ const vitrine = formats[1];
             });
         };
 
-        const showDelta = (diff: number) => {
-            const chip = document.createElement("span");
-            chip.className = "pc-delta";
-            chip.dataset.dir = diff > 0 ? "up" : "down";
-            chip.textContent = `${diff > 0 ? "+" : "−"}${fr.format(Math.abs(diff))} €`;
-            deltaHost.replaceChildren(chip);
-            chip.animate(
-                [
-                    { opacity: 0, transform: "translateY(8px) scale(0.92)" },
-                    { opacity: 1, transform: "none", offset: 0.15 },
-                    { opacity: 1, transform: "translateY(-2px)", offset: 0.75 },
-                    { opacity: 0, transform: "translateY(-10px)" },
-                ],
-                { duration: 1600, easing: EASE_OUT },
-            ).onfinish = () => chip.remove();
-        };
-
         let shown: number | null | undefined;
         const setTotal = (value: number | null) => {
             if (value === shown) return;
@@ -728,7 +707,6 @@ const vitrine = formats[1];
                 // Commit the strips at 0 so the new digits roll up into place.
                 if (animate) odo.getBoundingClientRect();
             }
-            if (animate && typeof previous === "number") showDelta(value - previous);
             rollTo(text);
         };
 
@@ -1617,21 +1595,6 @@ const vitrine = formats[1];
     .pc-total > span {
         color: var(--color-gray-700);
         font-size: 15px;
-        position: relative;
-    }
-
-    .pc-total :global(.pc-delta) {
-        bottom: 1px;
-        color: var(--color-blue-500);
-        font-size: 13px;
-        font-weight: var(--w5);
-        left: calc(100% + 8px);
-        position: absolute;
-        white-space: nowrap;
-    }
-
-    .pc-total :global(.pc-delta[data-dir="down"]) {
-        color: var(--color-gray-500);
     }
 
     .pc-total strong {
