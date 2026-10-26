@@ -48,62 +48,6 @@ const choiceClass =
     </div>
 </div>
 
-<style is:global>
-    #cookie-banner .hero-button {
-        --hero-button-bg: var(--color-snow-600);
-        --hero-button-border: transparent;
-        --hero-button-color: var(--color-coffee-300);
-
-        color: var(--hero-button-color);
-        isolation: isolate;
-        position: relative;
-    }
-
-    #cookie-banner .hero-button::before {
-        background: var(--hero-button-bg);
-        border: 1px solid var(--hero-button-border);
-        border-radius: inherit;
-        content: "";
-        inset: 0;
-        position: absolute;
-        transform: scale(1);
-        transition: transform 520ms
-            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
-        z-index: -1;
-    }
-
-    #cookie-banner .hero-button:focus-visible::before {
-        transform: scale(0.95);
-    }
-
-    @media (hover: hover) {
-        #cookie-banner .hero-button:hover::before {
-            transform: scale(0.95);
-        }
-    }
-
-    #cookie-banner .hero-button:focus-visible {
-        outline: 2px solid var(--color-blue-500);
-        outline-offset: 3px;
-    }
-
-    #cookie-banner .hero-button--primary {
-        --hero-button-bg: var(--color-coffee-300);
-        --hero-button-border: var(--color-coffee-300);
-        --hero-button-color: var(--color-snow-50);
-    }
-
-    #cookie-banner .hero-button--secondary {
-        --hero-button-bg: var(--color-gray-100);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        #cookie-banner .hero-button::before {
-            transition: none;
-        }
-    }
-</style>
-
 <script>
     import {
         CONSENT_STORAGE_KEY,

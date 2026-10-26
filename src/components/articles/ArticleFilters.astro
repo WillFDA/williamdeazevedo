@@ -5,19 +5,17 @@
 import { getTagIconSvg } from "@/lib/articleTagIcons";
 
 interface Props {
+    pageSize: number;
     tags: string[];
-    years: string[];
 }
 
-const { tags, years } = Astro.props;
+const { pageSize, tags } = Astro.props;
 
 const COLLAPSED_TAG_COUNT = 4;
 const TAG_LIST_ID = "article-tag-list";
 
-const filterSelectClass =
-    "h-11 w-full appearance-none rounded-xl border border-gray-100 bg-snow-50 px-3 pr-10 text-left text-sm font-light text-gray-900 transition-colors hover:border-gray-200 focus-visible:border-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500";
 const tagButtonBaseClass =
-    "article-tag-pill relative isolate inline-flex cursor-pointer items-center gap-2 rounded-xl bg-transparent px-3.5 py-2 text-sm font-normal leading-none shadow-[0_16px_34px_-23px_rgba(34,42,55,0.58)] transition-[box-shadow,color] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:rounded-xl before:transition-transform before:duration-500 before:ease-out hover:shadow-[0_24px_48px_-26px_rgba(34,42,55,0.68)] hover:before:scale-[1.06] focus-visible:shadow-[0_24px_48px_-26px_rgba(34,42,55,0.68)] focus-visible:before:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-blue-500";
+    "pill article-tag-pill relative isolate cursor-pointer bg-transparent transition-colors duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:rounded-xl before:transition-transform before:duration-500 before:ease-out hover:before:scale-[1.06] focus-visible:before:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-blue-500";
 const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
 ---
 
@@ -25,47 +23,20 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
     aria-label="Filtrer les articles"
     class="mb-10 grid w-full max-w-4xl gap-4"
     data-article-filters
+    data-page-size={pageSize}
     data-tags={JSON.stringify(tags)}
-    data-years={JSON.stringify(years)}
 >
-    <div
-        class="grid w-full max-w-[40.5rem] grid-cols-[minmax(0,28rem)_minmax(9.5rem,11.5rem)] gap-3"
-    >
-        <div>
-            <label class="sr-only" for="article-search">Rechercher un article</label>
-            <input
-                class="h-11 w-full rounded-xl border border-gray-100 bg-snow-50 px-3 text-sm font-light text-gray-900 transition-colors placeholder:text-gray-600 hover:border-gray-200 focus-visible:border-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                id="article-search"
-                name="search"
-                placeholder="Rechercher"
-                type="search"
-                autocomplete="off"
-                data-article-search
-            />
-        </div>
-        <div class="relative">
-            <label class="sr-only" for="article-year">Filtrer par date</label>
-            <select class={filterSelectClass} id="article-year" data-article-year>
-                <option value="all">Toutes les dates</option>
-                {years.map((year) => <option value={year}>{year}</option>)}
-            </select>
-            <span
-                class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-400"
-            >
-                <svg
-                    aria-hidden="true"
-                    class="size-4"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.8"
-                    viewBox="0 0 24 24"
-                >
-                    <path d="m6 9 6 6 6-6"></path>
-                </svg>
-            </span>
-        </div>
+    <div class="w-full max-w-[28rem]">
+        <label class="sr-only" for="article-search">Rechercher un article</label>
+        <input
+            class="h-11 w-full rounded-xl bg-snow-50 px-3 text-sm font-light text-gray-900 shadow-pill placeholder:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            id="article-search"
+            name="search"
+            placeholder="Rechercher"
+            type="search"
+            autocomplete="off"
+            data-article-search
+        />
     </div>
     <fieldset class="flex max-w-4xl min-w-0 flex-wrap gap-2" id={TAG_LIST_ID}>
         <legend class="sr-only">Filtrer par tag</legend>
@@ -73,14 +44,14 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
             tags.map((tagName, index) => (
                 <button
                     aria-pressed="false"
-                    class:list={[tagButtonBaseClass, "text-gray-900 before:bg-snow-50"]}
+                    class:list={[tagButtonBaseClass, "before:bg-snow-50"]}
                     type="button"
                     data-article-tag={tagName}
                     data-collapsible={index >= COLLAPSED_TAG_COUNT ? "" : undefined}
                     hidden={index >= COLLAPSED_TAG_COUNT}
                 >
                     <span
-                        class="article-tag-pill__icon inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
+                        class="pill-icon article-tag-pill__icon"
                         set:html={getTagIconSvg(tagName)}
                     />
                     {tagName}
@@ -92,7 +63,7 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
                 <button
                     aria-controls={TAG_LIST_ID}
                     aria-expanded="false"
-                    class:list={[tagButtonBaseClass, "text-gray-900 before:bg-snow-50"]}
+                    class:list={[tagButtonBaseClass, "before:bg-snow-50"]}
                     type="button"
                     data-article-tag-toggle
                     data-hidden-count={hiddenTagCount}
@@ -106,10 +77,15 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
 </form>
 
 <script>
-    import { filterArticles, readFiltersFromUrl, writeFiltersToUrl } from "@/lib/articleFilters";
+    import {
+        filterArticles,
+        paginateArticles,
+        readFiltersFromUrl,
+        writeFiltersToUrl,
+    } from "@/lib/articleFilters";
 
     const ACTIVE = ["text-snow-50", "before:bg-blue-500"];
-    const INACTIVE = ["text-gray-900", "before:bg-snow-50"];
+    const INACTIVE = ["before:bg-snow-50"];
 
     const initArticleFilters = () => {
         const form = document.querySelector<HTMLFormElement>("[data-article-filters]");
@@ -118,14 +94,21 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
 
         const root = form.closest<HTMLElement>("[data-articles-page]");
         const search = form.querySelector<HTMLInputElement>("[data-article-search]");
-        const year = form.querySelector<HTMLSelectElement>("[data-article-year]");
         const tagButtons = [...form.querySelectorAll<HTMLButtonElement>("[data-article-tag]")];
         const toggle = form.querySelector<HTMLButtonElement>("[data-article-tag-toggle]");
-        if (!root || !search || !year) return;
+        if (!root || !search) return;
 
+        const more = root.querySelector<HTMLButtonElement>("[data-article-more]");
+        const pageSize = Number(form.dataset.pageSize) || Number.POSITIVE_INFINITY;
         const tags: string[] = JSON.parse(form.dataset.tags ?? "[]");
-        const years: string[] = JSON.parse(form.dataset.years ?? "[]");
-        const state = { ...readFiltersFromUrl(window.location.search, tags, years), expanded: false };
+        const state = {
+            ...readFiltersFromUrl(window.location.search, tags),
+            expanded: false,
+            limit: pageSize,
+        };
+        // Rang (parmi les articles retenus) du premier article révélé par
+        // « Voir plus », qui reçoit le focus.
+        let focusRank: number | null = null;
 
         const renderTags = () => {
             for (const button of tagButtons) {
@@ -133,9 +116,9 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
                 button.setAttribute("aria-pressed", String(isActive));
                 button.classList.remove(...(isActive ? INACTIVE : ACTIVE));
                 button.classList.add(...(isActive ? ACTIVE : INACTIVE));
-                const icon = button.querySelector(".article-tag-pill__icon");
-                icon?.classList.toggle("text-snow-50", isActive);
-                icon?.classList.toggle("text-blue-500", !isActive);
+                button
+                    .querySelector(".article-tag-pill__icon")
+                    ?.classList.toggle("text-snow-50", isActive);
                 // Le tag actif reste visible même quand la liste est repliée.
                 if (Object.hasOwn(button.dataset, "collapsible")) {
                     button.hidden = !(state.expanded || isActive);
@@ -153,27 +136,43 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
         const apply = () => {
             renderTags();
             const items = [...root.querySelectorAll<HTMLElement>("[data-article]")];
-            const visible = filterArticles(
+            const matches = filterArticles(
                 items.map((item) => ({
                     description: item.dataset.description ?? "",
                     tags: (item.dataset.tags ?? "").split("|").filter(Boolean),
                     title: item.dataset.title ?? "",
-                    year: item.dataset.year ?? "",
                 })),
                 state
             );
-            let visibleCount = 0;
+            const { hasMore, matchCount, visible } = paginateArticles(
+                matches,
+                state,
+                state.limit
+            );
+            let rank = 0;
+            let revealedCount = 0;
             items.forEach((item, index) => {
                 const isVisible = visible[index] ?? true;
+                // `data-article-overflow` masque en CSS les articles hors de la
+                // première page avant ce script ; `hidden` prend le relais.
+                const wasHidden = item.hidden || Object.hasOwn(item.dataset, "articleOverflow");
                 item.hidden = !isVisible;
-                if (!isVisible) return;
-                item.style.setProperty("--article-index", String(visibleCount));
+                delete item.dataset.articleOverflow;
+                if (matches[index]) {
+                    if (rank === focusRank) item.querySelector("a")?.focus();
+                    rank += 1;
+                }
+                // Seuls les articles qui apparaissent sont animés.
+                if (!(isVisible && wasHidden)) return;
+                item.style.setProperty("--article-index", String(revealedCount));
                 item.classList.remove("is-filtered-in");
                 void item.offsetWidth;
                 item.classList.add("is-filtered-in");
-                visibleCount += 1;
+                revealedCount += 1;
             });
-            root.querySelector("[data-article-empty]")?.classList.toggle("hidden", visibleCount > 0);
+            focusRank = null;
+            root.querySelector("[data-article-empty]")?.classList.toggle("hidden", matchCount > 0);
+            if (more) more.hidden = !hasMore;
         };
 
         const syncUrl = () => {
@@ -184,20 +183,14 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
         };
 
         const syncFromUrl = () => {
-            Object.assign(state, readFiltersFromUrl(window.location.search, tags, years));
+            Object.assign(state, readFiltersFromUrl(window.location.search, tags));
             search.value = state.search;
-            year.value = state.year;
             apply();
         };
 
         form.addEventListener("submit", (event) => event.preventDefault());
         search.addEventListener("input", () => {
             state.search = search.value;
-            apply();
-            syncUrl();
-        });
-        year.addEventListener("change", () => {
-            state.year = year.value;
             apply();
             syncUrl();
         });
@@ -212,6 +205,11 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
         toggle?.addEventListener("click", () => {
             state.expanded = !state.expanded;
             renderTags();
+        });
+        more?.addEventListener("click", () => {
+            focusRank = state.limit;
+            state.limit += pageSize;
+            apply();
         });
         window.addEventListener("popstate", syncFromUrl);
         document.addEventListener(

@@ -5,6 +5,7 @@ import AboutCallout from "../components/AboutCallout.astro";
 import CapabilitiesStrip from "../components/CapabilitiesStrip.astro";
 import ExpertiseShowcase from "../components/ExpertiseShowcase.astro";
 import FaqSection from "../components/FaqSection.astro";
+import LatestArticles from "../components/LatestArticles.astro";
 import PricingPreview from "../components/PricingPreview.astro";
 import ProblemComparison from "../components/ProblemComparison.astro";
 import ProjectShowcase from "../components/ProjectShowcase.astro";
@@ -147,7 +148,7 @@ const displayedTestimonials = getPublishedTestimonials();
     >
         <a
             aria-label="Avis Google : 5,0 sur 5 (nouvel onglet)"
-            class="mx-auto inline-flex max-w-full items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-tight text-gray-900 no-underline shadow-[0_10px_22px_-16px_rgba(34,42,55,0.45)] transition-transform hover:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 sm:text-base"
+            class="pill mx-auto max-w-full leading-tight no-underline transition-transform hover:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 sm:text-base"
             data-hero-eyebrow
             href="https://share.google/LlCN4Hr5IlatyVSl2"
             rel="noreferrer"
@@ -295,6 +296,7 @@ const displayedTestimonials = getPublishedTestimonials();
     <FaqSection title="Questions fréquentes" />
     <TestimonialsSection />
     <ProjectShowcase />
+    <LatestArticles />
 </Layout>
 
 <script>
@@ -652,55 +654,6 @@ const displayedTestimonials = getPublishedTestimonials();
         }
 
     }
-    .hero-button {
-        --hero-button-bg: var(--color-snow-600);
-        --hero-button-border: transparent;
-        --hero-button-color: var(--color-coffee-300);
-
-        color: var(--hero-button-color);
-        isolation: isolate;
-        position: relative;
-        text-decoration: none;
-    }
-
-    .hero-button::before {
-        background: var(--hero-button-bg);
-        border: 1px solid var(--hero-button-border);
-        border-radius: inherit;
-        content: "";
-        inset: 0;
-        position: absolute;
-        transform: scale(1);
-        transition: transform 520ms
-            var(--wui-ease-standard, cubic-bezier(0.2, 0, 0, 1));
-        z-index: -1;
-    }
-
-    .hero-button:focus-visible::before {
-        transform: scale(0.95);
-    }
-
-    @media (hover: hover) {
-        .hero-button:hover::before {
-            transform: scale(0.95);
-        }
-    }
-
-    .hero-button:focus-visible {
-        outline: 2px solid var(--color-blue-500);
-        outline-offset: 3px;
-    }
-
-    .hero-button--primary {
-        --hero-button-bg: var(--color-coffee-300);
-        --hero-button-border: var(--color-coffee-300);
-        --hero-button-color: var(--color-snow-50);
-    }
-
-    .hero-button--secondary {
-        --hero-button-bg: var(--color-gray-100);
-    }
-
     .expertise-cta {
         background: transparent;
         border: 0;
@@ -742,7 +695,6 @@ const displayedTestimonials = getPublishedTestimonials();
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .hero-button::before,
         .expertise-cta::before {
             transition: none;
         }
