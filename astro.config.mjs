@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 import hastAccessibleTables from "./scripts/hast-accessible-tables.mjs";
+import hastArticleFaq from "./scripts/hast-article-faq.mjs";
 import hastStaticTaskLists from "./scripts/hast-static-task-lists.mjs";
 
 // https://astro.build/config
@@ -25,9 +26,9 @@ export default defineConfig({
 
   markdown: {
     // Sätteri (Astro's native pipeline) also renders .mdx: @astrojs/mdx
-    // inherits markdown.processor, so both plugins apply to every article.
+    // inherits markdown.processor, so these plugins apply to every article.
     processor: satteri({
-      hastPlugins: [hastAccessibleTables, hastStaticTaskLists],
+      hastPlugins: [hastAccessibleTables, hastStaticTaskLists, hastArticleFaq],
     }),
     shikiConfig: {
       theme: "github-dark-dimmed",

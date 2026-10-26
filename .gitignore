@@ -20,6 +20,9 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# local screenshots dropped at the repo root
+/_*.png
+
 # jetbrains setting folder
 .idea/
 .vercel
