@@ -1,15 +1,15 @@
 ---
 import { Image } from "astro:assets";
 import { render } from "astro:content";
+import ArticleBody from "@/components/articles/ArticleBody.astro";
+import ArticleImage from "@/components/articles/ArticleImage.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
-import ServiceCallout from "@/components/articles/ServiceCallout.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
+import ArticleTag from "@/components/articles/ArticleTag.astro";
 import williamPortrait from "@/assets/williamdeazevedo.webp";
 import Layout from "@/layout/Layout.astro";
 import { type Article, formatArticleDate, getVisibleArticles } from "@/lib/articles";
-import { getTagIconSvg } from "@/lib/articleTagIcons";
 
 export async function getStaticPaths() {
     const articles = await getVisibleArticles();
@@ -145,7 +145,8 @@ const faqJsonLd = faq?.length
         class="mx-auto w-full max-w-6xl px-4 py-12 md:px-6 md:py-16"
         data-reading-progress-root
     >
-        <FadeReveal delay={0.1}>
+        {/* Glissement sans fondu : le titre peut être l'élément LCP (mobile, article sans couverture). */}
+        <FadeReveal delay={0.1} fade={false}>
             <header class="mx-auto mb-12 max-w-5xl text-center">
                 <a
                     class="mb-6 inline-flex items-center gap-2 text-sm font-normal text-gray-600 transition-colors hover:text-gray-900"
@@ -169,13 +170,7 @@ const faqJsonLd = faq?.length
                 {tags.length > 0 && (
                     <div class="mt-5 flex flex-wrap justify-center gap-2">
                         {tags.map((tag) => (
-                            <span class="inline-flex items-center gap-2 rounded-xl bg-snow-50 px-3.5 py-2 text-sm font-normal leading-none text-gray-900 shadow-[0_10px_24px_-18px_rgba(34,42,55,0.45)]">
-                                <span
-                                    class="inline-flex size-4 shrink-0 items-center justify-center text-blue-500 *:size-full"
-                                    set:html={getTagIconSvg(tag)}
-                                />
-                                {tag}
-                            </span>
+                            <ArticleTag tag={tag} />
                         ))}
                     </div>
                 )}
@@ -201,36 +196,26 @@ const faqJsonLd = faq?.length
             </header>
         </FadeReveal>
 
-        <FadeReveal delay={0.2}>
-            <div class="mx-auto mb-14 aspect-video w-full max-w-5xl overflow-hidden rounded-lg bg-gray-200">
-                {image ? (
-                    <img
-                        class="size-full object-cover"
-                        src={image.src}
-                        alt={image.alt}
-                        loading="eager"
-                        decoding="async"
-                    />
-                ) : (
-                    <span class="block size-full bg-gray-200"></span>
-                )}
-            </div>
-        </FadeReveal>
-
-        <div class="article-body-shell mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(13rem,16rem)] lg:gap-12">
-            <div class="hidden lg:block" aria-hidden="true"></div>
-
-            <FadeReveal delay={0.3}>
-                <div class="article-prose min-w-0">
-                    <Content />
-                </div>
-                <ServiceCallout articleId={article.id} />
-            </FadeReveal>
-
-            <aside class="article-toc-column order-first lg:order-none">
-                <TableOfContents items={tocItems} />
-            </aside>
+        {/* Couverture hors FadeReveal : c'est l'élément LCP, elle doit être
+            peinte dès le premier rendu, sans fondu. */}
+        <div class="mx-auto mb-14 aspect-video w-full max-w-5xl overflow-hidden rounded-lg bg-gray-200">
+            {image ? (
+                <ArticleImage
+                    class="size-full object-cover"
+                    src={image.src}
+                    alt={image.alt}
+                    sizes="(min-width: 1024px) 1024px, 100vw"
+                    loading="eager"
+                    fetchpriority="high"
+                />
+            ) : (
+                <span class="block size-full bg-gray-200"></span>
+            )}
         </div>
+
+        <ArticleBody articleId={article.id} tocItems={tocItems}>
+            <Content />
+        </ArticleBody>
     </article>
 </Layout>
 
@@ -277,6 +262,11 @@ const faqJsonLd = faq?.length
         font-weight: 500;
         line-height: 1.45;
         margin-top: 2.25rem;
+        scroll-margin-top: 7rem;
+    }
+
+    /* The FAQ sits outside .article-prose: same offset for its anchors. */
+    .article-faq :is(h2, h3) {
         scroll-margin-top: 7rem;
     }
 
@@ -467,7 +457,7 @@ const faqJsonLd = faq?.length
     }
 
     .article-prose tbody tr:nth-child(even) td {
-        background: var(--color-surface-100);
+        background: var(--color-surface-muted);
     }
 
     @media (hover: hover) {

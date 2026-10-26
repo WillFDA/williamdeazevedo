@@ -1,0 +1,272 @@
+---
+// Filtres de la liste d'articles, rendus côté serveur et pilotés par un petit
+// script sans framework (auparavant un composant React chargé au démarrage,
+// ~65 ko gzip de runtime pour une recherche et quelques boutons).
+import { getTagIconSvg } from "@/lib/articleTagIcons";
+
+interface Props {
+    pageSize: number;
+    tags: string[];
+}
+
+const { pageSize, tags } = Astro.props;
+
+const COLLAPSED_TAG_COUNT = 4;
+const TAG_LIST_ID = "article-tag-list";
+
+const tagButtonBaseClass =
+    "pill article-tag-pill relative isolate cursor-pointer bg-transparent transition-colors duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:rounded-xl before:transition-transform before:duration-500 before:ease-out hover:before:scale-[1.06] focus-visible:before:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-blue-500";
+const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
+---
+
+<form
+    aria-label="Filtrer les articles"
+    class="mb-10 grid w-full max-w-4xl gap-4"
+    data-article-filters
+    data-page-size={pageSize}
+    data-tags={JSON.stringify(tags)}
+>
+    <div class="w-full max-w-[28rem]">
+        <label class="sr-only" for="article-search">Rechercher un article</label>
+        <input
+            class="h-11 w-full rounded-xl bg-snow-50 px-3 text-sm font-light text-gray-900 shadow-pill placeholder:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            id="article-search"
+            name="search"
+            placeholder="Rechercher"
+            type="search"
+            autocomplete="off"
+            data-article-search
+        />
+    </div>
+    <fieldset class="flex max-w-4xl min-w-0 flex-wrap gap-2" id={TAG_LIST_ID}>
+        <legend class="sr-only">Filtrer par tag</legend>
+        {
+            tags.map((tagName, index) => (
+                <button
+                    aria-pressed="false"
+                    class:list={[tagButtonBaseClass, "before:bg-snow-50"]}
+                    type="button"
+                    data-article-tag={tagName}
+                    data-collapsible={index >= COLLAPSED_TAG_COUNT ? "" : undefined}
+                    hidden={index >= COLLAPSED_TAG_COUNT}
+                >
+                    <span
+                        class="pill-icon article-tag-pill__icon"
+                        set:html={getTagIconSvg(tagName)}
+                    />
+                    {tagName}
+                </button>
+            ))
+        }
+        {
+            hiddenTagCount > 0 && (
+                <button
+                    aria-controls={TAG_LIST_ID}
+                    aria-expanded="false"
+                    class:list={[tagButtonBaseClass, "before:bg-snow-50"]}
+                    type="button"
+                    data-article-tag-toggle
+                    data-hidden-count={hiddenTagCount}
+                >
+                    +{hiddenTagCount}
+                    <span class="sr-only">{hiddenTagCount > 1 ? " tags" : " tag"}</span>
+                </button>
+            )
+        }
+    </fieldset>
+</form>
+
+<script>
+    import {
+        filterArticles,
+        paginateArticles,
+        readFiltersFromUrl,
+        writeFiltersToUrl,
+    } from "@/lib/articleFilters";
+
+    const ACTIVE = ["text-snow-50", "before:bg-blue-500"];
+    const INACTIVE = ["before:bg-snow-50"];
+
+    const initArticleFilters = () => {
+        const form = document.querySelector<HTMLFormElement>("[data-article-filters]");
+        if (!form || form.dataset.ready === "true") return;
+        form.dataset.ready = "true";
+
+        const root = form.closest<HTMLElement>("[data-articles-page]");
+        const search = form.querySelector<HTMLInputElement>("[data-article-search]");
+        const tagButtons = [...form.querySelectorAll<HTMLButtonElement>("[data-article-tag]")];
+        const toggle = form.querySelector<HTMLButtonElement>("[data-article-tag-toggle]");
+        if (!root || !search) return;
+
+        const more = root.querySelector<HTMLButtonElement>("[data-article-more]");
+        const pageSize = Number(form.dataset.pageSize) || Number.POSITIVE_INFINITY;
+        const tags: string[] = JSON.parse(form.dataset.tags ?? "[]");
+        const state = {
+            ...readFiltersFromUrl(window.location.search, tags),
+            expanded: false,
+            limit: pageSize,
+        };
+        // Rang (parmi les articles retenus) du premier article révélé par
+        // « Voir plus », qui reçoit le focus.
+        let focusRank: number | null = null;
+
+        const renderTags = () => {
+            for (const button of tagButtons) {
+                const isActive = button.dataset.articleTag === state.tag;
+                button.setAttribute("aria-pressed", String(isActive));
+                button.classList.remove(...(isActive ? INACTIVE : ACTIVE));
+                button.classList.add(...(isActive ? ACTIVE : INACTIVE));
+                button
+                    .querySelector(".article-tag-pill__icon")
+                    ?.classList.toggle("text-snow-50", isActive);
+                // Le tag actif reste visible même quand la liste est repliée.
+                if (Object.hasOwn(button.dataset, "collapsible")) {
+                    button.hidden = !(state.expanded || isActive);
+                }
+            }
+            if (!toggle) return;
+            const hidden = tagButtons.filter((button) => button.hidden).length;
+            toggle.hidden = !state.expanded && hidden === 0;
+            toggle.setAttribute("aria-expanded", String(state.expanded));
+            toggle.innerHTML = state.expanded
+                ? "Moins"
+                : `+${hidden}<span class="sr-only">${hidden > 1 ? " tags" : " tag"}</span>`;
+        };
+
+        const apply = () => {
+            renderTags();
+            const items = [...root.querySelectorAll<HTMLElement>("[data-article]")];
+            const matches = filterArticles(
+                items.map((item) => ({
+                    description: item.dataset.description ?? "",
+                    tags: (item.dataset.tags ?? "").split("|").filter(Boolean),
+                    title: item.dataset.title ?? "",
+                })),
+                state
+            );
+            const { hasMore, matchCount, visible } = paginateArticles(
+                matches,
+                state,
+                state.limit
+            );
+            let rank = 0;
+            let revealedCount = 0;
+            items.forEach((item, index) => {
+                const isVisible = visible[index] ?? true;
+                // `data-article-overflow` masque en CSS les articles hors de la
+                // première page avant ce script ; `hidden` prend le relais.
+                const wasHidden = item.hidden || Object.hasOwn(item.dataset, "articleOverflow");
+                item.hidden = !isVisible;
+                delete item.dataset.articleOverflow;
+                if (matches[index]) {
+                    if (rank === focusRank) item.querySelector("a")?.focus();
+                    rank += 1;
+                }
+                // Seuls les articles qui apparaissent sont animés.
+                if (!(isVisible && wasHidden)) return;
+                item.style.setProperty("--article-index", String(revealedCount));
+                item.classList.remove("is-filtered-in");
+                void item.offsetWidth;
+                item.classList.add("is-filtered-in");
+                revealedCount += 1;
+            });
+            focusRank = null;
+            root.querySelector("[data-article-empty]")?.classList.toggle("hidden", matchCount > 0);
+            if (more) more.hidden = !hasMore;
+        };
+
+        const syncUrl = () => {
+            const next = writeFiltersToUrl(window.location.href, state);
+            const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+            // Le ClientRouter range son index et le scroll dans history.state : on le garde.
+            if (next !== current) window.history.replaceState(window.history.state, "", next);
+        };
+
+        const syncFromUrl = () => {
+            Object.assign(state, readFiltersFromUrl(window.location.search, tags));
+            search.value = state.search;
+            apply();
+        };
+
+        form.addEventListener("submit", (event) => event.preventDefault());
+        search.addEventListener("input", () => {
+            state.search = search.value;
+            apply();
+            syncUrl();
+        });
+        for (const button of tagButtons) {
+            button.addEventListener("click", () => {
+                const value = button.dataset.articleTag ?? "all";
+                state.tag = state.tag === value ? "all" : value;
+                apply();
+                syncUrl();
+            });
+        }
+        toggle?.addEventListener("click", () => {
+            state.expanded = !state.expanded;
+            renderTags();
+        });
+        more?.addEventListener("click", () => {
+            focusRank = state.limit;
+            state.limit += pageSize;
+            apply();
+        });
+        window.addEventListener("popstate", syncFromUrl);
+        document.addEventListener(
+            "astro:before-swap",
+            () => window.removeEventListener("popstate", syncFromUrl),
+            { once: true }
+        );
+
+        syncFromUrl();
+    };
+
+    initArticleFilters();
+    document.addEventListener("astro:page-load", initArticleFilters);
+</script>
+
+<style is:global>
+    .article-tag-pill__icon {
+        transform-origin: 50% 55%;
+    }
+
+    @media (hover: hover) {
+        .article-tag-pill:hover .article-tag-pill__icon {
+            animation: article-tag-icon-jitter 620ms cubic-bezier(0.22, 1.16, 0.36, 1) both;
+        }
+    }
+
+    .article-tag-pill:focus-visible .article-tag-pill__icon {
+        animation: article-tag-icon-jitter 620ms cubic-bezier(0.22, 1.16, 0.36, 1) both;
+    }
+
+    @keyframes article-tag-icon-jitter {
+        0%,
+        100% {
+            transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+        }
+        16% {
+            transform: translate3d(0.5px, -0.5px, 0) rotate(-5deg) scale(1.04);
+        }
+        32% {
+            transform: translate3d(-0.5px, 0.5px, 0) rotate(4deg) scale(1.02);
+        }
+        48% {
+            transform: translate3d(0.35px, 0, 0) rotate(-3deg) scale(1.03);
+        }
+        68% {
+            transform: translate3d(-0.2px, -0.2px, 0) rotate(2deg) scale(1.01);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .article-tag-pill::before {
+            transition: none;
+        }
+
+        .article-tag-pill:hover .article-tag-pill__icon,
+        .article-tag-pill:focus-visible .article-tag-pill__icon {
+            animation: none;
+        }
+    }
+</style>

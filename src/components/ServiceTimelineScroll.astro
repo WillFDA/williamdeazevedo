@@ -158,157 +158,101 @@ const toneClasses: Record<ServiceCapabilityTone, string> = {
 </section>
 
 <script>
-    import { gsap } from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-    gsap.registerPlugin(ScrollTrigger);
+    import {
+        createScrubTimeline,
+        type MotionStep,
+        prefersReducedMotion,
+        queryAll,
+    } from "@/scripts/motion";
 
     const activeServiceTimelineControllers = new WeakMap<HTMLElement, () => void>();
 
     const cleanupServiceTimelines = () => {
-        document.querySelectorAll<HTMLElement>("[data-service-timeline]").forEach(
-            (timeline) => {
-                activeServiceTimelineControllers.get(timeline)?.();
-                activeServiceTimelineControllers.delete(timeline);
-                delete timeline.dataset.serviceTimelineReady;
-            },
-        );
+        for (const timeline of queryAll(document, "[data-service-timeline]")) {
+            activeServiceTimelineControllers.get(timeline)?.();
+            activeServiceTimelineControllers.delete(timeline);
+            delete timeline.dataset.serviceTimelineReady;
+        }
     };
 
     const initServiceTimelines = () => {
-        document.querySelectorAll<HTMLElement>("[data-service-timeline]").forEach(
-            (timeline) => {
-                if (timeline.dataset.serviceTimelineReady === "true") return;
-                timeline.dataset.serviceTimelineReady = "true";
+        for (const timeline of queryAll(document, "[data-service-timeline]")) {
+            if (timeline.dataset.serviceTimelineReady === "true") continue;
+            timeline.dataset.serviceTimelineReady = "true";
 
-                const progress = timeline.querySelector<HTMLElement>(
-                    "[data-service-timeline-progress]",
+            const progress = timeline.querySelector<HTMLElement>(
+                "[data-service-timeline-progress]",
+            );
+            const items = queryAll(timeline, "[data-service-timeline-item]");
+            if (!progress || items.length === 0) continue;
+
+            const track = timeline.querySelector<HTMLElement>(
+                ".service-timeline__track",
+            );
+            const icons = items.map((item) =>
+                item.querySelector<HTMLElement>(".service-timeline__icon"),
+            );
+            const contents = items.map((item) =>
+                item.querySelector<HTMLElement>(".service-timeline__content"),
+            );
+            const trackRect = track?.getBoundingClientRect();
+            const fractions = icons.map((icon) => {
+                if (!(icon && trackRect) || trackRect.height === 0) return 1;
+                const rect = icon.getBoundingClientRect();
+                return Math.min(
+                    1,
+                    Math.max(
+                        0,
+                        (rect.top + rect.height / 2 - trackRect.top) /
+                            trackRect.height,
+                    ),
                 );
-                const items = gsap.utils.toArray<HTMLElement>(
-                    "[data-service-timeline-item]",
-                    timeline,
-                );
+            });
 
-                if (!progress || items.length === 0) return;
+            // Le CSS gère l'état sans animation (scaleY(1), contenu visible).
+            if (prefersReducedMotion()) continue;
+            progress.style.transformOrigin = "top";
 
-                const track = timeline.querySelector<HTMLElement>(
-                    ".service-timeline__track",
-                );
-                const icons = items.map((item) =>
-                    item.querySelector<HTMLElement>(".service-timeline__icon"),
-                );
-                const trackRect = track?.getBoundingClientRect();
-                const fractions = icons.map((icon) => {
-                    if (!(icon && trackRect) || trackRect.height === 0) return 1;
-                    const rect = icon.getBoundingClientRect();
-                    return Math.min(
-                        1,
-                        Math.max(
-                            0,
-                            (rect.top + rect.height / 2 - trackRect.top) /
-                                trackRect.height,
-                        ),
-                    );
-                });
+            const segment = 1 / items.length;
+            const steps: MotionStep[] = icons.flatMap((icon, index) => [
+                {
+                    at: index * segment + segment * 0.34,
+                    duration: segment * 0.28,
+                    from: { opacity: 0, scale: 0.6 },
+                    targets: icon,
+                },
+                {
+                    at: index * segment + segment * 0.42,
+                    duration: segment * 0.5,
+                    from: { filter: "blur(8px)", opacity: 0, y: 24 },
+                    targets: contents[index],
+                },
+            ]);
 
-                if (
-                    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-                ) {
-                    gsap.set(progress, { scaleY: 1 });
-                    gsap.set(icons.filter(Boolean) as HTMLElement[], {
-                        autoAlpha: 1,
-                        scale: 1,
-                    });
-                    gsap.set(
-                        items
-                            .map((item) =>
-                                item.querySelector<HTMLElement>(
-                                    ".service-timeline__content",
-                                ),
-                            )
-                            .filter(Boolean) as HTMLElement[],
-                        { autoAlpha: 1, filter: "none", y: 0 },
-                    );
-                    return;
-                }
-
-                const context = gsap.context(() => {
-                    gsap.set(progress, { scaleY: 0, transformOrigin: "top" });
-                    items.forEach((item, index) => {
-                        const content = item.querySelector<HTMLElement>(
-                            ".service-timeline__content",
-                        );
-                        const icon = icons[index];
-                        if (content) {
-                            gsap.set(content, {
-                                autoAlpha: 0,
-                                filter: "blur(8px)",
-                                y: 24,
-                            });
-                        }
-                        if (icon) {
-                            gsap.set(icon, {
-                                autoAlpha: 0,
-                                scale: 0.6,
-                                transformOrigin: "center",
-                            });
-                        }
-                    });
-
-                    const scrollTimeline = gsap.timeline({
-                        defaults: { ease: "none" },
-                        scrollTrigger: {
-                            trigger: timeline,
-                            start: "top 70%",
-                            end: "bottom 55%",
-                            scrub: 0.65,
-                        },
-                    });
-
-                    const segment = 1 / items.length;
-                    items.forEach((item, index) => {
-                        const at = index * segment;
-                        const icon = icons[index];
-                        const content = item.querySelector<HTMLElement>(
-                            ".service-timeline__content",
-                        );
-
-                        scrollTimeline.to(
+            const motion = createScrubTimeline(timeline, steps, {
+                enter: "70%",
+                leave: "55%",
+                // La barre de progression avance d'une icône à la suivante.
+                extend: (scrub) => {
+                    for (const [index, fraction] of fractions.entries()) {
+                        scrub.add(
                             progress,
-                            { scaleY: fractions[index] ?? 1, duration: segment * 0.45 },
-                            at,
+                            {
+                                duration: segment * 0.45 * 1000,
+                                scaleY: [fractions[index - 1] ?? 0, fraction],
+                            },
+                            index * segment * 1000,
                         );
+                    }
+                },
+            });
 
-                        if (icon) {
-                            scrollTimeline.to(
-                                icon,
-                                { autoAlpha: 1, scale: 1, duration: segment * 0.28 },
-                                at + segment * 0.34,
-                            );
-                        }
-
-                        if (content) {
-                            scrollTimeline.to(
-                                content,
-                                {
-                                    autoAlpha: 1,
-                                    filter: "blur(0px)",
-                                    y: 0,
-                                    duration: segment * 0.5,
-                                },
-                                at + segment * 0.42,
-                            );
-                        }
-                    });
-                }, timeline);
-
-                activeServiceTimelineControllers.set(timeline, () =>
-                    context.revert(),
-                );
-            },
-        );
-
-        ScrollTrigger.refresh();
+            activeServiceTimelineControllers.set(timeline, () => {
+                motion.revert();
+                progress.style.removeProperty("transform");
+                progress.style.removeProperty("transform-origin");
+            });
+        }
     };
 
     initServiceTimelines();

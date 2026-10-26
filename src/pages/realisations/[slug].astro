@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
+import { Image, Picture } from "astro:assets";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import FadeRevealOnScroll from "@/components/animations/FadeRevealOnScroll.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
@@ -163,21 +164,31 @@ const breadcrumbJsonLd = {
             </header>
         </FadeReveal>
 
-        <section class="realisation-body-shell mx-auto mt-14 grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,46rem)_minmax(13rem,17rem)] lg:gap-12">
+        <section
+            class="realisation-body-shell mx-auto mt-14 grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,46rem)_minmax(13rem,17rem)] lg:gap-12"
+            data-section-reveal="false"
+        >
             <div class="hidden lg:block" aria-hidden="true"></div>
 
             <article class="realisation-story min-w-0">
                 {project.media.type === "image" && (
-                    <FadeReveal delay={0.24}>
-                        <section id="apercu-du-projet" class="scroll-mt-28">
+                    <FadeReveal delay={0.24} fade={false}>
+                        <section
+                            id="apercu-du-projet"
+                            class="scroll-mt-28"
+                            data-section-reveal="false"
+                        >
                             <h2 class="sr-only">Aperçu du projet</h2>
                             <figure class="relative overflow-hidden rounded-3xl shadow-[0_24px_70px_-54px_rgba(34,42,55,0.5)]">
-                                <img
+                                <Picture
                                     src={project.media.poster}
                                     alt={`Aperçu du projet ${project.title}`}
+                                    formats={["avif", "webp"]}
                                     class="aspect-video w-full object-cover"
+                                    widths={[640, 1024, 1600]}
+                                    sizes="(min-width: 1024px) 46rem, 100vw"
+                                    loading="eager"
                                     fetchpriority="high"
-                                    decoding="async"
                                 />
                             </figure>
                         </section>
@@ -185,8 +196,12 @@ const breadcrumbJsonLd = {
                 )}
 
                 {project.media.type === "video" && (
-                    <FadeReveal delay={0.24}>
-                        <section id="apercu-du-projet" class="scroll-mt-28">
+                    <FadeReveal delay={0.24} fade={false}>
+                        <section
+                            id="apercu-du-projet"
+                            class="scroll-mt-28"
+                            data-section-reveal="false"
+                        >
                             <h2 class="sr-only">Aperçu du projet</h2>
                             <figure
                                 class="realisation-video-player relative overflow-hidden rounded-3xl shadow-[0_24px_70px_-54px_rgba(34,42,55,0.5)]"
@@ -197,7 +212,7 @@ const breadcrumbJsonLd = {
                                     muted
                                     playsinline
                                     preload="metadata"
-                                    poster={project.media.poster}
+                                    poster={project.media.poster.src}
                                     aria-label={`Vidéo du projet ${project.title}`}
                                     class="aspect-video w-full object-cover"
                                     data-realisation-video
@@ -241,12 +256,13 @@ const breadcrumbJsonLd = {
                             {galleryItems.map((item, index) => (
                                 <FadeRevealOnScroll>
                                     <figure class="overflow-hidden rounded-3xl shadow-[0_20px_60px_-54px_rgba(34,42,55,0.42)]">
-                                        <img
+                                        <Image
                                             src={item.src}
                                             alt={item.alt}
                                             class="w-full object-cover"
+                                            widths={[640, 1024, 1600]}
+                                            sizes="(min-width: 1024px) 46rem, 100vw"
                                             loading={index === 0 ? "eager" : "lazy"}
-                                            decoding="async"
                                         />
                                     </figure>
                                 </FadeRevealOnScroll>

@@ -1,3 +1,5 @@
+import type { ImageMetadata } from "astro";
+
 import leFellicHomePoster from "../assets/projects/lefellic-home.webp";
 import motivaiLandingHero from "../assets/projects/motivai-landing-hero.webp";
 import motivaiLandingPreset from "../assets/projects/motivai-landing-preset.webp";
@@ -22,18 +24,18 @@ export type Project = {
   };
   gallery?: {
     alt: string;
-    src: string;
+    src: ImageMetadata;
   }[];
   href: string;
   id: string;
   media:
     | {
-        poster: string;
+        poster: ImageMetadata;
         src: string;
         type: "video";
       }
     | {
-        poster: string;
+        poster: ImageMetadata;
         type: "image";
       }
     | {
@@ -88,15 +90,15 @@ export const projects: Project[] = [
     ],
     media: {
       type: "image",
-      poster: regletHomePoster.src,
+      poster: regletHomePoster,
     },
     gallery: [
       {
-        src: regletRapport.src,
+        src: regletRapport,
         alt: "Journal de chantier et rapport technique rédigé par l'IA dans Réglet",
       },
       {
-        src: regletEquipe.src,
+        src: regletEquipe,
         alt: "Collaboration d'équipe et rôles sur un chantier dans Réglet",
       },
     ],
@@ -139,7 +141,7 @@ export const projects: Project[] = [
     ],
     media: {
       type: "video",
-      poster: persistanceHomePoster.src,
+      poster: persistanceHomePoster,
       src: "/persistance/persistance-home.mp4",
     },
     caseStudy: {
@@ -181,7 +183,7 @@ export const projects: Project[] = [
     ],
     media: {
       type: "video",
-      poster: leFellicHomePoster.src,
+      poster: leFellicHomePoster,
       src: "/lefellic/lefellic-home.mp4",
     },
     caseStudy: {
@@ -223,16 +225,16 @@ export const projects: Project[] = [
     ],
     media: {
       type: "video",
-      poster: motivaiLandingPoster.src,
+      poster: motivaiLandingPoster,
       src: "/motivai/motivai-landing.mp4",
     },
     gallery: [
       {
-        src: motivaiLandingHero.src,
+        src: motivaiLandingHero,
         alt: "Interface de génération de lettre de motivation dans Motivai",
       },
       {
-        src: motivaiLandingPreset.src,
+        src: motivaiLandingPreset,
         alt: "Sélection du mode de génération dans Motivai",
       },
     ],

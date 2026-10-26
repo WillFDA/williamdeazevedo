@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import Carousel from "./Carousel.astro";
 import ProjectIntro from "./ProjectIntro.astro";
 import { projects } from "@/data/projects";
@@ -27,7 +28,7 @@ const {
     <div
         class="mx-auto mb-12 flex max-w-5xl flex-col items-start gap-4 px-4 text-left"
     >
-        <h2 id={`${id}-title`} class="section-heading project-showcase-heading">
+        <h2 id={`${id}-title`} class="section-heading section-heading--left">
             {title}
         </h2>
         <p class="section-subheading mx-0 max-w-3xl text-left text-gray-700">
@@ -44,12 +45,13 @@ const {
                         aria-hidden="true"
                     >
                         {project.media.type !== "placeholder" && (
-                            <img
+                            <Image
                                 src={project.media.poster}
                                 alt=""
                                 class="block h-full w-full object-cover"
+                                widths={[480, 800, 1200]}
+                                sizes="(min-width: 1024px) 40rem, 90vw"
                                 loading="lazy"
-                                decoding="async"
                             />
                         )}
                     </div>
@@ -154,12 +156,6 @@ const {
 </script>
 
 <style>
-    .project-showcase-heading {
-        font-size: clamp(2.35rem, 3.9vw, 3.45rem);
-        max-width: 54rem;
-        text-align: left;
-    }
-
     .project-copy__panel {
         filter: blur(6px);
         grid-area: 1 / 1;

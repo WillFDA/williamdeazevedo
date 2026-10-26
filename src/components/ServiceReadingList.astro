@@ -1,5 +1,7 @@
 ---
-import { getVisibleArticles } from "@/lib/articles";
+import ArticleImage from "@/components/articles/ArticleImage.astro";
+import ArticleTag from "@/components/articles/ArticleTag.astro";
+import { formatArticleDate, getVisibleArticles } from "@/lib/articles";
 import { serviceReadings } from "@/data/serviceArticles";
 
 interface Props {
@@ -34,7 +36,7 @@ const headingId = `${serviceSlug}-reading`;
 {
     picked.length >= MIN_ITEMS && (
         <section
-            class="flex flex-col gap-8"
+            class="flex flex-col gap-8 sm:gap-10"
             aria-labelledby={headingId}
         >
             <div class="flex flex-col gap-3 text-center">
@@ -48,29 +50,46 @@ const headingId = `${serviceSlug}-reading`;
             </div>
             <ul
                 class:list={[
-                    "grid gap-6",
-                    picked.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3",
+                    "grid gap-4 lg:gap-8",
+                    picked.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3",
                 ]}
             >
                 {picked.map((article) => (
                     <li>
                         <a
-                            class="flex h-full flex-col rounded-xl bg-snow-500 p-4 text-gray-900 no-underline transition-colors hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                            class="group flex h-full flex-col rounded-2xl bg-surface-muted p-5 text-gray-900 no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500 sm:p-6 lg:rounded-none lg:bg-transparent lg:p-0"
                             href={`/articles/${article.id}/`}
                         >
                             {article.data.image && (
-                                <img
-                                    class="mb-4 aspect-video w-full rounded-lg object-cover"
-                                    src={article.data.image.src}
-                                    alt=""
-                                    loading="lazy"
-                                    decoding="async"
-                                />
+                                <span class="mb-5 hidden aspect-video w-full overflow-hidden rounded-lg bg-gray-200 lg:block">
+                                    <ArticleImage
+                                        class="size-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
+                                        src={article.data.image.src}
+                                        alt=""
+                                        sizes={
+                                            picked.length === 2
+                                                ? "(min-width: 1024px) 30rem, 100vw"
+                                                : "(min-width: 1024px) 20rem, 100vw"
+                                        }
+                                        widths={[480, 800]}
+                                    />
+                                </span>
                             )}
-                            <h3 class="text-lg font-normal leading-snug text-gray-900">
+                            <span class="flex flex-wrap items-center gap-3">
+                                {article.data.tags[0] && (
+                                    <ArticleTag tag={article.data.tags[0]} />
+                                )}
+                                <time
+                                    class="text-sm font-normal text-gray-600"
+                                    datetime={article.data.pubDate.toISOString()}
+                                >
+                                    {formatArticleDate(article.data.pubDate)}
+                                </time>
+                            </span>
+                            <h3 class="mt-4 text-xl font-normal leading-snug text-gray-900 text-pretty">
                                 {article.data.title}
                             </h3>
-                            <p class="mt-2 line-clamp-3 text-sm font-normal leading-6 text-gray-600">
+                            <p class="mt-2 line-clamp-2 text-sm font-normal leading-6 text-gray-600">
                                 {article.data.description}
                             </p>
                         </a>
