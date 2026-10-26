@@ -3,12 +3,28 @@
 // GTM n'est chargé qu'après un accord (src/scripts/consent.ts). Deux
 // finalités séparées : mesure d'audience et publicité.
 
-// Refuser et accepter partagent la même taille et la même forme (exigence
-// CNIL) ; seule la couleur change (principal / secondaire gris).
+// Trois boutons de même taille et de même forme : « Tout refuser » et
+// « Tout accepter » (même prééminence, exigence CNIL ; seule la couleur
+// change) et « Personnaliser » (contour seul), qui ouvre le choix par
+// finalité et cède sa place à « Enregistrer mes choix », même style.
 // Sur mobile et en paysage (variante `wide` de global.css), bandeau compact
-// (boutons côte à côte, plus bas) pour masquer le moins possible le hero.
+// (refuser et accepter côte à côte, plus bas) pour masquer le moins
+// possible le hero.
 const choiceClass =
     "hero-button flex min-h-10 w-full cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-sm font-normal wide:min-h-14 wide:px-8 wide:py-3 wide:text-base";
+
+const purposes = [
+    {
+        name: "analytics",
+        label: "Mesure d'audience",
+        description: "Google Analytics : pages vues et provenance.",
+    },
+    {
+        name: "ads",
+        label: "Publicité",
+        description: "Google Ads : contacts issus des annonces, sans pub personnalisée.",
+    },
+];
 ---
 
 <div
@@ -26,44 +42,54 @@ const choiceClass =
     <h2 id="cookie-banner-title" class="sr-only text-sm font-medium wide:not-sr-only wide:text-base">Cookies</h2>
     <p id="cookie-banner-text" class="leading-snug text-gray-700 wide:mt-1 wide:leading-relaxed">
         <span aria-hidden="true" class="font-medium text-gray-900 wide:hidden">Cookies&nbsp;:{" "}</span>
-        <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, Google Analytics mesure l'audience et
-        Google Ads les contacts issus des annonces. Rien n'est chargé sans
-        votre accord, modifiable à tout moment.{" "}
+        <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, des
+        cookies Google mesurent l'audience et les contacts issus de nos
+        annonces. Modifiable à tout moment.{" "}
         <a
             class="underline underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             href="/mentions-legales/#cookies">En savoir plus</a
         >
     </p>
     <fieldset
-        class="mt-3 flex flex-col gap-2"
+        id="cookie-purposes"
+        class="mt-2 flex flex-col gap-1.5 wide:mt-3 wide:gap-2"
         data-cookie-purposes
         hidden
     >
-        <legend class="sr-only">Choix par finalité</legend>
-        <label class="flex cursor-pointer items-start gap-2">
-            <input
-                class="mt-0.5 size-4 accent-coffee-300"
-                type="checkbox"
-                name="analytics"
-                data-cookie-purpose="analytics"
-            />
-            <span>
-                <span class="font-medium">Mesure d'audience</span>
-                <span class="block text-gray-600">Google Analytics : pages vues, provenance des visites.</span>
-            </span>
-        </label>
-        <label class="flex cursor-pointer items-start gap-2">
-            <input
-                class="mt-0.5 size-4 accent-coffee-300"
-                type="checkbox"
-                name="ads"
-                data-cookie-purpose="ads"
-            />
-            <span>
-                <span class="font-medium">Publicité</span>
-                <span class="block text-gray-600">Google Ads : mesure des contacts issus des annonces (rendez-vous, clics email ou téléphone), sans publicité personnalisée.</span>
-            </span>
-        </label>
+        <legend class="sr-only">Choisir les cookies</legend>
+        {
+            purposes.map(({ name, label, description }) => (
+                <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-transparent bg-surface-muted px-3 py-2 transition-colors hover:border-gray-300 has-checked:border-coffee-300">
+                    <span class="min-w-0 flex-1 leading-snug">
+                        <span class="block font-medium text-gray-900">{label}</span>
+                        <span class="block text-gray-600">{description}</span>
+                    </span>
+                    {/* Vraie case native, redessinée : la coche suit :checked. */}
+                    <span class="grid shrink-0 place-items-center">
+                        <input
+                            class="peer col-start-1 row-start-1 size-5 cursor-pointer appearance-none rounded-md border border-gray-400 bg-snow-50 transition-colors checked:border-coffee-300 checked:bg-coffee-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                            type="checkbox"
+                            name={name}
+                            data-cookie-purpose={name}
+                        />
+                        <svg
+                            class="pointer-events-none col-start-1 row-start-1 size-3.5 text-snow-50 opacity-0 peer-checked:opacity-100"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M3.5 8.5l3 3 6-7"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </span>
+                </label>
+            ))
+        }
     </fieldset>
     <div class="mt-2 grid grid-cols-2 gap-1.5 wide:mt-4 wide:grid-cols-1 wide:gap-3">
         <button
@@ -81,14 +107,16 @@ const choiceClass =
             Tout accepter
         </button>
         <button
-            class="col-span-2 min-h-6 cursor-pointer justify-self-center px-2 text-[13px] underline wide:col-span-1 wide:text-sm underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            class:list={[choiceClass, "hero-button--ghost col-span-2 wide:col-span-1"]}
             type="button"
+            aria-expanded="false"
+            aria-controls="cookie-purposes"
             data-cookie-customize
         >
-            Choisir par finalité
+            Personnaliser
         </button>
         <button
-            class:list={[choiceClass, "hero-button--secondary col-span-2 wide:col-span-1"]}
+            class:list={[choiceClass, "hero-button--ghost col-span-2 wide:col-span-1"]}
             type="button"
             data-cookie-choice="custom"
             hidden
@@ -131,9 +159,12 @@ const choiceClass =
         const save = element.querySelector<HTMLElement>('[data-cookie-choice="custom"]');
         if (fieldset) fieldset.hidden = !customizing;
         if (save) save.hidden = !customizing;
-        // Le bouton disparaît une fois le détail ouvert (le focus passe à la
-        // première case) : pas d'aria-expanded sur un élément masqué.
-        if (toggle) toggle.hidden = customizing;
+        // « Personnaliser » cède sa place à « Enregistrer mes choix » une fois
+        // le détail ouvert (le focus passe à la première case).
+        if (toggle) {
+            toggle.hidden = customizing;
+            toggle.setAttribute("aria-expanded", String(customizing));
+        }
         if (!customizing) return;
         const current = readConsent();
         for (const input of purposeInputs(element)) {
