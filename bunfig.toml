@@ -1,4 +1,0 @@
-# Tests unitaires bun uniquement dans tests/ : les specs Playwright de e2e/
-# (*.spec.ts) ne doivent pas être ramassées par `bun test`.
-[test]
-root = "tests"
