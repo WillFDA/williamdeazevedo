@@ -1,6 +1,6 @@
 # Confidentialité : déploiement sans bandeau
 
-La PR n'ajoute aucun bandeau, panneau de préférences, cookie de consentement ni bouton « Gérer mes cookies ». Elle enrichit les mentions, garde les événements en mémoire plutôt qu'en sessionStorage, nettoie les URL des événements manuels et charge Cal.com uniquement au clic.
+La PR n'ajoute aucun bandeau, panneau de préférences, cookie de consentement ni bouton « Gérer mes cookies ». Elle enrichit les mentions, garde les événements en mémoire plutôt qu'en sessionStorage, nettoie les URL des événements manuels et ne charge Cal.com qu'au moment où le visiteur appuie sur un bouton de réservation (souris, doigt, stylet, Entrée ou Espace), jamais au chargement de la page, au survol ou au focus.
 
 ## Avant fusion vers 2026
 
