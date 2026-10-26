@@ -28,6 +28,8 @@ export type Project = {
   }[];
   href: string;
   id: string;
+  /** Type de projet affiché dans le footer, ex. « Site vitrine administrable ». */
+  kind: string;
   media:
     | {
         poster: ImageMetadata;
@@ -62,6 +64,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: "reglet",
+    kind: "Application de chantier BTP",
     title: "Réglet",
     href: "https://reglet.fr/",
     brand: {
@@ -112,6 +115,7 @@ export const projects: Project[] = [
   },
   {
     id: "persistance",
+    kind: "Site vitrine administrable",
     title: "Persistance",
     href: "https://persistance-studio.fr/",
     brand: {
@@ -154,6 +158,7 @@ export const projects: Project[] = [
   },
   {
     id: "le-fellic",
+    kind: "Site vitrine one-page",
     title: "SARL LE FELLIC",
     href: "https://lefellic.fr/",
     brand: {
@@ -196,6 +201,7 @@ export const projects: Project[] = [
   },
   {
     id: "motivai",
+    kind: "SaaS IA, projet personnel",
     title: "Motivai",
     href: "https://www.motivai.fr/",
     brand: {
