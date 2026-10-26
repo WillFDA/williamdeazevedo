@@ -265,25 +265,6 @@ body {
     --hero-button-bg: var(--color-gray-100);
   }
 
-  /* Ghost: transparent with a light border; the hover fills it in gray. */
-  .hero-button--ghost {
-    --hero-button-bg: transparent;
-    --hero-button-border: var(--color-gray-300);
-    --hero-button-color: var(--color-gray-900);
-  }
-
-  .hero-button--ghost:focus-visible {
-    --hero-button-bg: var(--color-gray-100);
-    --hero-button-border: var(--color-gray-400);
-  }
-
-  @media (hover: hover) {
-    .hero-button--ghost:hover {
-      --hero-button-bg: var(--color-gray-100);
-      --hero-button-border: var(--color-gray-400);
-    }
-  }
-
   /* Tag pill shared by article tags, project tags and the tag filters.
      Utilities on the element override it (e.g. the active filter colors). */
   .pill {

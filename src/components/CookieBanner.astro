@@ -3,15 +3,16 @@
 // GTM n'est chargé qu'après un accord (src/scripts/consent.ts). Deux
 // finalités séparées : mesure d'audience et publicité.
 
-// Trois boutons de même taille et de même forme : « Tout refuser » et
-// « Tout accepter » (même prééminence, exigence CNIL ; seule la couleur
-// change) et « Personnaliser » (contour seul), qui ouvre le choix par
+// Trois boutons empilés, pleine largeur, de même taille et de même forme à
+// toutes les tailles : « Tout refuser » et « Tout accepter » (même
+// prééminence, exigence CNIL ; seule la couleur change) puis
+// « Personnaliser » (même gris que « Tout refuser »), qui ouvre le choix par
 // finalité et cède sa place à « Enregistrer mes choix », même style.
+// Chaque finalité est un interrupteur (case native, role="switch").
 // Sur mobile et en paysage (variante `wide` de global.css), bandeau compact
-// (refuser et accepter côte à côte, plus bas) pour masquer le moins
-// possible le hero.
+// (boutons plus bas) pour masquer le moins possible le hero.
 const choiceClass =
-    "hero-button flex min-h-10 w-full cursor-pointer items-center justify-center rounded-xl px-3 py-2 text-sm font-normal wide:min-h-14 wide:px-8 wide:py-3 wide:text-base";
+    "hero-button flex min-h-10 w-full cursor-pointer whitespace-nowrap items-center justify-center rounded-xl px-3 py-2 text-sm font-normal wide:min-h-14 wide:px-8 wide:py-3 wide:text-base";
 
 const purposes = [
     {
@@ -52,46 +53,37 @@ const purposes = [
     </p>
     <fieldset
         id="cookie-purposes"
-        class="mt-2 flex flex-col gap-1.5 wide:mt-3 wide:gap-2"
+        class="mt-2 wide:mt-3"
         data-cookie-purposes
         hidden
     >
         <legend class="sr-only">Choisir les cookies</legend>
         {
             purposes.map(({ name, label, description }) => (
-                <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-transparent bg-surface-muted px-3 py-2 transition-colors hover:border-gray-300 has-checked:border-coffee-300">
+                <label class="group flex cursor-pointer items-center gap-3 border-t border-gray-200 py-2 wide:py-2.5">
                     <span class="min-w-0 flex-1 leading-snug">
                         <span class="block font-medium text-gray-900">{label}</span>
-                        <span class="block text-gray-600">{description}</span>
+                        <span class="block text-xs text-gray-600 wide:text-[13px]">{description}</span>
                     </span>
-                    {/* Vraie case native, redessinée : la coche suit :checked. */}
-                    <span class="grid shrink-0 place-items-center">
+                    {/* Vraie case native en interrupteur : la pastille suit :checked. */}
+                    <span class="grid shrink-0 items-center">
                         <input
-                            class="peer col-start-1 row-start-1 size-5 cursor-pointer appearance-none rounded-md border border-gray-400 bg-snow-50 transition-colors checked:border-coffee-300 checked:bg-coffee-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                            class="peer col-start-1 row-start-1 h-5 w-9 cursor-pointer appearance-none rounded-full bg-gray-300 transition-colors group-hover:not-checked:bg-gray-400 checked:bg-coffee-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 motion-reduce:transition-none"
                             type="checkbox"
+                            role="switch"
                             name={name}
                             data-cookie-purpose={name}
                         />
-                        <svg
-                            class="pointer-events-none col-start-1 row-start-1 size-3.5 text-snow-50 opacity-0 peer-checked:opacity-100"
-                            viewBox="0 0 16 16"
-                            fill="none"
+                        <span
+                            class="pointer-events-none col-start-1 row-start-1 ml-0.5 size-4 rounded-full bg-snow-50 shadow-sm transition-transform peer-checked:translate-x-4 motion-reduce:transition-none"
                             aria-hidden="true"
-                        >
-                            <path
-                                d="M3.5 8.5l3 3 6-7"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
+                        />
                     </span>
                 </label>
             ))
         }
     </fieldset>
-    <div class="mt-2 grid grid-cols-2 gap-1.5 wide:mt-4 wide:grid-cols-1 wide:gap-3">
+    <div class="mt-2 grid grid-cols-1 gap-1.5 wide:mt-4 wide:gap-3">
         <button
             class:list={[choiceClass, "hero-button--secondary"]}
             type="button"
@@ -107,7 +99,7 @@ const purposes = [
             Tout accepter
         </button>
         <button
-            class:list={[choiceClass, "hero-button--ghost col-span-2 wide:col-span-1"]}
+            class:list={[choiceClass, "hero-button--secondary"]}
             type="button"
             aria-expanded="false"
             aria-controls="cookie-purposes"
@@ -116,7 +108,7 @@ const purposes = [
             Personnaliser
         </button>
         <button
-            class:list={[choiceClass, "hero-button--ghost col-span-2 wide:col-span-1"]}
+            class:list={[choiceClass, "hero-button--secondary"]}
             type="button"
             data-cookie-choice="custom"
             hidden
@@ -160,7 +152,7 @@ const purposes = [
         if (fieldset) fieldset.hidden = !customizing;
         if (save) save.hidden = !customizing;
         // « Personnaliser » cède sa place à « Enregistrer mes choix » une fois
-        // le détail ouvert (le focus passe à la première case).
+        // le détail ouvert (le focus passe au premier interrupteur).
         if (toggle) {
             toggle.hidden = customizing;
             toggle.setAttribute("aria-expanded", String(customizing));
