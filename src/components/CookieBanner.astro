@@ -1,17 +1,36 @@
 ---
-// Bandeau de consentement (CNIL) branché sur Consent Mode v2.
-// Le choix est restauré tôt dans tracking/GoogleTagManager.astro : garder la
-// clé "wui-consent" et la durée de 6 mois alignées entre les deux fichiers.
+// Bandeau de consentement (CNIL) branché sur Consent Mode v2, mode basique :
+// GTM n'est chargé qu'après un accord (src/scripts/consent.ts). Deux
+// finalités séparées : mesure d'audience et publicité.
 
-// Refuser et accepter partagent la même taille et la même forme (exigence
-// CNIL) ; seule la couleur change (principal / secondaire gris).
+// Trois boutons empilés, pleine largeur, de même taille et de même forme à
+// toutes les tailles : « Tout refuser » et « Tout accepter » (même
+// prééminence, exigence CNIL ; seule la couleur change) puis
+// « Personnaliser » (même gris que « Tout refuser »), qui ouvre le choix par
+// finalité et cède sa place à « Enregistrer mes choix », même style.
+// Chaque finalité est un interrupteur (case native, role="switch").
+// Sur mobile et en paysage (variante `wide` de global.css), bandeau compact
+// (boutons plus bas) pour masquer le moins possible le hero.
 const choiceClass =
-    "hero-button flex min-h-14 w-full cursor-pointer items-center justify-center rounded-xl px-8 py-3 text-base font-normal";
+    "hero-button flex min-h-10 w-full cursor-pointer whitespace-nowrap items-center justify-center rounded-xl px-3 py-2 text-sm font-normal wide:min-h-14 wide:px-8 wide:py-3 wide:text-base";
+
+const purposes = [
+    {
+        name: "analytics",
+        label: "Mesure d'audience",
+        description: "Google Analytics : pages vues et provenance.",
+    },
+    {
+        name: "ads",
+        label: "Publicité",
+        description: "Google Ads : contacts issus des annonces, sans pub personnalisée.",
+    },
+];
 ---
 
 <div
     id="cookie-banner"
-    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-3 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] sm:right-auto sm:bottom-4 sm:left-4 sm:max-w-sm"
+    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-[13px] wide:p-5 wide:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] wide:right-auto wide:bottom-4 wide:left-4 wide:max-w-sm"
     role="dialog"
     aria-modal="false"
     aria-labelledby="cookie-banner-title"
@@ -20,16 +39,51 @@ const choiceClass =
     hidden
     transition:persist
 >
-    <h2 id="cookie-banner-title" class="text-base font-medium">Cookies</h2>
-    <p id="cookie-banner-text" class="mt-1 leading-relaxed text-gray-700">
-        Avec votre accord, Google dépose des cookies de mesure d'audience et
-        de publicité. Vous pouvez changer d'avis à tout moment.
+    {/* Titre masqué visuellement sur mobile (bandeau plus bas), toujours lu. */}
+    <h2 id="cookie-banner-title" class="sr-only text-sm font-semibold wide:not-sr-only wide:text-base wide:leading-6">Cookies</h2>
+    <p id="cookie-banner-text" class="leading-[1.45] text-gray-700 wide:mt-1 wide:leading-normal">
+        <span aria-hidden="true" class="font-semibold text-gray-900 wide:hidden">Cookies&nbsp;:{" "}</span>
+        <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, des
+        cookies Google mesurent l'audience et les contacts issus de nos
+        annonces. Modifiable à tout moment.{" "}
         <a
             class="underline underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             href="/mentions-legales/#cookies">En savoir plus</a
         >
     </p>
-    <div class="mt-4 flex flex-col gap-3">
+    <fieldset
+        id="cookie-purposes"
+        class="mt-1 divide-y divide-gray-200/60 wide:mt-2"
+        data-cookie-purposes
+        hidden
+    >
+        <legend class="sr-only">Choisir les cookies</legend>
+        {
+            purposes.map(({ name, label, description }) => (
+                <label class="group flex cursor-pointer items-center gap-6 py-3 last:pb-0">
+                    <span class="grid min-w-0 flex-1 gap-0.5">
+                        <span class="text-sm leading-5 font-medium text-gray-900">{label}</span>
+                        <span class="text-xs leading-4 text-pretty text-gray-600 wide:text-[13px] wide:leading-[1.125rem]">{description}</span>
+                    </span>
+                    {/* Vraie case native en interrupteur : la pastille suit :checked. */}
+                    <span class="grid shrink-0 items-center">
+                        <input
+                            class="peer col-start-1 row-start-1 h-5 w-9 cursor-pointer appearance-none rounded-full bg-gray-300 transition-colors group-hover:not-checked:bg-gray-400 checked:bg-coffee-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 motion-reduce:transition-none"
+                            type="checkbox"
+                            role="switch"
+                            name={name}
+                            data-cookie-purpose={name}
+                        />
+                        <span
+                            class="pointer-events-none col-start-1 row-start-1 ml-0.5 size-4 rounded-full bg-snow-50 shadow-sm transition-transform peer-checked:translate-x-4 motion-reduce:transition-none"
+                            aria-hidden="true"
+                        />
+                    </span>
+                </label>
+            ))
+        }
+    </fieldset>
+    <div class="mt-4 grid grid-cols-1 gap-2 wide:mt-5 wide:gap-3">
         <button
             class:list={[choiceClass, "hero-button--secondary"]}
             type="button"
@@ -42,91 +96,128 @@ const choiceClass =
             type="button"
             data-cookie-choice="granted"
         >
-            Accepter
+            Tout accepter
+        </button>
+        <button
+            class:list={[choiceClass, "hero-button--secondary"]}
+            type="button"
+            aria-expanded="false"
+            aria-controls="cookie-purposes"
+            data-cookie-customize
+        >
+            Personnaliser
+        </button>
+        <button
+            class:list={[choiceClass, "hero-button--secondary"]}
+            type="button"
+            data-cookie-choice="custom"
+            hidden
+        >
+            Enregistrer mes choix
         </button>
     </div>
 </div>
 
+<style is:global>
+    /* Tant que le bandeau est affiché, le défilement au clavier garde
+       l'élément focalisé au-dessus de lui (WCAG 2.4.11). */
+    html:has(#cookie-banner:not([hidden])) {
+        scroll-padding-bottom: 12rem;
+    }
+</style>
+
 <script>
-    type ConsentValue = "granted" | "denied";
+    import {
+        readConsent,
+        saveConsent,
+        type ConsentChoice,
+    } from "../scripts/consent";
 
-    const STORAGE_KEY = "wui-consent";
-    const consentWindow = window as Window & {
-        gtag?: (...args: unknown[]) => void;
-        dataLayer?: unknown[];
+    const bannerWindow = window as Window & {
         __wuiCookieBannerReady?: boolean;
-    };
-
-    const readChoice = (): ConsentValue | null => {
-        try {
-            const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
-            if (!stored) return null;
-            const expiry = new Date(stored.at);
-            expiry.setMonth(expiry.getMonth() + 6);
-            return Date.now() < expiry.getTime() ? stored.value : null;
-        } catch {
-            return null;
-        }
-    };
-
-    // Au refus, retire les cookies Google déjà posés (domaine courant et parent).
-    const clearGoogleCookies = () => {
-        const domain = window.location.hostname.replace(/^www\./, "");
-        for (const entry of document.cookie.split(";")) {
-            const name = entry.split("=")[0].trim();
-            if (!/^(?:_ga|_gid|_gat|_gcl)/.test(name)) continue;
-            for (const scope of ["", `;domain=${domain}`, `;domain=.${domain}`]) {
-                // oxlint-disable-next-line unicorn/no-document-cookie -- Cookie Store API absente de Firefox < 140 et Safari < 18.4 : document.cookie reste le seul moyen d'effacer _ga partout.
-                document.cookie = `${name}=;max-age=0;path=/${scope}`;
-            }
-        }
     };
 
     const banner = () => document.getElementById("cookie-banner");
     let returnFocus: HTMLElement | null = null;
 
-    const saveChoice = (value: ConsentValue) => {
-        try {
-            localStorage.setItem(
-                STORAGE_KEY,
-                JSON.stringify({ value, at: new Date().toISOString() }),
-            );
-        } catch {
-            // Stockage indisponible (navigation privée) : le choix vaut pour cette page.
-        }
-        consentWindow.gtag?.("consent", "update", {
-            ad_storage: value,
-            ad_user_data: value,
-            ad_personalization: value,
-            analytics_storage: value,
-        });
-        consentWindow.dataLayer?.push({ event: "consent_update", consent: value });
-        if (value === "denied") clearGoogleCookies();
+    const purposeInputs = (element: HTMLElement) =>
+        element.querySelectorAll<HTMLInputElement>("[data-cookie-purpose]");
 
-        const element = banner();
-        if (element) element.hidden = true;
-        returnFocus?.focus();
+    // Affiche ou masque le détail par finalité, cases pré-remplies avec le
+    // choix en cours (rien de coché par défaut : pas de case pré-cochée).
+    const setCustomizing = (element: HTMLElement, customizing: boolean) => {
+        const fieldset = element.querySelector<HTMLElement>("[data-cookie-purposes]");
+        const toggle = element.querySelector<HTMLElement>("[data-cookie-customize]");
+        const save = element.querySelector<HTMLElement>('[data-cookie-choice="custom"]');
+        if (fieldset) fieldset.hidden = !customizing;
+        if (save) save.hidden = !customizing;
+        // « Personnaliser » cède sa place à « Enregistrer mes choix » une fois
+        // le détail ouvert (le focus passe au premier interrupteur).
+        if (toggle) {
+            toggle.hidden = customizing;
+            toggle.setAttribute("aria-expanded", String(customizing));
+        }
+        if (!customizing) return;
+        const current = readConsent();
+        for (const input of purposeInputs(element)) {
+            const purpose = input.dataset.cookiePurpose as keyof ConsentChoice;
+            input.checked = current?.[purpose] ?? false;
+        }
+    };
+
+    const choiceFrom = (element: HTMLElement, kind: string | undefined) => {
+        if (kind === "granted") return { analytics: true, ads: true };
+        if (kind === "custom") {
+            const choice: ConsentChoice = { analytics: false, ads: false };
+            for (const input of purposeInputs(element)) {
+                const purpose = input.dataset.cookiePurpose;
+                if (purpose === "analytics" || purpose === "ads")
+                    choice[purpose] = input.checked;
+            }
+            return choice;
+        }
+        return { analytics: false, ads: false };
+    };
+
+    const close = (element: HTMLElement) => {
+        element.hidden = true;
+        setCustomizing(element, false);
+        // Premier choix : le focus revient au début du contenu, pas sur <body>.
+        (returnFocus ?? document.getElementById("main-content"))?.focus({
+            preventScroll: true,
+        });
         returnFocus = null;
     };
 
-    if (!consentWindow.__wuiCookieBannerReady) {
-        consentWindow.__wuiCookieBannerReady = true;
+    if (!bannerWindow.__wuiCookieBannerReady) {
+        bannerWindow.__wuiCookieBannerReady = true;
 
         document.addEventListener("click", (event) => {
             const target = event.target;
             if (!(target instanceof Element)) return;
+            const element = banner();
+            if (!element) return;
 
             const choice = target.closest<HTMLElement>("[data-cookie-choice]");
             if (choice) {
-                saveChoice(choice.dataset.cookieChoice as ConsentValue);
+                saveConsent(choiceFrom(element, choice.dataset.cookieChoice));
+                close(element);
                 return;
             }
 
+            if (target.closest("[data-cookie-customize]")) {
+                setCustomizing(element, true);
+                element.querySelector<HTMLInputElement>("[data-cookie-purpose]")?.focus();
+                return;
+            }
+
+            // « Gérer les cookies » : rouvre le bandeau avec le détail ouvert,
+            // pour pouvoir retirer une seule finalité.
             const opener = target.closest<HTMLElement>("[data-cookie-settings]");
-            const element = banner();
-            if (!opener || !element) return;
+            if (!opener) return;
             returnFocus = opener;
             element.hidden = false;
+            setCustomizing(element, true);
             element.focus();
         });
 
@@ -134,7 +225,7 @@ const choiceClass =
         // le choix a expiré pendant la navigation.
         document.addEventListener("astro:page-load", () => {
             const element = banner();
-            if (element && !readChoice()) element.hidden = false;
+            if (element && !readConsent()) element.hidden = false;
         });
     }
 </script>
