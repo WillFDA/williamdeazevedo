@@ -446,7 +446,7 @@ const vitrine = formats[1];
                                 <small data-pc-format-sub>{vitrine.sub}</small>
                             </dt>
                             <dd>
-                                <span class="pc-line">
+                                <span class="pc-line" data-pc-format-line>
                                     <span data-pc-format-name>{vitrine.name}</span>
                                     <b data-pc-format-price>{fr(vitrine.base)} €</b>
                                 </span>
@@ -486,15 +486,27 @@ const vitrine = formats[1];
                                         </span>
                                     ))
                                 }
-                                <span data-pc-line-none>—</span>
+                                <span class="pc-line-none" data-pc-line-none>
+                                    —
+                                </span>
                             </dd>
                         </div>
                     </dl>
 
                     <div class="pc-total">
-                        <span>Total</span>
+                        <span>
+                            Total
+                            <span data-pc-delta aria-hidden="true"></span>
+                        </span>
                         <strong data-pc-total-wrap>
-                            <span data-pc-total>{fr(vitrine.base)}</span>
+                            <span>
+                                <span class="sr-only" data-pc-total-text>
+                                    {fr(vitrine.base)}
+                                </span>
+                                <span class="pc-odo" data-pc-odo aria-hidden="true">
+                                    {fr(vitrine.base)}
+                                </span>
+                            </span>
                             <small data-pc-unit>€ HT</small>
                         </strong>
                     </div>
@@ -552,6 +564,13 @@ const vitrine = formats[1];
 
     const fr = new Intl.NumberFormat("fr-FR");
     const MAX_PAGES = 30;
+    const DIGIT_STRIP = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
+    const EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)";
+    const fadeUp = [
+        { opacity: 0, transform: "translateY(4px)" },
+        { opacity: 1, transform: "none" },
+    ];
+    const shapeOf = (text: string) => text.replaceAll(/\d/g, "0");
 
     const noteFor = (quotedFormat: boolean, quoted: boolean, sum: number) => {
         if (quotedFormat) {
@@ -586,8 +605,12 @@ const vitrine = formats[1];
         const counter = $("[data-pc-counter]");
         const minus = $<HTMLButtonElement>("[data-pc-minus]");
         const plus = $<HTMLButtonElement>("[data-pc-plus]");
-        const total = $("[data-pc-total]");
         const totalWrap = $("[data-pc-total-wrap]");
+        const totalText = $("[data-pc-total-text]");
+        const odo = $("[data-pc-odo]");
+        const deltaHost = $("[data-pc-delta]");
+        const formatLine = $("[data-pc-format-line]");
+        const formatName = $("[data-pc-format-name]");
         const note = $("[data-pc-note]");
 
         const vp = $("[data-pc-vp]");
@@ -640,17 +663,85 @@ const vitrine = formats[1];
             return extraMode ? pages - includedPages : 0;
         };
 
-        const setTotal = (text: string) => {
-            if (total.textContent === text) return;
-            total.textContent = text;
-            if (reduce()) return;
-            totalWrap.animate(
-                [
-                    { opacity: 0, transform: "translateY(4px)" },
-                    { opacity: 1, transform: "none" },
-                ],
-                { duration: 400, easing: "ease" },
+        const buildOdometer = (text: string) => {
+            odo.replaceChildren(
+                ...[...text].map((char, i) => {
+                    const cell = document.createElement("span");
+                    if (!/\d/.test(char)) {
+                        cell.textContent = char;
+                        return cell;
+                    }
+                    cell.className = "pc-odo-digit";
+                    cell.style.setProperty("--i", String(i));
+                    const ghost = document.createElement("span");
+                    ghost.className = "pc-odo-ghost";
+                    ghost.textContent = "0";
+                    const strip = document.createElement("span");
+                    strip.className = "pc-odo-strip";
+                    strip.textContent = DIGIT_STRIP;
+                    cell.append(ghost, strip);
+                    return cell;
+                }),
             );
+        };
+
+        const rollTo = (text: string) => {
+            const digits = text.replaceAll(/\D/g, "");
+            odo.querySelectorAll<HTMLElement>(".pc-odo-strip").forEach((strip, k) => {
+                strip.style.setProperty("--d", digits[k]);
+            });
+        };
+
+        const showDelta = (diff: number) => {
+            const chip = document.createElement("span");
+            chip.className = "pc-delta";
+            chip.dataset.dir = diff > 0 ? "up" : "down";
+            chip.textContent = `${diff > 0 ? "+" : "−"}${fr.format(Math.abs(diff))} €`;
+            deltaHost.replaceChildren(chip);
+            chip.animate(
+                [
+                    { opacity: 0, transform: "translateY(8px) scale(0.92)" },
+                    { opacity: 1, transform: "none", offset: 0.15 },
+                    { opacity: 1, transform: "translateY(-2px)", offset: 0.75 },
+                    { opacity: 0, transform: "translateY(-10px)" },
+                ],
+                { duration: 1600, easing: EASE_OUT },
+            ).onfinish = () => chip.remove();
+        };
+
+        let shown: number | null | undefined;
+        const setTotal = (value: number | null) => {
+            if (value === shown) return;
+            const previous = shown;
+            const animate = previous !== undefined && !reduce();
+            const text = value === null ? "Sur devis" : fr.format(value);
+            shown = value;
+            totalText.textContent = text;
+            $("[data-pc-unit]").hidden = value === null;
+            if (value === null) {
+                odo.textContent = text;
+                if (animate) totalWrap.animate(fadeUp, { duration: 400, easing: "ease" });
+                return;
+            }
+            if (typeof previous !== "number" || shapeOf(fr.format(previous)) !== shapeOf(text)) {
+                buildOdometer(text);
+                // Commit the strips at 0 so the new digits roll up into place.
+                if (animate) odo.getBoundingClientRect();
+            }
+            if (animate && typeof previous === "number") showDelta(value - previous);
+            rollTo(text);
+        };
+
+        const setFormatLine = (d: DOMStringMap, base: number | null) => {
+            const name = d.name ?? "";
+            const changed = formatName.textContent !== name;
+            formatName.textContent = name;
+            $("[data-pc-format-sub]").textContent = d.sub ?? "";
+            $("[data-pc-format-price]").textContent =
+                base === null ? "Sur devis" : `${fr.format(base)} €`;
+            if (changed && shown !== undefined && !reduce()) {
+                formatLine.animate(fadeUp, { duration: 450, easing: EASE_OUT });
+            }
         };
 
         const update = () => {
@@ -667,10 +758,7 @@ const vitrine = formats[1];
                     ? "Pour une interface produit, tout se chiffre pendant le cadrage."
                     : "À ajouter maintenant ou plus tard, sans refaire le site. Chaque option s'ajoute au total.";
 
-            $("[data-pc-format-name]").textContent = d.name ?? "";
-            $("[data-pc-format-sub]").textContent = d.sub ?? "";
-            $("[data-pc-format-price]").textContent =
-                base === null ? "Sur devis" : `${fr.format(base)} €`;
+            setFormatLine(d, base);
             $("[data-pc-line-pages]").hidden = extra <= 0;
             $("[data-pc-pages-count]").textContent = `× ${extra}`;
             $("[data-pc-pages-price]").textContent = `${fr.format(extra * extraPage)} €`;
@@ -689,8 +777,7 @@ const vitrine = formats[1];
                 active.reduce((s, o) => s + (Number(o.dataset.price) || 0), 0);
             const isQuote = base === null || active.some((o) => !o.dataset.price);
             note.textContent = noteFor(base === null, isQuote, sum);
-            setTotal(isQuote ? "Sur devis" : fr.format(sum));
-            $("[data-pc-unit]").hidden = isQuote;
+            setTotal(isQuote ? null : sum);
         };
 
         root.addEventListener("change", (event) => {
@@ -711,6 +798,10 @@ const vitrine = formats[1];
             update();
         });
         update();
+        // Summary lines animate in only after the first rendered frame.
+        requestAnimationFrame(() =>
+            requestAnimationFrame(() => (root.dataset.animate = "")),
+        );
     };
 
     document.addEventListener("astro:page-load", init);
@@ -1430,6 +1521,7 @@ const vitrine = formats[1];
     }
 
     .pc-lines {
+        interpolate-size: allow-keywords;
         margin-top: 24px;
     }
 
@@ -1442,9 +1534,38 @@ const vitrine = formats[1];
         padding: 16px 0;
     }
 
+    .pc-lines > div,
+    .pc-line,
+    .pc-line-none {
+        min-height: 0;
+        overflow: clip;
+        transition:
+            height 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            padding-block 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 0.3s,
+            translate 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            display 0.45s allow-discrete;
+    }
+
     .pc-lines > div[hidden],
-    .pc-line[hidden] {
+    .pc-line[hidden],
+    .pc-line-none[hidden] {
         display: none;
+        height: 0;
+        opacity: 0;
+        padding-block: 0;
+        translate: 0 -4px;
+    }
+
+    @starting-style {
+        .pc[data-animate] .pc-lines > div,
+        .pc[data-animate] .pc-line,
+        .pc[data-animate] .pc-line-none {
+            height: 0;
+            opacity: 0;
+            padding-block: 0;
+            translate: 0 6px;
+        }
     }
 
     .pc-lines dt {
@@ -1496,6 +1617,21 @@ const vitrine = formats[1];
     .pc-total > span {
         color: var(--color-gray-700);
         font-size: 15px;
+        position: relative;
+    }
+
+    .pc-total :global(.pc-delta) {
+        bottom: 1px;
+        color: var(--color-blue-500);
+        font-size: 13px;
+        font-weight: var(--w5);
+        left: calc(100% + 8px);
+        position: absolute;
+        white-space: nowrap;
+    }
+
+    .pc-total :global(.pc-delta[data-dir="down"]) {
+        color: var(--color-gray-500);
     }
 
     .pc-total strong {
@@ -1503,6 +1639,7 @@ const vitrine = formats[1];
         display: flex;
         flex-wrap: wrap;
         font-size: 48px;
+        font-variant-numeric: tabular-nums;
         font-weight: var(--w5);
         gap: 0 6px;
         justify-content: flex-end;
@@ -1510,6 +1647,29 @@ const vitrine = formats[1];
         line-height: 52px;
         margin-left: auto;
         white-space: nowrap;
+    }
+
+    /* Each digit is a 0-9 strip behind a one-line window. The hidden ghost
+       digit gives the window its width and baseline; clip-path, unlike
+       overflow, leaves that baseline in place. */
+    .pc-odo :global(.pc-odo-digit) {
+        clip-path: inset(0 -0.1em);
+        display: inline-block;
+        position: relative;
+    }
+
+    .pc-odo :global(.pc-odo-ghost) {
+        visibility: hidden;
+    }
+
+    .pc-odo :global(.pc-odo-strip) {
+        left: 0;
+        position: absolute;
+        top: 0;
+        transform: translateY(calc(var(--d, 0) * -10%));
+        transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1)
+            calc(var(--i, 0) * 45ms);
+        white-space: pre;
     }
 
     .pc-total small {
@@ -1835,7 +1995,11 @@ const vitrine = formats[1];
         .pc-check,
         .pc-toggle-v,
         .pc-cta::before,
-        .pc-included::details-content {
+        .pc-included::details-content,
+        .pc-lines > div,
+        .pc-line,
+        .pc-line-none,
+        .pc-odo :global(.pc-odo-strip) {
             transition: none;
         }
 
