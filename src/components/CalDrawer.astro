@@ -5,6 +5,9 @@ const calLink = String(
     .replace(/^https?:\/\/(?:app\.)?cal\.com\//, "")
     .replace(/^\/+/, "")
     .replace(/\/+$/, "");
+
+// Cases du calendrier dans le squelette : cinq semaines de sept jours.
+const skeletonDays = Array.from({ length: 35 });
 ---
 
 <dialog
@@ -37,17 +40,40 @@ const calLink = String(
             </svg>
         </button>
     </div>
-    <p class="px-4 pb-3 text-sm text-snow-50/80">Le calendrier est fourni par Cal.com. Vos coordonnées servent à organiser le rendez-vous. <a class="underline" href="/mentions-legales/#reservation">Confidentialité</a></p>
     <div
+        aria-busy="true"
         aria-label="Réserver un appel avec William De Azevedo"
-        class="cal-drawer__embed mx-auto h-full min-h-0 w-full overflow-auto"
-        data-cal-inline
-        data-cal-link={calLink}
-    ></div>
+        role="region"
+        class="cal-drawer__body"
+        data-cal-region
+    >
+        {/* Squelette affiché dès l'ouverture, retiré quand Cal.com est prêt :
+            il recouvre l'emplacement du calendrier sans le décaler. */}
+        <div class="cal-drawer__skeleton" data-cal-skeleton>
+            <p class="sr-only">Chargement du calendrier…</p>
+            <div aria-hidden="true" class="cal-skeleton">
+                <span class="cal-skeleton__bone cal-skeleton__avatar"></span>
+                <span class="cal-skeleton__bone w-28"></span>
+                <span class="cal-skeleton__bone cal-skeleton__title"></span>
+                <span class="cal-skeleton__bone w-16"></span>
+                <span class="cal-skeleton__bone w-36"></span>
+                <span class="cal-skeleton__bone cal-skeleton__month"></span>
+                <div class="cal-skeleton__days">
+                    {skeletonDays.map(() => <span class="cal-skeleton__bone" />)}
+                </div>
+            </div>
+        </div>
+        <div
+            class="cal-drawer__embed mx-auto h-full min-h-0 w-full overflow-auto"
+            data-cal-inline
+            data-cal-link={calLink}
+        ></div>
+    </div>
 </dialog>
 
 <script>
     import { trackAnalytics } from "../scripts/analytics";
+    import { hasConsentFor } from "../scripts/consent";
 
     // File d'attente du snippet Cal.com : les appels sont mis en file jusqu'au
     // chargement de embed.js, qui remplace ensuite window.Cal.
@@ -59,11 +85,15 @@ const calLink = String(
     };
 
     const calWindow = window as Window & { Cal?: CalGlobal };
+    const calEmbedSrc = "https://app.cal.com/embed/embed.js";
 
     const drawer = document.querySelector("[data-cal-drawer]");
+    const calRegion = document.querySelector("[data-cal-region]");
+    const skeleton = document.querySelector("[data-cal-skeleton]");
     const inlineEmbed = document.querySelector("[data-cal-inline]");
     const root = document.documentElement;
     const closeAnimationMs = 320;
+    const iframeReadyGraceMs = 3000;
     let isCalEmbedded = false;
     let isCalConfigured = false;
     let closeTimer: number | undefined;
@@ -120,7 +150,14 @@ const calLink = String(
                 C.Cal = stub;
             }
             return C.Cal;
-        })(calWindow, "https://app.cal.com/embed/embed.js", "init");
+        })(calWindow, calEmbedSrc, "init");
+    }
+
+    // Le squelette laisse la place à l'iframe Cal.com (calendrier prêt, ou
+    // message d'erreur de Cal.com).
+    function endCalLoading() {
+        if (skeleton instanceof HTMLElement) skeleton.hidden = true;
+        calRegion?.setAttribute("aria-busy", "false");
     }
 
     function getCalLink() {
@@ -133,6 +170,23 @@ const calLink = String(
 
         const cal = loadCalEmbed();
         cal("init", { origin: "https://cal.com" });
+        // linkReady : Cal.com retire son propre indicateur, calendrier affiché.
+        cal("on", { action: "linkReady", callback: endCalLoading });
+        cal("on", { action: "linkFailed", callback: endCalLoading });
+        // Filet de sécurité : si linkReady tarde alors que Cal.com montre déjà
+        // l'iframe (événement interne __iframeReady), le squelette ne doit pas
+        // masquer un calendrier utilisable.
+        cal("on", {
+            action: "__iframeReady",
+            callback: () => window.setTimeout(endCalLoading, iframeReadyGraceMs),
+        });
+        // embed.js bloqué ou injoignable : aucun de ces événements n'arrive.
+        document
+            .querySelector(`script[src="${calEmbedSrc}"]`)
+            ?.addEventListener("error", endCalLoading, { once: true });
+        // Thème sombre, comme le tiroir et son squelette (pas de flash blanc). La langue (français) et le
+        // premier jour de la semaine (lundi) se règlent dans le compte Cal.com
+        // (Paramètres > Général) : l'embed n'expose aucune option pour les forcer.
         cal("ui", {
             cssVarsPerTheme: {
                 dark: {
@@ -143,6 +197,7 @@ const calLink = String(
                     "cal-border-subtle": "#2a2230",
                 },
             },
+            layout: "month_view",
             styles: {
                 body: { background: "#141016" },
                 eventTypeListItem: { background: "#1f1822" },
@@ -154,10 +209,13 @@ const calLink = String(
             callback: (event: CalBookingEvent) => {
                 const booking = event.detail?.data ?? {};
 
-                // Google Tag Manager : conversion prise de rendez-vous.
-                const w = window as Window & { dataLayer?: unknown[] };
-                w.dataLayer ||= [];
-                w.dataLayer.push({ event: "prise_rdv" });
+                // Google Tag Manager : conversion Google Ads prise de rendez-vous,
+                // seulement si la finalité « publicité » est acceptée.
+                if (hasConsentFor("ads")) {
+                    const w = window as Window & { dataLayer?: unknown[] };
+                    w.dataLayer ||= [];
+                    w.dataLayer.push({ event: "prise_rdv" });
+                }
 
                 trackAnalytics("cal_booking_success", {
                     cal_link: calLink,
@@ -167,7 +225,8 @@ const calLink = String(
                 });
             },
         });
-        cal("preload", { calLink });
+        // Pas de cal("preload") : il ouvre une iframe modale cachée en plus de
+        // l'iframe inline du tiroir, soit la page Cal.com chargée deux fois.
         isCalConfigured = true;
     }
 
@@ -180,7 +239,11 @@ const calLink = String(
         configureCalEmbed(calLink);
         loadCalEmbed()("inline", {
             calLink,
-            config: { theme: "dark", "ui.color-scheme": "dark" },
+            config: {
+                layout: "month_view",
+                theme: "dark",
+                "ui.color-scheme": "dark",
+            },
             elementOrSelector: inlineEmbed,
         });
         isCalEmbedded = true;
@@ -225,12 +288,42 @@ const calLink = String(
         closeCalDrawer();
     });
 
+    function getCalButton(target: EventTarget | null) {
+        return target instanceof Element
+            ? target.closest<HTMLElement>("[data-cal-open]")
+            : null;
+    }
+
+    // Cal.com n'est contacté qu'à une intention explicite sur un bouton de
+    // réservation : appui (souris, doigt ou stylet), Entrée, ou Espace sur un
+    // <button> (Espace n'active pas un lien). L'appui précède le clic d'environ
+    // 100 ms, gagnées sur le chargement. Le tiroir, lui, ne s'ouvre qu'au clic :
+    // un appui suivi d'un glissement charge Cal.com sans rien ouvrir.
+    document.addEventListener(
+        "pointerdown",
+        (event) => {
+            if (event.button === 0 && getCalButton(event.target)) mountCalEmbed();
+        },
+        { passive: true },
+    );
+
+    document.addEventListener("keydown", (event) => {
+        const calOpenButton = getCalButton(event.target);
+        if (
+            calOpenButton &&
+            (event.key === "Enter" ||
+                (event.key === " " && calOpenButton instanceof HTMLButtonElement))
+        ) {
+            mountCalEmbed();
+        }
+    });
+
     document.addEventListener("click", (event) => {
         const target = event.target;
         if (!(target instanceof Element)) return;
 
-        const calOpenButton = target.closest("[data-cal-open]");
-        if (calOpenButton instanceof HTMLElement) {
+        const calOpenButton = getCalButton(target);
+        if (calOpenButton) {
             event.preventDefault();
             trackAnalytics("cal_cta_click", {
                 location: calOpenButton.dataset.calLocation ?? "unknown",
@@ -257,6 +350,7 @@ const calLink = String(
 
     .cal-drawer {
         background: #141016;
+        box-shadow: 0 24px 60px -32px rgb(20 16 22 / 0.6);
         height: calc(100dvh - 2rem);
         inset: 1rem 1rem 1rem auto;
         margin: auto 0 auto auto;
@@ -277,7 +371,9 @@ const calLink = String(
     .cal-drawer[open] {
         animation: cal-drawer-in 440ms cubic-bezier(0.16, 1, 0.3, 1);
         display: grid;
-        grid-template-rows: auto minmax(0, 1fr);
+        /* En-tête, mention de confidentialité, puis le calendrier qui prend
+           toute la hauteur restante. */
+        grid-template-rows: auto auto minmax(0, 1fr);
     }
 
     .cal-drawer[open]::backdrop {
@@ -296,6 +392,70 @@ const calLink = String(
     .cal-drawer__close:focus-visible {
         outline: 2px solid var(--color-blue-500);
         outline-offset: 3px;
+    }
+
+    /* Squelette et calendrier partagent la même cellule : retirer le
+       squelette ne décale rien. */
+    .cal-drawer__body {
+        display: grid;
+        grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .cal-drawer__body > * {
+        grid-area: 1 / 1;
+    }
+
+    .cal-drawer__skeleton {
+        background: #141016;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .cal-skeleton {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin: 0 auto;
+        max-width: 640px;
+        padding: 1.5rem 3rem;
+    }
+
+    .cal-skeleton__bone {
+        animation: cal-skeleton-pulse 1.6s ease-in-out infinite;
+        background: rgb(255 255 255 / 0.08);
+        border-radius: 0.375rem;
+        display: block;
+        height: 0.875rem;
+    }
+
+    .cal-skeleton__avatar {
+        border-radius: 9999px;
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
+    .cal-skeleton__title {
+        height: 1.25rem;
+        width: 9rem;
+    }
+
+    .cal-skeleton__month {
+        height: 1.125rem;
+        margin-top: 1.5rem;
+        width: 7rem;
+    }
+
+    .cal-skeleton__days {
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        margin-top: 1rem;
+    }
+
+    .cal-skeleton__days > .cal-skeleton__bone {
+        aspect-ratio: 1;
+        height: auto;
     }
 
     .cal-drawer__embed {
@@ -321,6 +481,16 @@ const calLink = String(
 
         .cal-drawer__embed {
             width: 100%;
+        }
+
+        .cal-skeleton {
+            padding: 1rem 1.25rem;
+        }
+    }
+
+    @keyframes cal-skeleton-pulse {
+        50% {
+            opacity: 0.45;
         }
     }
 
@@ -376,7 +546,8 @@ const calLink = String(
         .cal-drawer[open],
         .cal-drawer[open]::backdrop,
         .cal-drawer[open].is-closing,
-        .cal-drawer[open].is-closing::backdrop {
+        .cal-drawer[open].is-closing::backdrop,
+        .cal-skeleton__bone {
             animation: none;
         }
     }

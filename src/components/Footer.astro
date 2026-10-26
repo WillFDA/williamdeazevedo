@@ -6,6 +6,10 @@ import BrandMark from "./ui/BrandMark.astro";
 import { projects } from "@/data/projects";
 
 const year = new Date().getFullYear();
+const email = "william.deazevedopro@gmail.com";
+// Same number as Header.astro.
+const phoneDisplay = "07 62 74 60 21";
+const phoneHref = "tel:+33762746021";
 const socialLinks = [
     {
         href: "https://www.linkedin.com/in/william-de-azevedo/",
@@ -19,6 +23,15 @@ const socialLinks = [
     },
 ];
 const linkGroups = [
+    {
+        title: "Réalisations",
+        links: projects.map((project) => ({
+            href: `/realisations/${project.id}/`,
+            label: project.title,
+            detail: project.kind,
+        })),
+        more: { href: "/realisations/", label: "Toutes les réalisations" },
+    },
     {
         title: "Services",
         links: [
@@ -37,22 +50,14 @@ const linkGroups = [
                 label: "Développeur freelance",
             },
         ],
+        more: { href: "/services/", label: "Tous les services" },
     },
     {
-        title: "Réalisations",
-        links: projects.map((project) => ({
-            href: `/realisations/${project.id}/`,
-            label: project.title,
-        })),
-    },
-    {
-        title: "Ressources",
+        title: "En savoir plus",
         links: [
             { href: "/about/", label: "À propos" },
+            { href: "/#tarifs", label: "Tarifs" },
             { href: "/articles/", label: "Conseils" },
-            { href: "/mentions-legales/", label: "Mentions légales" },
-            { href: "/mentions-legales/#confidentialite", label: "Confidentialité" },
-            { href: "/mentions-legales/#cookies", label: "Cookies et traceurs" },
         ],
     },
 ];
@@ -63,23 +68,70 @@ const linkGroups = [
     data-site-footer
 >
     <div class="mx-auto flex max-w-5xl flex-col gap-12">
-        <div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-            <div class="max-w-xl">
+        <div class="flex flex-col items-center text-center">
+            <h2 class="footer-cta-title section-heading section-heading--inverse max-w-3xl">
+                Prenons <span class="title-pill whitespace-nowrap">15 minutes</span> pour parler de votre projet.
+            </h2>
+            <p class="mt-4 max-w-xl text-base font-light leading-relaxed text-snow-50/75">
+                Appel gratuit et sans engagement. Vous préférez écrire ? Envoyez-moi l'essentiel par email.
+            </p>
+            <div class="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
+                <button
+                    aria-controls="cal-drawer"
+                    aria-haspopup="dialog"
+                    class="footer-cta relative isolate inline-flex h-14 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border-0 bg-transparent px-6 text-sm font-medium text-coffee-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50 sm:w-56"
+                    data-cal-location="footer"
+                    data-cal-open
+                    data-wui-wave-parent
+                    type="button"
+                >
+                    <WaveText text="Réserver 15 min" trigger="parent" />
+                </button>
+                <a
+                    class="inline-flex h-14 w-full items-center justify-center rounded-xl border border-snow-50/25 px-6 text-sm font-medium text-snow-50 transition-colors hover:border-snow-50/60 hover:bg-snow-50/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50 sm:w-56"
+                    href={`mailto:${email}`}
+                >
+                    Écrire un email
+                </a>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-10 border-t border-snow-50/15 pt-12 lg:grid-cols-4 lg:gap-x-10">
+            <h2 class="col-span-2 -mb-4 text-base font-medium text-snow-50 lg:col-span-1 lg:mb-0">Où me trouver</h2>
+            <div>
+                <p class="mb-4 text-xs font-medium uppercase tracking-widest text-snow-50/55">Localisation</p>
+                <p class="leading-relaxed text-snow-50/80">Achères (78260)<br />Yvelines, Île-de-France</p>
+                <p class="mt-1 text-xs text-snow-50/50">Et à distance partout en France</p>
+            </div>
+            <div>
+                <p class="mb-4 text-xs font-medium uppercase tracking-widest text-snow-50/55">Téléphone</p>
+                <a
+                    class="text-snow-50/80 transition-colors hover:text-snow-50 focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                    href={phoneHref}
+                >
+                    {phoneDisplay}
+                </a>
+            </div>
+            <div class="col-span-2 lg:col-span-1">
+                <p class="mb-4 text-xs font-medium uppercase tracking-widest text-snow-50/55">Écrire</p>
+                <a
+                    class="text-snow-50/80 transition-colors [overflow-wrap:anywhere] hover:text-snow-50 focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                    href={`mailto:${email}`}
+                >
+                    william.deazevedopro<wbr />@gmail.com
+                </a>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-10 border-t border-snow-50/15 pt-12 lg:grid-cols-4 lg:gap-x-10">
+            <div class="col-span-2 lg:col-span-1">
                 <p class="flex flex-col items-start gap-4 text-base font-medium text-snow-50">
                     <BrandMark class="h-7 w-auto" />
                     <span>William De Azevedo</span>
                 </p>
-                <p class="mt-2 max-w-lg text-base font-light leading-relaxed text-snow-50/75">
+                <p class="mt-3 max-w-xs font-light leading-relaxed text-snow-50/75">
                     Développeur front-end freelance pour sites clairs, rapides,
                     accessibles et crédibles.
                 </p>
-                <a
-                    class="mt-5 inline-flex text-snow-50/85 transition-colors hover:text-snow-50 focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
-                    href="mailto:william.deazevedopro@gmail.com"
-                >
-                    william.deazevedopro@gmail.com
-                </a>
-                <div class="mt-4 flex flex-wrap gap-4">
+                <div class="mt-5 -ml-1.5 flex flex-wrap gap-1">
                     {
                         socialLinks.map((link) => {
                             const Icon = link.icon;
@@ -87,70 +139,107 @@ const linkGroups = [
                             return (
                                 <a
                                     aria-label={link.label}
-                                    class="inline-flex size-8 items-center justify-center text-snow-50/85 transition-colors hover:text-snow-50 focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                                    class="inline-flex size-8 items-center justify-center text-snow-50/80 transition-colors hover:text-snow-50 focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
                                     href={link.href}
                                     rel="noreferrer"
                                     target="_blank"
                                 >
-                                    <Icon class="size-7" aria-hidden="true" />
+                                    <Icon class="size-5" aria-hidden="true" />
                                 </a>
                             );
                         })
                     }
                 </div>
             </div>
-            <button
-                aria-controls="cal-drawer"
-                aria-haspopup="dialog"
-                class="footer-cta relative isolate inline-flex min-h-14 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border-0 bg-transparent px-8 py-3 text-sm font-medium text-coffee-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50 sm:w-auto"
-                data-cal-location="footer"
-                data-cal-open
-                data-wui-wave-parent
-                type="button"
-            >
-                <WaveText text="Réserver 15 min" trigger="parent" />
-            </button>
-        </div>
-        <nav aria-label="Navigation pied de page">
-            <div class="grid gap-8 border-t border-snow-50/15 pt-10 sm:grid-cols-3">
+            <nav aria-label="Navigation pied de page" class="contents">
                 {
                     linkGroups.map((group) => (
                         <div>
-                            <h2 class="mb-3 text-xs font-medium uppercase tracking-widest text-snow-50/55">
+                            <h2 class="mb-4 text-xs font-medium uppercase tracking-widest text-snow-50/55">
                                 {group.title}
                             </h2>
-                            <ul class="flex flex-col gap-2">
+                            <ul class="flex flex-col gap-3">
                                 {group.links.map((link) => (
                                     <li>
-                                        <a
-                                            class="text-snow-50/80 transition-colors hover:text-snow-50 focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
-                                            href={link.href}
-                                        >
-                                            {link.label}
-                                        </a>
+                                        {"detail" in link ? (
+                                            <a
+                                                class="group inline-flex flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                                                href={link.href}
+                                            >
+                                                <span class="text-snow-50/80 transition-colors group-hover:text-snow-50">
+                                                    {link.label}
+                                                </span>
+                                                <span class="text-xs text-snow-50/50">
+                                                    {link.detail}
+                                                </span>
+                                            </a>
+                                        ) : (
+                                            <a
+                                                class="text-snow-50/80 transition-colors hover:text-snow-50 focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                                                href={link.href}
+                                            >
+                                                {link.label}
+                                            </a>
+                                        )}
                                     </li>
                                 ))}
+                                {group.more && (
+                                    <li class="pt-1">
+                                        <a
+                                            class="font-medium text-snow-50 focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                                            href={group.more.href}
+                                        >
+                                            {group.more.label}&nbsp;<span aria-hidden="true">→</span>
+                                        </a>
+                                    </li>
+                                )}
                             </ul>
                         </div>
                     ))
                 }
+            </nav>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-4 border-t border-snow-50/15 pt-8 text-xs text-snow-50/60">
+            <p>© {year} William De Azevedo · SIREN 995 010 873 · Achères&nbsp;(78)</p>
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <a
+                    class="underline-offset-4 transition-colors hover:text-snow-50 hover:underline focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                    href="/mentions-legales/"
+                >
+                    Mentions légales
+                </a>
+                <a
+                    class="underline-offset-4 transition-colors hover:text-snow-50 hover:underline focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                    href="/mentions-legales/#confidentialite"
+                >
+                    Confidentialité
+                </a>
+                <a
+                    class="underline-offset-4 transition-colors hover:text-snow-50 hover:underline focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                    href="/mentions-legales/#cookies"
+                >
+                    Cookies
+                </a>
+                <button
+                    class="cursor-pointer underline-offset-4 transition-colors hover:text-snow-50 hover:underline focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
+                    aria-controls="cookie-banner"
+                    data-cookie-settings
+                    type="button"
+                >
+                    Gérer les cookies
+                </button>
             </div>
-        </nav>
-        <div class="flex flex-wrap items-center justify-between gap-4 border-t border-snow-50/15 pt-6 text-xs text-snow-50/60">
-            <p>© {year} William De Azevedo</p>
-            <button
-                class="cursor-pointer underline-offset-4 transition-colors hover:text-snow-50 hover:underline focus-visible:text-snow-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-snow-50"
-                aria-controls="cookie-banner"
-                data-cookie-settings
-                type="button"
-            >
-                Gérer les cookies
-            </button>
         </div>
     </div>
 </footer>
 
 <style>
+    .footer-cta-title {
+        font-size: clamp(2rem, 4.2vw, 3.4rem);
+        line-height: 1.05;
+        text-wrap: balance;
+    }
+
     .footer-cta::before {
         background: var(--color-snow-50);
         border: 1px solid rgba(34, 42, 55, 0.06);
