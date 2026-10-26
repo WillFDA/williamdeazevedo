@@ -602,7 +602,6 @@ const vitrine = formats[1];
             const canNext = embla.canScrollNext();
             prev.disabled = !canPrev;
             next.disabled = !canNext;
-            vp.toggleAttribute("data-prev", canPrev);
             vp.toggleAttribute("data-next", canNext);
             $("[data-pc-nav]").hidden = !canPrev && !canNext;
         };
@@ -720,12 +719,6 @@ const vitrine = formats[1];
 <style>
     /* Awesomic's Cosmica 500/400 ("Regular"/"Book" files) match Geist 370/260
        by stem width; their numerals sit 9% taller, so price sizes are x1.09. */
-    @property --pc-fade-l {
-        syntax: "<length>";
-        inherits: false;
-        initial-value: 0px;
-    }
-
     @property --pc-fade-r {
         syntax: "<length>";
         inherits: false;
@@ -733,12 +726,11 @@ const vitrine = formats[1];
     }
 
     .pc {
-        /* Flat tonal cards: gray-100 at rest, one step darker on hover,
-           the page background with a black ring when selected. */
+        /* Flat cards: gray-100 at rest, one step darker on hover, the dark
+           CTA color with light text when selected. */
         --pc-card: var(--color-gray-100);
         --pc-card-hover: var(--color-coffee-50);
-        --pc-lift-bg: var(--color-snow-500);
-        --pc-lift-shadow: 0 0 0 1.5px var(--color-gray-900);
+        --pc-lift-bg: var(--color-coffee-300);
         --pc-knob-bg: var(--color-snow-300);
         --w5: 370;
         --w4: 260;
@@ -903,26 +895,19 @@ const vitrine = formats[1];
         outline-offset: 2px;
     }
 
-    /* The viewport bleeds 5px sideways, 8px above and 40px below so the
-       selected card's lift, shadow and focus outline are not clipped. */
+    /* The viewport bleeds 5px sideways and 8px vertically so the selected
+       card's lift and focus outline are not clipped. Snapped cards sit flush
+       left, so only the right edge fades. */
     .pc-vp {
-        margin: 20px -5px -40px;
+        margin: 20px -5px -8px;
         mask-image: linear-gradient(
             to right,
-            transparent,
-            #000 var(--pc-fade-l),
             #000 calc(100% - var(--pc-fade-r)),
             transparent
         );
         overflow: hidden;
-        padding: 8px 0 40px;
-        transition:
-            --pc-fade-l 0.3s,
-            --pc-fade-r 0.3s;
-    }
-
-    .pc-vp[data-prev] {
-        --pc-fade-l: 48px;
+        padding: 8px 0;
+        transition: --pc-fade-r 0.3s;
     }
 
     .pc-vp[data-next] {
@@ -975,8 +960,8 @@ const vitrine = formats[1];
         height: 100%;
         padding: 22px 20px;
         transition:
-            box-shadow 0.25s,
             background-color 0.25s,
+            color 0.25s,
             transform 0.25s;
     }
 
@@ -986,7 +971,7 @@ const vitrine = formats[1];
 
     .pc-tile:has(:checked) {
         background: var(--pc-card);
-        box-shadow: var(--pc-lift-shadow);
+        color: var(--color-snow-50);
         transform: translateY(-2px);
     }
 
@@ -1054,7 +1039,7 @@ const vitrine = formats[1];
 
     .pc-tile:has(:checked) .pc-radio,
     .pc-none[aria-pressed="true"] .pc-radio {
-        box-shadow: inset 0 0 0 5px var(--color-coffee-300);
+        box-shadow: inset 0 0 0 5px var(--color-snow-50);
     }
 
     .pc-tile-price {
@@ -1108,8 +1093,20 @@ const vitrine = formats[1];
     }
 
     .pc-tile:has(:checked) .pc-feat-check {
-        background: var(--color-coffee-300);
-        color: var(--color-snow-50);
+        background: var(--color-snow-50);
+        color: var(--color-coffee-300);
+    }
+
+    .pc-tile:has(:checked) .pc-feats li {
+        color: var(--color-gray-200);
+    }
+
+    .pc-tile:has(:checked) .pc-tile-price span,
+    .pc-row:has(:checked) .pc-row-copy span,
+    .pc-row:has(:checked) .pc-row-amount span,
+    .pc-row:has(:checked) .pc-row-quoted,
+    .pc-none[aria-pressed="true"] > span:last-child {
+        color: var(--color-gray-300);
     }
 
     .pc-included {
@@ -1258,8 +1255,8 @@ const vitrine = formats[1];
         gap: 20px;
         padding: 20px 24px;
         transition:
-            box-shadow 0.25s,
-            background-color 0.25s;
+            background-color 0.25s,
+            color 0.25s;
     }
 
     .pc-row:hover {
@@ -1268,7 +1265,7 @@ const vitrine = formats[1];
 
     .pc-row:has(:checked) {
         background: var(--pc-card);
-        box-shadow: var(--pc-lift-shadow);
+        color: var(--color-snow-50);
     }
 
     .pc-rows:disabled .pc-row,
@@ -1294,9 +1291,9 @@ const vitrine = formats[1];
     }
 
     .pc-row:has(:checked) .pc-check {
-        background: var(--color-coffee-300);
-        box-shadow: inset 0 0 0 1.5px var(--color-coffee-300);
-        color: var(--color-snow-50);
+        background: var(--color-snow-50);
+        box-shadow: inset 0 0 0 1.5px var(--color-snow-50);
+        color: var(--color-coffee-300);
     }
 
     .pc-row-pic {
@@ -1374,12 +1371,12 @@ const vitrine = formats[1];
         text-align: left;
         transition:
             background-color 0.2s,
-            box-shadow 0.2s;
+            color 0.2s;
     }
 
     .pc-none[aria-pressed="true"] {
         background: var(--pc-card);
-        box-shadow: var(--pc-lift-shadow);
+        color: var(--color-snow-50);
     }
 
     .pc-none strong {
