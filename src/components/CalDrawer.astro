@@ -73,6 +73,7 @@ const skeletonDays = Array.from({ length: 35 });
 
 <script>
     import { trackAnalytics } from "../scripts/analytics";
+    import { hasConsentFor } from "../scripts/consent";
 
     // File d'attente du snippet Cal.com : les appels sont mis en file jusqu'au
     // chargement de embed.js, qui remplace ensuite window.Cal.
@@ -208,10 +209,13 @@ const skeletonDays = Array.from({ length: 35 });
             callback: (event: CalBookingEvent) => {
                 const booking = event.detail?.data ?? {};
 
-                // Google Tag Manager : conversion prise de rendez-vous.
-                const w = window as Window & { dataLayer?: unknown[] };
-                w.dataLayer ||= [];
-                w.dataLayer.push({ event: "prise_rdv" });
+                // Google Tag Manager : conversion Google Ads prise de rendez-vous,
+                // seulement si la finalité « publicité » est acceptée.
+                if (hasConsentFor("ads")) {
+                    const w = window as Window & { dataLayer?: unknown[] };
+                    w.dataLayer ||= [];
+                    w.dataLayer.push({ event: "prise_rdv" });
+                }
 
                 trackAnalytics("cal_booking_success", {
                     cal_link: calLink,

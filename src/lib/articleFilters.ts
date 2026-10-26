@@ -1,4 +1,4 @@
-// Logique pure des filtres d'articles (testée dans tests/articleFilters.test.ts).
+// Logique pure des filtres d'articles.
 
 export const ALL_VALUE = "all";
 const COMBINING_MARKS = /[\u0300-\u036F]/g;

@@ -30,7 +30,6 @@ Confirmer les durées email/rendez-vous et les garanties de transfert des presta
 
 ## Vérification
 
-- `bun test tests/analytics.test.ts` et `PUBLIC_RYBBIT_EXEMPT_AUDIENCE=true bun test tests/analytics.test.ts` : aucun chargement par défaut ; chargement unique et file en mémoire lorsque l'activation est explicite ; URL sans paramètres/fragments.
 - `bun run lint`, `bun run build`, `git diff --check`.
 - Vérifier le build par défaut dans un navigateur : aucune interface de consentement et aucun script Rybbit/Zaraz/Cal chargé initialement par le code.
 - Après réglage Cloudflare, répéter sur une prévisualisation distante : vérifier réseau, stockages et événements serveur. Les tests locaux ne prouvent pas que les réglages de production sont corrects.
