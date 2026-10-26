@@ -96,7 +96,7 @@ export const servicesOverviewBentoItems = [
   {
     description:
       "Structure, vitesse, métadonnées, formulaires et mise en ligne : je pose une base propre pour être trouvé, compris et contacté.",
-    href: "/tarifs/",
+    href: "/#tarifs",
     title: "SEO & mise en ligne",
     variant: "small",
     visual: "seo",

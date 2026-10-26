@@ -1,0 +1,1908 @@
+---
+import CapabilityIcon from "@/components/ui/CapabilityIcon.astro";
+import WaveIcon from "@/components/ui/WaveIcon.astro";
+import WaveText from "@/components/ui/WaveText.astro";
+import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
+import Check from "@/components/icons/nucleo/check-2-outline.svg";
+import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
+import ChevronRight from "@/components/icons/nucleo/chevron-right-fill.svg";
+import { iconToneClasses } from "@/lib/iconTones";
+
+const fr = (n: number) => new Intl.NumberFormat("fr-FR").format(n);
+
+const formats = [
+    {
+        id: "landing",
+        name: "Site une page",
+        icon: "conversion",
+        tone: "blue",
+        base: 1200,
+        included: 1,
+        pages: "fixed",
+        pagesLabel: "1",
+        pagesNote: "Tout tient sur une seule page, organisée en sections.",
+        sub: "1 page",
+        features: [
+            "Tout sur une seule page",
+            "Design sur mesure",
+            "Formulaire de contact",
+            "En ligne en 10 jours",
+        ],
+    },
+    {
+        id: "vitrine",
+        name: "Site vitrine",
+        icon: "ux",
+        tone: "violet",
+        base: 2000,
+        included: 5,
+        pages: "extra",
+        sub: "5 pages incluses",
+        features: [
+            "5 pages incluses",
+            "Design sur mesure",
+            "SEO technique de base",
+            "Formulaire de contact",
+        ],
+    },
+    {
+        id: "refonte",
+        name: "Refonte",
+        icon: "refonte",
+        tone: "cyan",
+        base: 2500,
+        included: 5,
+        pages: "extra",
+        sub: "5 pages incluses",
+        features: [
+            "5 pages reprises",
+            "Contenus migrés",
+            "Redirections pour le SEO",
+            "Design modernisé",
+        ],
+    },
+    {
+        id: "interface",
+        name: "Interface produit",
+        icon: "cms",
+        tone: "indigo",
+        base: null,
+        included: 0,
+        pages: "none",
+        pagesLabel: "—",
+        pagesNote: "Le nombre d'écrans se définit pendant le cadrage.",
+        sub: "Cadrage dès 900 € HT",
+        summary: "Au cadrage",
+        features: [
+            "Écrans et parcours cadrés",
+            "Rôles, états et données",
+            "Design système",
+            "Développement front-end",
+        ],
+    },
+] as const;
+
+const options = [
+    {
+        id: "animations",
+        title: "Animations",
+        short: "Animations",
+        text: "Transitions de page, apparitions au scroll et micro-interactions soignées, sans alourdir le chargement.",
+        icon: "touch",
+        tone: "orange",
+        price: 500,
+    },
+    {
+        id: "form",
+        title: "Formulaire de contact personnalisé",
+        short: "Formulaire",
+        text: "Champs adaptés à vos demandes, envoi par e-mail, protection anti-spam et message de confirmation.",
+        icon: "form",
+        tone: "green",
+        price: 500,
+    },
+    {
+        id: "cms",
+        title: "CMS, contenus modifiables",
+        short: "CMS",
+        text: "Vous publiez vous-même textes, projets et articles depuis une interface simple, sans toucher au code.",
+        icon: "cms",
+        tone: "teal",
+        price: 1000,
+    },
+    {
+        id: "ads",
+        title: "Google Ads",
+        short: "Google Ads",
+        text: "Pages d'atterrissage et suivi des conversions prêts pour vos campagnes, chiffrés selon le volume.",
+        icon: "search",
+        tone: "sky",
+        price: null,
+    },
+] as const;
+
+const included = [
+    "Cadrage du besoin",
+    "Structure des pages",
+    "Design responsive",
+    "Développement front-end",
+    "SEO technique initial",
+    "Performance et accessibilité",
+    "Action de contact",
+    "Mise en ligne",
+];
+
+const extraPagePrice = 200;
+const pagesNote = (f: (typeof formats)[number]) =>
+    "pagesNote" in f
+        ? f.pagesNote
+        : `${f.name} : ${f.included} pages incluses, puis ${fr(extraPagePrice)} € HT par page.`;
+
+const vitrine = formats[1];
+---
+
+<section
+    class="pc"
+    id="tarifs"
+    aria-labelledby="pc-title"
+    data-pc
+    data-extra-page={extraPagePrice}
+>
+    <div class="pc-heading">
+        <div>
+            <h2 id="pc-title" class="section-heading section-heading--left">
+                Choisissez votre projet.{" "}<br />Voyez ce qu'il coûte.
+            </h2>
+        </div>
+        <div class="pc-intro">
+            <p class="section-subheading mx-0 text-left">
+                Les prix sont indicatifs et hors taxes. Choisissez un format,
+                ajoutez des pages ou des options, le total suit. Le devis final
+                confirme le périmètre.
+            </p>
+        </div>
+    </div>
+
+    <div class="pc-stage">
+        <div class="pc-steps" data-pc-steps>
+            <div class="pc-step">
+                <div class="pc-step-head">
+                    <span class="pc-num">01</span>
+                    <div class="pc-step-copy">
+                        <h3>Choisissez votre format</h3>
+                        <p>
+                            Tous les formats incluent le cadrage, le design
+                            responsive et le SEO technique. Le format fixe le
+                            point de départ du budget.
+                        </p>
+                    </div>
+                    <div class="pc-nav" data-pc-nav>
+                        <button
+                            class="pc-btn"
+                            type="button"
+                            aria-label="Formats précédents"
+                            data-pc-prev
+                        >
+                            <ChevronLeft class="size-3.5" aria-hidden="true" />
+                        </button>
+                        <button
+                            class="pc-btn"
+                            type="button"
+                            aria-label="Formats suivants"
+                            data-pc-next
+                        >
+                            <ChevronRight class="size-3.5" aria-hidden="true" />
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pc-vp" data-pc-vp>
+                    <div
+                        class="pc-tiles"
+                        role="radiogroup"
+                        aria-label="Format du projet"
+                    >
+                        {
+                            formats.map((f) => (
+                                <div class="pc-slide">
+                                    <label class="pc-tile">
+                                        <input
+                                            class="sr-only"
+                                            type="radio"
+                                            name="pc-format"
+                                            value={f.id}
+                                            checked={f.id === "vitrine"}
+                                            data-name={f.name}
+                                            data-base={f.base ?? ""}
+                                            data-included={f.included}
+                                            data-pages={f.pages}
+                                            data-pages-label={"pagesLabel" in f ? f.pagesLabel : undefined}
+                                            data-pages-note={pagesNote(f)}
+                                            data-sub={"summary" in f ? f.summary : f.sub}
+                                        />
+                                        <span class="pc-tile-top">
+                                            <span
+                                                class:list={[
+                                                    "pc-object",
+                                                    iconToneClasses[f.tone],
+                                                ]}
+                                                aria-hidden="true"
+                                            >
+                                                <CapabilityIcon
+                                                    icon={f.icon}
+                                                    class="size-[18px]"
+                                                />
+                                            </span>
+                                            <span class="pc-tile-name">
+                                                {f.name}
+                                            </span>
+                                            <span
+                                                class="pc-radio"
+                                                aria-hidden="true"
+                                            />
+                                        </span>
+                                        <span class="pc-tile-price">
+                                            <strong>
+                                                {f.base === null
+                                                    ? "Sur devis"
+                                                    : `${fr(f.base)} €`}
+                                            </strong>
+                                            <span>
+                                                {f.base === null
+                                                    ? f.sub
+                                                    : "prix de départ HT"}
+                                            </span>
+                                        </span>
+                                        <ul class="pc-feats">
+                                            {f.features.map((item) => (
+                                                <li>
+                                                    <span
+                                                        class="pc-feat-check"
+                                                        aria-hidden="true"
+                                                    >
+                                                        <Check class="size-2.5" />
+                                                    </span>
+                                                    {item}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </label>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <details class="pc-included">
+                    <summary>
+                        <span>
+                            Inclus dans chaque format
+                            <small>{included.length} éléments</small>
+                        </span>
+                        <span class="pc-toggle" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                <path class="pc-toggle-v" d="M8 3.5v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                <path d="M3.5 8h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                            </svg>
+                        </span>
+                    </summary>
+                    <ul>
+                        {
+                            included.map((item) => (
+                                <li>
+                                    <Check
+                                        class="size-4 shrink-0 text-gray-500"
+                                        aria-hidden="true"
+                                    />
+                                    {item}
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </details>
+
+                <div class="pc-team" data-pc-counter>
+                    <div class="pc-team-head">
+                        <div>
+                            <strong>Nombre de pages</strong>
+                            <span data-pc-counter-text>
+                                {pagesNote(vitrine)}
+                            </span>
+                        </div>
+                        <div class="pc-stepper">
+                            <button
+                                class="pc-btn"
+                                type="button"
+                                aria-label="Retirer une page"
+                                data-pc-minus
+                            >
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M3.5 8h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                </svg>
+                            </button>
+                            <output aria-live="polite" data-pc-pages>5</output>
+                            <button
+                                class="pc-btn"
+                                type="button"
+                                aria-label="Ajouter une page"
+                                data-pc-plus
+                            >
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pc-step">
+                <div class="pc-step-head">
+                    <span class="pc-num">02</span>
+                    <div class="pc-step-copy">
+                        <h3>
+                            Ajoutez des options
+                            <span class="pc-optional">Optionnel</span>
+                        </h3>
+                        <p data-pc-options-text>
+                            À ajouter maintenant ou plus tard, sans refaire le
+                            site. Chaque option s'ajoute au total.
+                        </p>
+                    </div>
+                </div>
+
+                <fieldset class="pc-rows" data-pc-options>
+                    <legend class="sr-only">Options</legend>
+                    {
+                        options.map((o) => (
+                            <label class="pc-row">
+                                <input
+                                    class="sr-only"
+                                    type="checkbox"
+                                    name="pc-option"
+                                    value={o.id}
+                                    data-price={o.price ?? ""}
+                                />
+                                <span class="pc-check" aria-hidden="true">
+                                    <Check class="size-3" />
+                                </span>
+                                <span
+                                    class:list={[
+                                        "pc-row-pic",
+                                        iconToneClasses[o.tone],
+                                    ]}
+                                    aria-hidden="true"
+                                >
+                                    <CapabilityIcon
+                                        icon={o.icon}
+                                        class="size-[18px]"
+                                    />
+                                </span>
+                                <span class="pc-row-copy">
+                                    <strong>{o.title}</strong>
+                                    <span>{o.text}</span>
+                                </span>
+                                <span class="pc-row-price">
+                                    <span class="pc-row-amount">
+                                        <strong>
+                                            {o.price === null
+                                                ? "Sur devis"
+                                                : `+${fr(o.price)} €`}
+                                        </strong>
+                                        {o.price !== null && <span>HT</span>}
+                                    </span>
+                                    {o.price === null && (
+                                        <span class="pc-row-quoted">
+                                            Selon vos campagnes
+                                        </span>
+                                    )}
+                                </span>
+                            </label>
+                        ))
+                    }
+                    <button
+                        class="pc-none"
+                        type="button"
+                        aria-pressed="true"
+                        data-pc-none
+                    >
+                        <span class="pc-radio" aria-hidden="true" />
+                        <strong>Aucune option pour l'instant</strong>
+                        <span>Vous pourrez en ajouter après la mise en ligne.</span>
+                    </button>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="pc-side">
+            <aside
+                class="pc-summary"
+                aria-label="Récapitulatif"
+                data-pc-summary
+            >
+                <div class="pc-sum-card">
+                    <span class="pc-sum-eyebrow">Votre projet</span>
+                    <p class="pc-sum-sub">
+                        Tout ce que vous avez choisi, sur un seul devis.
+                    </p>
+
+                    <dl class="pc-lines">
+                        <div>
+                            <dt>
+                                Format
+                                <small data-pc-format-sub>{vitrine.sub}</small>
+                            </dt>
+                            <dd>
+                                <span class="pc-line" data-pc-format-line>
+                                    <span data-pc-format-name>{vitrine.name}</span>
+                                    <b data-pc-format-price>{fr(vitrine.base)} €</b>
+                                </span>
+                            </dd>
+                        </div>
+                        <div data-pc-line-pages hidden>
+                            <dt>
+                                Pages en plus
+                                <small>{fr(extraPagePrice)} € HT la page</small>
+                            </dt>
+                            <dd>
+                                <span class="pc-line">
+                                    <span data-pc-pages-count>× 1</span>
+                                    <b data-pc-pages-price>{fr(extraPagePrice)} €</b>
+                                </span>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>
+                                Options
+                                <small data-pc-options-sub>Optionnel</small>
+                            </dt>
+                            <dd>
+                                {
+                                    options.map((o) => (
+                                        <span
+                                            class="pc-line"
+                                            data-pc-line-option={o.id}
+                                            hidden
+                                        >
+                                            <span>{o.short}</span>
+                                            <b>
+                                                {o.price === null
+                                                    ? "Sur devis"
+                                                    : `${fr(o.price)} €`}
+                                            </b>
+                                        </span>
+                                    ))
+                                }
+                                <span class="pc-line-none" data-pc-line-none>
+                                    —
+                                </span>
+                            </dd>
+                        </div>
+                    </dl>
+
+                    <div class="pc-total">
+                        <span>Total</span>
+                        <strong data-pc-total-wrap>
+                            <span>
+                                <span class="sr-only" data-pc-total-text>
+                                    {fr(vitrine.base)}
+                                </span>
+                                <span class="pc-odo" data-pc-odo aria-hidden="true">
+                                    {fr(vitrine.base)}
+                                </span>
+                            </span>
+                            <small data-pc-unit>€ HT</small>
+                        </strong>
+                    </div>
+                    <p class="pc-note" data-pc-note>
+                        Livré en 10 jours à 5 semaines selon le périmètre.
+                        Prix indicatif hors taxes, confirmé par le devis après
+                        un premier échange.
+                    </p>
+
+                    <button
+                        aria-controls="cal-drawer"
+                        aria-haspopup="dialog"
+                        class="pc-cta"
+                        data-cal-location="pricing-configurator"
+                        data-cal-open
+                        type="button"
+                    >
+                        <WaveText text="Parlons de votre projet" trigger="parent" />
+                        <WaveIcon
+                            style="--wui-wave-icon-size: 0.875rem;"
+                            direction="right"
+                            trigger="parent"
+                        >
+                            <ArrowRight class="size-full" aria-hidden="true" />
+                        </WaveIcon>
+                    </button>
+                </div>
+            </aside>
+
+            <a class="pc-compare" href="#faq">
+                <WaveText text="Voir ce qui fait varier un devis" trigger="parent" />
+                <WaveIcon
+                    style="--wui-wave-icon-size: 0.875rem;"
+                    direction="right"
+                    trigger="parent"
+                >
+                    <ArrowRight class="size-full" aria-hidden="true" />
+                </WaveIcon>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    import EmblaCarousel from "embla-carousel";
+
+    const fr = new Intl.NumberFormat("fr-FR");
+    const MAX_PAGES = 30;
+    const DIGIT_STRIP = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
+    const EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)";
+    const fadeUp = [
+        { opacity: 0, transform: "translateY(4px)" },
+        { opacity: 1, transform: "none" },
+    ];
+    const shapeOf = (text: string) => text.replaceAll(/\d/g, "0");
+
+    const noteFor = (quotedFormat: boolean, quoted: boolean, sum: number) => {
+        if (quotedFormat) {
+            return "Le planning et le budget se définissent pendant le cadrage, à partir de 900 € HT.";
+        }
+        if (quoted) {
+            return `${fr.format(sum)} € HT, plus Google Ads chiffré selon vos campagnes. Livré en 10 jours à 5 semaines selon le périmètre.`;
+        }
+        return "Livré en 10 jours à 5 semaines selon le périmètre. Prix indicatif hors taxes, confirmé par le devis après un premier échange.";
+    };
+
+    const init = () => {
+        const root = document.querySelector<HTMLElement>("[data-pc]");
+        if (!root || root.dataset.ready) return;
+        root.dataset.ready = "true";
+
+        const $ = <T extends Element = HTMLElement>(sel: string) => {
+            const el = root.querySelector<T>(sel);
+            if (!el) throw new Error(`PricingConfigurator: ${sel} introuvable`);
+            return el;
+        };
+        const extraPage = Number(root.dataset.extraPage);
+        const formats = [
+            ...root.querySelectorAll<HTMLInputElement>('input[name="pc-format"]'),
+        ];
+        const checkedFormat = () => formats.find((i) => i.checked) ?? formats[0];
+        const opts = [
+            ...root.querySelectorAll<HTMLInputElement>('input[name="pc-option"]'),
+        ];
+        const optionsSet = $<HTMLFieldSetElement>("[data-pc-options]");
+        const none = $<HTMLButtonElement>("[data-pc-none]");
+        const counter = $("[data-pc-counter]");
+        const minus = $<HTMLButtonElement>("[data-pc-minus]");
+        const plus = $<HTMLButtonElement>("[data-pc-plus]");
+        const totalWrap = $("[data-pc-total-wrap]");
+        const totalText = $("[data-pc-total-text]");
+        const odo = $("[data-pc-odo]");
+        const formatLine = $("[data-pc-format-line]");
+        const formatName = $("[data-pc-format-name]");
+        const note = $("[data-pc-note]");
+
+        const vp = $("[data-pc-vp]");
+        const prev = $<HTMLButtonElement>("[data-pc-prev]");
+        const next = $<HTMLButtonElement>("[data-pc-next]");
+        const embla = EmblaCarousel(vp, {
+            align: "start",
+            containScroll: "trimSnaps",
+        });
+        const syncNav = () => {
+            const canPrev = embla.canScrollPrev();
+            const canNext = embla.canScrollNext();
+            prev.disabled = !canPrev;
+            next.disabled = !canNext;
+            vp.toggleAttribute("data-next", canNext);
+            $("[data-pc-nav]").hidden = !canPrev && !canNext;
+        };
+        embla.on("select", syncNav).on("reInit", syncNav);
+        syncNav();
+        prev.addEventListener("click", () => embla.scrollPrev());
+        next.addEventListener("click", () => embla.scrollNext());
+        const reveal = (input: HTMLInputElement, jump = false) => {
+            const slide = embla.slideNodes().findIndex((s) => s.contains(input));
+            const box = embla.slideNodes()[slide].getBoundingClientRect();
+            const view = vp.getBoundingClientRect();
+            if (box.left >= view.left - 1 && box.right <= view.right + 1) return;
+            const snap = embla
+                .internalEngine()
+                .slideRegistry.findIndex((group) => group.includes(slide));
+            embla.scrollTo(snap, jump);
+        };
+        reveal(checkedFormat(), true);
+        document.addEventListener("astro:before-swap", () => embla.destroy(), {
+            once: true,
+        });
+
+        let pages = 5;
+        const reduce = () =>
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const syncPages = (d: DOMStringMap) => {
+            const includedPages = Number(d.included);
+            const extraMode = d.pages === "extra";
+            pages = Math.max(pages, includedPages || 1);
+            counter.toggleAttribute("data-disabled", !extraMode);
+            minus.disabled = !extraMode || pages <= includedPages;
+            plus.disabled = !extraMode || pages >= MAX_PAGES;
+            $("[data-pc-pages]").textContent = d.pagesLabel ?? String(pages);
+            $("[data-pc-counter-text]").textContent = d.pagesNote ?? "";
+            return extraMode ? pages - includedPages : 0;
+        };
+
+        const buildOdometer = (text: string) => {
+            odo.replaceChildren(
+                ...[...text].map((char, i) => {
+                    const cell = document.createElement("span");
+                    if (!/\d/.test(char)) {
+                        cell.textContent = char;
+                        return cell;
+                    }
+                    cell.className = "pc-odo-digit";
+                    cell.style.setProperty("--i", String(i));
+                    const ghost = document.createElement("span");
+                    ghost.className = "pc-odo-ghost";
+                    ghost.textContent = "0";
+                    const strip = document.createElement("span");
+                    strip.className = "pc-odo-strip";
+                    strip.textContent = DIGIT_STRIP;
+                    cell.append(ghost, strip);
+                    return cell;
+                }),
+            );
+        };
+
+        const rollTo = (text: string) => {
+            const digits = text.replaceAll(/\D/g, "");
+            odo.querySelectorAll<HTMLElement>(".pc-odo-strip").forEach((strip, k) => {
+                strip.style.setProperty("--d", digits[k]);
+            });
+        };
+
+        let shown: number | null | undefined;
+        const setTotal = (value: number | null) => {
+            if (value === shown) return;
+            const previous = shown;
+            const animate = previous !== undefined && !reduce();
+            const text = value === null ? "Sur devis" : fr.format(value);
+            shown = value;
+            totalText.textContent = text;
+            $("[data-pc-unit]").hidden = value === null;
+            if (value === null) {
+                odo.textContent = text;
+                if (animate) totalWrap.animate(fadeUp, { duration: 400, easing: "ease" });
+                return;
+            }
+            if (typeof previous !== "number" || shapeOf(fr.format(previous)) !== shapeOf(text)) {
+                buildOdometer(text);
+                // Commit the strips at 0 so the new digits roll up into place.
+                if (animate) odo.getBoundingClientRect();
+            }
+            rollTo(text);
+        };
+
+        const setFormatLine = (d: DOMStringMap, base: number | null) => {
+            const name = d.name ?? "";
+            const changed = formatName.textContent !== name;
+            formatName.textContent = name;
+            $("[data-pc-format-sub]").textContent = d.sub ?? "";
+            $("[data-pc-format-price]").textContent =
+                base === null ? "Sur devis" : `${fr.format(base)} €`;
+            if (changed && shown !== undefined && !reduce()) {
+                formatLine.animate(fadeUp, { duration: 450, easing: EASE_OUT });
+            }
+        };
+
+        const update = () => {
+            const d = checkedFormat().dataset;
+            const base = d.base ? Number(d.base) : null;
+            const extra = syncPages(d);
+
+            optionsSet.disabled = base === null;
+            none.disabled = base === null;
+            const active = base === null ? [] : opts.filter((o) => o.checked);
+            none.setAttribute("aria-pressed", String(active.length === 0));
+            $("[data-pc-options-text]").textContent =
+                base === null
+                    ? "Pour une interface produit, tout se chiffre pendant le cadrage."
+                    : "À ajouter maintenant ou plus tard, sans refaire le site. Chaque option s'ajoute au total.";
+
+            setFormatLine(d, base);
+            $("[data-pc-line-pages]").hidden = extra <= 0;
+            $("[data-pc-pages-count]").textContent = `× ${extra}`;
+            $("[data-pc-pages-price]").textContent = `${fr.format(extra * extraPage)} €`;
+            opts.forEach((o) => {
+                $(`[data-pc-line-option="${o.value}"]`).hidden = !active.includes(o);
+            });
+            $("[data-pc-line-none]").hidden = active.length > 0;
+            $("[data-pc-options-sub]").textContent =
+                active.length === 0
+                    ? "Optionnel"
+                    : `${active.length} choisie${active.length > 1 ? "s" : ""}`;
+
+            const sum =
+                (base ?? 0) +
+                extra * extraPage +
+                active.reduce((s, o) => s + (Number(o.dataset.price) || 0), 0);
+            const isQuote = base === null || active.some((o) => !o.dataset.price);
+            note.textContent = noteFor(base === null, isQuote, sum);
+            setTotal(isQuote ? null : sum);
+        };
+
+        root.addEventListener("change", (event) => {
+            const input = event.target as HTMLInputElement;
+            if (input.name === "pc-format") reveal(input);
+            update();
+        });
+        none.addEventListener("click", () => {
+            opts.forEach((o) => (o.checked = false));
+            update();
+        });
+        minus.addEventListener("click", () => {
+            pages -= 1;
+            update();
+        });
+        plus.addEventListener("click", () => {
+            pages += 1;
+            update();
+        });
+        update();
+        // Summary lines animate in only after the first rendered frame.
+        requestAnimationFrame(() =>
+            requestAnimationFrame(() => (root.dataset.animate = "")),
+        );
+    };
+
+    document.addEventListener("astro:page-load", init);
+</script>
+
+<style>
+    /* Awesomic's Cosmica 500/400 ("Regular"/"Book" files) match Geist 370/260
+       by stem width; their numerals sit 9% taller, so price sizes are x1.09. */
+    @property --pc-fade-r {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+    }
+
+    .pc {
+        /* Flat cards: gray-100 at rest, one step darker on hover, the dark
+           CTA color with light text when selected. */
+        --pc-card: var(--color-gray-100);
+        --pc-card-hover: var(--color-coffee-50);
+        --pc-lift-bg: var(--color-coffee-300);
+        --pc-knob-bg: var(--color-snow-300);
+        --w5: 370;
+        --w4: 260;
+        color: var(--color-gray-900);
+        font-size: 14px;
+        font-weight: var(--w4);
+        line-height: 21px;
+        margin: 0 auto;
+        max-width: 80rem;
+        padding: 64px 32px;
+    }
+
+    .pc-heading {
+        align-items: flex-start;
+        display: flex;
+        gap: 48px;
+        justify-content: space-between;
+    }
+
+
+    .pc-intro {
+        flex: 0 0 440px;
+    }
+
+
+    .pc-stage {
+        align-items: start;
+        display: grid;
+        gap: 40px;
+        grid-template-columns: minmax(0, 1fr) 360px;
+        margin-top: 64px;
+    }
+
+    .pc-steps {
+        border-radius: 36px;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 12px 0;
+    }
+
+    .pc-step {
+        padding: 32px 0 32px 56px;
+        position: relative;
+    }
+
+    .pc-step:first-child::after {
+        background: linear-gradient(
+            var(--color-coffee-300),
+            var(--color-gray-200)
+        );
+        border-radius: 2px;
+        bottom: -32px;
+        content: "";
+        left: 15px;
+        position: absolute;
+        top: 72px;
+        width: 2px;
+    }
+
+    .pc-step-head {
+        align-items: flex-start;
+        display: flex;
+        gap: 16px;
+    }
+
+    .pc-num {
+        align-items: center;
+        background: var(--color-coffee-300);
+        border-radius: 50%;
+        color: var(--color-snow-50);
+        display: inline-flex;
+        font-size: 12px;
+        font-weight: var(--w5);
+        height: 32px;
+        justify-content: center;
+        left: 0;
+        position: absolute;
+        top: 32px;
+        width: 32px;
+    }
+
+    .pc-step-copy {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .pc-step-copy h3 {
+        align-items: center;
+        display: flex;
+        font-size: 24px;
+        font-weight: var(--w5);
+        gap: 10px;
+        letter-spacing: -0.02em;
+        line-height: 28px;
+        margin-top: 2px;
+        white-space: nowrap;
+    }
+
+    .pc-step-copy p {
+        color: var(--color-gray-500);
+        font-size: 15px;
+        line-height: 1.5;
+        margin-top: 8px;
+        max-width: 520px;
+    }
+
+    .pc-optional {
+        background: var(--color-gray-100);
+        border-radius: 80px;
+        color: var(--color-gray-500);
+        font-size: 12px;
+        font-weight: var(--w4);
+        letter-spacing: 0;
+        padding: 3px 8px;
+    }
+
+    .pc-nav,
+    .pc-stepper {
+        align-items: center;
+        background: var(--color-coffee-50);
+        border-radius: 12px;
+        display: flex;
+        flex: 0 0 auto;
+        gap: 2px;
+        padding: 3px;
+    }
+
+    .pc-nav[hidden] {
+        display: none;
+    }
+
+    .pc-btn {
+        align-items: center;
+        background: var(--pc-knob-bg);
+        border-radius: 9px;
+        color: var(--color-gray-900);
+        cursor: pointer;
+        display: flex;
+        height: 32px;
+        justify-content: center;
+        transition:
+            background-color 0.2s,
+            color 0.2s;
+        width: 32px;
+    }
+
+    .pc-btn:disabled {
+        background: transparent;
+        box-shadow: none;
+        color: var(--color-gray-300);
+        cursor: default;
+    }
+
+    .pc-btn:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 2px;
+    }
+
+    /* The viewport bleeds 5px sideways and 8px vertically so the selected
+       card's lift and focus outline are not clipped. Snapped cards sit flush
+       left, so only the right edge fades. */
+    .pc-vp {
+        margin: 20px -5px -8px;
+        mask-image: linear-gradient(
+            to right,
+            #000 calc(100% - var(--pc-fade-r)),
+            transparent
+        );
+        overflow: hidden;
+        padding: 8px 0;
+        transition: --pc-fade-r 0.3s;
+    }
+
+    .pc-vp[data-next] {
+        --pc-fade-r: 48px;
+    }
+
+    .pc-tiles {
+        display: flex;
+        touch-action: pan-y pinch-zoom;
+    }
+
+    .pc-slide {
+        flex: 0 0 246px;
+        min-width: 0;
+        padding: 0 5px;
+    }
+
+    .pc-tile,
+    .pc-row,
+    .pc-none {
+        isolation: isolate;
+        position: relative;
+    }
+
+    .pc-tile::before,
+    .pc-row::before,
+    .pc-none::before {
+        background: var(--pc-lift-bg);
+        border-radius: inherit;
+        content: "";
+        inset: 0;
+        opacity: 0;
+        position: absolute;
+        transition: opacity 0.3s;
+        z-index: -1;
+    }
+
+    .pc-tile:has(:checked)::before,
+    .pc-row:has(:checked)::before,
+    .pc-none[aria-pressed="true"]::before {
+        opacity: 1;
+    }
+
+    .pc-tile {
+        background: var(--pc-card);
+        border-radius: 22px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 22px 20px;
+        transition:
+            background-color 0.25s,
+            color 0.25s,
+            transform 0.25s;
+    }
+
+    .pc-tile:hover {
+        background: var(--pc-card-hover);
+    }
+
+    .pc-tile:has(:checked) {
+        background: var(--pc-card);
+        color: var(--color-snow-50);
+        transform: translateY(-2px);
+    }
+
+    .pc-tile:has(:focus-visible),
+    .pc-row:has(:focus-visible),
+    .pc-none:focus-visible,
+    .pc-included summary:focus-visible,
+    .pc-cta:focus-visible,
+    .pc-compare:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 2px;
+    }
+
+    .pc-tile-top {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        min-height: 24px;
+    }
+
+    .pc-object,
+    .pc-row-pic {
+        align-items: center;
+        border-radius: 10px;
+        color: var(--color-snow-50);
+        display: inline-flex;
+        flex: 0 0 auto;
+        height: 32px;
+        justify-content: center;
+        width: 32px;
+    }
+
+    .pc-object {
+        filter: grayscale(0.35) saturate(0.85);
+        transition:
+            filter 0.25s,
+            transform 0.25s;
+    }
+
+    .pc-tile:hover .pc-object,
+    .pc-tile:has(:checked) .pc-object {
+        filter: none;
+        transform: scale(1.08) rotate(-4deg);
+    }
+
+    .pc-tile-name {
+        font-size: 16px;
+        font-weight: var(--w5);
+        white-space: nowrap;
+    }
+
+    .pc-radio {
+        background: transparent;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
+        flex: 0 0 auto;
+        height: 18px;
+        transition: box-shadow 0.2s;
+        width: 18px;
+    }
+
+    .pc-tile-top .pc-radio {
+        margin-left: auto;
+    }
+
+    .pc-tile:has(:checked) .pc-radio,
+    .pc-none[aria-pressed="true"] .pc-radio {
+        box-shadow: inset 0 0 0 5px var(--color-snow-50);
+    }
+
+    .pc-tile-price {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .pc-tile-price strong {
+        font-size: 35px;
+        font-weight: var(--w5);
+        letter-spacing: -0.03em;
+        line-height: 44px;
+        white-space: nowrap;
+    }
+
+    .pc-tile-price span {
+        color: var(--color-gray-500);
+        font-size: 13px;
+    }
+
+    .pc-feats {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .pc-feats li {
+        align-items: flex-start;
+        color: var(--color-gray-700);
+        display: flex;
+        font-size: 13px;
+        gap: 8px;
+        line-height: 18px;
+    }
+
+    .pc-feat-check {
+        align-items: center;
+        background: var(--color-gray-200);
+        border-radius: 50%;
+        color: var(--color-gray-700);
+        display: inline-flex;
+        flex: 0 0 auto;
+        height: 18px;
+        justify-content: center;
+        transition:
+            background-color 0.2s,
+            color 0.2s;
+        width: 18px;
+    }
+
+    .pc-tile:has(:checked) .pc-feat-check {
+        background: var(--color-snow-50);
+        color: var(--color-coffee-300);
+    }
+
+    .pc-tile:has(:checked) .pc-feats li {
+        color: var(--color-gray-200);
+    }
+
+    .pc-tile:has(:checked) .pc-tile-price span,
+    .pc-row:has(:checked) .pc-row-copy span,
+    .pc-row:has(:checked) .pc-row-amount span,
+    .pc-row:has(:checked) .pc-row-quoted,
+    .pc-none[aria-pressed="true"] > span:last-child {
+        color: var(--color-gray-300);
+    }
+
+    .pc-included {
+        background: var(--pc-card);
+        border-radius: 18px;
+        interpolate-size: allow-keywords;
+        margin-top: 20px;
+    }
+
+    .pc-included summary {
+        align-items: center;
+        border-radius: 18px;
+        cursor: pointer;
+        display: flex;
+        font-size: 15px;
+        font-weight: var(--w5);
+        gap: 12px;
+        justify-content: space-between;
+        list-style: none;
+        padding: 16px 18px;
+    }
+
+    .pc-included summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .pc-included small {
+        color: var(--color-gray-500);
+        font-size: 13px;
+        font-weight: var(--w4);
+        margin-left: 8px;
+    }
+
+    .pc-toggle {
+        align-items: center;
+        background: var(--pc-knob-bg);
+        border-radius: 9px;
+        display: inline-flex;
+        flex: 0 0 auto;
+        height: 28px;
+        justify-content: center;
+        transition: background-color 0.2s;
+        width: 28px;
+    }
+
+    .pc-included summary:hover .pc-toggle {
+        background: var(--color-snow-300);
+    }
+
+    .pc-toggle-v {
+        transform-origin: center;
+        transition: transform 0.3s var(--wui-ease-standard, ease);
+    }
+
+    .pc-included[open] .pc-toggle-v {
+        transform: scaleY(0);
+    }
+
+    .pc-included::details-content {
+        block-size: 0;
+        overflow: hidden;
+        transition:
+            block-size 0.3s var(--wui-ease-standard, ease),
+            content-visibility 0.3s allow-discrete;
+    }
+
+    .pc-included[open]::details-content {
+        block-size: auto;
+    }
+
+    .pc-included ul {
+        border-top: 1px solid var(--color-gray-100);
+        display: grid;
+        gap: 14px 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        padding: 16px 18px 18px;
+    }
+
+    .pc-included li {
+        align-items: center;
+        color: var(--color-gray-700);
+        display: flex;
+        font-size: 13px;
+        gap: 6px;
+    }
+
+    .pc-team {
+        background: var(--pc-card);
+        border-radius: 18px;
+        margin-top: 20px;
+        padding: 16px 18px;
+        transition: opacity 0.2s;
+    }
+
+    .pc-team[data-disabled] {
+        opacity: 0.55;
+    }
+
+    .pc-team-head {
+        align-items: center;
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+    }
+
+    .pc-team-head strong {
+        display: block;
+        font-size: 15px;
+        font-weight: var(--w5);
+    }
+
+    .pc-team-head span {
+        color: var(--color-gray-500);
+        display: block;
+        font-size: 13px;
+        margin-top: 2px;
+    }
+
+
+    .pc-stepper output {
+        font-size: 15px;
+        font-weight: var(--w5);
+        min-width: 32px;
+        text-align: center;
+    }
+
+    .pc-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 28px;
+        min-width: 0;
+        transition: opacity 0.2s;
+    }
+
+    .pc-rows:disabled {
+        opacity: 0.5;
+    }
+
+    .pc-row {
+        align-items: center;
+        background: var(--pc-card);
+        border-radius: 22px;
+        cursor: pointer;
+        display: flex;
+        gap: 20px;
+        padding: 20px 24px;
+        transition:
+            background-color 0.25s,
+            color 0.25s;
+    }
+
+    .pc-row:hover {
+        background: var(--pc-card-hover);
+    }
+
+    .pc-row:has(:checked) {
+        background: var(--pc-card);
+        color: var(--color-snow-50);
+    }
+
+    .pc-rows:disabled .pc-row,
+    .pc-rows:disabled .pc-none {
+        cursor: not-allowed;
+    }
+
+    .pc-check {
+        align-items: center;
+        background: transparent;
+        border-radius: 5px;
+        box-shadow: inset 0 0 0 1.5px var(--color-gray-300);
+        color: transparent;
+        display: inline-flex;
+        flex: 0 0 auto;
+        height: 18px;
+        justify-content: center;
+        transition:
+            background-color 0.2s,
+            box-shadow 0.2s,
+            color 0.2s;
+        width: 18px;
+    }
+
+    .pc-row:has(:checked) .pc-check {
+        background: var(--color-snow-50);
+        box-shadow: inset 0 0 0 1.5px var(--color-snow-50);
+        color: var(--color-coffee-300);
+    }
+
+    .pc-row-pic {
+        height: 36px;
+        width: 36px;
+    }
+
+    .pc-row-copy {
+        display: flex;
+        flex: 1 1 0%;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+    }
+
+    .pc-row-copy strong {
+        font-size: 16px;
+        font-weight: var(--w5);
+    }
+
+    .pc-row-copy span {
+        color: var(--color-gray-500);
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    .pc-row-price {
+        align-items: flex-end;
+        display: flex;
+        flex: 0 0 auto;
+        flex-direction: column;
+        max-width: 180px;
+    }
+
+    .pc-row-amount {
+        align-items: baseline;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 8px;
+        justify-content: flex-end;
+    }
+
+    .pc-row-amount strong {
+        font-size: 26px;
+        font-weight: var(--w5);
+        letter-spacing: -0.02em;
+        line-height: 32px;
+        white-space: nowrap;
+    }
+
+    .pc-row-amount span,
+    .pc-row-quoted {
+        color: var(--color-gray-500);
+        white-space: nowrap;
+    }
+
+    .pc-row-amount span {
+        font-size: 14px;
+    }
+
+    .pc-row-quoted {
+        font-size: 13px;
+        margin-top: 2px;
+    }
+
+    .pc-none {
+        align-items: center;
+        background: var(--pc-card);
+        border-radius: 18px;
+        cursor: pointer;
+        display: flex;
+        gap: 12px;
+        margin-top: -2px;
+        padding: 14px 20px;
+        text-align: left;
+        transition:
+            background-color 0.2s,
+            color 0.2s;
+    }
+
+    .pc-none[aria-pressed="true"] {
+        background: var(--pc-card);
+        color: var(--color-snow-50);
+    }
+
+    .pc-none strong {
+        flex: 0 0 auto;
+        font-weight: var(--w5);
+    }
+
+    .pc-none > span:last-child {
+        color: var(--color-gray-500);
+    }
+
+    .pc-side {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        position: sticky;
+        top: 96px;
+    }
+
+    .pc-summary {
+        background: var(--pc-card);
+        border-radius: 36px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .pc-sum-card {
+        display: flex;
+        flex-direction: column;
+        padding: 32px;
+        position: relative;
+    }
+
+    .pc-sum-eyebrow {
+        font-size: 20px;
+        font-weight: var(--w5);
+        letter-spacing: -0.02em;
+    }
+
+    .pc-sum-sub {
+        color: var(--color-gray-500);
+        line-height: 1.5;
+        margin-top: 6px;
+    }
+
+    .pc-lines {
+        interpolate-size: allow-keywords;
+        margin-top: 24px;
+    }
+
+    .pc-lines > div {
+        align-items: flex-start;
+        border-top: 1px solid var(--color-gray-200);
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        padding: 16px 0;
+    }
+
+    .pc-lines > div,
+    .pc-line,
+    .pc-line-none {
+        min-height: 0;
+        overflow: clip;
+        transition:
+            height 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            padding-block 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 0.3s,
+            translate 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            display 0.45s allow-discrete;
+    }
+
+    .pc-lines > div[hidden],
+    .pc-line[hidden],
+    .pc-line-none[hidden] {
+        display: none;
+        height: 0;
+        opacity: 0;
+        padding-block: 0;
+        translate: 0 -4px;
+    }
+
+    @starting-style {
+        .pc[data-animate] .pc-lines > div,
+        .pc[data-animate] .pc-line,
+        .pc[data-animate] .pc-line-none {
+            height: 0;
+            opacity: 0;
+            padding-block: 0;
+            translate: 0 6px;
+        }
+    }
+
+    .pc-lines dt {
+        display: flex;
+        flex-direction: column;
+        font-size: 15px;
+        font-weight: var(--w5);
+        gap: 2px;
+    }
+
+    .pc-lines small {
+        color: var(--color-gray-400);
+        font-size: 13px;
+        font-weight: var(--w4);
+    }
+
+    .pc-lines dd {
+        color: var(--color-gray-700);
+        display: flex;
+        flex-direction: column;
+        font-size: 15px;
+        gap: 4px;
+        text-align: right;
+    }
+
+    .pc-line {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        white-space: nowrap;
+    }
+
+    .pc-line b {
+        font-weight: var(--w5);
+        min-width: 56px;
+        text-align: right;
+    }
+
+    .pc-total {
+        align-items: baseline;
+        border-top: 1px solid var(--color-gray-200);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 16px;
+        justify-content: space-between;
+        padding-top: 20px;
+    }
+
+    .pc-total > span {
+        color: var(--color-gray-700);
+        font-size: 15px;
+    }
+
+    .pc-total strong {
+        align-items: baseline;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 48px;
+        font-variant-numeric: tabular-nums;
+        font-weight: var(--w5);
+        gap: 0 6px;
+        justify-content: flex-end;
+        letter-spacing: -0.03em;
+        line-height: 52px;
+        margin-left: auto;
+        white-space: nowrap;
+    }
+
+    /* Each digit is a 0-9 strip behind a one-line window. The hidden ghost
+       digit gives the window its width and baseline; clip-path, unlike
+       overflow, leaves that baseline in place. */
+    .pc-odo :global(.pc-odo-digit) {
+        clip-path: inset(0 -0.1em);
+        display: inline-block;
+        position: relative;
+    }
+
+    .pc-odo :global(.pc-odo-ghost) {
+        visibility: hidden;
+    }
+
+    .pc-odo :global(.pc-odo-strip) {
+        left: 0;
+        position: absolute;
+        top: 0;
+        transform: translateY(calc(var(--d, 0) * -10%));
+        transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1)
+            calc(var(--i, 0) * 45ms);
+        white-space: pre;
+    }
+
+    .pc-total small {
+        color: var(--color-gray-500);
+        font-size: 15px;
+        letter-spacing: 0;
+    }
+
+    .pc-note {
+        color: var(--color-gray-500);
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 8px;
+        min-height: 42px;
+    }
+
+    .pc-cta {
+        align-items: center;
+        border-radius: 14px;
+        color: var(--color-snow-50);
+        display: flex;
+        font-size: 14px;
+        font-weight: var(--w5);
+        gap: 8px;
+        height: 52px;
+        isolation: isolate;
+        justify-content: center;
+        line-height: 1.25;
+        margin-top: 20px;
+        position: relative;
+    }
+
+    .pc-cta::before {
+        background: var(--color-coffee-300);
+        border-radius: inherit;
+        content: "";
+        inset: 0;
+        position: absolute;
+        transition: transform 0.52s var(--wui-ease-standard, ease);
+        z-index: -1;
+    }
+
+    @media (hover: hover) {
+        .pc-cta:hover::before {
+            transform: scale(0.95);
+        }
+    }
+
+    .pc-compare {
+        align-items: center;
+        align-self: center;
+        display: inline-flex;
+        font-size: 14px;
+        font-weight: var(--w5);
+        gap: 12px;
+    }
+
+    @media (max-width: 1360px) {
+        .pc-stage {
+            grid-template-columns: minmax(0, 1fr) 330px;
+        }
+
+        .pc-steps {
+            padding: 8px 0;
+        }
+
+        .pc-stage {
+            gap: 32px;
+        }
+
+        .pc-step {
+            padding-left: 48px;
+        }
+
+        .pc-tile-price strong {
+            font-size: 30.5px;
+        }
+
+        .pc-total strong {
+            font-size: 41.5px;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .pc-heading {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pc-intro {
+            flex: 0 0 auto;
+            max-width: 560px;
+        }
+
+        .pc-stage {
+            grid-template-columns: minmax(0, 1fr);
+            margin-top: 40px;
+        }
+
+        .pc-side {
+            position: static;
+        }
+
+        .pc-step-head {
+            flex-wrap: wrap;
+        }
+
+        .pc-included ul {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 767px) {
+        .pc {
+            padding: 48px 16px;
+        }
+
+        .pc-heading h2 br {
+            display: none;
+        }
+
+        .pc-stage {
+            margin-top: 28px;
+        }
+
+        .pc-steps {
+            padding: 4px 0;
+        }
+
+        .pc-step {
+            padding: 24px 0;
+        }
+
+        .pc-step:first-child::after,
+        .pc-nav {
+            display: none;
+        }
+
+        .pc-step-head {
+            align-items: stretch;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pc-num {
+            align-self: flex-start;
+            position: static;
+        }
+
+        .pc-step-copy h3 {
+            flex-wrap: wrap;
+            font-size: 20px;
+            line-height: 26px;
+            white-space: normal;
+        }
+
+        .pc-step-copy p {
+            font-size: 14px;
+        }
+
+        .pc-vp {
+            margin-top: 14px;
+        }
+
+        .pc-slide {
+            flex-basis: 226px;
+            padding: 0 4px;
+        }
+
+        .pc-vp {
+            margin-inline: -4px;
+        }
+
+        .pc-tile {
+            border-radius: 18px;
+            padding: 18px 16px;
+        }
+
+        .pc-object {
+            height: 26px;
+            width: 26px;
+        }
+
+        .pc-tile-price strong {
+            font-size: 28px;
+            line-height: 32px;
+        }
+
+        .pc-tile-price span {
+            font-size: 12px;
+        }
+
+        .pc-included summary,
+        .pc-team {
+            padding: 14px;
+        }
+
+        .pc-included summary {
+            font-size: 14px;
+        }
+
+        .pc-included ul {
+            gap: 10px;
+            grid-template-columns: minmax(0, 1fr);
+            padding: 14px;
+        }
+
+        .pc-team-head {
+            flex-wrap: wrap;
+        }
+
+        .pc-team-head > div:first-child {
+            flex: 1 1 160px;
+        }
+
+        .pc-team-head span {
+            font-size: 12px;
+        }
+
+        .pc-rows {
+            margin-top: 20px;
+        }
+
+        .pc-row {
+            flex-wrap: wrap;
+            gap: 10px 12px;
+            padding: 16px;
+        }
+
+        .pc-row-copy {
+            flex-basis: 100%;
+            order: 3;
+        }
+
+        .pc-row-price {
+            align-items: flex-start;
+            flex-basis: 100%;
+            order: 4;
+        }
+
+        .pc-row-amount {
+            justify-content: flex-start;
+        }
+
+        .pc-none {
+            flex-wrap: wrap;
+            gap: 4px 12px;
+            padding: 14px 16px;
+        }
+
+        .pc-none > span:last-child {
+            flex-basis: 100%;
+            padding-left: 30px;
+        }
+
+        .pc-sum-card {
+            padding: 24px 20px;
+        }
+
+        .pc-lines > div {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pc-lines dd {
+            width: 100%;
+        }
+
+        .pc-line {
+            justify-content: space-between;
+        }
+
+        .pc-total strong {
+            font-size: 39px;
+            line-height: 44px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .pc-vp,
+        .pc-tile,
+        .pc-row,
+        .pc-object,
+        .pc-radio,
+        .pc-check,
+        .pc-toggle-v,
+        .pc-cta::before,
+        .pc-included::details-content,
+        .pc-lines > div,
+        .pc-line,
+        .pc-line-none,
+        .pc-odo :global(.pc-odo-strip) {
+            transition: none;
+        }
+
+        .pc-tile:has(:checked) {
+            transform: none;
+        }
+
+        .pc-tile:hover .pc-object,
+        .pc-tile:has(:checked) .pc-object {
+            transform: none;
+        }
+    }
+</style>
