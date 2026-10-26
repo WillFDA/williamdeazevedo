@@ -10,6 +10,7 @@ import PricingPreview from "../components/PricingPreview.astro";
 import ProblemComparison from "../components/ProblemComparison.astro";
 import ProjectShowcase from "../components/ProjectShowcase.astro";
 import TestimonialsSection from "../components/TestimonialsSection.astro";
+import GoogleLogo from "../components/icons/google.svg";
 import ArrowRight from "../components/icons/nucleo/arrow-right-fill.svg";
 import SearchContent from "../components/icons/nucleo/search-content-2-fill.svg";
 import Star from "../components/icons/nucleo/star-fill.svg";
@@ -207,7 +208,7 @@ const displayedTestimonials = getPublishedTestimonials();
         </FadeReveal>
         <FadeReveal animate={false}>
             <div
-                class="testimonial-rotator mx-auto mb-4 mt-0 text-center text-xs"
+                class="testimonial-rotator mx-auto mb-4 mt-2 text-center text-xs"
                 data-testimonial-rotator
                 data-testimonial-interval="5500"
             >
@@ -225,6 +226,18 @@ const displayedTestimonials = getPublishedTestimonials();
                             aria-hidden={index === 0 ? undefined : "true"}
                             inert={index === 0 ? undefined : true}
                         >
+                            <div
+                                aria-label="Avis Google : 5 étoiles sur 5"
+                                class="testimonial-rotator__rating flex items-center justify-center gap-2.5"
+                                role="img"
+                            >
+                                <GoogleLogo aria-hidden="true" class="size-4" />
+                                <span class="flex gap-0.5 text-amber-400">
+                                    {Array.from({ length: 5 }, () => (
+                                        <Star aria-hidden="true" class="size-4" />
+                                    ))}
+                                </span>
+                            </div>
                             <blockquote class="mx-auto max-w-md text-base font-normal leading-normal text-gray-900">
                                 “{temoignage.excerpt ?? temoignage.text}”
                             </blockquote>
@@ -493,7 +506,7 @@ const displayedTestimonials = getPublishedTestimonials();
     .testimonial-rotator {
         display: grid;
         min-height: 8.5rem;
-        place-items: center;
+        place-items: start center;
         width: min(100%, 30rem);
     }
 
@@ -521,6 +534,7 @@ const displayedTestimonials = getPublishedTestimonials();
         transform: none;
     }
 
+    .testimonial-rotator__item.is-active .testimonial-rotator__rating,
     .testimonial-rotator__item.is-active blockquote,
     .testimonial-rotator__item.is-active .testimonial-rotator__person {
         animation: testimonial-content-in 920ms cubic-bezier(0.22, 1.16, 0.36, 1)
@@ -541,6 +555,8 @@ const displayedTestimonials = getPublishedTestimonials();
         transform-origin: 50% 35%;
     }
 
+    .testimonial-rotator__item[data-testimonial-initial]
+        .testimonial-rotator__rating,
     .testimonial-rotator__item[data-testimonial-initial] blockquote {
         animation: testimonial-initial-copy-in 420ms
             cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -649,6 +665,7 @@ const displayedTestimonials = getPublishedTestimonials();
         .testimonial-rotator__avatar,
         .testimonial-rotator__author,
         .testimonial-rotator__person,
+        .testimonial-rotator__rating,
         .testimonial-rotator blockquote {
             animation: none;
         }
