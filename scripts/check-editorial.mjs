@@ -34,6 +34,7 @@ const slugs = [
   "site-pas-sur-google",
   "wix-ou-wordpress",
   "site-one-page",
+  "charte-graphique-entreprise",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");

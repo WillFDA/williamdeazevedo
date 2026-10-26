@@ -58,9 +58,10 @@ export const serviceReadings: Record<string, ServiceReading> = {
   "creation-site-internet-professionnel": {
     articles: [
       "mentions-legales-site-internet-professionnel",
+      "charte-graphique-entreprise",
       "cahier-des-charges-site-internet",
-      "landing-page",
       "site-600-euros-vs-site-2000-euros",
+      "landing-page",
     ],
     fallbackTags: ["tpe"],
   },
@@ -94,6 +95,7 @@ export const articleServices: Record<string, string[]> = {
   "audit-seo": ["creation-site-vitrine"],
   "cahier-des-charges-site-internet": ["creation-site-vitrine"],
   "changer-prestataire-web": ["refonte-site-internet"],
+  "charte-graphique-entreprise": ["creation-site-internet-professionnel"],
   "choisir-developpeur-web": ["creation-site-vitrine"],
   "cout-site-internet-par-mois": ["creation-site-vitrine"],
   "creer-site-internet-ia": ["creation-site-vitrine"],
