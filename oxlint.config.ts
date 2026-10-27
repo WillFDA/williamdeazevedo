@@ -5,6 +5,7 @@ import react from "ultracite/oxlint/react";
 
 export default defineConfig({
   extends: [core, astro, react],
+  env: core.env,
   ignorePatterns: core.ignorePatterns,
   // ponytail: keep Ultracite useful without renaming/refactoring the existing app.
   rules: {
@@ -16,7 +17,6 @@ export default defineConfig({
     // schedule <-> tick in Marquee stays allowed; variables and classes are still checked.
     "no-use-before-define": ["error", { functions: false }],
     "prefer-destructuring": "off",
-    "promise/prefer-await-to-then": "off",
     "react/function-component-definition": "off",
     "require-unicode-regexp": "off",
     "sort-keys": "off",
