@@ -28,6 +28,7 @@ const slugs = [
   "maintenance-site-web",
   "hebergement-site-vitrine",
   "arborescence-site-web",
+  "maquette-site-web",
   "rgpd-formulaire-de-contact",
   "seo-local",
   "site-non-securise",

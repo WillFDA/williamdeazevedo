@@ -101,6 +101,7 @@ export const articleServices: Record<string, string[]> = {
   "fiche-google-my-business-artisan": ["creation-site-internet-artisan"],
   "hebergement-site-vitrine": ["creation-site-vitrine"],
   "landing-page": ["creation-site-vitrine"],
+  "maquette-site-web": ["creation-site-vitrine"],
   "mentions-legales-site-internet-professionnel": [
     "creation-site-internet-professionnel",
   ],
