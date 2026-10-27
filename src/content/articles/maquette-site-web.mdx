@@ -1,0 +1,213 @@
+---
+title: "Maquette de site web : à quoi elle sert et comment la valider"
+seoTitle: "Maquette site web : à quoi elle sert"
+description: "Maquette de site web : ce qu’elle montre, sa place dans le projet, comment la relire sur mobile et faire des retours utiles avant le développement."
+image:
+  src: "/articles/maquette-site-web/cover.webp"
+  alt: "Trois cartes. Le wireframe, l’ordre des informations : un schéma gris avec le haut de page, trois blocs de services, les preuves et le contact. La maquette, votre site avant qu’il existe : un écran de téléphone avec l’accroche « Plombier chauffagiste à Poissy, dépannage et entretien de chaudière », un bouton « Appeler » et des photos de chantiers. La validation, corriger quand c’est simple : compris en 5 secondes, version mobile relue, boutons faciles à toucher de 24 px au minimum, texte lisible avec un contraste de 4,5:1, vrais textes et vraies photos, contact en un geste."
+pubDate: 2026-10-27
+author: "William De Azevedo"
+draft: false
+faq:
+  - question: "Quelle est la différence entre une maquette et un wireframe ?"
+    answer: "Le wireframe est un schéma en noir et blanc : il place les blocs de la page (titre, texte, photo, bouton) sans couleurs ni typographies, pour valider l’ordre des informations. La maquette graphique montre la page telle qu’elle sera, avec vos couleurs, vos polices, vos photos et vos vrais textes. On valide d’abord la structure, puis l’apparence."
+  - question: "Peut-on faire la maquette de son site soi-même ?"
+    answer: "Vous pouvez faire un croquis, sur papier ou dans un outil gratuit : c’est une bonne façon de préparer le premier rendez-vous. Mais il ne remplace pas une maquette pensée pour vos clients, déclinée sur mobile et vérifiée pour la lisibilité. C’est un point de départ, pas un plan d’exécution."
+  - question: "Faut-il une maquette pour un petit site ?"
+    answer: "Oui, même pour un site d’une seule page. Sa forme peut être légère : les sections clés de la page d’accueil en version ordinateur et en version mobile suffisent souvent. Ce qui compte, c’est de voir et de valider la page avant qu’elle soit développée, plutôt que de la découvrir une fois en ligne."
+  - question: "Le site final sera-t-il identique à la maquette ?"
+    answer: "Il doit en être très proche : mêmes sections, même ordre, mêmes couleurs, mêmes textes. Quelques détails changent au développement, parce qu’un vrai site s’adapte à toutes les largeurs d’écran. Un écart important doit vous être expliqué, pas découvert."
+  - question: "Peut-on encore modifier le site après avoir validé la maquette ?"
+    answer: "Oui. Corriger un texte, remplacer une photo ou ajuster une couleur reste simple. Ce qui coûte plus d’efforts, c’est de changer la structure après coup : ajouter une section au milieu d’une page, déplacer le formulaire ou revoir le menu. C’est pour cela qu’il vaut mieux trancher ces questions au stade de la maquette."
+  - question: "Comment la maquette vous est-elle présentée ?"
+    answer: "Le plus souvent sous la forme d’un lien à ouvrir dans le navigateur, parfois avec un rendez-vous pour la parcourir ensemble. L’important est de pouvoir la regarder sur votre propre téléphone, à votre rythme, et de noter vos remarques section par section."
+tags: ["site vitrine", "tpe", "artisan"]
+---
+
+**Une maquette de site web est la représentation visuelle de vos pages avant qu’elles soient développées : on y voit l’ordre des sections, les textes, les photos, les couleurs et les boutons, sur ordinateur et sur mobile. C’est le moment où vous validez à quoi ressemblera votre site, et le moment où une correction demande le moins d’efforts. Un site fait à la va-vite saute souvent cette étape : on découvre le résultat une fois en ligne, et il ne rassure personne.**
+
+« On peut voir à quoi ça va ressembler avant ? » On me pose la question à presque chaque premier rendez-vous. Oui : c’est le rôle de la maquette.
+
+Je suis développeur web et designer freelance à Achères (78). Je conçois la maquette des sites que je crée, et j’intègre aussi celles que d’autres designers ont réalisées. Cet article ne s’adresse pas aux graphistes, mais à vous, qui allez recevoir une maquette et devoir dire « c’est bon » ou « pas encore ».
+
+## Maquette de site web : de quoi parle-t-on ?
+
+Le mot « maquette » recouvre plusieurs documents, qui ne servent pas à la même chose. Selon le projet, vous en verrez un, deux ou tous. Ce qui compte, c’est de savoir ce que vous validez à chaque fois.
+
+| Document | Ce que vous voyez | Ce que vous validez |
+| --- | --- | --- |
+| Zoning | Des rectangles qui découpent la page en zones | Les grandes parties de la page et leur ordre |
+| Wireframe | Un schéma en noir et blanc, avec titres et boutons | La hiérarchie des informations et le parcours |
+| Maquette graphique | La page avec couleurs, typographies, photos et textes | L’apparence, le ton, la lisibilité |
+| Prototype | Une maquette cliquable, où l’on passe d’un écran à l’autre | Le parcours réel, jusqu’au contact |
+
+Pour un site vitrine de TPE, le wireframe et la maquette graphique se fondent souvent en une seule étape, à condition de discuter la structure avant les couleurs. Et une maquette n’est pas un modèle (ou template) : un modèle est une mise en page vendue à des milliers de personnes, une maquette part de votre activité et de vos clients.
+
+## Arborescence, maquette, développement : dans quel ordre ?
+
+La maquette arrive à un moment précis : trop tôt, elle dessine une page dont on ignore le contenu ; trop tard, le site est déjà construit. Voici les étapes telles que je les mène pour un [site vitrine](/creation-site-vitrine/) :
+
+1. **Le cadrage** : votre activité, vos objectifs, les contenus dont vous disposez déjà.
+2. **La structure** : la liste des pages et leur organisation, c’est-à-dire l’[arborescence du site](/articles/arborescence-site-web/), puis le parcours d’un visiteur jusqu’au contact.
+3. **La maquette** : le design des sections clés et de leurs versions mobile.
+4. **Le développement** : la construction du site, avec l’accessibilité, la performance et le référencement technique.
+5. **La recette et la mise en ligne** : la vérification du site réel, puis la prise en main.
+
+L’arborescence dit *quelles* pages existent, la maquette *à quoi* elles ressemblent, le développement les rend réelles. Si vous avez déjà une identité visuelle travaillée par un graphiste, comme celles de [Persistance Studio](/realisations/persistance/), la maquette s’appuie dessus au lieu de l’inventer.
+
+## Pourquoi valider la maquette avant le développement
+
+Une maquette se modifie vite. Un site développé, beaucoup moins : déplacer une section oblige à reprendre du code et à revérifier le mobile. Valider la maquette, c’est décider quand décider est facile :
+
+- **Vous voyez votre site avant vos clients.** Une page d’accueil floue, c’est un visiteur qui repart : mieux vaut le voir sur la maquette que dans vos statistiques.
+- **Vous parlez de la même chose que votre prestataire.** « Moderne » ou « chaleureux » ne veulent pas dire la même chose pour tout le monde. Une image tranche.
+- **Vous évitez le site interchangeable.** C’est à cette étape que l’on construit ce qui vous distingue : vos photos, vos arguments, votre façon de parler.
+
+Un site est votre carte de visite : il doit être clair, rassurant et professionnel dès la première seconde. La maquette est l’endroit où l’on s’en assure.
+
+## Ce qu’une maquette de page d’accueil doit vous montrer
+
+La page d’accueil est la plus vue. Si vous ne relisez qu’une maquette, relisez celle-ci, section par section.
+
+| Section | La question à vous poser |
+| --- | --- |
+| Haut de page (titre, phrase d’accroche, bouton) | Un inconnu comprend-il en quelques secondes ce que je fais, et où ? |
+| Services ou prestations | Mes clients y retrouvent-ils leurs mots, ou les miens ? |
+| Preuves (réalisations, avis, chiffres réels) | Qu’est-ce qui montre que je fais bien ce travail ? |
+| Méthode ou déroulement | Le client sait-il ce qui se passe après sa demande ? |
+| Zone d’intervention | Ma ville et mes secteurs sont-ils clairement nommés ? |
+| Contact | Puis-je appeler ou écrire en un geste, sans chercher ? |
+| Pied de page | Les mentions légales, les coordonnées et les liens utiles y sont-ils ? |
+
+Une maquette à valider montre ces sections **avec de vrais textes**, ou des textes très proches. Le faux texte latin (« lorem ipsum ») a sa place dans un wireframe : on ne juge pas la clarté d’un message qui n’existe pas encore.
+
+Même chose pour les photos : une photo d’illustration rend toujours bien sur une maquette. La vraie question est de savoir si vous aurez des photos de vos chantiers, de votre équipe ou de votre local.
+
+## La version mobile, la maquette à regarder en premier
+
+Beaucoup de clients découvrent la maquette sur grand écran, au bureau, et valident. Pourtant, une grande partie de vos visiteurs vous découvriront sur leur téléphone.
+
+Google utilise la version mobile du contenu d’un site pour l’indexation et le classement, et demande que le site mobile présente le même contenu que la version pour ordinateur. Une maquette mobile qui retire des sections pour « simplifier » les retire donc aussi pour Google.
+
+Sur la maquette mobile, vérifiez quatre choses :
+
+- **Le haut de page tient sur l’écran** : on comprend ce que vous faites sans faire défiler.
+- **Les boutons se touchent facilement.** Les règles d’accessibilité du W3C fixent un minimum de 24 pixels de côté pour une cible cliquable, et les boutons principaux gagnent à être bien plus grands.
+- **Rien ne déborde sur le côté.** Le W3C demande qu’un contenu reste lisible sans défilement horizontal sur un écran de 320 pixels de large, l’équivalent d’un petit téléphone.
+- **Le téléphone est cliquable** et le bouton de contact ne disparaît pas tout en bas de la page.
+
+Si la maquette ne contient qu’une version ordinateur, demandez la version mobile avant de valider.
+
+## Comment relire une maquette sans être graphiste
+
+Vous n’avez pas besoin d’un œil de designer : vous connaissez vos clients, c’est mieux. Voici la méthode que je conseille.
+
+**1. Regardez-la d’abord comme un inconnu.** Ouvrez la maquette sur votre téléphone, regardez le haut de page cinq secondes, puis fermez-la. Qu’avez-vous retenu ? Si ce n’est pas « ce que je fais, pour qui et où », le message n’est pas assez clair.
+
+**2. Faites le parcours d’un client.** Partez d’une demande réelle (une fuite, un devis, un rendez-vous) : combien d’étapes pour arriver au contact ?
+
+**3. Lisez les textes à voix haute.** Une phrase qui sonne comme une brochure sera sautée. Un mot technique doit être un mot que vos clients emploient.
+
+**4. Montrez-la à une personne extérieure**, sans rien expliquer avant, et demandez-lui ce que fait l’entreprise.
+
+**5. Vérifiez ce qui doit être exact** : nom, adresse, zone, téléphone, horaires, certifications. Une erreur sur la maquette se retrouve presque toujours en ligne.
+
+**6. Regardez la lisibilité.** Un texte gris clair sur fond blanc se lit mal, surtout en plein soleil. Le W3C demande un contraste d’au moins 4,5:1 pour le texte courant. Mon guide pour [tester l’accessibilité de votre site](/articles/tester-accessibilite-site-web/) donne d’autres vérifications simples.
+
+## Faire des retours utiles sur une maquette
+
+Un retour flou produit une deuxième maquette au hasard, un retour précis produit la bonne. Le secret : décrire le problème que vous voyez plutôt que la solution que vous imaginez.
+
+| Retour flou | Retour utile |
+| --- | --- |
+| « Je ne sais pas, ça ne me parle pas. » | « En haut de page, on ne comprend pas que je travaille surtout pour des particuliers. » |
+| « Faites plus moderne. » | « Ça me paraît sombre pour une entreprise de rénovation, je voudrais un rendu plus lumineux. » |
+| « Ajoutez plein de photos. » | « On ne voit aucun chantier réel, alors que c’est ce qui rassure mes clients. » |
+| « Le bouton est moche. » | « Sur mobile, je n’ai pas vu le bouton d’appel tout de suite. » |
+
+Quelques réflexes utiles :
+
+- **Regroupez vos remarques** en un seul envoi, section par section, plutôt qu’au fil de l’eau.
+- **Hiérarchisez** : ce qui bloque (un message faux, une section manquante), ce qui gêne, ce qui serait un plus.
+- **Une seule voix** : si plusieurs associés relisent, mettez-vous d’accord avant d’envoyer.
+- **Dites aussi ce qui vous plaît** : c’est ce qu’il ne faut pas toucher à la version suivante.
+
+## Modèle gratuit, générateur ou IA : ce qui manque à la maquette
+
+Chercher une maquette de site web gratuite mène vers des centaines de modèles et de générateurs, dont certains utilisent l’intelligence artificielle pour produire une page en quelques secondes. Le résultat est souvent propre, et c’est le piège : la page *ressemble* à un site professionnel, mais l’outil ne sait pas ce qui fait choisir vos clients. Il remplit les sections de phrases génériques (« des solutions sur mesure pour tous vos besoins ») et de photos qui conviendraient à n’importe qui.
+
+| Ce que produit un générateur | Ce que doit contenir votre maquette |
+| --- | --- |
+| Une structure standard, la même pour tout le monde | Une structure pensée à partir de vos services et de vos clients |
+| Des textes génériques, sans vos arguments | Vos mots, vos garanties, votre zone d’intervention |
+| Des photos d’illustration | Vos chantiers, votre équipe, vos produits, ou un plan pour les obtenir |
+| Une version mobile automatique, rarement relue | Une version mobile vérifiée section par section |
+
+C’est toute la différence entre un site fait vite et un site qui travaille pour vous, que je détaille dans l’article [site à 600 euros ou site à 2 000 euros](/articles/site-600-euros-vs-site-2000-euros/) : un site fait à la va-vite n’apporte ni clients, ni visibilité, ni confiance. Le problème n’est pas l’outil, c’est l’absence de réflexion sur votre activité.
+
+## Ce que la validation engage, et ce qui reste modifiable
+
+Valider une maquette, c’est donner le feu vert au développement sur une base précise. Voici ce que cela fige et ce qui reste souple.
+
+| Ce qui est figé par la validation | Ce qui reste simple à ajuster ensuite |
+| --- | --- |
+| Les pages et les sections de chaque page | Une formulation, une coquille dans un texte |
+| L’ordre des informations, le menu et le parcours vers le contact | Le remplacement d’une photo, une nuance de couleur |
+| La logique de la version mobile | L’ajout d’un avis client ou d’une réalisation |
+
+Avant de valider, une dernière question : « Si mon site ressemblait exactement à cela demain, en serais-je fier devant un client ? » Si la réponse est « presque », dites ce qui manque.
+
+Le nombre de tours de corrections et la façon de valider se fixent dès le devis, pour éviter les malentendus. Mon article pour [choisir un développeur web](/articles/choisir-developpeur-web/) détaille les autres points à vérifier avant de vous engager.
+
+## Exemple : la relecture d’une page d’accueil d’artisan
+
+Voici un exemple type. Il ne décrit pas un client précis : il rassemble des remarques fréquentes lors de la relecture d’une page d’accueil. Imaginons un plombier chauffagiste de Poissy qui travaille pour des particuliers. Il reçoit la maquette en version ordinateur et mobile, la relit avec la méthode ci-dessus et renvoie un seul message, par section :
+
+- **Haut de page** : « On lit "Votre confort, notre priorité". Ça ne dit pas que je fais du dépannage et de l’entretien de chaudière, ni où. » La phrase est remplacée par une accroche qui nomme le métier et la zone.
+- **Services** : « Vous avez mis "rénovation énergétique" en premier. Mes clients m’appellent surtout pour des dépannages. » L’ordre des services est inversé.
+- **Preuves** : « Les photos sont belles, mais ce ne sont pas mes chantiers. » Il est convenu de faire des photos de chantiers récents avant la mise en ligne.
+- **Mobile** : « Le numéro est en bas de page. Mes clients appellent depuis leur téléphone, souvent en urgence. » Un bouton d’appel est ajouté dans le haut de la version mobile.
+- **Ce qui lui plaît** : « Les couleurs et la section qui explique comment se passe une intervention, ne touchez à rien. »
+
+Aucune de ces remarques ne demande de compétence en design, toutes changent la façon dont un visiteur perçoit l’entreprise, et toutes auraient été plus longues à traiter sur un site déjà développé. Si vous hésitez encore sur le format, mon article sur le [site one page](/articles/site-one-page/) vous aidera à trancher avant la maquette.
+
+## Votre maquette, relue et construite avec vous
+
+Une bonne maquette n’est pas celle qui impressionne au premier coup d’œil, mais celle qui dit clairement ce que vous faites, rassure vos futurs clients et les mène jusqu’à vous, sur ordinateur comme sur téléphone.
+
+Je crée des sites pour des artisans, des TPE et des indépendants à Achères, Poissy, Saint-Germain-en-Laye, Conflans-Sainte-Honorine et dans le reste des Yvelines, et aussi à distance. Chaque projet passe par une maquette que vous validez avant le développement.
+
+Vous avez un projet de [site vitrine](/creation-site-vitrine/), un [site d’artisan](/creation-site-internet-artisan/) ou une [refonte](/refonte-site-internet/) en tête ? Demandez un devis : on commence par cadrer votre activité, et vous verrez votre site avant qu’il existe.
+
+## Questions fréquentes
+
+### Quelle est la différence entre une maquette et un wireframe ?
+
+Le wireframe est un schéma en noir et blanc : il place les blocs de la page (titre, texte, photo, bouton) sans couleurs ni typographies, pour valider l’ordre des informations. La maquette graphique montre la page telle qu’elle sera, avec vos couleurs, vos polices, vos photos et vos vrais textes. On valide d’abord la structure, puis l’apparence.
+
+### Peut-on faire la maquette de son site soi-même ?
+
+Vous pouvez faire un croquis, sur papier ou dans un outil gratuit : c’est une bonne façon de préparer le premier rendez-vous. Mais il ne remplace pas une maquette pensée pour vos clients, déclinée sur mobile et vérifiée pour la lisibilité. C’est un point de départ, pas un plan d’exécution.
+
+### Faut-il une maquette pour un petit site ?
+
+Oui, même pour un site d’une seule page. Sa forme peut être légère : les sections clés de la page d’accueil en version ordinateur et en version mobile suffisent souvent. Ce qui compte, c’est de voir et de valider la page avant qu’elle soit développée, plutôt que de la découvrir une fois en ligne.
+
+### Le site final sera-t-il identique à la maquette ?
+
+Il doit en être très proche : mêmes sections, même ordre, mêmes couleurs, mêmes textes. Quelques détails changent au développement, parce qu’un vrai site s’adapte à toutes les largeurs d’écran. Un écart important doit vous être expliqué, pas découvert.
+
+### Peut-on encore modifier le site après avoir validé la maquette ?
+
+Oui. Corriger un texte, remplacer une photo ou ajuster une couleur reste simple. Ce qui coûte plus d’efforts, c’est de changer la structure après coup : ajouter une section au milieu d’une page, déplacer le formulaire ou revoir le menu. C’est pour cela qu’il vaut mieux trancher ces questions au stade de la maquette.
+
+### Comment la maquette vous est-elle présentée ?
+
+Le plus souvent sous la forme d’un lien à ouvrir dans le navigateur, parfois avec un rendez-vous pour la parcourir ensemble. L’important est de pouvoir la regarder sur votre propre téléphone, à votre rythme, et de noter vos remarques section par section.
+
+## Sources officielles
+
+- [Google Search Central : bonnes pratiques en matière d’indexation orientée mobile](https://developers.google.com/search/docs/crawling-indexing/mobile/mobile-sites-mobile-first-indexing?hl=fr) (version mobile utilisée pour l’indexation et le classement, même contenu que sur ordinateur), lu le 27/10/2026
+- [W3C : comprendre le critère WCAG 2.2 2.5.8, taille minimale des cibles](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) (24 × 24 pixels CSS, avec exceptions), en anglais, lu le 27/10/2026
+- [W3C : comprendre le critère WCAG 2.2 1.4.10, redistribution du contenu](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html) (pas de défilement horizontal à 320 pixels CSS de large), en anglais, lu le 27/10/2026
+- [W3C : comprendre le critère WCAG 2.2 1.4.3, contraste minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) (contraste de 4,5:1 pour le texte courant), en anglais, lu le 27/10/2026
