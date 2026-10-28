@@ -120,6 +120,7 @@ const {
     titleId = `${id}-title`,
 } = Astro.props;
 const faqItems = Array.from(items ?? getDefaultFaqItems());
+const titleWords = title.split(" ");
 
 const accordionClasses = {
     content:
@@ -139,6 +140,8 @@ const accordionClasses = {
         className,
     ]}
     aria-labelledby={titleId}
+    data-faq
+    data-section-reveal="false"
 >
     {/* DOM order matches the mobile order (title, questions, card); from lg the card moves under the title. */}
     <div
@@ -152,11 +155,20 @@ const accordionClasses = {
                 id={titleId}
                 class="section-heading section-heading--left"
             >
-                {title}
+                {
+                    titleWords.map((word, index) => (
+                        <Fragment>
+                            {index > 0 && " "}
+                            <span class="inline-block" data-faq-word>
+                                {word}
+                            </span>
+                        </Fragment>
+                    ))
+                }
             </h2>
             {
                 description && (
-                    <p class="section-subheading mx-0 mt-5 text-left">
+                    <p class="section-subheading mx-0 mt-5 text-left" data-faq-description>
                         {description}
                     </p>
                 )
@@ -175,7 +187,10 @@ const accordionClasses = {
 
         {
             showCta && (
-                <div class="rounded-3xl bg-surface-muted p-6 sm:p-8 lg:sticky lg:top-24 lg:col-start-1 lg:row-start-2 lg:self-start">
+                <div
+                    class="rounded-3xl bg-surface-muted p-6 sm:p-8 lg:sticky lg:top-24 lg:col-start-1 lg:row-start-2 lg:self-start"
+                    data-faq-card
+                >
                     <Image
                         class="size-12 rounded-xl object-cover"
                         src={williamPortrait}
@@ -212,3 +227,66 @@ const accordionClasses = {
         }
     </div>
 </section>
+
+<script>
+    import { createScrollReveal, prefersReducedMotion, queryAll } from "@/scripts/motion";
+
+    document.addEventListener("astro:page-load", () => {
+        if (prefersReducedMotion()) return;
+        for (const section of queryAll(document, "[data-faq]")) {
+            const list = section.querySelector<HTMLElement>(".accordion");
+            const card = section.querySelector<HTMLElement>("[data-faq-card]");
+            // Stacked on mobile, the list and the card sit screens below the
+            // heading: each one waits for its own entrance.
+            const motions = [
+                createScrollReveal(section, [
+                    {
+                        at: 0,
+                        duration: 0.5,
+                        from: { opacity: 0, scale: 0.985, y: 18 },
+                        stagger: 0.025,
+                        targets: queryAll(section, "[data-faq-word]"),
+                    },
+                    {
+                        at: 0.1,
+                        duration: 0.44,
+                        from: { opacity: 0, y: 14 },
+                        targets: section.querySelector<HTMLElement>(
+                            "[data-faq-description]",
+                        ),
+                    },
+                ]),
+            ];
+            if (list) {
+                motions.push(
+                    createScrollReveal(list, [
+                        {
+                            at: 0.1,
+                            duration: 0.44,
+                            from: { opacity: 0, y: 16 },
+                            stagger: 0.035,
+                            targets: queryAll(list, ".accordion__item"),
+                        },
+                    ]),
+                );
+            }
+            if (card) {
+                motions.push(
+                    createScrollReveal(card, [
+                        {
+                            at: 0,
+                            duration: 0.52,
+                            from: { opacity: 0, scale: 0.985, y: 22 },
+                            targets: card,
+                        },
+                    ]),
+                );
+            }
+            document.addEventListener(
+                "astro:before-swap",
+                () => motions.forEach((motion) => motion.revert()),
+                { once: true },
+            );
+        }
+    });
+</script>
