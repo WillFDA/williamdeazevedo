@@ -201,8 +201,8 @@ const visibleIcons = icons.slice(0, visibleSlotCount);
 
         state.animations.add(animation);
         animation.finished
-            .catch(ignoreCancelledAnimation)
-            .finally(() => state.animations.delete(animation));
+            .finally(() => state.animations.delete(animation))
+            .catch(ignoreCancelledAnimation);
 
         return animation;
     }
