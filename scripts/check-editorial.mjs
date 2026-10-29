@@ -133,8 +133,11 @@ for (const slug of slugs) {
       .replaceAll("&gt;", ">")
       .replaceAll("&amp;", "&");
     // Both ways: every visible question of the FAQ section is in the schema.
+    // The FAQ title may wrap each word in a <span> for its reveal animation.
     const faqSection = html
-      .split(/<h2\b[^>]*>\s*Questions fréquentes\s*<\/h2>/)[1]
+      .split(
+        /<h2\b[^>]*>(?:\s|<[^>]+>)*Questions(?:\s|<[^>]+>)+fréquentes(?:\s|<[^>]+>)*<\/h2>/
+      )[1]
       ?.split(/<h2\b/)[0];
     assert.equal(
       (faqSection?.match(/<h3\b/g) || []).length,
