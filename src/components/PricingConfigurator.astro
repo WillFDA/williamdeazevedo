@@ -139,6 +139,7 @@ const pagesNote = (f: (typeof formats)[number]) =>
         : `${f.name} : ${f.included} pages incluses, puis ${fr(extraPagePrice)} € HT par page.`;
 
 const vitrine = formats[1];
+const titleLines = ["Choisissez votre projet.", "Voyez ce qu'il coûte."];
 ---
 
 <section
@@ -147,11 +148,26 @@ const vitrine = formats[1];
     aria-labelledby="pc-title"
     data-pc
     data-extra-page={extraPagePrice}
+    data-section-reveal="false"
 >
     <div class="pc-heading">
         <div>
             <h2 id="pc-title" class="section-heading section-heading--left">
-                Choisissez votre projet.{" "}<br />Voyez ce qu'il coûte.
+                {
+                    titleLines.map((line, lineIndex) => (
+                        <Fragment>
+                            {lineIndex > 0 && <Fragment>{" "}<br /></Fragment>}
+                            {line.split(" ").map((word, index) => (
+                                <Fragment>
+                                    {index > 0 && " "}
+                                    <span class="inline-block" data-pc-word>
+                                        {word}
+                                    </span>
+                                </Fragment>
+                            ))}
+                        </Fragment>
+                    ))
+                }
             </h2>
         </div>
         <div class="pc-intro">
@@ -536,6 +552,7 @@ const vitrine = formats[1];
 
 <script>
     import EmblaCarousel from "embla-carousel";
+    import { createScrollReveal, queryAll } from "@/scripts/motion";
 
     const fr = new Intl.NumberFormat("fr-FR");
     const MAX_PAGES = 30;
@@ -754,6 +771,103 @@ const vitrine = formats[1];
             update();
         });
         update();
+
+        if (!reduce()) {
+            // The total rolls up from zero once the summary comes into view.
+            for (const strip of odo.querySelectorAll<HTMLElement>(".pc-odo-strip")) {
+                strip.style.setProperty("--d", "0");
+            }
+            const summary = $("[data-pc-summary]");
+            // One trigger per block: stacked on mobile, the steps and the summary
+            // sit screens below the heading.
+            const motions = [
+                createScrollReveal(root, [
+                    {
+                        at: 0,
+                        duration: 0.5,
+                        from: { opacity: 0, scale: 0.985, y: 18 },
+                        stagger: 0.025,
+                        targets: queryAll(root, "[data-pc-word]"),
+                    },
+                    {
+                        at: 0.1,
+                        duration: 0.44,
+                        from: { opacity: 0, y: 14 },
+                        targets: $<HTMLElement>(".pc-intro"),
+                    },
+                ]),
+                ...queryAll(root, ".pc-step").map((step) =>
+                    createScrollReveal(step, [
+                        {
+                            at: 0,
+                            duration: 0.44,
+                            from: { opacity: 0, scale: 0.94, y: 10 },
+                            targets: step.querySelector<HTMLElement>(".pc-num"),
+                        },
+                        {
+                            at: 0.04,
+                            duration: 0.44,
+                            from: { opacity: 0, y: 14 },
+                            targets: queryAll(step, ".pc-step-copy, [data-pc-nav]"),
+                        },
+                        {
+                            at: 0.12,
+                            duration: 0.5,
+                            from: { y: 20 },
+                            targets: step.querySelector<HTMLElement>("[data-pc-vp]"),
+                        },
+                        {
+                            at: 0.12,
+                            duration: 0.44,
+                            from: { opacity: 0 },
+                            stagger: 0.06,
+                            targets: queryAll(step, ".pc-slide"),
+                        },
+                        {
+                            at: 0.12,
+                            duration: 0.52,
+                            from: { opacity: 0, scale: 0.985, y: 20 },
+                            stagger: 0.06,
+                            targets: queryAll(step, ".pc-row, [data-pc-none]"),
+                        },
+                        {
+                            at: 0.24,
+                            duration: 0.46,
+                            from: { opacity: 0, y: 16 },
+                            stagger: 0.07,
+                            targets: queryAll(step, ".pc-included, [data-pc-counter]"),
+                        },
+                    ]),
+                ),
+                createScrollReveal(
+                    summary,
+                    [
+                        {
+                            at: 0.08,
+                            duration: 0.52,
+                            from: { opacity: 0, scale: 0.985, y: 22 },
+                            targets: summary,
+                        },
+                        {
+                            at: 0.22,
+                            duration: 0.44,
+                            from: { opacity: 0, y: 12 },
+                            targets: $<HTMLElement>(".pc-compare"),
+                        },
+                    ],
+                    {
+                        extend: (timeline) =>
+                            timeline.call(() => rollTo(totalText.textContent ?? ""), 180),
+                    },
+                ),
+            ];
+            document.addEventListener(
+                "astro:before-swap",
+                () => motions.forEach((motion) => motion.revert()),
+                { once: true },
+            );
+        }
+
         // Summary lines animate in only after the first rendered frame.
         requestAnimationFrame(() =>
             requestAnimationFrame(() => (root.dataset.animate = "")),
