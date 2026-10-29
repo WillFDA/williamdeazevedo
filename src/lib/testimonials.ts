@@ -10,15 +10,17 @@ export const getPublishedTestimonials = () =>
   temoignages
     .filter((testimonial) => testimonial.published !== false)
     .map((testimonial) => {
-      const project = getProjectById(testimonial.projectId);
+      const project = testimonial.projectId
+        ? getProjectById(testimonial.projectId)
+        : undefined;
 
-      if (!project) {
+      if (testimonial.projectId && !project) {
         throw new Error(`Projet introuvable pour ${testimonial.id}`);
       }
 
       return {
         ...testimonial,
-        href: project.href,
+        href: project?.href,
         project,
         image: testimonial.imageFile
           ? testimonialImages[`../assets/temoignages/${testimonial.imageFile}`]
