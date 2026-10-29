@@ -29,7 +29,10 @@ export interface MotionStep {
   at: number;
   /** Durée de chaque élément, en secondes. */
   duration: number;
-  /** Courbe anime.js (par défaut `out(3)`, l'équivalent de power3.out). */
+  /**
+   * Courbe anime.js (par défaut `out(4)`). Les puissances GSAP sont décalées
+   * d'un cran : power3.out = out(4), power2.out = out(3).
+   */
   ease?: string;
   /** État de départ ; l'arrivée est toujours l'état naturel de l'élément. */
   from: MotionFrom;
@@ -182,7 +185,7 @@ export const createScrollReveal = (
         callbacks.onComplete?.();
       },
     },
-    "out(3)",
+    "out(4)",
     true
   );
   elements = built;
