@@ -38,6 +38,10 @@ All commands are run from the root of the project, from a terminal:
 | `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `bun astro -- --help` | Get help using the Astro CLI                     |
 
+## 🛡️ Garde-fou des agents
+
+`.claude/hooks/guard-shell.mjs` vérifie chaque commande shell de Claude Code (`PreToolUse` dans `.claude/settings.json`) et de Cursor (`beforeShellExecution` dans `.cursor/hooks.json`). Il bloque les push forcés, les push vers `main`, `develop` ou `2026`, la suppression de branche distante, `git reset --hard`, `git clean -f`, `git branch -D`, `git checkout .`, `git restore .`, `git stash clear`, `--no-verify`, ainsi que `npm`, `pnpm`, `yarn` et `npx` (le site utilise Bun). Quand l'opération est voulue, lance-la toi-même dans ton terminal.
+
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
