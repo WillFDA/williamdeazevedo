@@ -226,11 +226,17 @@ const displayedTestimonials = getPublishedTestimonials();
                             inert={index === 0 ? undefined : true}
                         >
                             <div
-                                aria-label="Avis Google : 5 étoiles sur 5"
+                                aria-label={
+                                    temoignage.isGoogleReview
+                                        ? "Avis Google : 5 étoiles sur 5"
+                                        : "5 étoiles sur 5"
+                                }
                                 class="testimonial-rotator__rating flex items-center justify-center gap-2.5"
                                 role="img"
                             >
-                                <GoogleLogo aria-hidden="true" class="size-4" />
+                                {temoignage.isGoogleReview && (
+                                    <GoogleLogo aria-hidden="true" class="size-4" />
+                                )}
                                 <span class="flex gap-0.5 text-amber-400">
                                     {Array.from({ length: 5 }, () => (
                                         <Star aria-hidden="true" class="size-4" />
@@ -258,15 +264,19 @@ const displayedTestimonials = getPublishedTestimonials();
                                     )}
                                 </div>
                                 <figcaption class="testimonial-rotator__author text-left text-sm font-medium leading-tight text-gray-900">
-                                    <a
-                                        class="text-inherit no-underline underline-offset-2 focus-visible:underline"
-                                        href={temoignage.href}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        aria-label={`Voir le site de ${temoignage.name}`}
-                                    >
-                                        {temoignage.name}
-                                    </a>
+                                    {temoignage.href ? (
+                                        <a
+                                            class="text-inherit no-underline underline-offset-2 focus-visible:underline"
+                                            href={temoignage.href}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            aria-label={`Voir le site de ${temoignage.name}`}
+                                        >
+                                            {temoignage.name}
+                                        </a>
+                                    ) : (
+                                        temoignage.name
+                                    )}
                                 </figcaption>
                             </div>
                         </figure>

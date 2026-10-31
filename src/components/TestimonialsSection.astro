@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Carousel from "@/components/Carousel.astro";
+import GoogleLogo from "@/components/icons/google.svg";
 import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
 import ProjectTag from "@/components/realisations/ProjectTag.astro";
 import WaveIcon from "@/components/ui/WaveIcon.astro";
@@ -80,11 +81,25 @@ const titleWords = "Ce que mes clients disent de leur site".split(" ");
                 compactControls
             >
                 {testimonials.map(
-                    ({ image, imageAlt, initials, name, project, quote }) => (
+                    ({
+                        image,
+                        imageAlt,
+                        initials,
+                        isGoogleReview,
+                        name,
+                        project,
+                        quote,
+                    }) => (
                         <article class="embla__slide">
                             <figure class="testimonial-card flex min-h-full flex-col rounded-3xl bg-surface-muted p-6 sm:p-8">
                                 <div class="flex flex-wrap gap-2">
-                                    {project.tags.map((tag) => (
+                                    {isGoogleReview && (
+                                        <span class="pill">
+                                            <GoogleLogo class="pill-icon" aria-hidden="true" />
+                                            <span>Avis Google</span>
+                                        </span>
+                                    )}
+                                    {project?.tags.map((tag) => (
                                         <ProjectTag tag={tag} />
                                     ))}
                                 </div>
@@ -106,9 +121,11 @@ const titleWords = "Ce que mes clients disent de leur site".split(" ");
                                             <p class="text-base font-medium text-gray-900">
                                                 {name}
                                             </p>
-                                            <p class="text-sm text-gray-600">
-                                                {project.title}
-                                            </p>
+                                            {project && (
+                                                <p class="text-sm text-gray-600">
+                                                    {project.title}
+                                                </p>
+                                            )}
                                         </div>
                                         {image ? (
                                             <Image
@@ -124,25 +141,27 @@ const titleWords = "Ce que mes clients disent de leur site".split(" ");
                                             </div>
                                         )}
                                     </div>
-                                    <a
-                                        class="hero-button hero-button--primary flex min-h-14 w-full items-center justify-center gap-5 rounded-xl px-8 py-3 text-base font-normal sm:w-auto"
-                                        href={`/realisations/${project.id}/`}
-                                    >
-                                        <WaveText
-                                            text="Découvrir ce projet"
-                                            trigger="parent"
-                                        />
-                                        <WaveIcon
-                                            style="--wui-wave-icon-size: 1rem;"
-                                            direction="right"
-                                            trigger="parent"
+                                    {project && (
+                                        <a
+                                            class="hero-button hero-button--primary flex min-h-14 w-full items-center justify-center gap-5 rounded-xl px-8 py-3 text-base font-normal sm:w-auto"
+                                            href={`/realisations/${project.id}/`}
                                         >
-                                            <ArrowRight
-                                                class="size-full"
-                                                aria-hidden="true"
+                                            <WaveText
+                                                text="Découvrir ce projet"
+                                                trigger="parent"
                                             />
-                                        </WaveIcon>
-                                    </a>
+                                            <WaveIcon
+                                                style="--wui-wave-icon-size: 1rem;"
+                                                direction="right"
+                                                trigger="parent"
+                                            >
+                                                <ArrowRight
+                                                    class="size-full"
+                                                    aria-hidden="true"
+                                                />
+                                            </WaveIcon>
+                                        </a>
+                                    )}
                                 </figcaption>
                             </figure>
                         </article>
