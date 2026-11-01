@@ -3,12 +3,12 @@ import { fileURLToPath } from "node:url";
 // @ts-check
 import { satteri } from "@astrojs/markdown-satteri";
 import mdx from "@astrojs/mdx";
-import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 import hastAccessibleTables from "./scripts/hast-accessible-tables.mjs";
+import hastArticleFaq from "./scripts/hast-article-faq.mjs";
 import hastStaticTaskLists from "./scripts/hast-static-task-lists.mjs";
 import {
   createSitemapSerializer,
@@ -24,7 +24,6 @@ const articleDates = readArticleDates(
 export default defineConfig({
   site: "https://williamdeazevedo.fr/",
   integrations: [
-    react(),
     mdx(),
     sitemap({ serialize: createSitemapSerializer(articleDates) }),
     // Après sitemap : complète dist/_redirects (301 barre finale, /blog/<slug>).
@@ -43,9 +42,9 @@ export default defineConfig({
 
   markdown: {
     // Sätteri (Astro's native pipeline) also renders .mdx: @astrojs/mdx
-    // inherits markdown.processor, so both plugins apply to every article.
+    // inherits markdown.processor, so these plugins apply to every article.
     processor: satteri({
-      hastPlugins: [hastAccessibleTables, hastStaticTaskLists],
+      hastPlugins: [hastAccessibleTables, hastStaticTaskLists, hastArticleFaq],
     }),
     shikiConfig: {
       theme: "github-dark-dimmed",

@@ -14,36 +14,30 @@
     "format:check": "oxfmt --check",
     "typecheck": "astro check",
     "check:repo": "node scripts/check-no-tracked-node-modules.mjs",
-    "check:editorial": "node scripts/check-editorial.mjs",
-    "test": "bun test"
+    "check:editorial": "node scripts/check-editorial.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.2",
     "@astrojs/mdx": "^8.0.2",
-    "@astrojs/react": "^7.0.0",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/geist": "^5.3.0",
     "@tailwindcss/vite": "^4.3.3",
     "animejs": "^4.5.0",
     "astro": "^7.3.5",
     "embla-carousel": "^8.6.0",
-    "gsap": "^3.15.0",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.11",
-    "@types/bun": "^1.4.3",
     "oxfmt": "^0.74.0",
     "oxlint": "^1.89.0",
     "typescript": "^5.9.3",
-    "ultracite": "^8.0.1"
+    "ultracite": "^8.1.0"
   },
   "overrides": {
     "vite": "^8.3.1"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": "^22.22.2 || >=24.15.0"
   }
 }

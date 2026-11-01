@@ -199,7 +199,10 @@ const {
     }
 
     .embla :global(.embla__slide) {
-        aspect-ratio: var(--aspect-video);
+        /* Consumers resize their slides through --slide-aspect-ratio: a rule
+           overriding this one would tie on specificity and depend on the
+           order of the bundled CSS. */
+        aspect-ratio: var(--slide-aspect-ratio, var(--aspect-video));
         flex: 0 0 calc(var(--slide-size) + var(--slide-spacing));
         min-width: 0;
         padding-left: var(--slide-spacing);

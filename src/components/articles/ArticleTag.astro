@@ -1,0 +1,14 @@
+---
+import { getTagIconSvg } from "@/lib/articleTagIcons";
+
+interface Props {
+    tag: string;
+}
+
+const { tag } = Astro.props;
+---
+
+<span class="pill">
+    <span class="pill-icon" set:html={getTagIconSvg(tag)} />
+    {tag}
+</span>

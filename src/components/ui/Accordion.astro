@@ -3,6 +3,8 @@ import ChevronUp from "../icons/nucleo/chevron-up-fill.svg";
 
 type AccordionItem = {
     answer?: string;
+    /** Rich answer, already rendered HTML (article Markdown): replaces `answer`. */
+    answerHtml?: string;
     content?: string;
     id?: string;
     link?: {
@@ -11,12 +13,18 @@ type AccordionItem = {
     };
     open?: boolean;
     question?: string;
+    /** Rich question, already rendered HTML: replaces `question`. */
+    questionHtml?: string;
+    /** id of the question element, to keep an existing `#anchor` valid. */
+    questionId?: string;
     title?: string;
 };
 
 interface Props {
     class?: string;
     contentClass?: string;
+    /** Renders each question as a heading of this level instead of a span. */
+    headingLevel?: 2 | 3 | 4 | 5 | 6;
     iconClass?: string;
     itemClass?: string;
     items: AccordionItem[];
@@ -26,12 +34,14 @@ interface Props {
 const {
     class: className,
     contentClass = "px-5 pb-5 pr-14 text-base font-light leading-normal text-gray-600",
+    headingLevel,
     iconClass = "text-gray-900",
-    itemClass = "bg-gray-100 shadow-sm ring-1 ring-gray-200",
+    itemClass = "bg-surface-muted shadow-sm ring-1 ring-gray-200",
     items,
     summaryClass = "px-5 py-4 text-base font-normal leading-tight text-gray-900",
 } = Astro.props;
 
+const Heading = headingLevel ? (`h${headingLevel}` as const) : undefined;
 const getTitle = (item: AccordionItem) => item.title ?? item.question ?? "";
 const getContent = (item: AccordionItem) => item.content ?? item.answer ?? "";
 ---
@@ -42,30 +52,48 @@ const getContent = (item: AccordionItem) => item.content ?? item.answer ?? "";
             <details
                 id={item.id}
                 class:list={[
-                    "accordion__item group overflow-hidden rounded-xl",
+                    "accordion__item group overflow-hidden rounded-2xl",
                     itemClass,
                 ]}
                 open={item.open ? true : undefined}
             >
                 <summary
                     class:list={[
-                        "accordion__summary flex cursor-pointer list-none items-center justify-between gap-4 text-left outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500",
+                        "accordion__summary flex cursor-pointer list-none items-center justify-between gap-4 text-left outline-none",
                         summaryClass,
                     ]}
                 >
-                    <span class="min-w-0 flex-1">{getTitle(item)}</span>
+                    {
+                        Heading ? (
+                            <Heading class="min-w-0 flex-1" id={item.questionId}>
+                                {item.questionHtml ? (
+                                    <Fragment set:html={item.questionHtml} />
+                                ) : (
+                                    getTitle(item)
+                                )}
+                            </Heading>
+                        ) : (
+                            <span class="min-w-0 flex-1">{getTitle(item)}</span>
+                        )
+                    }
                     <span
                         class:list={[
-                            "accordion__icon inline-flex size-5 flex-none items-center justify-center transition-transform duration-300 ease-out",
+                            "accordion__icon inline-flex size-6 flex-none items-center justify-center transition-transform duration-150 ease-[cubic-bezier(0.4,0,0.2,1)]",
                             iconClass,
                         ]}
                         aria-hidden="true"
                     >
-                        <ChevronUp class="size-3" />
+                        <ChevronUp class="size-3.5" />
                     </span>
                 </summary>
                 <div class:list={["accordion__content", contentClass]}>
-                    <p class="m-0">{getContent(item)}</p>
+                    {
+                        item.answerHtml ? (
+                            <div class="accordion__rich" set:html={item.answerHtml} />
+                        ) : (
+                            <p class="m-0">{getContent(item)}</p>
+                        )
+                    }
                     {
                         item.link && (
                             <a
@@ -89,12 +117,73 @@ const getContent = (item: AccordionItem) => item.content ?? item.answer ?? "";
         display: none;
     }
 
+    /* Focus ring on the whole card: the item's overflow clip would cut an
+       outline drawn on the summary itself. */
+    .accordion__item:has(> .accordion__summary:focus-visible) {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 4px;
+    }
+
     .accordion__icon {
         transform: rotate(180deg);
     }
 
     .accordion__item[open] .accordion__icon {
         transform: rotate(0deg);
+    }
+
+    /* Rich answers (article Markdown): links read like the FAQ link above. */
+    .accordion__rich > :global(* + *) {
+        margin-top: 0.75rem;
+    }
+
+    .accordion__rich :global(a) {
+        color: var(--color-gray-900);
+        text-decoration: underline;
+        text-decoration-color: var(--color-gray-300);
+        text-underline-offset: 4px;
+        transition: text-decoration-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @media (hover: hover) {
+        .accordion__rich :global(a:hover) {
+            text-decoration-color: var(--color-gray-900);
+        }
+    }
+
+    .accordion__rich :global(a:focus-visible) {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 4px;
+    }
+
+    .accordion__rich :global(strong) {
+        color: var(--color-gray-900);
+        font-weight: 500;
+    }
+
+    .accordion__rich :global(:is(ul, ol)) {
+        padding-left: 1.25rem;
+    }
+
+    .accordion__rich :global(ul) {
+        list-style: disc;
+    }
+
+    .accordion__rich :global(ol) {
+        list-style: decimal;
+    }
+
+    .accordion__rich :global(li + li) {
+        margin-top: 0.35rem;
+    }
+
+    .accordion__rich :global(:not(pre) > code) {
+        background: var(--color-snow-50);
+        border-radius: 0.25rem;
+        box-shadow: inset 0 0 0 1px var(--color-gray-200);
+        color: var(--color-gray-900);
+        font-size: 0.85em;
+        padding: 0.15em 0.4em;
     }
 
     @supports selector(::details-content) {

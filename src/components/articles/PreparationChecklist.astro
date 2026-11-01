@@ -94,8 +94,8 @@ const {
   .preparation-checklist .checklist-note { margin: .4rem 0 1.25rem; font-size: .875rem; line-height: 1.6; color: var(--color-gray-600); }
   .preparation-checklist .checklist-items { display: grid; gap: .35rem; padding: 0; margin: 0; list-style: none; }
   .preparation-checklist .checklist-items li { margin: 0; }
-  .checklist-items label { display: flex; align-items: flex-start; gap: .85rem; padding: .75rem .9rem; min-height: 44px; cursor: pointer; border-radius: .6rem; background: var(--color-surface-100); font-size: .9375rem; line-height: 1.55; transition: background-color 160ms ease, color 160ms ease; }
-  .checklist-items label:hover { background: var(--color-gray-100); }
+  .checklist-items label { display: flex; align-items: flex-start; gap: .85rem; padding: .75rem .9rem; min-height: 44px; cursor: pointer; border-radius: .6rem; background: var(--color-surface-muted); font-size: .9375rem; line-height: 1.55; transition: background-color 160ms ease, color 160ms ease; }
+  .checklist-items label:hover { background: color-mix(in srgb, var(--color-gray-200) 50%, var(--color-surface-muted)); }
   .checklist-items input { flex: 0 0 auto; width: 1.15rem; height: 1.15rem; margin: .2rem 0 0; accent-color: var(--color-blue-500); cursor: pointer; }
   .checklist-items label:has(input:checked) { background: var(--color-blue-50); color: var(--color-gray-900); }
   .checklist-items label:has(input:focus-visible) { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
@@ -106,7 +106,7 @@ const {
   .checklist-bar { display: block; height: .375rem; border-radius: 999px; background: var(--color-gray-100); overflow: hidden; }
   .checklist-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--color-blue-500); transform: scaleX(0); transform-origin: left; transition: transform 240ms cubic-bezier(.2, 0, 0, 1); }
   .checklist-tools button { min-height: 40px; padding: .5rem .9rem; border: 1px solid var(--color-gray-200); border-radius: .6rem; color: var(--color-gray-900); background: var(--color-snow-50); font: inherit; font-size: .875rem; cursor: pointer; transition: background-color 160ms ease; }
-  .checklist-tools button:hover:not(:disabled) { background: var(--color-surface-100); }
+  .checklist-tools button:hover:not(:disabled) { background: var(--color-surface-muted); }
   .checklist-tools button:disabled { color: var(--color-gray-400); cursor: default; }
   @media (prefers-reduced-motion: reduce) { .checklist-items label, .checklist-bar > span, .checklist-tools button { transition: none; } }
 </style>

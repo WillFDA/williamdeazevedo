@@ -1,0 +1,29 @@
+---
+import GlobeIcon from "@/components/icons/nucleo/globe-outline.svg";
+import SparkleIcon from "@/components/icons/nucleo/sparkle-3-fill.svg";
+import WindowLayoutIcon from "@/components/icons/nucleo/window-layout-fill.svg";
+import WindowPaintbrushIcon from "@/components/icons/nucleo/window-paintbrush-fill.svg";
+import WindowPointerIcon from "@/components/icons/nucleo/window-pointer-fill.svg";
+import type { Project } from "@/data/projects";
+
+interface Props {
+    tag: Project["tags"][number];
+}
+
+const { tag } = Astro.props;
+
+const projectTagIcons = {
+    globe: GlobeIcon,
+    sparkle: SparkleIcon,
+    "window-layout": WindowLayoutIcon,
+    "window-paintbrush": WindowPaintbrushIcon,
+    "window-pointer": WindowPointerIcon,
+} as const;
+
+const Icon = projectTagIcons[tag.icon];
+---
+
+<span class="pill">
+    <Icon class="pill-icon" aria-hidden="true" />
+    <span>{tag.label}</span>
+</span>

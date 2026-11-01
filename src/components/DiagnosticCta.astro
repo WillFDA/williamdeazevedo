@@ -74,97 +74,60 @@ const { buttonLabel, copy, location, titleParts } = Astro.props;
 </DarkCalloutShell>
 
 <script>
-    import { gsap } from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-    gsap.registerPlugin(ScrollTrigger);
+    import {
+        createScrubTimeline,
+        prefersReducedMotion,
+        queryAll,
+    } from "@/scripts/motion";
 
     const activeDiagnosticControllers = new WeakMap<HTMLElement, () => void>();
 
     const cleanupDiagnosticCtas = () => {
-        document.querySelectorAll<HTMLElement>("[data-diagnostic-cta]").forEach((cta) => {
+        for (const cta of queryAll(document, "[data-diagnostic-cta]")) {
             activeDiagnosticControllers.get(cta)?.();
             activeDiagnosticControllers.delete(cta);
             delete cta.dataset.diagnosticReady;
-        });
+        }
     };
 
     const initDiagnosticCtas = () => {
-        document.querySelectorAll<HTMLElement>("[data-diagnostic-cta]").forEach((cta) => {
-            if (cta.dataset.diagnosticReady === "true") return;
+        for (const cta of queryAll(document, "[data-diagnostic-cta]")) {
+            if (cta.dataset.diagnosticReady === "true") continue;
             cta.dataset.diagnosticReady = "true";
+            if (prefersReducedMotion()) continue;
 
-            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                return;
-            }
-
-            const context = gsap.context(() => {
-                const words = gsap.utils.toArray<HTMLElement>(
-                    "[data-diagnostic-word]",
-                    cta,
-                );
-                const media = cta.querySelector<HTMLElement>(
-                    "[data-diagnostic-media]",
-                );
-                const copy = cta.querySelector<HTMLElement>("[data-diagnostic-copy]");
-
-                const timeline = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: cta,
-                        start: "top 82%",
-                        end: "bottom 48%",
-                        scrub: 0.8,
-                    },
-                });
-
-                timeline.fromTo(
-                    words,
-                    { autoAlpha: 0.9, y: 8 },
+            const motion = createScrubTimeline(
+                cta,
+                [
                     {
-                        autoAlpha: 1,
-                        y: 0,
+                        at: 0,
                         duration: 0.62,
-                        ease: "none",
+                        from: { opacity: 0.9, y: 8 },
                         stagger: 0.025,
+                        targets: queryAll(cta, "[data-diagnostic-word]"),
                     },
-                    0,
-                );
+                    {
+                        at: 0.06,
+                        duration: 0.58,
+                        from: { opacity: 0.9, rotate: -4, scale: 0.9 },
+                        targets: cta.querySelector<HTMLElement>(
+                            "[data-diagnostic-media]",
+                        ),
+                    },
+                    {
+                        at: 0.18,
+                        duration: 0.48,
+                        from: { opacity: 0.92, y: 8 },
+                        targets: cta.querySelector<HTMLElement>(
+                            "[data-diagnostic-copy]",
+                        ),
+                    },
+                ],
+                { enter: "82%", leave: "48%" },
+            );
 
-                if (media) {
-                    timeline.fromTo(
-                        media,
-                        { autoAlpha: 0.9, rotation: -4, scale: 0.9 },
-                        {
-                            autoAlpha: 1,
-                            rotation: 0,
-                            scale: 1,
-                            duration: 0.58,
-                            ease: "none",
-                        },
-                        0.06,
-                    );
-                }
-
-                if (copy) {
-                    timeline.fromTo(
-                        copy,
-                        { autoAlpha: 0.92, y: 8 },
-                        {
-                            autoAlpha: 1,
-                            y: 0,
-                            duration: 0.48,
-                            ease: "none",
-                        },
-                        0.18,
-                    );
-                }
-
-            }, cta);
-
-            activeDiagnosticControllers.set(cta, () => context.revert());
-        });
-
-        ScrollTrigger.refresh();
+            activeDiagnosticControllers.set(cta, motion.revert);
+        }
     };
 
     initDiagnosticCtas();

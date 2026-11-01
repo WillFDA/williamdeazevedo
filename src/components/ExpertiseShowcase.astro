@@ -195,10 +195,11 @@ const titleWords = title.split(" ");
 </section>
 
 <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
+  import {
+    createScrollReveal,
+    queryAll,
+    type ScrollReveal,
+  } from "@/scripts/motion";
 
   function initExpertiseShowcase(root: Element) {
     if (!(root instanceof HTMLElement) || root.dataset.expertiseReady) return;
@@ -224,7 +225,7 @@ const titleWords = title.split(" ");
     let activePanel: HTMLElement | undefined;
     let canRunVisualStack = reducedMotion.matches;
     let hasEnteredViewport = reducedMotion.matches;
-    let motionContext: gsap.Context | undefined;
+    let motion: ScrollReveal | undefined;
 
     const getVisualItems = (panel: HTMLElement) =>
       Array.from(panel.querySelectorAll(".expertise-showcase__visual-item"))
@@ -401,140 +402,79 @@ const titleWords = title.split(" ");
     root.dataset.expertiseReady = "true";
 
     if (!reducedMotion.matches) {
-      motionContext = gsap.context(() => {
-        const headingWords = gsap.utils.toArray(
-          "[data-expertise-heading-word]",
-          root,
-        );
-        const introDescription = root.querySelector(
-          "[data-expertise-description]",
-        );
-        const tabsContainer = root.querySelector("[data-expertise-tabs]");
-        const initialVisual = activePanel?.querySelector(
-          "[data-expertise-visual]",
-        );
-        const contentTitle = activePanel?.querySelector(
-          "[data-expertise-content-title]",
-        );
-        const contentCopy = activePanel
-          ? gsap.utils.toArray(
-              "[data-expertise-content-copy]",
-              activePanel,
-            )
-          : [];
-        const contentPills = activePanel
-          ? gsap.utils.toArray(
-              "[data-expertise-content-pill]",
-              activePanel,
-            )
-          : [];
-        const animatedElements = [
-          ...headingWords,
-          ...(introDescription ? [introDescription] : []),
-          ...(tabsContainer ? [tabsContainer] : []),
-          ...(initialVisual ? [initialVisual] : []),
-          ...(contentTitle ? [contentTitle] : []),
-          ...contentCopy,
-          ...contentPills,
-        ];
-
-        const timeline = gsap.timeline({
-          defaults: { ease: "power3.out" },
-          scrollTrigger: {
-            trigger: root,
-            start: "top 80%",
-            once: true,
-            toggleActions: "play none none none",
+      motion = createScrollReveal(
+        root,
+        [
+          {
+            at: 0,
+            duration: 0.5,
+            from: { opacity: 0, scale: 0.985, y: 18 },
+            stagger: 0.025,
+            targets: queryAll(root, "[data-expertise-heading-word]"),
           },
-          onStart: () => {
+          {
+            at: 0.1,
+            duration: 0.44,
+            from: { opacity: 0, y: 14 },
+            targets: root.querySelector<HTMLElement>(
+              "[data-expertise-description]",
+            ),
+          },
+          {
+            at: 0.14,
+            duration: 0.44,
+            from: { opacity: 0, x: -12 },
+            targets: root.querySelector<HTMLElement>("[data-expertise-tabs]"),
+          },
+          {
+            at: 0.16,
+            duration: 0.52,
+            from: { opacity: 0, scale: 0.985, y: 20 },
+            targets: activePanel?.querySelector<HTMLElement>(
+              "[data-expertise-visual]",
+            ),
+          },
+          {
+            at: 0.18,
+            duration: 0.5,
+            from: { opacity: 0, x: 16 },
+            targets: activePanel?.querySelector<HTMLElement>(
+              "[data-expertise-content-title]",
+            ),
+          },
+          {
+            at: 0.22,
+            duration: 0.46,
+            from: { opacity: 0, x: 14 },
+            stagger: 0.06,
+            targets: activePanel
+              ? queryAll(activePanel, "[data-expertise-content-copy]")
+              : [],
+          },
+          {
+            at: 0.28,
+            duration: 0.42,
+            from: { opacity: 0, scale: 0.97, y: 10 },
+            stagger: 0.05,
+            targets: activePanel
+              ? queryAll(activePanel, "[data-expertise-content-pill]")
+              : [],
+          },
+        ],
+        {
+          onBegin: () => {
             hasEnteredViewport = true;
           },
           onComplete: () => {
             canRunVisualStack = true;
             if (activePanel) startVisualStack(activePanel);
-            gsap.set(animatedElements, {
-              clearProps: "opacity,transform,visibility",
-            });
           },
-        });
-
-        timeline.from(
-          headingWords,
-          {
-            autoAlpha: 0,
-            y: 18,
-            scale: 0.985,
-            duration: 0.5,
-            stagger: 0.025,
-          },
-          0,
-        );
-
-        if (introDescription) {
-          timeline.from(
-            introDescription,
-            { autoAlpha: 0, y: 14, duration: 0.44 },
-            0.1,
-          );
-        }
-
-        if (tabsContainer) {
-          timeline.from(
-            tabsContainer,
-            {
-              autoAlpha: 0,
-              x: -12,
-              duration: 0.44,
-            },
-            0.14,
-          );
-        }
-
-        if (initialVisual) {
-          timeline.from(
-            initialVisual,
-            { autoAlpha: 0, y: 20, scale: 0.985, duration: 0.52 },
-            0.16,
-          );
-        }
-
-        if (contentTitle) {
-          timeline.from(
-            contentTitle,
-            { autoAlpha: 0, x: 16, duration: 0.5 },
-            0.18,
-          );
-        }
-
-        timeline.from(
-          contentCopy,
-          {
-            autoAlpha: 0,
-            x: 14,
-            duration: 0.46,
-            stagger: 0.06,
-          },
-          0.22,
-        );
-
-        timeline.from(
-          contentPills,
-          {
-            autoAlpha: 0,
-            y: 10,
-            scale: 0.97,
-            duration: 0.42,
-            stagger: 0.05,
-          },
-          0.28,
-        );
-      }, root);
-
-      ScrollTrigger.refresh();
+        },
+      );
     }
 
     const cleanupShowcase = () => {
-      motionContext?.revert();
+      motion?.revert();
       stopAllVisualStacks();
       delete root.dataset.expertiseReady;
     };
@@ -562,7 +502,7 @@ const titleWords = title.split(" ");
   .expertise-showcase__tabs {
     align-self: start;
     align-content: start;
-    background: var(--color-surface-100);
+    background: var(--color-surface-muted);
     border-radius: 2em;
     display: grid;
     gap: 0.85rem;
@@ -598,20 +538,19 @@ const titleWords = title.split(" ");
     background: transparent;
     border: 0;
     border-radius: 1em;
-    color: var(--color-gray-900);
+    /* Onglet inactif : texte atténué sans opacité (gray-600 sur surface-muted = 5,43:1, AA). */
+    color: var(--color-gray-600);
     display: flex;
     font: inherit;
     font-size: 0.95rem;
     font-weight: 400;
     gap: 0.75em;
     min-height: 3rem;
-    opacity: 0.5;
     padding: 0.5em 1.5em 0.5em 0.5em;
     position: relative;
     text-align: left;
     transition:
       color 220ms cubic-bezier(0.2, 0, 0, 1),
-      opacity 220ms cubic-bezier(0.2, 0, 0, 1),
       transform 220ms cubic-bezier(0.2, 0, 0, 1);
     width: 100%;
     z-index: 1;
@@ -619,7 +558,6 @@ const titleWords = title.split(" ");
 
   .expertise-showcase__tab.is-active {
     color: var(--color-gray-900);
-    opacity: 1;
   }
 
   .expertise-showcase:not([data-expertise-ready])
@@ -667,19 +605,36 @@ const titleWords = title.split(" ");
     --tab-icon-shadow: rgba(83, 103, 216, 0.64);
   }
 
+  /* Icône inactive : pastille grise atténuée (glyphe blanc sur gray-500 = 4,35:1,
+     au-dessus des 3:1 demandés pour les icônes). L'onglet actif garde sa couleur. */
   .expertise-showcase__tab-icon {
     align-items: center;
-    background: var(--tab-icon-bg, var(--color-blue-500));
+    background: var(--color-gray-500);
     border-radius: 0.875em;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.28),
-      0 12px 24px -16px var(--tab-icon-shadow, rgba(62, 96, 212, 0.7));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
     color: var(--color-snow-50);
+    transition:
+      background-color 220ms cubic-bezier(0.2, 0, 0, 1),
+      box-shadow 220ms cubic-bezier(0.2, 0, 0, 1);
     display: inline-flex;
     flex: 0 0 auto;
     height: 2rem;
     justify-content: center;
     width: 2rem;
+  }
+
+  .expertise-showcase__tab.is-active .expertise-showcase__tab-icon {
+    background: var(--tab-icon-bg, var(--color-blue-500));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      0 12px 24px -16px var(--tab-icon-shadow, rgba(62, 96, 212, 0.7));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .expertise-showcase__tab,
+    .expertise-showcase__tab-icon {
+      transition: none;
+    }
   }
 
   .expertise-showcase__tab-icon svg {
@@ -694,7 +649,7 @@ const titleWords = title.split(" ");
   .expertise-showcase__visual {
     align-items: center;
     align-self: start;
-    background: var(--color-surface-100);
+    background: var(--color-surface-muted);
     border-radius: 2rem;
     display: flex;
     height: 20rem;
@@ -915,7 +870,7 @@ const titleWords = title.split(" ");
   }
 
   .expertise-showcase__pills span {
-    background: var(--color-surface-100);
+    background: var(--color-surface-muted);
     border: 1px solid color-mix(in srgb, var(--color-gray-200) 80%, white);
   }
 
