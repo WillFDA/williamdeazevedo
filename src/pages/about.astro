@@ -212,7 +212,7 @@ const clientAngles: ClientAngle[] = [
 
         <section class="relative left-1/2 w-dvw -translate-x-1/2">
             <FadeRevealOnScroll>
-                <div class="photo-strip flex items-center justify-start gap-3 overflow-x-auto px-4 sm:px-4 lg:justify-center lg:gap-5 lg:overflow-visible lg:px-0">
+                <div aria-label="Photos de William" class="photo-strip flex items-center justify-start gap-3 overflow-x-auto px-4 sm:px-4 lg:justify-center lg:gap-5 lg:overflow-visible lg:px-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500" role="region" tabindex="0">
                     {
                         pictures.map((picture, index) => (
                             <div

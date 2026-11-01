@@ -1,17 +1,20 @@
 ---
+import type { ImageMetadata } from "astro";
+import motivaiOldUi from "@/assets/articles/motivai-ancienne-interface.webp";
 import motivaiLandingHero from "@/assets/projects/motivai-landing-hero.webp";
+import ArticleImage from "@/components/articles/ArticleImage.astro";
 
 // Accessible image comparison slider (no framework, ~25 lines of JS).
 // Driven by a native range input so it works with keyboard and touch for free.
 interface Props {
     afterAlt?: string;
     afterLabel?: string;
-    afterSrc?: string;
+    afterSrc?: ImageMetadata | string;
     ariaLabel?: string;
     aspectRatio?: string;
     beforeAlt?: string;
     beforeLabel?: string;
-    beforeSrc?: string;
+    beforeSrc?: ImageMetadata | string;
     caption?: string;
     helperText?: string;
 }
@@ -19,12 +22,13 @@ interface Props {
 const {
     afterAlt = "Nouvelle interface de Motivai",
     afterLabel = "Après",
-    afterSrc = motivaiLandingHero.src,
+    afterSrc = motivaiLandingHero,
     ariaLabel = "Comparer l'ancienne et la nouvelle interface de Motivai",
     aspectRatio = "16 / 9",
     beforeAlt = "Ancienne interface de Motivai",
     beforeLabel = "Avant",
-    beforeSrc = "https://igpmag5dwziffdrn.public.blob.vercel-storage.com/blog/motivia_old_ui.jpeg",
+    // Ancienne capture rapatriée de Vercel Blob dans src/assets (pipeline Astro).
+    beforeSrc = motivaiOldUi,
     caption = "L'ancienne interface vs la nouvelle.",
     helperText = "Glisse pour comparer",
 } = Astro.props;
@@ -40,21 +44,21 @@ const {
         class="ui-compare__frame relative overflow-hidden rounded-lg border border-gray-100 select-none"
         style={`--pos: 50%; aspect-ratio: ${aspectRatio};`}
     >
-        <img
+        <ArticleImage
             class="absolute inset-0 m-0 block size-full max-w-none rounded-none object-cover object-top"
             src={afterSrc}
             alt={afterAlt}
-            loading="lazy"
-            decoding="async"
+            sizes="(min-width: 672px) 672px, 100vw"
+            widths={[672, 1344]}
             draggable="false"
         />
         <div class="ui-compare__clip absolute inset-0 overflow-hidden">
-            <img
+            <ArticleImage
                 class="absolute inset-0 m-0 block size-full max-w-none rounded-none object-cover object-top"
                 src={beforeSrc}
                 alt={beforeAlt}
-                loading="lazy"
-                decoding="async"
+                sizes="(min-width: 672px) 672px, 100vw"
+                widths={[672, 1344]}
                 draggable="false"
             />
         </div>

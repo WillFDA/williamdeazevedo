@@ -1,0 +1,61 @@
+---
+import type { ComponentProps } from "astro/types";
+import FadeReveal from "@/components/animations/FadeReveal.astro";
+import ServiceCallout from "@/components/articles/ServiceCallout.astro";
+import FaqSection from "@/components/FaqSection.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import { splitArticleFaq } from "@/lib/articleFaq";
+
+interface Props {
+    articleId: string;
+    tocItems: ComponentProps<typeof TableOfContents>["items"];
+}
+
+const { articleId, tocItems } = Astro.props;
+// Default slot: the article's <Content />. Its FAQ is laid out like the
+// homepage one, across the full width, so the body is split around it and the
+// sticky table of contents stops above it.
+const { after, before, faq } = splitArticleFaq(
+    (await Astro.slots.render("default")) ?? "",
+);
+const shellClass =
+    "article-body-shell mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(13rem,16rem)] lg:gap-12";
+---
+
+<div class={shellClass}>
+    <div class="hidden lg:block" aria-hidden="true"></div>
+
+    <FadeReveal delay={0.3}>
+        <div class="article-prose min-w-0" set:html={before} />
+        {!faq && <ServiceCallout articleId={articleId} />}
+    </FadeReveal>
+
+    <aside class="article-toc-column order-first lg:order-none">
+        <TableOfContents items={tocItems} />
+    </aside>
+</div>
+
+{
+    faq && (
+        <>
+            <FaqSection
+                class="article-faq"
+                ctaLocation={`article-${articleId}-faq`}
+                headingLevel={3}
+                items={faq.items}
+                padded={false}
+                title="Questions fréquentes"
+                titleId={faq.titleId}
+            />
+            <div class={shellClass}>
+                <div class="hidden lg:block" aria-hidden="true"></div>
+                <div>
+                    {after && (
+                        <div class="article-prose min-w-0" set:html={after} />
+                    )}
+                    <ServiceCallout articleId={articleId} />
+                </div>
+            </div>
+        </>
+    )
+}

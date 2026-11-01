@@ -1,6 +1,6 @@
 # Confidentialité : déploiement sans bandeau
 
-La PR n'ajoute aucun bandeau, panneau de préférences, cookie de consentement ni bouton « Gérer mes cookies ». Elle enrichit les mentions, garde les événements en mémoire plutôt qu'en sessionStorage, nettoie les URL des événements manuels et charge Cal.com uniquement au clic.
+La PR n'ajoute aucun bandeau, panneau de préférences, cookie de consentement ni bouton « Gérer mes cookies ». Elle enrichit les mentions, garde les événements en mémoire plutôt qu'en sessionStorage, nettoie les URL des événements manuels et ne charge Cal.com qu'au moment où le visiteur appuie sur un bouton de réservation (souris, doigt, stylet, Entrée ou Espace), jamais au chargement de la page, au survol ou au focus.
 
 ## Avant fusion vers 2026
 
@@ -30,7 +30,6 @@ Confirmer les durées email/rendez-vous et les garanties de transfert des presta
 
 ## Vérification
 
-- `bun test tests/analytics.test.ts` et `PUBLIC_RYBBIT_EXEMPT_AUDIENCE=true bun test tests/analytics.test.ts` : aucun chargement par défaut ; chargement unique et file en mémoire lorsque l'activation est explicite ; URL sans paramètres/fragments.
 - `bun run lint`, `bun run build`, `git diff --check`.
 - Vérifier le build par défaut dans un navigateur : aucune interface de consentement et aucun script Rybbit/Zaraz/Cal chargé initialement par le code.
 - Après réglage Cloudflare, répéter sur une prévisualisation distante : vérifier réseau, stockages et événements serveur. Les tests locaux ne prouvent pas que les réglages de production sont corrects.

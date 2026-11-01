@@ -51,7 +51,7 @@ Pour tester l’envoi, utilisez des informations de test et prévenez le destina
 
 ## Mesurer les contrastes au lieu de les deviner
 
-Un gris peut paraître lisible sur votre écran et rester insuffisant. Utilisez un vérificateur de contraste avec les couleurs effectives du texte et de son fond. Pour du texte sur une photographie ou un dégradé, examinez les zones réellement placées derrière les lettres.
+Un gris peut paraître lisible sur votre écran et rester insuffisant, même s’il vient de votre charte graphique : voyez comment [adapter une charte graphique au web](/articles/charte-graphique-entreprise/). Utilisez un vérificateur de contraste avec les couleurs effectives du texte et de son fond. Pour du texte sur une photographie ou un dégradé, examinez les zones réellement placées derrière les lettres.
 
 Le [critère WCAG 2.2 1.4.3, niveau AA](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html), demande notamment :
 

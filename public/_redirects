@@ -12,3 +12,7 @@
 
 # Barre finale : redirection permanente au lieu du 307 automatique.
 /about /about/ 301
+
+# Page /tarifs/ supprimée : les tarifs sont dans le configurateur de l'accueil.
+/tarifs /#tarifs 301
+/tarifs/ /#tarifs 301

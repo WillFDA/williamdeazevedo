@@ -28,12 +28,14 @@ const slugs = [
   "maintenance-site-web",
   "hebergement-site-vitrine",
   "arborescence-site-web",
+  "maquette-site-web",
   "rgpd-formulaire-de-contact",
   "seo-local",
   "site-non-securise",
   "site-pas-sur-google",
   "wix-ou-wordpress",
   "site-one-page",
+  "charte-graphique-entreprise",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
@@ -131,8 +133,11 @@ for (const slug of slugs) {
       .replaceAll("&gt;", ">")
       .replaceAll("&amp;", "&");
     // Both ways: every visible question of the FAQ section is in the schema.
+    // The FAQ title may wrap each word in a <span> for its reveal animation.
     const faqSection = html
-      .split(/<h2\b[^>]*>\s*Questions fréquentes\s*<\/h2>/)[1]
+      .split(
+        /<h2\b[^>]*>(?:\s|<[^>]+>)*Questions(?:\s|<[^>]+>)+fréquentes(?:\s|<[^>]+>)*<\/h2>/
+      )[1]
       ?.split(/<h2\b/)[0];
     assert.equal(
       (faqSection?.match(/<h3\b/g) || []).length,

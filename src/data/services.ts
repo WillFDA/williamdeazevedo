@@ -853,7 +853,7 @@ export const services: Service[] = [
           "Un développement web sur mesure est chiffré sur devis : le prix dépend surtout du nombre d'écrans, des types d'utilisateurs, des données à gérer et des outils à connecter. Un cadrage est possible dès 900 € HT, et le planning est défini après lecture du périmètre.",
         ],
         link: {
-          href: "/tarifs/",
+          href: "/#tarifs",
           label: "Voir les tarifs",
         },
       },

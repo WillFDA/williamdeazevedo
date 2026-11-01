@@ -23,26 +23,8 @@ type ResultRow = {
     withMe: string;
 };
 
-interface Props {
-    /**
-     * `tarifs` : page /tarifs/. `vitrine` : page /creation-site-vitrine/
-     * (slot after-cta). Seuls l'ancre du titre et l'emplacement analytics
-     * du bouton changent.
-     */
-    variant?: "tarifs" | "vitrine";
-}
-
-const { variant = "tarifs" } = Astro.props;
-const { headingId, ctaLocation } = {
-    tarifs: {
-        headingId: "pricing-comparison-title",
-        ctaLocation: "tarifs-comparaison",
-    },
-    vitrine: {
-        headingId: "pricing-comparison-costs-title",
-        ctaLocation: "service-creation-site-vitrine-comparaison",
-    },
-}[variant];
+const headingId = "pricing-comparison-costs-title";
+const ctaLocation = "service-creation-site-vitrine-comparaison";
 
 // Coût sur 3 ans. Colonne « Site à 600 € » : relevé d'offres publiques de
 // sites à bas prix et par abonnement, consulté le 14 octobre 2026, aucune
@@ -52,7 +34,8 @@ const { headingId, ctaLocation } = {
 // propriété du site variable selon le contrat. Scénario retenu : 600 € HT de
 // mise en place + 36 mensualités de 30 à 100 € HT (scénario, pas une moyenne).
 // Colonne William : uniquement des formulations déjà publiées (« Dès 2 000 €
-// HT » : PricingPreview.astro ; coûts après livraison : tarifs.astro).
+// HT » : PricingConfigurator.astro ; coûts après livraison : ancienne page
+// /tarifs/).
 const nbsp = "\u00A0";
 const euro = (value: number) =>
     `${new Intl.NumberFormat("fr-FR").format(value)}${nbsp}€${nbsp}HT`;

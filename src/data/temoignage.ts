@@ -4,8 +4,10 @@ export type Temoignage = {
   imageAlt?: string;
   imageFile?: string;
   initials: string;
+  /** Avis publié sur la fiche Google : il affiche le logo Google. */
+  isGoogleReview?: boolean;
   name: string;
-  projectId: string;
+  projectId?: string;
   published?: boolean;
   text: string;
 };
@@ -29,8 +31,16 @@ export const temoignages: Temoignage[] = [
     imageAlt: "Portrait de Cédrine Marmasse",
     imageFile: "persistance-cedrine-marmasse.webp",
     initials: "CM",
+    isGoogleReview: true,
     name: "Cédrine Marmasse",
     projectId: "persistance",
     text: "J’ai fait appel à William pour la réalisation de mon site internet. Force de conseil et de proposition, il a su me mettre en confiance dès le début du projet. Son expertise technique, associée à une approche pédagogique, m’a permis de mieux comprendre les enjeux liés à la conception du site. Réactif, rigoureux et à l’écoute, il a su traduire mes besoins en un site clair, professionnel et fidèle à mon activité. Je suis pleinement satisfait du résultat final. Le résultat final correspond parfaitement à mes attentes et reflète fidèlement l’identité de mon activité.",
+  },
+  {
+    id: "maximin-d-audiffret",
+    initials: "MA",
+    isGoogleReview: true,
+    name: "Maximin d'Audiffret",
+    text: "Dev Front avec beaucoup de gout et de sens du détail.",
   },
 ];
