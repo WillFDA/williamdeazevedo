@@ -38,9 +38,9 @@ export const temoignages: Temoignage[] = [
   },
   {
     id: "maximin-d-audiffret",
-    // Avis masqué pour l'instant (published: false). Photo prête dans src/assets/temoignages/maximin-d-audiffret.webp : à ajouter via imageFile après son accord.
+    imageAlt: "Portrait de Maximin d'Audiffret",
+    imageFile: "maximin-d-audiffret.webp",
     initials: "MA",
-    published: false,
     isGoogleReview: true,
     name: "Maximin d'Audiffret",
     text: "Dev Front avec beaucoup de gout et de sens du détail.",
