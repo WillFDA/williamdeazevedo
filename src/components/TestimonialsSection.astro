@@ -85,6 +85,7 @@ const titleWords = "Ce que mes clients disent de leur site".split(" ");
                         image,
                         imageAlt,
                         initials,
+                        role,
                         isGoogleReview,
                         name,
                         project,
@@ -121,9 +122,9 @@ const titleWords = "Ce que mes clients disent de leur site".split(" ");
                                             <p class="text-base font-medium text-gray-900">
                                                 {name}
                                             </p>
-                                            {project && (
+                                            {(role ?? project?.title) && (
                                                 <p class="text-sm text-gray-600">
-                                                    {project.title}
+                                                    {role ?? project?.title}
                                                 </p>
                                             )}
                                         </div>
