@@ -36,20 +36,27 @@ const getServiceIconKind = (href: string): ServiceIconKind => {
     return "pointer";
 };
 
-const serviceLinks = services.map((service) => {
-    const href = service.rootPath ?? `/services/${service.slug}/`;
+const serviceLinks = services
+    .filter((service) => !service.hideFromNav)
+    .map((service) => {
+        const href = service.rootPath ?? `/services/${service.slug}/`;
 
-    return {
-        href,
-        iconKind: getServiceIconKind(href),
-        label: service.navLabel,
-        title: service.title,
-    };
-});
+        return {
+            href,
+            iconKind: getServiceIconKind(href),
+            label: service.navLabel,
+            title: service.title,
+        };
+    });
 
 const normalizePath = (path: string) => path.replace(/\/$/, "") || "/";
 const currentPath = normalizePath(pathName);
-const servicePaths = new Set(serviceLinks.map((service) => normalizePath(service.href)));
+// Toutes les pages services (y compris celles hors menu) activent l'onglet.
+const servicePaths = new Set(
+    services.map((service) =>
+        normalizePath(service.rootPath ?? `/services/${service.slug}/`),
+    ),
+);
 const isServicesActive =
     currentPath === "/services" ||
     currentPath.startsWith("/services/") ||

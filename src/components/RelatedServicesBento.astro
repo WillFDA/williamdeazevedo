@@ -43,6 +43,7 @@ const extraItems = relatedItems.slice(3);
             </div>
             {extraItems.map((item, index) => (
                 <ServiceBentoCard
+                    class="xl:col-span-2"
                     delay={0.32 + index * 0.08}
                     item={item}
                     variant="related"
