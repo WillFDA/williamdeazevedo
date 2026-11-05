@@ -1,4 +1,5 @@
 ---
+import { serializeJsonLd } from "@/lib/jsonLd";
 import CalButton from "@/components/CalButton.astro";
 import CapabilitiesStrip from "@/components/CapabilitiesStrip.astro";
 import DiagnosticCta from "@/components/DiagnosticCta.astro";
@@ -12,6 +13,7 @@ import ProjectListItem from "@/components/realisations/ProjectListItem.astro";
 import AnimatedHeading from "@/components/ui/AnimatedHeading.astro";
 import WaveText from "@/components/ui/WaveText.astro";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
+import { localAreaLabel } from "@/data/business";
 import { getProjectById } from "@/data/projects";
 import { type Service, getServiceBySlug } from "@/data/services";
 import Layout from "@/layout/Layout.astro";
@@ -183,17 +185,17 @@ const breadcrumbJsonLd = {
     <script
         type="application/ld+json"
         is:inline
-        set:html={JSON.stringify(serviceJsonLd)}
+        set:html={serializeJsonLd(serviceJsonLd)}
     />
     <script
         type="application/ld+json"
         is:inline
-        set:html={JSON.stringify(faqJsonLd)}
+        set:html={serializeJsonLd(faqJsonLd)}
     />
     <script
         type="application/ld+json"
         is:inline
-        set:html={JSON.stringify(breadcrumbJsonLd)}
+        set:html={serializeJsonLd(breadcrumbJsonLd)}
     />
 
     <div class="mx-auto flex w-full max-w-5xl flex-col gap-20 px-4 pt-10 pb-20 sm:gap-28 sm:pt-14 sm:pb-28 lg:gap-32 lg:pt-16 lg:pb-32">
@@ -204,7 +206,13 @@ const breadcrumbJsonLd = {
             <AnimatedHeading
                 class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl"
                 parts={heroTitleParts}
-            />
+            >
+                {service.localHeading && (
+                    <span class="heading-location" slot="after">
+                        Freelance basé à {localAreaLabel}
+                    </span>
+                )}
+            </AnimatedHeading>
             <FadeReveal delay={0.32}>
                 <p class="page-subheading max-w-sm sm:max-w-lg">
                     {service.intro}
