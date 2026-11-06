@@ -4,6 +4,11 @@
       {
         "command": "bunx ultracite fix --hook"
       }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "node .claude/hooks/guard-shell.mjs"
+      }
     ]
   },
   "version": 1
