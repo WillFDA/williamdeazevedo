@@ -50,32 +50,22 @@ try {
       }
       scrollTo({top:0,behavior:'instant'});return output;
     })()`);
+    // Sous 768 px, la bulle est masquée (revue Fable UI-4).
     if (width < 768)
-      for (const sample of samples) {
+      for (const sample of samples)
         assert.equal(
           sample.visible,
-          !sample.footerVisible,
-          `Mobile visibility at ${width}px scrollY=${sample.y}`
+          false,
+          `Mobile hidden at ${width}px scrollY=${sample.y}`
         );
-        assert.equal(
-          sample.width,
-          sample.height,
-          "Mobile bubble remains circular"
-        );
-      }
     const overlays = evaluate(`(async()=>{
       const wait=()=>new Promise(r=>setTimeout(r,450));
       await wait();
       const bubble=document.querySelector('[data-floating-email]');
       const visible=()=>getComputedStyle(bubble).visibility==='visible'&&getComputedStyle(bubble).display!=='none';
       const output={};
-      if(innerWidth<768){
-        document.querySelector('[data-mobile-menu-button]').click();await wait();output.menuHidden=!visible();
-        document.querySelector('[data-mobile-menu-button]').click();await wait();output.menuRestored=visible();
-      }
       document.querySelector('[data-cal-drawer]').showModal();await wait();output.dialogHidden=!visible();
       document.querySelector('[data-cal-drawer]').close();await wait();output.dialogClosed=true;
-      if(innerWidth<768)output.dialogRestored=visible();
       return output;
     })()`);
     for (const [state, passed] of Object.entries(overlays))
@@ -84,7 +74,7 @@ try {
   }
   console.log(JSON.stringify(results, null, 2));
   console.log(
-    "PASS: original widths and stable mobile overlay; footer hides on entry"
+    "PASS: original widths; bubble hidden on mobile and under the Cal.com dialog"
   );
 } finally {
   browser("close");

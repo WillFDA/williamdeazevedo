@@ -64,17 +64,6 @@
             contentObserver?.disconnect();
             const rect = bubble.getBoundingClientRect();
             if (!rect.width) return;
-            // Mobile is a conventional overlay: never shrink the page or hide
-            // on individual content. Yield only when the footer enters view.
-            if (window.matchMedia("(max-width: 767px)").matches) {
-                delete bubble.dataset.contentOverlap;
-                contentObserver = new IntersectionObserver((entries) => {
-                    bubble.toggleAttribute("data-footer-visible", entries.some((entry) => entry.isIntersecting));
-                });
-                document.querySelectorAll("[data-site-footer]").forEach((footer) => contentObserver?.observe(footer));
-                return;
-            }
-            delete bubble.dataset.footerVisible;
             const overlapping = new Set<Element>();
             // Observe only the bubble's footprint (with an 8px breathing room).
             // Yield to text, images, controls and the footer instead of covering
@@ -126,7 +115,6 @@
         box-shadow: 0 8px 28px -10px rgb(34 42 55 / 45%);
     }
 
-    .floating-email[data-footer-visible],
     .floating-email[data-content-overlap]:not(:focus-within) {
         visibility: hidden;
     }
@@ -174,10 +162,11 @@
         }
     }
 
+    /* Sur mobile, la bulle recouvrait la colonne de texte ; le header
+       (« Appeler ») et les CTA du contenu suffisent. */
     @media (max-width: 767px) {
         .floating-email {
-            right: max(0.75rem, env(safe-area-inset-right));
-            bottom: max(0.75rem, env(safe-area-inset-bottom));
+            display: none;
         }
     }
 
