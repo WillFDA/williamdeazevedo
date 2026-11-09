@@ -54,14 +54,14 @@ const realisationsDiagnosticTitleParts = [
                     class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl"
                     parts={heroTitleParts}
                 />
-                <FadeReveal delay={0.32}>
+                <FadeReveal delay={0.1} fade={false}>
                     <p class="page-subheading max-w-sm sm:max-w-lg">
                         Chaque réalisation part d'un doute concret : clarifier une
                         offre, moderniser une expérience et guider plus naturellement
                         vers le contact.
                     </p>
                 </FadeReveal>
-                <FadeReveal class="w-full sm:w-auto" delay={0.44}>
+                <FadeReveal class="w-full sm:w-auto" delay={0.18} fade={false}>
                     <div class="mt-3 flex w-full flex-col items-center gap-3 sm:mt-4 sm:w-auto sm:flex-row">
                         <CalButton
                             class="w-full rounded-xl text-base font-normal sm:w-auto"
@@ -84,7 +84,7 @@ const realisationsDiagnosticTitleParts = [
 
             {
                 featuredProject && (
-                    <FadeReveal delay={0.15}>
+                    <FadeReveal delay={0.15} fade={false}>
                         <ProjectListItem project={featuredProject} eager />
                     </FadeReveal>
                 )

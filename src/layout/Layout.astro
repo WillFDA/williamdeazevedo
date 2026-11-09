@@ -435,41 +435,34 @@ const websiteJsonLd = {
 
     :global(.section-fade-reveal) {
         transition:
-            opacity 1050ms cubic-bezier(0.16, 1, 0.3, 1),
-            transform 1050ms cubic-bezier(0.16, 1, 0.3, 1),
-            filter 1050ms cubic-bezier(0.16, 1, 0.3, 1);
+            opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
+            transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
         transition-delay: var(--fade-delay, 0s);
     }
 
     :global(.section-fade-reveal.is-reveal-ready) {
-        filter: blur(2px);
         opacity: 0;
-        transform: translate3d(0, 1.2rem, 0);
-        will-change: opacity, transform, filter;
+        transform: translate3d(0, 0.7rem, 0);
     }
 
     :global(.section-fade-reveal.is-reveal-ready.is-visible),
     :global(.section-fade-reveal.is-reveal-complete) {
-        filter: none;
         opacity: 1;
         transform: none;
-        will-change: auto;
     }
 
     :global(.section-fade-reveal.is-reveal-complete) {
         transition: none;
     }
 
-    @media (scripting: none), (prefers-reduced-motion: reduce) {
+    @media (scripting: none), (prefers-reduced-motion: reduce), print {
         :global(.section-fade-reveal),
         :global(.section-fade-reveal.is-reveal-ready),
         :global(.section-fade-reveal.is-reveal-ready.is-visible),
         :global(.section-fade-reveal.is-reveal-complete) {
-            filter: none;
             opacity: 1;
             transform: none;
             transition: none;
-            will-change: auto;
         }
     }
 </style>

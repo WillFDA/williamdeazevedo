@@ -7,22 +7,25 @@ import Layout from "@/layout/Layout.astro";
     title="Page introuvable - William De Azevedo"
     description="Cette page n'existe pas ou a été déplacée."
 >
-    <section class="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center gap-6 px-4 py-12 text-center md:py-16">
-        <FadeReveal delay={0.1}>
+    <section
+        class="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center gap-6 px-4 py-12 text-center md:py-16"
+        data-section-reveal="false"
+    >
+        <FadeReveal delay={0.1} fade={false}>
             <p class="text-sm font-light text-blue-500">Erreur 404</p>
         </FadeReveal>
-        <FadeReveal delay={0.2}>
+        <FadeReveal delay={0.2} fade={false}>
             <h1 class="page-heading">
                 Cette page n'existe pas
             </h1>
         </FadeReveal>
-        <FadeReveal delay={0.3}>
+        <FadeReveal delay={0.3} fade={false}>
             <p class="page-subheading max-w-sm sm:max-w-lg">
                 Le lien est peut-être cassé ou la page a été déplacée. Pas de
                 panique, on retrouve le chemin.
             </p>
         </FadeReveal>
-        <FadeReveal delay={0.4}>
+        <FadeReveal delay={0.4} fade={false}>
             <div class="flex flex-wrap items-center justify-center gap-3">
                 <a
                     class="inline-flex min-h-14 items-center justify-center rounded-xl bg-coffee-300 px-8 py-3 text-base font-normal text-snow-50 transition-transform hover:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-blue-500"
