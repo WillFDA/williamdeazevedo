@@ -4,8 +4,11 @@
 # every visit (~2.1 MB+ each).
 
 # En-têtes de sécurité, sur toutes les pages et tous les fichiers.
-# - HSTS sans includeSubDomains ni preload : à élargir seulement quand tous
-#   les sous-domaines sont confirmés en HTTPS (décision de William).
+# - HSTS avec includeSubDomains, sans preload. Constaté le 2026-11-09 : DNS en
+#   wildcard proxifié (tout sous-domaine pointe sur l'edge Cloudflare), aucun
+#   MX, certificat edge *.williamdeazevedo.fr ; www (301), analytics (200) et
+#   un sous-domaine quelconque (404) répondent en HTTPS valide. Si l'option
+#   est aussi activée dans SSL/TLS > Edge Certificates, n'en garder qu'une.
 # - frame-ancestors est ignoré en Report-Only : il est donc imposé par une
 #   CSP séparée (et X-Frame-Options pour les anciens navigateurs).
 # - La CSP complète reste en Report-Only : elle signale dans la console ce
@@ -19,19 +22,22 @@
 #   le tiroir Cal.com ouvert ; aucune ligne « Content-Security-Policy ».
 # - img-src : l'origine Vercel Blob sert encore l'image « Avant » de l'article
 #   MotivAI (ImageComparison) ; à retirer une fois l'image rapatriée (#137).
-# - Non listés, à ajouter si activés dans le dashboard Cloudflare : Web
-#   Analytics (static.cloudflareinsights.com, cloudflareinsights.com) et les
-#   outils côté client de Zaraz. HSTS : si l'option est aussi activée dans
-#   SSL/TLS > Edge Certificates, n'en garder qu'une des deux.
-# - tests/headers.test.ts vérifie ces en-têtes et les origines chargées.
+# - static.cloudflareinsights.com (script-src) et cloudflareinsights.com
+#   (connect-src) n'existent que pour Web Analytics, injecté depuis le
+#   dashboard Cloudflare : à retirer quand il sera désactivé.
+# - Zaraz : /cdn-cgi/zaraz/* est même origine ('self') et son amorce inline
+#   passe par 'unsafe-inline' ; la correction se fait dans le dashboard.
+# - Une future passerelle GTM (Tag Gateway) sur /metrics est même origine :
+#   déjà couverte par 'self'.
+# - bun run check:headers (scripts/check-headers.mjs) vérifie ce fichier.
 /*
-  Strict-Transport-Security: max-age=31536000
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
   X-Frame-Options: DENY
   Content-Security-Policy: frame-ancestors 'none'
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://app.cal.com https://analytics.williamdeazevedo.fr; style-src 'self' 'unsafe-inline' https://app.cal.com; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net https://igpmag5dwziffdrn.public.blob.vercel-storage.com; font-src 'self' data:; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://pagead2.googlesyndication.com https://app.cal.com https://cal.com https://analytics.williamdeazevedo.fr; frame-src https://cal.com https://app.cal.com https://www.googletagmanager.com https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://app.cal.com https://analytics.williamdeazevedo.fr https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://app.cal.com; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net https://igpmag5dwziffdrn.public.blob.vercel-storage.com; font-src 'self' data:; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://pagead2.googlesyndication.com https://app.cal.com https://cal.com https://analytics.williamdeazevedo.fr https://cloudflareinsights.com; frame-src https://cal.com https://app.cal.com https://www.googletagmanager.com https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 
 # Astro fingerprints these filenames on every build, so they're safe to cache
 # forever.
@@ -50,3 +56,21 @@
   Cache-Control: public, max-age=31536000, immutable
 /icons/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Fichiers racine non hachés (favicons, manifeste) : un jour de cache. Chemins
+# exacts, pas /*.png : le splat traverse les « / », la règle toucherait aussi
+# /pictures/*.png et Cloudflare joindrait les deux Cache-Control par une virgule.
+/favicon.ico
+  Cache-Control: public, max-age=86400
+/favicon.svg
+  Cache-Control: public, max-age=86400
+/favicon-96x96.png
+  Cache-Control: public, max-age=86400
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400
+/web-app-manifest-192x192.png
+  Cache-Control: public, max-age=86400
+/web-app-manifest-512x512.png
+  Cache-Control: public, max-age=86400
+/site.webmanifest
+  Cache-Control: public, max-age=86400

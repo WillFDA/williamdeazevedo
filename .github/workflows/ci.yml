@@ -28,6 +28,7 @@ jobs:
           node-version: 24
       - run: bun install --frozen-lockfile
       - run: bun run check:repo
+      - run: bun run check:headers
       - run: bun run lint
       - run: bun run format:check
       - run: bun run typecheck

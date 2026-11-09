@@ -14,7 +14,8 @@
     "format:check": "oxfmt --check",
     "typecheck": "astro check",
     "check:repo": "node scripts/check-no-tracked-node-modules.mjs",
-    "check:editorial": "node scripts/check-editorial.mjs"
+    "check:editorial": "node scripts/check-editorial.mjs",
+    "check:headers": "node scripts/check-headers.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.2",
