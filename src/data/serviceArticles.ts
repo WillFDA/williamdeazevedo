@@ -18,6 +18,7 @@ export const serviceReadings: Record<string, ServiceReading> = {
   "creation-site-vitrine": {
     articles: [
       "site-600-euros-vs-site-2000-euros",
+      "devis-site-internet",
       "hebergement-site-vitrine",
       "prix-site-vitrine",
       "landing-page",
@@ -99,6 +100,7 @@ export const articleServices: Record<string, string[]> = {
   "choisir-developpeur-web": ["creation-site-vitrine"],
   "cout-site-internet-par-mois": ["creation-site-vitrine"],
   "creer-site-internet-ia": ["creation-site-vitrine"],
+  "devis-site-internet": ["creation-site-vitrine"],
   "exemples-sites-vitrines": ["creation-site-vitrine"],
   "fiche-google-my-business-artisan": ["creation-site-internet-artisan"],
   "hebergement-site-vitrine": ["creation-site-vitrine"],
