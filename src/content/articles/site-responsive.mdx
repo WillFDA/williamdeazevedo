@@ -1,0 +1,185 @@
+---
+title: "Site responsive : comment vérifier que votre site s’affiche bien sur mobile"
+seoTitle: "Site responsive : le tester sur mobile"
+description: "Site responsive : ce que le mot veut dire, comment tester votre site sur votre téléphone puis avec les bons outils, les défauts qui font fuir vos clients."
+image:
+  src: "/articles/site-responsive/cover.webp"
+  alt: "Trois cartes. Le même site, trois écrans, un contenu : un ordinateur, une tablette et un téléphone affichent les mêmes blocs, sur trois colonnes, puis deux, puis une seule. Le test, comme un client, sur votre téléphone : compris en haut de l’écran, appel en un geste, menu qui s’ouvre, formulaire qui s’envoie, photos nettes, rien ne dépasse sur le côté. Les outils, pour confirmer : mode Appareil de Chrome, PageSpeed Insights sur mobile, largeur de 320 px sans défilement, texte agrandi à 200 %, et un rappel : le test mobile de Google est retiré."
+pubDate: 2026-11-11
+author: "William De Azevedo"
+draft: false
+faq:
+  - question: "Comment savoir si mon site est responsive ?"
+    answer: "Sur votre téléphone, un site qui n’est pas responsive se repère vite : il faut zoomer pour lire, ou la page défile sur le côté. Vérifiez aussi que le menu s’ouvre et que le formulaire s’envoie. Pour confirmer, réglez le mode Appareil de Chrome sur 320 pixels de large."
+  - question: "Un site responsive est-il mieux référencé sur Google ?"
+    answer: "Google utilise la version mobile de votre site pour l’indexer et le classer, et ses systèmes de classement visent à récompenser les pages qui offrent une bonne expérience. Le responsive ne garantit aucune position, mais un site pénible sur téléphone part avec un désavantage."
+  - question: "Le test d’optimisation mobile de Google existe-t-il encore ?"
+    answer: "Non. Google l’a retiré le 1er décembre 2023, avec le rapport « Ergonomie mobile » de la Search Console, et renvoie vers Lighthouse, que l’on utilise par exemple dans PageSpeed Insights. Un guide qui le conseille encore n’est plus à jour."
+  - question: "Mon site Wix ou WordPress est-il responsive automatiquement ?"
+    answer: "Les modèles Wix et les thèmes WordPress récents sont en général prévus pour le mobile, mais ce n’est qu’un point de départ : un tableau, une image trop large ou une extension peuvent casser l’affichage. Testez vos vraies pages sur un vrai téléphone."
+  - question: "Faut-il une application mobile en plus du site ?"
+    answer: "Pour une TPE ou un artisan qui veut être trouvé et contacté, presque jamais. Vos clients vous découvrent sur Google, dans leur navigateur : c’est votre site qui doit les convaincre. Une application se justifie quand des clients réguliers reviennent souvent utiliser un service."
+  - question: "Peut-on rendre un site existant responsive sans tout refaire ?"
+    answer: "Parfois. Sur un thème ou un code récent, corriger les éléments qui débordent peut suffire. Si le site a été construit pour l’ordinateur seulement, une refonte demande souvent moins d’efforts qu’une accumulation de rustines. Un audit des pages principales permet de trancher."
+tags: ["refonte", "site vitrine", "tpe", "artisan"]
+---
+
+**Un site responsive est un site qui réorganise le même contenu selon la taille de l’écran : sur un téléphone, les colonnes passent les unes sous les autres, le texte reste lisible sans zoomer et les boutons sont assez grands pour le doigt. Pour savoir si le vôtre l’est vraiment, ouvrez-le sur votre téléphone et faites ce que ferait un client : comprendre, trouver, appeler. Les outils viennent ensuite, pour confirmer et préciser ce que vous avez vu.** Un site vendu « responsive » sur le devis, mais pénible sur le téléphone de vos clients, ne rapporte ni contacts, ni visibilité, ni confiance.
+
+Votre client ne vous dira jamais « votre site n’est pas responsive ». Il fermera la page et appellera le suivant.
+
+Je suis développeur web et designer freelance à Achères (78). Cet article s’adresse à vous, dirigeant, artisan ou indépendant, qui voulez savoir ce que vos clients voient de votre site sur leur téléphone.
+
+## Site responsive : ce que le mot veut dire
+
+« Responsive » vient de l’anglais *responsive web design* ; en français, on parle aussi de « site adaptatif ». L’idée est simple : **une seule adresse, un seul contenu, une mise en page qui s’adapte à l’écran**. Sur un ordinateur, vos services peuvent tenir sur trois colonnes ; sur un téléphone, ils s’empilent. Le contenu ne change pas : seule sa présentation s’adapte, jusqu’au menu, souvent replié derrière un bouton.
+
+Ce n’est pas la seule façon d’adapter un site aux téléphones. Google en décrit trois :
+
+| Configuration | Comment ça marche | Ce que ça implique pour vous |
+| --- | --- | --- |
+| Site responsive | La même page, à la même adresse, s’adapte à tous les écrans | Un seul site à tenir à jour |
+| Diffusion dynamique | La même adresse, mais une version différente selon l’appareil détecté | Deux versions à maintenir, qui doivent rester identiques sur le fond |
+| Site mobile séparé | Une adresse à part, souvent du type m.votresite.fr | Deux sites à tenir à jour, avec des risques d’écarts entre les deux |
+
+Google recommande le responsive, « car il s’agit du modèle de conception le plus simple à mettre en œuvre et à gérer ».
+
+Un site responsive n’est pas non plus une application : l’application s’installe depuis un magasin d’applications, le site s’ouvre dans le navigateur, depuis Google ou un QR code sur votre camionnette.
+
+## Pourquoi c’est d’abord votre client qui s’en aperçoit
+
+On cherche souvent un artisan ou un commerce depuis son téléphone, entre deux rendez-vous ou devant le problème à régler. Votre site est votre carte de visite : sur mobile, c’est une carte que l’on tient dans la main.
+
+Quand elle est illisible, le client ne fait pas l’effort. Un texte minuscule, un menu qui ne s’ouvre pas, un formulaire impossible à remplir : il ne pense pas « problème technique », il pense « entreprise peu sérieuse ». Google fait un constat proche à propos des fenêtres qui masquent le contenu : interrompre les visiteurs « peut les frustrer et nuire à la confiance qu’ils accordent à votre site Web ».
+
+Le mobile compte aussi pour votre visibilité. Google utilise la version mobile de votre site pour l’indexer et le classer. Il demande donc le même contenu que sur ordinateur ; avec moins, prévient-il, « vous risquez de constater une baisse du trafic ». Et ses principaux systèmes de classement « visent à récompenser les contenus qui offrent une bonne expérience sur la page », dont un affichage correct sur mobile. Sans garantie de position pour autant.
+
+C’est sur téléphone qu’un site fait à la va-vite trahit sa fabrication. Les modèles récents et les outils qui génèrent un site avec l’IA produisent des pages « responsive » par défaut, mais ils ne connaissent ni vos textes, ni vos photos, ni vos clients : un titre qui déborde, une photo mal cadrée, un bouton d’appel tout en bas, et le site n’est adapté au mobile que sur le papier. J’en parle dans [l’article qui compare un site générique et un site travaillé](/articles/site-600-euros-vs-site-2000-euros/).
+
+## Tester votre site sur votre téléphone, comme un client
+
+Le test le plus utile ne demande aucun outil. Prenez votre téléphone, de préférence hors de votre Wi-Fi, et jouez le rôle d’un client qui ne vous connaît pas. Comptez un quart d’heure.
+
+1. **Ouvrez votre site depuis Google**, en tapant votre métier et votre ville, ou votre nom. La page s’affiche-t-elle vite, ou reste-t-elle blanche ? Si vous ne le trouvez pas, voyez [pourquoi un site n’apparaît pas sur Google](/articles/site-pas-sur-google/).
+2. **Lisez le haut de l’écran sans faire défiler.** Comprend-on ce que vous faites, et où ? Le titre tient-il sur l’écran sans être coupé ?
+3. **Cherchez comment vous contacter.** Le numéro est-il visible, et un appui suffit-il pour appeler ?
+4. **Ouvrez le menu.** S’ouvre-t-il et se referme-t-il facilement ? Les liens sont-ils assez espacés pour ne pas toucher le voisin ?
+5. **Visitez une page de service.** Les photos sont-elles nettes et entières ? Le texte se lit-il sans zoomer ? Rien ne doit dépasser sur le côté : si la page bouge de gauche à droite quand vous la faites défiler, un élément est trop large. Exception admise : un grand tableau qui défile dans son propre cadre, comme ceux de cet article sur téléphone.
+6. **Remplissez le formulaire de contact jusqu’au bout**, avec un vrai message. Le clavier masque-t-il le bouton d’envoi ? La confirmation s’affiche-t-elle, et le message arrive-t-il dans votre boîte mail ? Vérifiez au passage la mention sur les données personnelles (voyez [le RGPD et le formulaire de contact](/articles/rgpd-formulaire-de-contact/)).
+7. **Tournez le téléphone à l’horizontale** (déverrouillez la rotation de l’écran si besoin). La page doit rester utilisable dans les deux sens.
+
+Notez chaque problème avec une capture d’écran, le nom de la page et le modèle de votre téléphone. Si possible, refaites le parcours sur un deuxième téléphone, un Android si le vôtre est un iPhone par exemple : votre écran n’est pas celui de tous vos clients.
+
+## Test responsive depuis l’ordinateur : les outils et leurs limites
+
+Trois vérifications depuis l’ordinateur complètent ce parcours.
+
+**Le mode Appareil de Chrome.** Dans Chrome, faites un clic droit sur la page, choisissez « Inspecter », puis cliquez, en haut à gauche du panneau qui s’ouvre, sur l’icône du téléphone et de la tablette. Vous choisissez un modèle ou une largeur. C’est pratique pour parcourir toutes les pages, mais la documentation de Chrome le présente comme « une approximation du premier ordre » : une première idée, pas une preuve. Certains défauts n’apparaissent que sur un vrai téléphone.
+
+**PageSpeed Insights, onglet mobile.** L’outil gratuit de Google, sur [pagespeed.web.dev](https://pagespeed.web.dev/), teste une page avec Lighthouse, son outil d’analyse : vitesse sur mobile et pistes d’amélioration. En revanche, il ne voit pas si un menu s’ouvre ou si un formulaire s’envoie. Mon article sur l’[audit SEO d’un site vitrine](/articles/audit-seo/) explique comment lire ses résultats.
+
+**Les deux contrôles d’accessibilité qui révèlent un faux responsive.** Le référentiel français d’accessibilité (RGAA) fixe deux repères simples à vérifier :
+
+- **à une largeur de 320 pixels**, toutes les informations et les fonctionnalités doivent rester disponibles sans défilement horizontal (critère 10.11, sauf exceptions : carte, grand tableau). Dans le mode Appareil, réglez la largeur sur 320 : si un bloc dépasse ou qu’un bouton disparaît, vos clients aux plus petits écrans le vivent aussi ;
+- **le texte agrandi jusqu’à 200 %** ne doit pas provoquer de perte d’information (critère 10.4). Sur l’ordinateur, zoomez à 200 % (Ctrl et +, ou Cmd et + sur Mac) : rien ne doit se chevaucher ni disparaître.
+
+L’article [tester l’accessibilité d’un site web](/articles/tester-accessibilite-site-web/) va plus loin : clavier, formulaires, contrastes.
+
+À savoir : beaucoup de guides recommandent encore le « test d’optimisation mobile » de Google. **Cet outil n’existe plus** depuis le 1er décembre 2023. Google précise que l’ergonomie mobile reste importante et renvoie vers Lighthouse.
+
+## Les défauts les plus fréquents, et ce qu’ils vous font perdre
+
+Voici les problèmes que l’on retrouve souvent en testant un site sur téléphone, et à qui en parler.
+
+| Ce que vous constatez | Ce que vit votre client | Cause probable | Qui corrige |
+| --- | --- | --- | --- |
+| La page bouge de gauche à droite | Il a l’impression d’un site cassé | Une image, un tableau ou un bloc plus large que l’écran | Votre prestataire, ou vous si l’élément vient d’un ajout récent |
+| Il faut zoomer pour lire | Il abandonne avant la fin | Texte trop petit ou page pensée pour l’ordinateur | Votre prestataire |
+| Le numéro n’est pas cliquable | Il doit le recopier, ou il renonce | Numéro inséré en image ou sans lien d’appel | Votre prestataire (correction rapide) |
+| Le menu ne s’ouvre pas, ou mal | Il ne trouve pas vos services | Menu mobile mal réglé ou erreur technique | Votre prestataire |
+| Une fenêtre couvre tout l’écran | Il ferme la page | Fenêtre promotionnelle ou bandeau trop envahissant | Vous ou votre prestataire, selon l’outil utilisé |
+| Le formulaire est inutilisable | Il renonce à vous écrire, sans que vous le sachiez | Champs trop petits, bouton masqué, erreur à l’envoi | Votre prestataire, en priorité |
+| La page met longtemps à s’afficher | Il revient sur Google | Photos trop lourdes, trop d’extensions ou d’outils externes | Votre prestataire, et vous pour les photos ajoutées |
+| Une partie du contenu disparaît sur mobile | Il ne voit pas ce service | Section masquée « pour alléger » | Votre prestataire : le contenu doit être le même sur mobile et sur ordinateur |
+
+Le formulaire et le bouton d’appel passent avant tout : ce sont eux qui transforment une visite en demande. Un défaut esthétique se remarque ; un formulaire qui n’envoie rien, non.
+
+## « Design responsive » sur un devis ne suffit pas
+
+Beaucoup de devis de création de site mentionnent un « design responsive ». La mention ne dit pas comment le résultat sera vérifié. Avant de signer, faites préciser trois points :
+
+- **Une maquette mobile à valider**, avant le développement, pas une découverte une fois le site en ligne. L’article sur [la maquette de site web](/articles/maquette-site-web/) explique comment la relire.
+- **Une recette sur de vrais téléphones**, c’est-à-dire une vérification complète avant la mise en ligne. Demandez sur quels appareils, formulaire compris.
+- **Ce qui se passe quand vous ajoutez du contenu.** Si vous modifiez vous-même le site, vos nouveaux textes et photos doivent rester corrects sur mobile. Demandez comment c’est prévu.
+
+Un prestataire sérieux y répond facilement. Pour le reste du choix, mon article pour [choisir un développeur web ou une agence](/articles/choisir-developpeur-web/) détaille les critères.
+
+## Corriger ou refaire ?
+
+Tout dépend du nombre de problèmes et de leur origine.
+
+| Situation | Piste la plus probable |
+| --- | --- |
+| Quelques défauts isolés : une image trop large, un numéro non cliquable, un tableau qui déborde | Corrections ciblées, souvent dans le cadre de la [maintenance du site](/articles/maintenance-site-web/) |
+| Le site est responsive, mais lent sur mobile | Optimisation des photos, des extensions et des outils externes, sans changer le design |
+| Le site a été pensé pour l’ordinateur, et le mobile a été « ajouté » ensuite | Reprise des pages principales, voire du design : à arbitrer après un audit |
+| Le thème ou le modèle est ancien et ne s’adapte pas | Changement de thème ou refonte ; Google le dit lui-même pour des outils comme Wix : il faut parfois un nouveau thème adapté aux mobiles |
+| Le site a d’autres problèmes de fond : message flou, design daté | Une refonte qui traite le mobile avec le reste |
+
+Si vous hésitez sur l’outil, l’article [Wix ou WordPress (ou sur mesure)](/articles/wix-ou-wordpress/) compare les options.
+
+## Exemple fictif : une paysagiste teste son site
+
+Voici un exemple **fictif** : il ne décrit aucun client réel et sert seulement à illustrer la méthode. Imaginons une paysagiste de Saint-Germain-en-Laye. Son site, créé à partir d’un modèle il y a plusieurs années, s’affiche bien sur son ordinateur. Elle fait le parcours du client sur son téléphone :
+
+- **En haut de l’écran**, une grande photo de jardin, mais le titre « Création et entretien de jardins » est coupé en deux par le bord de l’écran.
+- **Le numéro de téléphone** est dans une image, en bas de page : impossible de l’appeler d’un appui.
+- **La page « Réalisations »** défile de gauche à droite : la galerie est plus large que l’écran.
+- **Le formulaire** s’affiche, mais le bouton « Envoyer » reste caché sous le clavier.
+
+À 320 pixels dans le mode Appareil, la galerie déborde aussi ; PageSpeed Insights signale des photos très lourdes.
+
+Plutôt qu’un vague « le site marche mal sur mobile », elle envoie à son prestataire la liste des problèmes, avec les captures et le modèle de son téléphone. Le numéro, le titre et le formulaire se corrigent vite ; pour la galerie et les photos, le prestataire propose de reprendre la page « Réalisations ».
+
+## Un site qui rassure aussi sur téléphone : parlons-en
+
+Un site web responsive, c’est un site que votre client comprend et utilise pour vous contacter, sur l’écran qu’il a dans la main.
+
+Je crée et je reprends des sites pour des artisans, des TPE et des indépendants à Achères, Poissy, Saint-Germain-en-Laye, Conflans-Sainte-Honorine et dans le reste des Yvelines, et aussi à distance. Quand je reprends un site, je regarde d’abord ce qui fonctionne déjà, puis ce qui crée du doute : message flou, design daté, mobile inconfortable, lenteur ou parcours de contact fragile.
+
+Votre site est lent ou inconfortable sur mobile ? La [refonte de site internet](/refonte-site-internet/) est faite pour cela. Vous partez de zéro ? Voyez la [création de site vitrine](/creation-site-vitrine/) ou le [site d’artisan](/creation-site-internet-artisan/). Envoyez-moi l’adresse de votre site et vos captures : on regarde ensemble ce qui bloque.
+
+## Questions fréquentes
+
+### Comment savoir si mon site est responsive ?
+
+Sur votre téléphone, un site qui n’est pas responsive se repère vite : il faut zoomer pour lire, ou la page défile sur le côté. Vérifiez aussi que le menu s’ouvre et que le formulaire s’envoie. Pour confirmer, réglez le mode Appareil de Chrome sur 320 pixels de large.
+
+### Un site responsive est-il mieux référencé sur Google ?
+
+Google utilise la version mobile de votre site pour l’indexer et le classer, et ses systèmes de classement visent à récompenser les pages qui offrent une bonne expérience. Le responsive ne garantit aucune position, mais un site pénible sur téléphone part avec un désavantage.
+
+### Le test d’optimisation mobile de Google existe-t-il encore ?
+
+Non. Google l’a retiré le 1er décembre 2023, avec le rapport « Ergonomie mobile » de la Search Console, et renvoie vers Lighthouse, que l’on utilise par exemple dans PageSpeed Insights. Un guide qui le conseille encore n’est plus à jour.
+
+### Mon site Wix ou WordPress est-il responsive automatiquement ?
+
+Les modèles Wix et les thèmes WordPress récents sont en général prévus pour le mobile, mais ce n’est qu’un point de départ : un tableau, une image trop large ou une extension peuvent casser l’affichage. Testez vos vraies pages sur un vrai téléphone.
+
+### Faut-il une application mobile en plus du site ?
+
+Pour une TPE ou un artisan qui veut être trouvé et contacté, presque jamais. Vos clients vous découvrent sur Google, dans leur navigateur : c’est votre site qui doit les convaincre. Une application se justifie quand des clients réguliers reviennent souvent utiliser un service.
+
+### Peut-on rendre un site existant responsive sans tout refaire ?
+
+Parfois. Sur un thème ou un code récent, corriger les éléments qui débordent peut suffire. Si le site a été construit pour l’ordinateur seulement, une refonte demande souvent moins d’efforts qu’une accumulation de rustines. Un audit des pages principales permet de trancher.
+
+## Sources officielles
+
+- [Google Search Central : bonnes pratiques en matière d’indexation orientée mobile](https://developers.google.com/search/docs/crawling-indexing/mobile/mobile-sites-mobile-first-indexing?hl=fr) (version mobile utilisée pour l’indexation et le classement, trois configurations, recommandation du responsive, même contenu sur mobile et sur ordinateur), lu le 11/11/2026
+- [Google Search Central : comprendre l’expérience sur la page](https://developers.google.com/search/docs/appearance/page-experience?hl=fr) (systèmes de classement et expérience sur la page, affichage sur mobile, Lighthouse), lu le 11/11/2026
+- [Google Search Central : éviter les interstitiels et les boîtes de dialogue intrusifs](https://developers.google.com/search/docs/appearance/avoid-intrusive-interstitials?hl=fr) (fenêtres qui masquent le contenu et confiance des visiteurs), lu le 11/11/2026
+- [Google Search Central Blog : le rôle de l’expérience sur la page (avril 2023)](https://developers.google.com/search/blog/2023/04/page-experience-in-search) (retrait du test d’optimisation mobile et du rapport « Ergonomie mobile » au 1er décembre 2023), en anglais, lu le 11/11/2026
+- [Chrome DevTools : simuler des appareils mobiles avec le mode Appareil](https://developer.chrome.com/docs/devtools/device-mode?hl=fr) (approximation de l’affichage mobile et ses limites), lu le 11/11/2026
+- [RGAA 4.1 : critères et tests](https://accessibilite.numerique.gouv.fr/methode/criteres-et-tests/) (critères 10.4, 10.11 et 13.9 : texte agrandi à 200 %, largeur de 320 px, orientation de l’écran), lu le 11/11/2026

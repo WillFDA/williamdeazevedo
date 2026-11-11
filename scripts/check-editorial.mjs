@@ -33,6 +33,7 @@ const slugs = [
   "seo-local",
   "site-non-securise",
   "site-pas-sur-google",
+  "site-responsive",
   "wix-ou-wordpress",
   "site-one-page",
   "charte-graphique-entreprise",
