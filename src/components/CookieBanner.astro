@@ -12,8 +12,6 @@
 // Chaque finalité est un interrupteur (case native, role="switch").
 // Sur mobile et en paysage (variante `wide` de global.css), bandeau compact
 // (boutons plus bas) pour masquer le moins possible le hero.
-import { isAudienceMeasurementEnabled } from "../scripts/analytics";
-
 const choiceClass =
     "hero-button flex min-h-10 w-full cursor-pointer whitespace-nowrap items-center justify-center rounded-xl px-3 py-2 text-sm font-normal wide:min-h-14 wide:px-8 wide:py-3 wide:text-base";
 
@@ -30,16 +28,14 @@ const purposes = [
     },
 ];
 
-// La mesure Rybbit sans cookie n'est chargée que si elle est activée
-// (src/scripts/analytics.ts) : la décrire seulement dans ce cas.
-const essentialsDescription = isAudienceMeasurementEnabled
-    ? "Fonctionnement du site, mémorisation de votre choix et mesure d'audience anonyme sans cookie."
-    : "Fonctionnement du site et mémorisation de votre choix.";
+// Pas de mesure Rybbit ici : si elle est activée un jour, l'exemption CNIL
+// impose de pouvoir s'y opposer, donc une ligne à part, pas « Toujours actifs ».
+const essentialsDescription = "Fonctionnement du site et mémorisation de votre choix.";
 ---
 
 <div
     id="cookie-banner"
-    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-[13px] wide:p-5 wide:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] wide:right-auto wide:bottom-4 wide:left-4 wide:max-w-sm"
+    class="fixed inset-x-3 max-h-[calc(100dvh-1rem)] overflow-y-auto wide:max-h-[calc(100dvh-2rem)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-[13px] wide:p-5 wide:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] wide:right-auto wide:bottom-4 wide:left-4 wide:max-w-sm"
     role="dialog"
     aria-modal="false"
     aria-labelledby="cookie-banner-title"
@@ -73,7 +69,7 @@ const essentialsDescription = isAudienceMeasurementEnabled
                 <span id="cookie-essentials-description" class="text-xs leading-4 text-pretty text-gray-600 wide:text-[13px] wide:leading-[1.125rem]">{essentialsDescription}</span>
             </span>
             <span class="flex shrink-0 items-center gap-2">
-                <span class="text-xs leading-4 font-medium text-gray-600" aria-hidden="true">Toujours actifs</span>
+                <span id="cookie-essentials-state" class="text-xs leading-4 font-medium text-gray-600">Toujours actifs</span>
                 {/* Interrupteur verrouillé : coché, désactivé, annoncé « Toujours actifs ». */}
                 <span class="grid items-center">
                     <input
@@ -90,7 +86,6 @@ const essentialsDescription = isAudienceMeasurementEnabled
                         aria-hidden="true"
                     />
                 </span>
-                <span id="cookie-essentials-state" class="sr-only">Toujours actifs</span>
             </span>
         </div>
         {
@@ -260,6 +255,16 @@ const essentialsDescription = isAudienceMeasurementEnabled
 
         // Se déclenche aussi au premier chargement ; ré-affiche le bandeau si
         // le choix a expiré pendant la navigation.
+        // Échap ferme le bandeau rouvert depuis le pied de page, sans rien
+        // enregistrer. Sans choix enregistré, il ne ferme rien (pas de
+        // fermeture sans choix).
+        document.addEventListener("keydown", (event) => {
+            if (event.key !== "Escape") return;
+            const element = banner();
+            if (!element || element.hidden || !readConsent()) return;
+            close(element);
+        });
+
         document.addEventListener("astro:page-load", () => {
             const element = banner();
             if (element && !readConsent()) element.hidden = false;
