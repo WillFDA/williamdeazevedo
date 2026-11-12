@@ -15,6 +15,8 @@ interface Props {
     image?: string;
     imageAlt?: string;
     canonicalPath?: string;
+    /** Page d'erreur : hors index, sans URL canonique à proposer. */
+    noindex?: boolean;
     ogType?: "website" | "article" | "profile";
     article?: {
         publishedTime?: string;
@@ -30,6 +32,7 @@ const {
     image = "/pictures/william-low.png",
     imageAlt = "William De Azevedo, développeur front-end freelance",
     canonicalPath,
+    noindex = false,
     ogType = "website",
     article,
 } = Astro.props;
@@ -153,14 +156,20 @@ const websiteJsonLd = {
             interactive components rely on to (re)initialise. */}
         <ClientRouter />
         <meta name="description" content={description} />
-        <link rel="canonical" href={canonicalUrl.href} />
+        {
+            noindex ? (
+                <meta name="robots" content="noindex" />
+            ) : (
+                <link rel="canonical" href={canonicalUrl.href} />
+            )
+        }
         <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
         <meta property="og:locale" content="fr_FR" />
         <meta property="og:site_name" content={siteName} />
         <meta property="og:type" content={ogType} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:url" content={canonicalUrl.href} />
+        {!noindex && <meta property="og:url" content={canonicalUrl.href} />}
         <meta property="og:image" content={imageUrl.href} />
         <meta property="og:image:alt" content={imageAlt} />
         {
