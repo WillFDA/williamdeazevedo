@@ -6,6 +6,7 @@ image:
   src: "/articles/rgpd-formulaire-de-contact/cover.webp"
   alt: "Quatre cartes résumant un formulaire de contact en règle : collecter le nécessaire, informer sous le formulaire, conserver pour une durée fixée, protéger les messages reçus."
 pubDate: 2026-10-16
+updatedDate: 2026-11-12
 author: "William De Azevedo"
 draft: false
 tags: ["RGPD", "formulaire de contact", "site vitrine", "artisan"]
@@ -146,29 +147,21 @@ Je suis [développeur web freelance](/services/developpeur-web-freelance/), bas�
 
 ## Questions fréquentes
 
-### Un formulaire de contact doit-il être conforme au RGPD ?
+### Le reCAPTCHA de Google est-il compatible avec le RGPD ?
 
-Oui, même sur un site vitrine de trois pages : le nombre de pages ne compte pas. Dès que le formulaire recueille des informations sur une personne identifiable, le RGPD s’applique. En pratique, cela revient surtout à informer sous le formulaire et à limiter les données collectées.
+Seulement avec le consentement des visiteurs, selon la CNIL. Un anti-robot qui sert uniquement à protéger votre site peut s’en passer. Mais la CNIL cite reCAPTCHA comme exemple d’outil dont le fournisseur réutilise les données pour son propre compte : il faut alors l’accord des visiteurs. Et un visiteur qui refuse contourne la protection. La CNIL préconise donc une autre solution, ou des protections complémentaires qui ne demandent pas de consentement.
 
-### Quelle mention mettre sous un formulaire de contact ?
+### Faut-il tenir un registre RGPD pour un formulaire de contact ?
 
-Une mention courte qui dit qui collecte les données, pourquoi, sur quelle base, pendant combien de temps, qui y a accès, et comment exercer ses droits ou saisir la CNIL. La section [Ce que vous devez afficher sous le formulaire](#ce-que-vous-devez-afficher-sous-le-formulaire) donne un exemple à copier et adapter.
+Oui. Le registre des activités de traitement est un document interne, obligatoire quelle que soit la taille de l’entreprise. Sous 250 salariés, une dérogation existe, mais elle ne vise que les traitements occasionnels : la CNIL range la gestion des clients et prospects parmi ceux qu’il faut inscrire. Les demandes reçues par votre formulaire y ont donc leur fiche. La CNIL propose un modèle simplifié, pensé pour les petites structures, à tenir à jour.
 
-### Faut-il une case à cocher de consentement ?
+### Faut-il nommer un DPO pour un site avec formulaire de contact ?
 
-Pas pour répondre à une demande de contact : l’information suffit en général. Une case est nécessaire si vous voulez envoyer ensuite autre chose, comme une newsletter, à des particuliers. Elle doit alors être séparée de l’envoi et non cochée par défaut.
+Non, en général. La CNIL réserve l’obligation de désigner un délégué à la protection des données (DPO) à trois cas : les organismes publics, ceux qui suivent des personnes de façon régulière et systématique à grande échelle, et ceux qui traitent à grande échelle des données sensibles, comme la santé, ou des données pénales. Un formulaire de demande de devis ne fait pas, à lui seul, entrer une TPE dans ces cas. La CNIL encourage toutefois cette désignation.
 
-### Combien de temps conserver les messages reçus ?
+### Quelle amende pour un formulaire de contact non conforme au RGPD ?
 
-Le RGPD ne fixe pas de durée unique : vous la choisissez selon l’usage et vous l’annoncez. À titre de repère, dans l’exemple d’une serrurerie fictive, la CNIL retient un an pour un devis resté sans suite, et trois ans pour une prospection annoncée sur le formulaire. Adaptez-le à votre cas.
-
-### Quel risque si mon formulaire n’est pas conforme ?
-
-La CNIL décrit des suites graduées après un signalement ou un contrôle : clôture, rappel aux obligations, mise en demeure, et dans certains cas une procédure de sanction. Je ne peux pas prédire l’issue pour votre site ; un formulaire peu clair peut aussi, plus simplement, faire douter vos visiteurs.
-
-### Dois-je déclarer mon site à la CNIL ?
-
-Non, pas pour ce type de fichier : la CNIL indique qu’il n’y a plus de déclaration pour les fichiers de clients et prospects depuis l’entrée en application du RGPD. En revanche, vous devez tenir un registre des activités de traitement. Même sous 250 salariés, ce fichier doit y figurer : la CNIL range la gestion des clients et prospects parmi les traitements non occasionnels. Elle fournit un modèle.
+Il n’y a pas de tarif fixe : la CNIL choisit la suite selon la gravité. Pour les dossiers simples, sa procédure simplifiée plafonne l’amende à 20 000 € pour une entreprise de moins de 50 millions d’euros de chiffre d’affaires, sans publication de la sanction. Pour les manquements les plus graves, le plafond atteint 20 millions d’euros ou 4 % du chiffre d’affaires mondial. Service Public mentionne aussi une amende de 1 500 € quand une information obligatoire manque. Ce sont des plafonds, pas une prévision.
 
 ## Sources officielles
 
@@ -182,3 +175,8 @@ Non, pas pour ce type de fichier : la CNIL indique qu’il n’y a plus de décl
 - [CNIL : la prospection commerciale par courrier électronique](https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique) : consentement préalable des particuliers, case pré-cochée interdite, conditions entre professionnels.
 - [CNIL : RGPD en pratique, communiquer en ligne](https://www.cnil.fr/fr/rgpd-en-pratique-communiquer-en-ligne) : mentions sous le formulaire de contact d’un site vitrine.
 - [CNIL : la chaîne répressive](https://www.cnil.fr/fr/la-chaine-repressive-de-la-cnil) : suites possibles d’un signalement ou d’un contrôle.
+- [CNIL : questions-réponses sur les cookies et autres traceurs](https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/FAQ) : CAPTCHA et consentement, exemple de reCAPTCHA (question 17).
+- [CNIL : le délégué à la protection des données, c’est obligatoire ?](https://www.cnil.fr/fr/cnil-direct/question/reglement-europeen-le-delegue-la-protection-des-donnees-cest-obligatoire) : cas où la désignation d’un DPO est obligatoire.
+- [CNIL : quelles sanctions peuvent être prononcées par la CNIL ?](https://www.cnil.fr/fr/cnil-direct/question/sanctions-quelles-sanctions-peuvent-etre-prononcees-par-la-cnil) : plafonds des amendes et procédure simplifiée.
+- [CNIL : la procédure de sanction simplifiée](https://www.cnil.fr/fr/la-procedure-de-sanction-simplifiee) : amende plafonnée à 20 000 € sous 50 millions d’euros de chiffre d’affaires.
+- [Service Public : mentions obligatoires sur le site internet d’une entreprise](https://entreprendre.service-public.gouv.fr/vosdroits/F37351) : informations à donner sur les données personnelles et amende de 1 500 € en cas d’oubli.
