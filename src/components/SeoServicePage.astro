@@ -137,18 +137,6 @@ const serviceJsonLd = {
     },
 };
 
-const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: service.faq.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-            "@type": "Answer",
-            text: item.answer,
-        },
-    })),
-};
 ---
 
 <Layout
@@ -160,11 +148,6 @@ const faqJsonLd = {
         type="application/ld+json"
         is:inline
         set:html={JSON.stringify(serviceJsonLd)}
-    />
-    <script
-        type="application/ld+json"
-        is:inline
-        set:html={JSON.stringify(faqJsonLd)}
     />
     <BreadcrumbJsonLd
         items={[
