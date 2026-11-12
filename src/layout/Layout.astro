@@ -218,15 +218,12 @@ const websiteJsonLd = {
                 />
             )
         }
-        {
-            isHomePage && (
-                <script
-                    type="application/ld+json"
-                    is:inline
-                    set:html={JSON.stringify(businessJsonLd)}
-                />
-            )
-        }
+        {/* Sur toutes les pages : le nœud Person y renvoie par `worksFor`. */}
+        <script
+            type="application/ld+json"
+            is:inline
+            set:html={JSON.stringify(businessJsonLd)}
+        />
         <title>{title}</title>
     </head>
     <body class="min-h-screen min-w-0 flex flex-col">

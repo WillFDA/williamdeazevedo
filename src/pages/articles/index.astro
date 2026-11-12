@@ -3,6 +3,7 @@ import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ArticleFilters from "@/components/articles/ArticleFilters.astro";
 import ArticleImage from "@/components/articles/ArticleImage.astro";
 import ArticleTag from "@/components/articles/ArticleTag.astro";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd.astro";
 import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
 import WaveIcon from "@/components/ui/WaveIcon.astro";
 import WaveText from "@/components/ui/WaveText.astro";
@@ -30,6 +31,7 @@ const PAGE_SIZE = 6;
     title="Conseils site web et front-end - William De Azevedo"
     description="Conseils pour rendre un site plus clair, rapide, accessible et crédible : contenu, performance, SEO technique et retours d'expérience freelance."
 >
+    <BreadcrumbJsonLd items={[{ name: "Articles", path: "/articles/" }]} />
     <div class="mx-auto w-full max-w-7xl px-4 py-12 sm:px-8 md:py-16">
         <section
             class="mx-auto flex w-full max-w-5xl flex-col items-center text-center"

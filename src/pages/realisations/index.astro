@@ -2,6 +2,7 @@
 import CalButton from "@/components/CalButton.astro";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import FadeRevealOnScroll from "@/components/animations/FadeRevealOnScroll.astro";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd.astro";
 import DiagnosticCta from "@/components/DiagnosticCta.astro";
 import ProjectListItem from "@/components/realisations/ProjectListItem.astro";
 import { projects } from "@/data/projects";
@@ -44,6 +45,7 @@ const realisationsDiagnosticTitleParts = [
     title="Réalisations web - William De Azevedo"
     description="Études de cas de sites vitrines, refontes et interfaces produit conçus pour clarifier une offre, rassurer et faciliter le passage à l'action."
 >
+    <BreadcrumbJsonLd items={[{ name: "Réalisations", path: "/realisations/" }]} />
     <div class="flex w-full flex-col gap-16 pt-10 pb-12 sm:pt-14 md:gap-20 md:pb-16 lg:pt-16">
         <div class="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 md:gap-20">
             <section

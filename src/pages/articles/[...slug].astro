@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { render } from "astro:content";
 import ArticleBody from "@/components/articles/ArticleBody.astro";
 import ArticleImage from "@/components/articles/ArticleImage.astro";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
@@ -74,31 +75,6 @@ const jsonLd = {
     },
 };
 
-const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-        {
-            "@type": "ListItem",
-            position: 1,
-            name: "Accueil",
-            item: siteUrl.href,
-        },
-        {
-            "@type": "ListItem",
-            position: 2,
-            name: "Articles",
-            item: new URL("/articles/", siteUrl).href,
-        },
-        {
-            "@type": "ListItem",
-            position: 3,
-            name: title,
-            item: canonicalUrl.href,
-        },
-    ],
-};
-
 const faqJsonLd = faq?.length
     ? {
           "@context": "https://schema.org",
@@ -133,10 +109,11 @@ const faqJsonLd = faq?.length
         is:inline
         set:html={JSON.stringify(jsonLd)}
     />
-    <script
-        type="application/ld+json"
-        is:inline
-        set:html={JSON.stringify(breadcrumbJsonLd)}
+    <BreadcrumbJsonLd
+        items={[
+            { name: "Articles", path: "/articles/" },
+            { name: title, path: canonicalUrl.pathname },
+        ]}
     />
     {faqJsonLd && (
         <script

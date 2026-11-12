@@ -1,5 +1,6 @@
 ---
 import FadeReveal from "@/components/animations/FadeReveal.astro";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd.astro";
 import Layout from "../layout/Layout.astro";
 
 const audienceEnabled = import.meta.env.PUBLIC_RYBBIT_EXEMPT_AUDIENCE === "true";
@@ -122,6 +123,9 @@ const sections = [
     title="Mentions légales et confidentialité - William De Azevedo"
     description="Mentions légales, confidentialité, cookies et mesure d'audience du site de William De Azevedo."
 >
+    <BreadcrumbJsonLd
+        items={[{ name: "Mentions légales", path: "/mentions-legales/" }]}
+    />
     <section class="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4 py-12 md:py-16">
         <FadeReveal delay={0.1}>
             <div class="flex flex-col gap-4 text-center">
