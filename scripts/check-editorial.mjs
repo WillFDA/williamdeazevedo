@@ -122,7 +122,7 @@ for (const slug of slugs) {
     `${slug}: breadcrumbs`
   );
   const faqPage = schemas.find((schema) => schema["@type"] === "FAQPage");
-  if (/^faq:/m.test(frontmatter) || faqPage) {
+  if (/^## Questions fréquentes$/m.test(body) || faqPage) {
     assert.ok(faqPage?.mainEntity?.length, `${slug}: FAQPage schema`);
     const visibleText = html
       .replaceAll(/<script\b[\s\S]*?<\/script>/g, " ")

@@ -4,7 +4,7 @@ import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ServiceCallout from "@/components/articles/ServiceCallout.astro";
 import FaqSection from "@/components/FaqSection.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
-import { splitArticleFaq } from "@/lib/articleFaq";
+import { articleFaqJsonLd, splitArticleFaq } from "@/lib/articleFaq";
 
 interface Props {
     articleId: string;
@@ -37,6 +37,11 @@ const shellClass =
 {
     faq && (
         <>
+            <script
+                type="application/ld+json"
+                is:inline
+                set:html={JSON.stringify(articleFaqJsonLd(faq))}
+            />
             <FaqSection
                 class="article-faq"
                 ctaLocation={`article-${articleId}-faq`}
