@@ -175,6 +175,12 @@ for (const slug of slugs) {
       }
     }
   }
+  // The business block is on every page; its phone number stays on the home
+  // page only, whatever the build is given.
+  assert.ok(
+    schemas.every((schema) => !("telephone" in schema)),
+    `${slug}: no phone number in structured data outside the home page`
+  );
   const person = schemas.find((schema) => schema["@type"] === "Person");
   assert.ok(
     person?.image.endsWith("/pictures/william-low.png"),

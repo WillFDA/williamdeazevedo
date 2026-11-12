@@ -89,8 +89,12 @@ const personJsonLd = {
     worksFor: { "@id": businessId },
 };
 
+const isHomePage = canonicalUrl.pathname === "/";
+
 // Activité locale (ProfessionalService) : uniquement des faits vérifiables.
 // Pas d'horaires ni de note : rien de publié ne les justifie.
+// Le bloc est publié sur toutes les pages, mais le numéro reste limité à
+// l'accueil, où il figurait déjà : l'étendre est une décision à part.
 const businessJsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -113,12 +117,11 @@ const businessJsonLd = {
         { "@type": "AdministrativeArea", name: "Île-de-France" },
         { "@type": "Country", name: "France" },
     ],
-    ...(phoneValue ? { telephone: phoneValue } : {}),
+    ...(isHomePage && phoneValue ? { telephone: phoneValue } : {}),
 };
 
 // Nom du site pour Google : publié uniquement sur la page d'accueil et relié
 // au nœud Person ci-dessus par son @id (pas de second bloc Person).
-const isHomePage = canonicalUrl.pathname === "/";
 const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
