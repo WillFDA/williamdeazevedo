@@ -41,6 +41,9 @@ const siteName = "William De Azevedo";
 const siteUrl = Astro.site ?? Astro.url;
 const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, siteUrl);
 const imageUrl = new URL(image, siteUrl);
+// Grande carte seulement pour une image propre à la page (couverture
+// d'article en 16:9) ; le portrait carré par défaut reste en vignette.
+const twitterCard = Astro.props.image ? "summary_large_image" : "summary";
 const phoneDisplay = String(import.meta.env.PUBLIC_PHONE_DISPLAY ?? "").trim();
 const phoneValue = String(import.meta.env.PUBLIC_PHONE_HREF ?? phoneDisplay)
     .replace(/^tel:/, "")
@@ -199,7 +202,7 @@ const websiteJsonLd = {
                 </>
             )
         }
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content={twitterCard} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={imageUrl.href} />
