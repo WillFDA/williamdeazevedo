@@ -32,6 +32,8 @@ interface Props {
     items?: readonly FaqItem[];
     padded?: boolean;
     showCta?: boolean;
+    /** `false` : la section reste affichée, sans balisage FAQPage. */
+    structuredData?: boolean;
     title?: string;
     /** id of the h2; defaults to `${id}-title`. */
     titleId?: string;
@@ -117,6 +119,7 @@ const {
     items,
     padded = true,
     showCta = true,
+    structuredData = true,
     title = "FAQ",
     titleId = `${id}-title`,
 } = Astro.props;
@@ -149,7 +152,11 @@ const accordionClasses = {
     data-faq
     data-section-reveal="false"
 >
-    <script type="application/ld+json" is:inline set:html={faqJsonLd} />
+    {
+        structuredData && (
+            <script type="application/ld+json" is:inline set:html={faqJsonLd} />
+        )
+    }
     {/* DOM order matches the mobile order (title, questions, card); from lg the card moves under the title. */}
     <div
         class:list={[
