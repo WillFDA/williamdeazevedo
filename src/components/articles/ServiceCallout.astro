@@ -1,16 +1,13 @@
 ---
 import CalButton from "@/components/CalButton.astro";
-import { articleServices } from "@/data/serviceArticles";
-import { getServiceBySlug } from "@/data/services";
+import { getArticleService } from "@/data/serviceArticles";
 
 interface Props {
     articleId: string;
 }
 
 const { articleId } = Astro.props;
-const service = (articleServices[articleId] ?? [])
-    .map((slug) => getServiceBySlug(slug))
-    .find((item) => item !== undefined);
+const service = getArticleService(articleId);
 const href = service
     ? (service.rootPath ?? `/services/${service.slug}/`)
     : undefined;

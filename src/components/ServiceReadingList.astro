@@ -2,23 +2,34 @@
 import ArticleImage from "@/components/articles/ArticleImage.astro";
 import ArticleTag from "@/components/articles/ArticleTag.astro";
 import { formatArticleDate, getVisibleArticles } from "@/lib/articles";
-import { serviceReadings } from "@/data/serviceArticles";
+import { getArticleService, serviceReadings } from "@/data/serviceArticles";
 
 interface Props {
+    /** Slug d'un service, ou `services` pour l'index. */
     serviceSlug: string;
 }
 
 const { serviceSlug } = Astro.props;
 const reading = serviceReadings[serviceSlug];
-const MAX_ITEMS = 3;
+// Deux rangées de trois cartes sur grand écran.
+const MAX_ITEMS = 6;
+// Places garanties à la liste manuelle ; les suivantes vont d'abord aux
+// articles récents dont l'encart renvoie vers ce service.
+const PINNED_ITEMS = 4;
 const MIN_ITEMS = 2;
 
 const visible = reading ? await getVisibleArticles() : [];
 const byId = new Map(visible.map((article) => [article.id, article]));
-const picked = (reading?.articles ?? [])
+const listed = (reading?.articles ?? [])
     .map((id) => byId.get(id))
-    .filter((article) => article !== undefined)
-    .slice(0, MAX_ITEMS);
+    .filter((article) => article !== undefined);
+// `visible` est trié du plus récent au plus ancien.
+const linked = visible.filter(
+    (article) => getArticleService(article.id)?.slug === serviceSlug,
+);
+const picked = [
+    ...new Set([...listed.slice(0, PINNED_ITEMS), ...linked, ...listed]),
+].slice(0, MAX_ITEMS);
 
 if (reading && picked.length < MIN_ITEMS) {
     for (const article of visible) {
@@ -31,6 +42,8 @@ if (reading && picked.length < MIN_ITEMS) {
 }
 
 const headingId = `${serviceSlug}-reading`;
+// 2 ou 4 cartes : deux colonnes, pour ne pas laisser une carte seule sur sa rangée.
+const twoColumns = picked.length === 2 || picked.length === 4;
 ---
 
 {
@@ -51,7 +64,7 @@ const headingId = `${serviceSlug}-reading`;
             <ul
                 class:list={[
                     "grid gap-4 lg:gap-8",
-                    picked.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3",
+                    twoColumns ? "lg:grid-cols-2" : "lg:grid-cols-3",
                 ]}
             >
                 {picked.map((article) => (
@@ -67,7 +80,7 @@ const headingId = `${serviceSlug}-reading`;
                                         src={article.data.image.src}
                                         alt=""
                                         sizes={
-                                            picked.length === 2
+                                            twoColumns
                                                 ? "(min-width: 1024px) 30rem, 100vw"
                                                 : "(min-width: 1024px) 20rem, 100vw"
                                         }

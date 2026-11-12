@@ -1,11 +1,18 @@
+import { type Service, getServiceBySlug } from "@/data/services";
+
 /**
  * Maillage articles ↔ pages services.
  *
  * - `serviceReadings` : articles proposés dans le bloc « À lire avant de vous
- *   lancer » de chaque page service, par ordre de priorité. Seuls les articles
- *   publiés sont affichés (les brouillons apparaîtront d'eux-mêmes une fois
- *   publiés). Si moins de 2 articles sont disponibles, le bloc complète avec
- *   des articles qui partagent un des `fallbackTags`.
+ *   lancer » de chaque page service (et de l'index `/services/`, clé
+ *   `services`), par ordre de priorité. Seuls les articles publiés sont
+ *   affichés (les brouillons apparaîtront d'eux-mêmes une fois publiés). Le
+ *   bloc montre 6 articles : les 4 premiers de cette liste, puis les
+ *   articles dont l'encart renvoie vers ce service (`articleServices`), du
+ *   plus récent au plus ancien, puis la suite de la liste. Un nouvel article
+ *   est donc lié depuis sa page service sans être ajouté ici. Si moins de 2
+ *   articles sont disponibles, le bloc complète avec des articles qui
+ *   partagent un des `fallbackTags`.
  * - `articleServices` : service mis en avant dans l'encart en bas d'un
  *   article, par ordre de priorité (le premier service existant est utilisé).
  */
@@ -19,6 +26,7 @@ export const serviceReadings: Record<string, ServiceReading> = {
     articles: [
       "site-600-euros-vs-site-2000-euros",
       "hebergement-site-vitrine",
+      "wix-ou-wordpress",
       "prix-site-vitrine",
       "landing-page",
       "site-one-page",
@@ -51,8 +59,11 @@ export const serviceReadings: Record<string, ServiceReading> = {
     articles: [
       "site-internet-artisan-contenus",
       "fiche-google-my-business-artisan",
+      "seo-local",
       "widget-avis-google",
       "mentions-legales-site-internet-professionnel",
+      "arborescence-site-web",
+      "rgpd-formulaire-de-contact",
     ],
     fallbackTags: ["artisan"],
   },
@@ -60,11 +71,26 @@ export const serviceReadings: Record<string, ServiceReading> = {
     articles: [
       "mentions-legales-site-internet-professionnel",
       "charte-graphique-entreprise",
+      "maquette-site-web",
       "cahier-des-charges-site-internet",
+      "arborescence-site-web",
       "site-600-euros-vs-site-2000-euros",
       "landing-page",
     ],
     fallbackTags: ["tpe"],
+  },
+  // Index /services/ : guides qui ne dépendent pas d'un seul service, puis
+  // ceux que les visiteurs cherchent le plus.
+  services: {
+    articles: [
+      "maintenance-site-web",
+      "wix-ou-wordpress",
+      "site-non-securise",
+      "tester-accessibilite-site-web",
+      "rgpd-formulaire-de-contact",
+      "choisir-developpeur-web",
+    ],
+    fallbackTags: [],
   },
   // Pages proposées dans des PR séparées : sans effet tant qu'elles n'existent pas.
   "creation-site-internet-yvelines": {
@@ -124,3 +150,9 @@ export const articleServices: Record<string, string[]> = {
   "wix-ou-wordpress": ["creation-site-vitrine"],
   // premier-side-project-motivai : projet personnel, pas d'encart service.
 };
+
+/** Service de l'encart « Le service lié » d'un article : le premier de sa liste qui existe. */
+export const getArticleService = (articleId: string): Service | undefined =>
+  (articleServices[articleId] ?? [])
+    .map((slug) => getServiceBySlug(slug))
+    .find((service) => service !== undefined);

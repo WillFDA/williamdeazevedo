@@ -44,6 +44,8 @@ const siteUrl = Astro.site ?? new URL(Astro.url.origin);
 // Même @id que le nœud Person du Layout, pour que Google relie les entités.
 const personId = new URL("/#person", siteUrl).href;
 const canonicalUrl = new URL(`/articles/${article.id}/`, siteUrl);
+// La signature et `author.url` mènent à la page À propos de l'auteur du site.
+const isSiteAuthor = author === "William De Azevedo";
 const ogImage = new URL(image?.src ?? "/pictures/william-low.png", siteUrl);
 
 const jsonLd = {
@@ -60,13 +62,13 @@ const jsonLd = {
     keywords: tags,
     author: {
         "@type": "Person",
-        ...(author === "William De Azevedo" && { "@id": personId }),
+        ...(isSiteAuthor && { "@id": personId }),
         name: author,
-        url: siteUrl.href,
+        url: isSiteAuthor ? new URL("/about/", siteUrl).href : siteUrl.href,
     },
     publisher: {
         "@type": "Person",
-        ...(author === "William De Azevedo" && { "@id": personId }),
+        ...(isSiteAuthor && { "@id": personId }),
         name: author,
         url: siteUrl.href,
     },
@@ -187,7 +189,18 @@ const faqJsonLd = faq?.length
                         loading="eager"
                     />
                     <div class="text-left text-sm">
-                        <p class="font-medium text-gray-900">{author}</p>
+                        <p class="font-medium text-gray-900">
+                            {isSiteAuthor ? (
+                                <a
+                                    class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                    href="/about/"
+                                >
+                                    {author}
+                                </a>
+                            ) : (
+                                author
+                            )}
+                        </p>
                         <time
                             class="font-normal text-gray-600"
                             datetime={pubDate.toISOString()}
