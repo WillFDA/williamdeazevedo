@@ -28,6 +28,9 @@ const { Content, headings } = await render(article);
 const { author, description, faq, image, pubDate, seoTitle, tags, title, updatedDate } =
     article.data;
 const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+// Une `updatedDate` qui ne suit pas la publication (brouillon retouché avant
+// sa sortie) n'est pas une mise à jour : elle n'est ni affichée ni déclarée.
+const modifiedDate = updatedDate && updatedDate > pubDate ? updatedDate : undefined;
 
 const articleTitleBreak = "2 000 euros";
 const shouldSplitArticleTitle =
@@ -50,7 +53,7 @@ const jsonLd = {
     description,
     inLanguage: "fr-FR",
     datePublished: pubDate.toISOString(),
-    dateModified: (updatedDate ?? pubDate).toISOString(),
+    dateModified: (modifiedDate ?? pubDate).toISOString(),
     image: ogImage.href,
     url: canonicalUrl.href,
     mainEntityOfPage: canonicalUrl.href,
@@ -116,7 +119,7 @@ const faqJsonLd = faq?.length
     ogType="article"
     article={{
         publishedTime: pubDate.toISOString(),
-        modifiedTime: (updatedDate ?? pubDate).toISOString(),
+        modifiedTime: (modifiedDate ?? pubDate).toISOString(),
         author,
         tags,
     }}
@@ -191,6 +194,14 @@ const faqJsonLd = faq?.length
                         >
                             {formatArticleDate(pubDate)}
                         </time>
+                        {modifiedDate && (
+                            <p class="font-normal text-gray-600">
+                                Mis à jour le{" "}
+                                <time datetime={modifiedDate.toISOString()}>
+                                    {formatArticleDate(modifiedDate)}
+                                </time>
+                            </p>
+                        )}
                     </div>
                 </div>
             </header>

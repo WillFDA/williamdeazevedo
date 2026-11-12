@@ -117,6 +117,19 @@ for (const slug of slugs) {
   assert.ok(article, `${slug}: BlogPosting schema`);
   assert.equal(article.url, `https://williamdeazevedo.fr${path}`);
   assert.equal(article.image, `https://williamdeazevedo.fr${imagePath}`);
+  // Freshness: the sitemap repeats the date the page declares, and the visible
+  // « Mis à jour le » only appears for an update made after publication.
+  assert.ok(
+    sitemap.includes(
+      `<loc>https://williamdeazevedo.fr${path}</loc><lastmod>${article.dateModified}</lastmod>`
+    ),
+    `${slug}: sitemap lastmod must equal dateModified`
+  );
+  assert.equal(
+    /Mis à jour le\s*<time\b/.test(html),
+    article.dateModified > article.datePublished,
+    `${slug}: « Mis à jour le » only for a real update`
+  );
   assert.ok(
     schemas.some((schema) => schema["@type"] === "BreadcrumbList"),
     `${slug}: breadcrumbs`
