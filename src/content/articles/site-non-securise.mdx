@@ -1,6 +1,6 @@
 ---
 title: "Mon site affiche « Non sécurisé » : pourquoi, et comment le régler"
-seoTitle: "Site « non sécurisé » : pourquoi et que faire ?"
+seoTitle: "Site non sécurisé : causes et solutions"
 description: "Votre site affiche « Non sécurisé » ? Les 4 causes possibles, comment les vérifier en 5 minutes, et qui doit régler le problème : hébergeur ou prestataire."
 image:
   src: "/articles/site-non-securise/cover.webp"
@@ -8,19 +8,6 @@ image:
 pubDate: 2026-10-20
 author: "William De Azevedo"
 draft: false
-faq:
-  - question: "Mon site affiche « Non sécurisé » : que faire en premier ?"
-    answer: "Cliquez sur l’icône à gauche de l’adresse et regardez le certificat : absent, expiré ou valide. Puis envoyez à votre hébergeur ou à votre prestataire le message de trois lignes proposé plus haut, avec une capture d’écran."
-  - question: "Un certificat SSL est-il obligatoire pour un site vitrine ?"
-    answer: "Aucune loi ne l’impose en toutes lettres à tous les sites, mais la CNIL recommande le chiffrement sur tous les sites et demande de le rendre obligatoire sur les pages qui transmettent des données personnelles, comme un formulaire de contact. Et sans lui, les navigateurs affichent « Non sécurisé », et Chrome avertit même avant d’ouvrir le site."
-  - question: "Peut-on avoir un certificat SSL gratuit ?"
-    answer: "Oui. Let’s Encrypt délivre gratuitement des certificats reconnus par la plupart des navigateurs, et beaucoup d’hébergeurs les intègrent à leurs offres. Pour un site vitrine, un certificat gratuit offre la même connexion sécurisée qu’un certificat payant."
-  - question: "Mon site est en https mais affiche quand même « Non sécurisé » : pourquoi ?"
-    answer: "Le plus souvent, le certificat a expiré ou ne couvre pas la bonne adresse (avec ou sans www) : le détail du certificat, dans le navigateur, permet de faire le tri. Un élément encore appelé en http, ce qu’on appelle du contenu mixte, se voit plutôt à une page qui s’affiche mal."
-  - question: "Le message « Non sécurisé » fait-il baisser mon référencement Google ?"
-    answer: "Pas directement. En 2014, Google a présenté le https comme un signal de classement très léger ; sa documentation actuelle précise que les critères d’expérience sur la page, dont le https, ne contribuent pas directement au classement, hormis les Core Web Vitals. Le vrai risque est ailleurs : des visiteurs qui repartent, et un site qui existe en plusieurs versions, http et https, pour Google."
-  - question: "Mon certificat a expiré : combien de temps pour le renouveler ?"
-    answer: "L’émission d’un certificat gratuit est automatisée : le délai dépend surtout de la réactivité de votre hébergeur ou de votre prestataire. Demandez-lui aussi de réparer le renouvellement automatique, sinon le problème reviendra."
 tags: ["sécurité", "site vitrine", "maintenance", "tpe"]
 ---
 
@@ -189,11 +176,11 @@ L’émission d’un certificat gratuit est automatisée : le délai dépend sur
 - [Chrome : messages d’erreur courants, dont « Votre connexion n’est pas privée »](https://support.google.com/chrome/answer/95669?hl=fr)
 - [Safari : éviter la fraude en utilisant des sites web chiffrés](https://support.apple.com/fr-fr/guide/safari/sfri40697/mac)
 - [Chrome 154 : notes de version (avertissement par défaut avant un site en http)](https://developer.chrome.com/release-notes/154)
-- [Google Security Blog : HTTPS by default (2025, en anglais)](https://security.googleblog.com/2025/10/https-by-default.html)
+- [Google Security Blog : HTTPS by default (2025, en anglais)](https://blog.google/security/https-by-defau/)
 - [Chromium Blog : Towards HTTPS by default (2023, en anglais)](https://blog.chromium.org/2023/08/towards-https-by-default.html)
 - [CNIL : sécuriser les sites web](https://www.cnil.fr/fr/securite-securiser-les-sites-web)
 - [Google Search Central : le protocole HTTPS en tant qu’indicateur de classement (2014)](https://developers.google.com/search/blog/2014/08/https-as-ranking-signal?hl=fr)
 - [Google Search Central : comprendre l’expérience sur la page](https://developers.google.com/search/docs/appearance/page-experience?hl=fr)
-- [Let’s Encrypt : à propos](https://letsencrypt.org/fr/about/) et [FAQ](https://letsencrypt.org/fr/docs/faq/) ; [fin des e-mails d’expiration](https://letsencrypt.org/2025/06/26/expiration-notification-service-has-ended/) et [passage à des certificats plus courts](https://letsencrypt.org/2025/12/02/from-90-to-45/) (en anglais)
+- [Let’s Encrypt : à propos](https://letsencrypt.org/fr/about/) et [FAQ](https://letsencrypt.org/fr/docs/faq/) ; [fin des e-mails d’expiration](https://letsencrypt.org/2025/06/26/expiration-notification-service-has-ended) et [passage à des certificats plus courts](https://letsencrypt.org/2025/12/02/from-90-to-45) (en anglais)
 - [CA/Browser Forum : exigences de base (durée des certificats)](https://cabforum.org/working-groups/server/baseline-requirements/requirements/)
 - [MDN : contenu mixte](https://developer.mozilla.org/fr/docs/Web/Security/Defenses/Mixed_content)

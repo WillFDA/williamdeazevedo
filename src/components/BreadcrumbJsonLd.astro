@@ -1,0 +1,27 @@
+---
+// Fil d'Ariane en données structurées : « Accueil », puis les niveaux reçus.
+interface Props {
+    items: { name: string; path: string }[];
+}
+
+const { items } = Astro.props;
+const siteUrl = Astro.site ?? new URL(Astro.url.origin);
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [{ name: "Accueil", path: "/" }, ...items].map(
+        (item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: item.name,
+            item: new URL(item.path, siteUrl).href,
+        }),
+    ),
+};
+---
+
+<script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(jsonLd)}
+/>

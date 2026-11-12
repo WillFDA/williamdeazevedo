@@ -1,7 +1,9 @@
 ---
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd.astro";
 import CalButton from "@/components/CalButton.astro";
 import DiagnosticCta from "@/components/DiagnosticCta.astro";
 import ProblemComparison from "@/components/ProblemComparison.astro";
+import ServiceReadingList from "@/components/ServiceReadingList.astro";
 import ServicesBentoGrid from "@/components/ServicesBentoGrid.astro";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import FadeRevealOnScroll from "@/components/animations/FadeRevealOnScroll.astro";
@@ -107,6 +109,7 @@ const servicesDiagnosticTitleParts = [
     title="Services web - création, refonte et SEO - William De Azevedo"
     description="Création, refonte et développement front-end pour des sites clairs, rapides et crédibles. Découvrez le service adapté à votre projet."
 >
+    <BreadcrumbJsonLd items={[{ name: "Services", path: "/services/" }]} />
     <div class="mx-auto flex w-full max-w-5xl flex-col px-4 py-14 sm:py-20 lg:py-24">
         <section
             class="mx-auto flex max-w-5xl flex-col items-center gap-6 text-center"
@@ -203,4 +206,8 @@ const servicesDiagnosticTitleParts = [
     />
 
     <ProjectShowcase id="services-projects" class="mt-16 sm:mt-20" />
+
+    <div class="mx-auto w-full max-w-5xl px-4 py-20 sm:py-28">
+        <ServiceReadingList serviceSlug="services" />
+    </div>
 </Layout>

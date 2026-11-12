@@ -117,15 +117,42 @@ for (const slug of slugs) {
   assert.ok(article, `${slug}: BlogPosting schema`);
   assert.equal(article.url, `https://williamdeazevedo.fr${path}`);
   assert.equal(article.image, `https://williamdeazevedo.fr${imagePath}`);
+  // Freshness: the sitemap repeats the date the page declares, and the visible
+  // « Mis à jour le » only appears for an update made after publication.
+  assert.ok(
+    sitemap.includes(
+      `<loc>https://williamdeazevedo.fr${path}</loc><lastmod>${article.dateModified}</lastmod>`
+    ),
+    `${slug}: sitemap lastmod must equal dateModified`
+  );
+  assert.equal(
+    /Mis à jour le\s*<time\b/.test(html),
+    article.dateModified > article.datePublished,
+    `${slug}: « Mis à jour le » only for a real update`
+  );
   assert.ok(
     schemas.some((schema) => schema["@type"] === "BreadcrumbList"),
     `${slug}: breadcrumbs`
   );
   const faqPage = schemas.find((schema) => schema["@type"] === "FAQPage");
-  if (/^faq:/m.test(frontmatter) || faqPage) {
+  // The FAQ title may wrap each word in a <span> for its reveal animation.
+  const faqSection = html
+    .split(
+      /<h2\b[^>]*>(?:\s|<[^>]+>)*Questions(?:\s|<[^>]+>)+fréquentes(?:\s|<[^>]+>)*<\/h2>/
+    )[1]
+    ?.split(/<h2\b/)[0];
+  const visibleQuestions = (faqSection?.match(/<h3\b/g) || []).length;
+  // FAQPage is generated from the visible FAQ (src/lib/faqJsonLd.ts): a
+  // visible FAQ always has its schema, and the schema says nothing else.
+  if (visibleQuestions > 0 || faqPage) {
     assert.ok(faqPage?.mainEntity?.length, `${slug}: FAQPage schema`);
     const visibleText = html
       .replaceAll(/<script\b[\s\S]*?<\/script>/g, " ")
+      // Same rule as src/lib/faqJsonLd.ts: a block end separates two words.
+      .replaceAll(
+        /<\/(?:p|li|ul|ol|div|blockquote|pre|tr|h[1-6])>|<br\s*\/?>/g,
+        " "
+      )
       .replaceAll(/<[^>]+>/g, "")
       .replaceAll(/&nbsp;|\s+/g, " ")
       .replaceAll(/&#39;|&#x27;/g, "'")
@@ -134,14 +161,8 @@ for (const slug of slugs) {
       .replaceAll("&gt;", ">")
       .replaceAll("&amp;", "&");
     // Both ways: every visible question of the FAQ section is in the schema.
-    // The FAQ title may wrap each word in a <span> for its reveal animation.
-    const faqSection = html
-      .split(
-        /<h2\b[^>]*>(?:\s|<[^>]+>)*Questions(?:\s|<[^>]+>)+fréquentes(?:\s|<[^>]+>)*<\/h2>/
-      )[1]
-      ?.split(/<h2\b/)[0];
     assert.equal(
-      (faqSection?.match(/<h3\b/g) || []).length,
+      visibleQuestions,
       faqPage.mainEntity.length,
       `${slug}: FAQPage must list every visible FAQ question`
     );
@@ -154,6 +175,12 @@ for (const slug of slugs) {
       }
     }
   }
+  // The business block is on every page; Layout.astro keeps its phone number
+  // on the home page. This only fails when the build is given a number.
+  assert.ok(
+    schemas.every((schema) => !("telephone" in schema)),
+    `${slug}: no phone number in structured data outside the home page`
+  );
   const person = schemas.find((schema) => schema["@type"] === "Person");
   assert.ok(
     person?.image.endsWith("/pictures/william-low.png"),

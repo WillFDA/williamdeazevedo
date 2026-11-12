@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { render } from "astro:content";
 import ArticleBody from "@/components/articles/ArticleBody.astro";
 import ArticleImage from "@/components/articles/ArticleImage.astro";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
@@ -25,9 +26,12 @@ interface Props {
 
 const { article } = Astro.props;
 const { Content, headings } = await render(article);
-const { author, description, faq, image, pubDate, seoTitle, tags, title, updatedDate } =
+const { author, description, image, pubDate, seoTitle, tags, title, updatedDate } =
     article.data;
 const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+// Une `updatedDate` qui ne suit pas la publication (brouillon retouché avant
+// sa sortie) n'est pas une mise à jour : elle n'est ni affichée ni déclarée.
+const modifiedDate = updatedDate && updatedDate > pubDate ? updatedDate : undefined;
 
 const articleTitleBreak = "2 000 euros";
 const shouldSplitArticleTitle =
@@ -41,6 +45,8 @@ const siteUrl = Astro.site ?? new URL(Astro.url.origin);
 // Même @id que le nœud Person du Layout, pour que Google relie les entités.
 const personId = new URL("/#person", siteUrl).href;
 const canonicalUrl = new URL(`/articles/${article.id}/`, siteUrl);
+// La signature et `author.url` mènent à la page À propos de l'auteur du site.
+const isSiteAuthor = author === "William De Azevedo";
 const ogImage = new URL(image?.src ?? "/pictures/william-low.png", siteUrl);
 
 const jsonLd = {
@@ -50,61 +56,24 @@ const jsonLd = {
     description,
     inLanguage: "fr-FR",
     datePublished: pubDate.toISOString(),
-    dateModified: (updatedDate ?? pubDate).toISOString(),
+    dateModified: (modifiedDate ?? pubDate).toISOString(),
     image: ogImage.href,
     url: canonicalUrl.href,
     mainEntityOfPage: canonicalUrl.href,
     keywords: tags,
     author: {
         "@type": "Person",
-        ...(author === "William De Azevedo" && { "@id": personId }),
+        ...(isSiteAuthor && { "@id": personId }),
         name: author,
-        url: siteUrl.href,
+        url: isSiteAuthor ? new URL("/about/", siteUrl).href : siteUrl.href,
     },
     publisher: {
         "@type": "Person",
-        ...(author === "William De Azevedo" && { "@id": personId }),
+        ...(isSiteAuthor && { "@id": personId }),
         name: author,
         url: siteUrl.href,
     },
 };
-
-const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-        {
-            "@type": "ListItem",
-            position: 1,
-            name: "Accueil",
-            item: siteUrl.href,
-        },
-        {
-            "@type": "ListItem",
-            position: 2,
-            name: "Articles",
-            item: new URL("/articles/", siteUrl).href,
-        },
-        {
-            "@type": "ListItem",
-            position: 3,
-            name: title,
-            item: canonicalUrl.href,
-        },
-    ],
-};
-
-const faqJsonLd = faq?.length
-    ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: faq.map(({ question, answer }) => ({
-              "@type": "Question",
-              name: question,
-              acceptedAnswer: { "@type": "Answer", text: answer },
-          })),
-      }
-    : undefined;
 ---
 
 <Layout
@@ -116,7 +85,7 @@ const faqJsonLd = faq?.length
     ogType="article"
     article={{
         publishedTime: pubDate.toISOString(),
-        modifiedTime: (updatedDate ?? pubDate).toISOString(),
+        modifiedTime: (modifiedDate ?? pubDate).toISOString(),
         author,
         tags,
     }}
@@ -128,18 +97,12 @@ const faqJsonLd = faq?.length
         is:inline
         set:html={JSON.stringify(jsonLd)}
     />
-    <script
-        type="application/ld+json"
-        is:inline
-        set:html={JSON.stringify(breadcrumbJsonLd)}
+    <BreadcrumbJsonLd
+        items={[
+            { name: "Articles", path: "/articles/" },
+            { name: title, path: canonicalUrl.pathname },
+        ]}
     />
-    {faqJsonLd && (
-        <script
-            type="application/ld+json"
-            is:inline
-            set:html={JSON.stringify(faqJsonLd)}
-        />
-    )}
 
     <article
         class="mx-auto w-full max-w-6xl px-4 py-12 md:px-6 md:py-16"
@@ -179,18 +142,37 @@ const faqJsonLd = faq?.length
                         class="size-9 rounded-full"
                         src={williamPortrait}
                         alt={`Photo de ${author}`}
-                        width={36}
-                        height={36}
+                        width={72}
+                        height={72}
                         loading="eager"
                     />
                     <div class="text-left text-sm">
-                        <p class="font-medium text-gray-900">{author}</p>
+                        <p class="font-medium text-gray-900">
+                            {isSiteAuthor ? (
+                                <a
+                                    class="text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                    href="/about/"
+                                >
+                                    {author}
+                                </a>
+                            ) : (
+                                author
+                            )}
+                        </p>
                         <time
                             class="font-normal text-gray-600"
                             datetime={pubDate.toISOString()}
                         >
                             {formatArticleDate(pubDate)}
                         </time>
+                        {modifiedDate && (
+                            <p class="font-normal text-gray-600">
+                                Mis à jour le{" "}
+                                <time datetime={modifiedDate.toISOString()}>
+                                    {formatArticleDate(modifiedDate)}
+                                </time>
+                            </p>
+                        )}
                     </div>
                 </div>
             </header>

@@ -6,6 +6,7 @@ import Accordion from "./ui/Accordion.astro";
 import WaveIcon from "./ui/WaveIcon.astro";
 import WaveText from "./ui/WaveText.astro";
 import { getProjectById } from "@/data/projects";
+import { buildFaqJsonLd } from "@/lib/faqJsonLd";
 
 // Plain text (`question`, `answer`) or already rendered HTML (articles).
 type FaqItem = {
@@ -31,6 +32,8 @@ interface Props {
     items?: readonly FaqItem[];
     padded?: boolean;
     showCta?: boolean;
+    /** `false` : la section reste affichée, sans balisage FAQPage. */
+    structuredData?: boolean;
     title?: string;
     /** id of the h2; defaults to `${id}-title`. */
     titleId?: string;
@@ -116,10 +119,16 @@ const {
     items,
     padded = true,
     showCta = true,
+    structuredData = true,
     title = "FAQ",
     titleId = `${id}-title`,
 } = Astro.props;
 const faqItems = Array.from(items ?? getDefaultFaqItems());
+// `<` échappé : le texte d'une réponse ne doit pas pouvoir fermer la balise script.
+const faqJsonLd = JSON.stringify(buildFaqJsonLd(faqItems)).replaceAll(
+    "<",
+    String.raw`\u003c`,
+);
 const titleWords = title.split(" ");
 
 const accordionClasses = {
@@ -143,6 +152,11 @@ const accordionClasses = {
     data-faq
     data-section-reveal="false"
 >
+    {
+        structuredData && (
+            <script type="application/ld+json" is:inline set:html={faqJsonLd} />
+        )
+    }
     {/* DOM order matches the mobile order (title, questions, card); from lg the card moves under the title. */}
     <div
         class:list={[

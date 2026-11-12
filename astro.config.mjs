@@ -8,11 +8,12 @@ import { defineConfig } from "astro/config";
 import hastAccessibleTables from "./scripts/hast-accessible-tables.mjs";
 import hastArticleFaq from "./scripts/hast-article-faq.mjs";
 import hastStaticTaskLists from "./scripts/hast-static-task-lists.mjs";
+import sitemapLastmod from "./scripts/sitemap-lastmod.mjs";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://williamdeazevedo.fr/",
-  integrations: [mdx(), sitemap()],
+  integrations: [mdx(), sitemap({ serialize: sitemapLastmod })],
 
   // <ClientRouter /> turns prefetch ON by default (prefetchAll, hover strategy)
   // — exactly the hover-time, full-page fetching that made the homepage hover

@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import Layout from "../layout/Layout.astro";
 import AboutCallout from "../components/AboutCallout.astro";
+import BreadcrumbJsonLd from "../components/BreadcrumbJsonLd.astro";
 import FadeReveal from "../components/animations/FadeReveal.astro";
 import FadeRevealOnScroll from "../components/animations/FadeRevealOnScroll.astro";
 import Marquee from "../components/Marquee.astro";
@@ -107,21 +108,25 @@ const clientAngles: ClientAngle[] = [
     title="À propos - William De Azevedo"
     description="Développeur front-end avec une approche design et produit pour créer des sites clairs, rapides, accessibles et crédibles."
 >
+    <BreadcrumbJsonLd items={[{ name: "À propos", path: "/about/" }]} />
     <div class="mx-auto flex w-full max-w-5xl flex-col gap-12 px-4 py-12 md:gap-16 md:py-16">
         <section class="flex flex-col gap-6">
             <h1 class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl">
                 {
                     aboutHeroTitleWords.map((word, index) => (
-                        <span
-                            class:list={[
-                                "about-hero-title-word",
-                                highlightedAboutHeroWords.has(word) &&
-                                    "text-coffee-300",
-                            ]}
-                            style={`--about-hero-word-index: ${index}`}
-                        >
-                            {word}
-                        </span>
+                        <Fragment>
+                            {index > 0 && " "}
+                            <span
+                                class:list={[
+                                    "about-hero-title-word",
+                                    highlightedAboutHeroWords.has(word) &&
+                                        "text-coffee-300",
+                                ]}
+                                style={`--about-hero-word-index: ${index}`}
+                            >
+                                {word}
+                            </span>
+                        </Fragment>
                     ))
                 }
             </h1>
