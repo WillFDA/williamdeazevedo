@@ -43,10 +43,13 @@ const PAGE_SIZE = 6;
                     aria-label="Ce que j'apprends en créant des sites."
                 >
                     {
-                        heroTitleParts.map((part) => (
-                            <span class:list={[part.pill && "title-pill"]}>
-                                {part.text}
-                            </span>
+                        heroTitleParts.map((part, index) => (
+                            <Fragment>
+                                {index > 0 && " "}
+                                <span class:list={[part.pill && "title-pill"]}>
+                                    {part.text}
+                                </span>
+                            </Fragment>
                         ))
                     }
                 </h1>
