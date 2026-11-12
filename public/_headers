@@ -31,7 +31,7 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
   X-Frame-Options: DENY
   Content-Security-Policy: frame-ancestors 'none'
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://app.cal.com https://analytics.williamdeazevedo.fr; style-src 'self' 'unsafe-inline' https://app.cal.com; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net https://igpmag5dwziffdrn.public.blob.vercel-storage.com; font-src 'self' data:; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://pagead2.googlesyndication.com https://app.cal.com https://cal.com https://analytics.williamdeazevedo.fr; frame-src https://cal.com https://app.cal.com https://www.googletagmanager.com https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://app.cal.com https://analytics.williamdeazevedo.fr; style-src 'self' 'unsafe-inline' https://app.cal.com; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net https://igpmag5dwziffdrn.public.blob.vercel-storage.com; font-src 'self' data:; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://pagead2.googlesyndication.com https://app.cal.com https://cal.com https://analytics.williamdeazevedo.fr; frame-src https://cal.com https://app.cal.com https://www.googletagmanager.com https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
 
 # Astro fingerprints these filenames on every build, so they're safe to cache
 # forever.
@@ -50,3 +50,9 @@
   Cache-Control: public, max-age=31536000, immutable
 /icons/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Couvertures d'articles : URL stable, servie comme image Open Graph (les
+# pages affichent les variantes de /_astro/). Un jour seulement, car une
+# couverture provisoire peut être remplacée sans changer de nom.
+/articles/:slug/cover.webp
+  Cache-Control: public, max-age=86400
