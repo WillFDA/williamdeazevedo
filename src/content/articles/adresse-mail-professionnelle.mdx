@@ -1,0 +1,205 @@
+---
+title: "Créer une adresse mail professionnelle : le guide pour votre entreprise"
+seoTitle: "Créer une adresse mail professionnelle"
+description: "Créer une adresse mail professionnelle à votre nom de domaine : où la loger, les réglages à vérifier, Gmail en 2027 et les erreurs qui coupent vos e-mails."
+image:
+  src: "/articles/adresse-mail-professionnelle/cover.webp"
+  alt: "Trois cartes. L’adresse : sur le devis, une adresse en gmail barrée, puis contact@votreentreprise.fr, au même nom que le site www.votreentreprise.fr. Les réglages, dans la zone DNS du domaine : MX pour recevoir, SPF pour les serveurs autorisés, DKIM pour un message signé, DMARC contre les imitations, pour moins de risque de spam. Les réflexes : domaine à votre nom, renouvellement suivi, double authentification, boîtes pro et perso séparées, et un rappel : en janvier 2027, Gmail arrête « Envoyer en tant que » pour les adresses tierces."
+pubDate: 2026-11-12
+author: "William De Azevedo"
+draft: false
+faq:
+  - question: "Peut-on créer une adresse mail professionnelle gratuite ?"
+    answer: "Pas vraiment. L’adresse elle-même peut être incluse dans une offre, mais elle repose sur un nom de domaine, payant et à renouveler. Une adresse chez Gmail ou Outlook est gratuite, mais elle porte le nom du fournisseur, pas celui de votre entreprise."
+  - question: "Peut-on avoir une adresse mail professionnelle avec Gmail ?"
+    answer: "Oui, avec Google Workspace, l’offre payante de Google, qui relie Gmail à votre nom de domaine. En revanche, utiliser depuis un Gmail gratuit une adresse hébergée ailleurs, avec « Envoyer en tant que », ne sera plus possible à partir de janvier 2027."
+  - question: "Faut-il un site internet pour avoir une adresse mail professionnelle ?"
+    answer: "Non. Il suffit d’un nom de domaine et d’un service de messagerie. Mais si vous créez un site ensuite, utilisez le même nom de domaine : votre adresse et votre site se renforcent l’un l’autre."
+  - question: "Quelle adresse choisir : prénom ou contact ?"
+    answer: "Souvent les deux. Une adresse générique, comme contact@ ou devis@, reste valable quand une personne part ou s’absente. Une adresse au prénom personnalise la relation avec vos clients réguliers."
+  - question: "Que deviennent mes e-mails si je change de prestataire ou d’hébergeur ?"
+    answer: "Cela dépend de l’endroit où vivent vos boîtes. Si elles restent chez le même fournisseur, faites reprendre leurs réglages à l’identique dans la zone DNS. Si elles sont incluses dans l’hébergement que vous quittez, faites-les déplacer, avec vos anciens messages, avant de résilier."
+  - question: "Pourquoi mes e-mails professionnels arrivent-ils en spam ?"
+    answer: "Deux causes à regarder d’abord : des réglages SPF, DKIM ou DMARC absents ou incomplets, ou un outil, comme le formulaire du site, qui envoie des messages en votre nom sans y être autorisé. Demandez à votre fournisseur de vérifier ces trois réglages."
+tags: ["site vitrine", "tpe", "artisan"]
+---
+
+**Une adresse mail professionnelle est une adresse qui se termine par le nom de domaine de votre entreprise, par exemple `contact@votreentreprise.fr`, au lieu du nom d’un fournisseur gratuit. Pour créer une adresse mail professionnelle, il faut quatre choses : un nom de domaine à votre nom, un service de messagerie relié à ce domaine, quelques réglages techniques pour que vos messages soient reconnus et risquent moins d’arriver en spam, et vos appareils configurés.** Votre adresse est la première chose que voit un client quand il reçoit votre devis, avant même de l’ouvrir.
+
+Un devis envoyé depuis `votreentreprise@gmail.com` peut être excellent ; il commence quand même par un doute.
+
+Je suis développeur web et designer freelance à Achères (78). Cet article s’adresse à vous, dirigeant, artisan ou indépendant. Il ne recommande aucun fournisseur : il vous dit quoi posséder, quoi demander et quoi vérifier.
+
+## Adresse mail professionnelle : de quoi parle-t-on ?
+
+Une adresse e-mail se lit en deux parties : ce qui est avant l’arobase (contact, julie, devis) et ce qui est après, le **nom de domaine**. Avec une adresse gratuite, le domaine est celui du fournisseur : gmail.com, orange.fr, outlook.fr. Avec une adresse professionnelle, c’est le vôtre : votreentreprise.fr, le même que celui de votre site.
+
+L’Afnic, l’association qui gère les noms de domaine en .fr, l’écrit : utiliser une adresse « avec un nom en orange, gmail ou yahoo, ne fait pas très professionnel ». Elle ajoute un argument moins connu : une adresse à votre nom facilite votre identification, et vous « réduisez aussi le risque d’usurpation d’identité ». N’importe qui peut ouvrir une adresse gratuite qui ressemble à la vôtre ; sur votre domaine, seul celui qui gère vos comptes peut créer une boîte, et les réglages présentés plus bas compliquent l’usurpation de votre adresse.
+
+Le nom de domaine est donc l’élément central : il appartient à quelqu’un, il se renouvelle, et il porte à la fois votre site et vos e-mails.
+
+## Pourquoi votre adresse compte autant que votre site
+
+Votre site est votre carte de visite, et votre adresse e-mail en est le prolongement : elle figure sur vos devis, vos factures, votre camionnette. Un client qui lit **`contact@votreentreprise.fr`** voit que le site, l’adresse et l’entreprise vont ensemble. Avec une adresse gratuite à côté d’un beau site, la cohérence se casse.
+
+C’est la même logique qu’un site fait à la va-vite : les détails qui manquent installent un doute au moment où le client doit vous faire confiance. Une adresse professionnelle ne vous apportera pas de clients à elle seule ; une adresse bricolée peut en faire hésiter. J’en parle dans [l’article qui compare un site générique et un site travaillé](/articles/site-600-euros-vs-site-2000-euros/).
+
+Une boîte dédiée évite aussi les mélanges : Cybermalveillance.gouv.fr déconseille de mêler messagerie professionnelle et personnelle, « le meilleur moyen de ne plus s’y retrouver et de commettre des erreurs ».
+
+## Créer une adresse mail professionnelle en 5 étapes
+
+Voici comment créer une adresse mail professionnelle, dans l’ordre. Si vous avez déjà un site, la première étape est peut-être faite : vérifiez seulement à quel nom.
+
+### 1. Un nom de domaine, à votre nom
+
+Le nom de domaine se réserve auprès d’un **bureau d’enregistrement** (ou « registrar »). Choisissez un nom court, facile à dicter au téléphone. Si vous avez déjà un site, gardez le même domaine : l’Afnic conseille cette cohérence entre l’adresse et le site.
+
+Le point qui compte le plus : **le titulaire du domaine doit être votre entreprise**, pas votre prestataire, et vous devez avoir accès au compte. L’article sur [l’hébergement d’un site vitrine](/articles/hebergement-site-vitrine/) détaille ce qu’il faut vérifier.
+
+Et notez la date d’échéance. L’Afnic le rappelle : renouvelez le domaine à temps « pour ne pas perdre l’adresse de votre site internet et des adresses mails qui y sont associées ».
+
+### 2. Choisir où vit votre messagerie
+
+Le domaine donne le nom ; la messagerie stocke et envoie vos messages, chez le même fournisseur ou un autre. Trois grandes familles :
+
+| Option | Comment ça marche | À vérifier |
+| --- | --- | --- |
+| Messagerie incluse avec le domaine ou l’hébergement | Le bureau d’enregistrement ou l’hébergeur fournit une ou plusieurs boîtes avec le domaine | Le nombre de boîtes et l’espace inclus, l’interface de consultation, le support |
+| Suite bureautique (Google Workspace, Microsoft 365…) | Votre domaine est relié à Gmail ou à Outlook, avec agenda et documents partagés | Un abonnement par utilisateur ; utile si vous travaillez à plusieurs |
+| Service de messagerie dédié | Un fournisseur spécialisé héberge uniquement vos e-mails | La localisation des données, la reprise de vos anciens messages |
+
+Aucune n’est meilleure dans l’absolu. Pour un artisan seul, la messagerie incluse avec le domaine suffit souvent ; une équipe qui partage agendas et documents sera plus à l’aise avec une suite. Demandez-vous surtout **qui pourra régler un problème le jour où un message n’arrive pas**. Et, comme pour le domaine, ouvrez le compte de messagerie au nom de l’entreprise.
+
+### 3. Choisir vos adresses
+
+L’Afnic distingue deux usages : une adresse par personne, et des adresses génériques par fonction. Les secondes ont un avantage : elles sont « stables dans le temps » et peuvent être partagées, pour que les messages soient traités même en cas d’absence.
+
+| Adresse | Pour quoi faire | Exemple |
+| --- | --- | --- |
+| Générique | Le contact public, sur le site et les cartes de visite | `contact@votreentreprise.fr` |
+| Par fonction | Séparer les demandes de devis, la facturation | `devis@` et `factures@` |
+| Personnelle | Les échanges suivis avec un client | `julie@` ou `julie.martin@votreentreprise.fr` |
+
+Évitez les chiffres et les sigles, choisissez une orthographe que l’on dicte sans épeler, et gardez la même forme pour toute l’équipe. Une adresse par fonction peut souvent être un **alias** (une adresse qui renvoie vers une boîte existante) plutôt qu’une boîte de plus.
+
+### 4. Les réglages pour recevoir et être reconnu : MX, SPF, DKIM, DMARC
+
+Ces réglages se font dans la **zone DNS** de votre domaine, une sorte d’annuaire qui dit où diriger votre site et vos e-mails. Votre fournisseur de messagerie indique quoi y mettre, et s’en charge souvent si votre domaine est chez lui.
+
+- **MX** : l’enregistrement qui indique quel serveur reçoit le courrier de votre domaine. S’il manque ou s’il est erroné, les messages ne vous parviennent pas.
+- **SPF** : la liste des serveurs autorisés à envoyer des e-mails en votre nom. D’après Google, il « permet d’éviter que des expéditeurs usurpent votre identité ».
+- **DKIM** : une signature ajoutée à chaque message, qui « empêche la modification du contenu de vos messages pendant leur transfert ».
+- **DMARC** : la consigne que vous donnez aux messageries des destinataires pour un message qui affiche votre domaine sans réussir ces contrôles.
+
+Depuis le 1er février 2024, Google demande à **tous les expéditeurs** qui écrivent à des adresses Gmail de configurer au moins SPF ou DKIM ; au-delà de 5 000 messages par jour, les trois sont exigés. Google recommande de toute façon de configurer SPF et DKIM ensemble, puis DMARC. Ces réglages servent, selon lui, à « empêcher les messages légitimes d’être marqués comme spam ».
+
+Vous n’avez pas à écrire ces réglages vous-même. Posez une seule question à votre fournisseur ou prestataire : **« MX, SPF, DKIM et DMARC sont-ils en place sur mon domaine ? »** La réponse doit être un oui clair, pour chacun.
+
+### 5. Configurer vos appareils, puis tester
+
+Votre fournisseur propose en général une messagerie en ligne (un « webmail »). Vous pouvez aussi ajouter la boîte dans le logiciel que vous utilisez déjà : Outlook, Apple Mail, Thunderbird, l’application Gmail sur téléphone. L’Afnic précise qu’il faut alors renseigner les « paramètres serveurs » donnés par votre fournisseur : POP ou IMAP pour recevoir, SMTP pour envoyer, et le mot de passe. Avec IMAP, vos messages restent synchronisés entre l’ordinateur et le téléphone.
+
+Ensuite, testez comme un client :
+
+1. Envoyez un message à une adresse Gmail et à une adresse Outlook que vous connaissez. Arrive-t-il en boîte de réception, ou en spam ?
+2. Répondez depuis ces adresses. La réponse revient-elle bien chez vous ?
+3. Envoyez-vous un message depuis le formulaire de votre site. Arrive-t-il, et dans quel dossier ?
+
+## Adresse mail professionnelle gratuite : ce que cela veut dire
+
+Vous cherchez à créer une adresse mail professionnelle gratuite ? La réponse honnête tient en une phrase : **l’adresse peut être offerte, le domaine ne l’est pas.**
+
+Un nom de domaine se loue, en général à l’année. Certaines offres de domaine ou d’hébergement incluent une ou plusieurs boîtes : l’adresse ne coûte rien de plus, sans être gratuite pour autant. Les offres annoncées « gratuites » ont souvent des limites (nombre de boîtes, stockage, fonctions réservées à la version payante) : lisez-les avant d’en faire l’adresse de votre entreprise.
+
+## Gmail et adresse professionnelle : ce qui change en janvier 2027
+
+Vous utilisez peut-être ce montage : la boîte est chez l’hébergeur du domaine, mais on lit et on envoie tout depuis un Gmail gratuit, avec « Envoyer en tant que » et la relève par POP. Cette astuce a une date de fin.
+
+Google l’annonce dans son centre d’aide : **à partir de janvier 2027**, Gmail supprimera « Envoyer en tant que » pour les adresses tierces, et la relève de ces boîtes par POP. Concrètement, depuis votre compte Gmail, vous ne pourrez plus envoyer de messages avec une adresse hébergée ailleurs, ni relever automatiquement cette boîte. D’ici là, Gmail « peut limiter les nouvelles configurations ».
+
+Ce qui ne change pas, d’après la même page :
+
+- l’application Gmail pour Android, iPhone et iPad peut toujours accueillir votre boîte professionnelle comme un compte à part ;
+- le transfert automatique de vos messages vers Gmail fonctionne toujours, pour les lire ;
+- les adresses gérées par Google Workspace ne sont pas concernées.
+
+Attention au transfert seul : vos réponses partiraient de l’adresse Gmail. Si vous utilisez ce montage, trois solutions : la messagerie en ligne ou l’application de votre fournisseur, un logiciel de messagerie, ou Google Workspace pour votre domaine. Google met en garde contre les outils tiers qui proposent de remplacer la fonction : ils demandent souvent l’accès à vos identifiants. Réglez la question **avant janvier 2027**, à tête reposée.
+
+## Les erreurs qui coupent vos e-mails
+
+Les coupures ci-dessous viennent d’un oubli, pas d’une panne.
+
+| Erreur | Ce qui se passe | Comment l’éviter |
+| --- | --- | --- |
+| Le domaine est au nom de l’ancien prestataire | Vous dépendez de lui pour garder vos adresses | Faire inscrire votre entreprise comme titulaire |
+| Le renouvellement du domaine est oublié | Le site et les e-mails cessent de fonctionner | Renouvellement automatique, et une personne nommée qui suit l’échéance |
+| La zone DNS est recopiée sans les réglages e-mail, lors d’un changement d’hébergeur | Le site s’affiche, mais vous ne recevez plus rien | Copier la zone avant toute modification, et tester l’envoi et la réception après |
+| Un outil envoie en votre nom sans autorisation : formulaire du site, logiciel de devis | Vos devis ou les demandes de clients arrivent en spam, ou pas du tout | Faire autoriser l’outil dans vos réglages SPF et DKIM, ou le faire passer par votre messagerie |
+
+Pour un changement de prestataire, l’article [changer de prestataire web](/articles/changer-prestataire-web/) explique dans quel ordre reprendre domaine, DNS et messagerie. Les messages du formulaire sont des données personnelles : voyez [le RGPD et le formulaire de contact](/articles/rgpd-formulaire-de-contact/).
+
+## Protéger la boîte de l’entreprise
+
+Votre boîte reçoit vos devis, vos factures, et les liens de réinitialisation de vos autres comptes. Pour Cybermalveillance.gouv.fr, le mot de passe de messagerie est « un des mots de passe les plus importants à protéger ». Les bons réflexes :
+
+- **un mot de passe long et unique**, rangé dans un gestionnaire de mots de passe ;
+- **la double authentification**, quand votre fournisseur la propose : un code demandé à chaque connexion depuis un nouvel appareil ;
+- **un coup d’œil, de temps en temps, aux règles de redirection** et à l’historique des connexions : une règle que vous n’avez pas créée est l’un des signes de piratage cités par Cybermalveillance.gouv.fr, qui détaille aussi les étapes à suivre si cela arrive.
+
+## Exemple fictif : un plombier passe à une adresse à son nom
+
+Voici un exemple **fictif** : il ne décrit aucun client réel et sert seulement à illustrer la méthode. Imaginons un plombier installé à Poissy. Il envoie ses devis depuis une adresse Gmail ouverte à ses débuts ; son site a son propre nom de domaine.
+
+- **Il vérifie le domaine** : il est au nom de l’entreprise, mais le compte du bureau d’enregistrement est lié à l’adresse de l’ancien prestataire. Il la remplace par une adresse qu’il lit, hors de son domaine.
+- **Il choisit la messagerie** : seul, il prend la boîte incluse avec son domaine, crée contact@ pour le site et le compte de sa [fiche Google](/articles/fiche-google-my-business-artisan/), et une adresse à son prénom.
+- **Il pose la question des réglages** à son fournisseur : MX, SPF et DKIM sont en place, DMARC manque. Le fournisseur l’ajoute.
+- **Il teste** : un message vers une adresse Gmail arrive en boîte de réception, une demande du formulaire aussi.
+- **Il prévient** ses clients réguliers, met à jour ses devis, ses cartes de visite et sa camionnette, et continue de lire l’ancienne adresse pendant la transition.
+
+Rien de spectaculaire : des démarches dans le bon ordre, et une adresse qui raconte enfin la même histoire que son site.
+
+## Un site à la hauteur de votre adresse : parlons-en
+
+Votre adresse e-mail, vos clients la voient à chaque échange. Elle repose sur le même nom de domaine que votre site : autant que les deux soient solides et à votre nom.
+
+Je crée et je reprends des sites pour des artisans, des TPE et des indépendants à Achères, Poissy, Saint-Germain-en-Laye, Conflans-Sainte-Honorine et dans le reste des Yvelines, et aussi à distance. Le domaine, l’hébergement et les outils restent payés à votre nom, et la mise en ligne passe par des vérifications avant le lancement, formulaire de contact compris.
+
+Un site cohérent avec votre adresse et votre image ? Voyez la [création de site internet professionnel](/creation-site-internet-professionnel/), la [création de site vitrine](/creation-site-vitrine/) ou le [site d’artisan](/creation-site-internet-artisan/). Envoyez-moi l’adresse de votre site : on regarde ensemble ce qui peut rassurer davantage vos clients.
+
+## Questions fréquentes
+
+### Peut-on créer une adresse mail professionnelle gratuite ?
+
+Pas vraiment. L’adresse elle-même peut être incluse dans une offre, mais elle repose sur un nom de domaine, payant et à renouveler. Une adresse chez Gmail ou Outlook est gratuite, mais elle porte le nom du fournisseur, pas celui de votre entreprise.
+
+### Peut-on avoir une adresse mail professionnelle avec Gmail ?
+
+Oui, avec Google Workspace, l’offre payante de Google, qui relie Gmail à votre nom de domaine. En revanche, utiliser depuis un Gmail gratuit une adresse hébergée ailleurs, avec « Envoyer en tant que », ne sera plus possible à partir de janvier 2027.
+
+### Faut-il un site internet pour avoir une adresse mail professionnelle ?
+
+Non. Il suffit d’un nom de domaine et d’un service de messagerie. Mais si vous créez un site ensuite, utilisez le même nom de domaine : votre adresse et votre site se renforcent l’un l’autre.
+
+### Quelle adresse choisir : prénom ou contact ?
+
+Souvent les deux. Une adresse générique, comme contact@ ou devis@, reste valable quand une personne part ou s’absente. Une adresse au prénom personnalise la relation avec vos clients réguliers.
+
+### Que deviennent mes e-mails si je change de prestataire ou d’hébergeur ?
+
+Cela dépend de l’endroit où vivent vos boîtes. Si elles restent chez le même fournisseur, faites reprendre leurs réglages à l’identique dans la zone DNS. Si elles sont incluses dans l’hébergement que vous quittez, faites-les déplacer, avec vos anciens messages, avant de résilier.
+
+### Pourquoi mes e-mails professionnels arrivent-ils en spam ?
+
+Deux causes à regarder d’abord : des réglages SPF, DKIM ou DMARC absents ou incomplets, ou un outil, comme le formulaire du site, qui envoie des messages en votre nom sans y être autorisé. Demandez à votre fournisseur de vérifier ces trois réglages.
+
+## Sources officielles
+
+- [Afnic sur France Num : 2 min pour… créer son email personnalisé !](https://www.francenum.gouv.fr/formations/2-min-pour-creer-son-email-personnalise), lu le 12/11/2026
+- [Afnic, Réussir en .fr : le pack « Créer mon adresse e-mail professionnelle »](https://xn--russir-en-b4a.fr/les-offres-des-partenaires-du-fr/pack-e-mail-personnalise/), lu le 12/11/2026
+- [Aide Gmail : consignes pour les expéditeurs de messages](https://support.google.com/a/answer/81126?hl=fr) (exigences depuis le 1er février 2024), lu le 12/11/2026
+- [Aide Google Workspace : à propos des méthodes d’authentification](https://support.google.com/a/answer/10583557?hl=fr), lu le 12/11/2026
+- [Aide Gmail : modifications apportées à la prise en charge des comptes de messagerie tiers](https://support.google.com/mail/answer/17101213?hl=fr) (janvier 2027), lu le 12/11/2026
+- [Cloudflare : qu’est-ce qu’un enregistrement DNS MX ?](https://www.cloudflare.com/fr-fr/learning/dns/dns-records/dns-mx-record/), lu le 12/11/2026
+- [Cybermalveillance.gouv.fr : que faire en cas de piratage d’une boîte mail ?](https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/que-faire-en-cas-de-piratage-de-boite-mail), lu le 12/11/2026
+- [Cybermalveillance.gouv.fr : la sécurité des usages pro-perso](https://www.cybermalveillance.gouv.fr/medias/2019/11/Fiche-pratique_usages-pro-perso.pdf), lu le 12/11/2026
+- [Cybermalveillance.gouv.fr : kit de sensibilisation](https://www.cybermalveillance.gouv.fr/medias/2019/02/kit_complet_de_sensibilisation.pdf), lu le 12/11/2026
