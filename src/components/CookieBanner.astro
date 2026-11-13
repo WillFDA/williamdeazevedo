@@ -1,13 +1,14 @@
 ---
 // Bandeau de consentement (CNIL) branché sur Consent Mode v2, mode basique :
-// GTM n'est chargé qu'après un accord (src/scripts/consent.ts). Deux
-// finalités séparées : mesure d'audience et publicité.
+// GTM n'est chargé qu'après un accord (src/scripts/consent.ts). « Réglages des
+// cookies » : Essentiels (toujours actifs, sans interrupteur actionnable) puis
+// deux catégories séparées, mesure d'audience et suivi publicitaire.
 
 // Trois boutons empilés, pleine largeur, de même taille et de même forme à
 // toutes les tailles : « Tout refuser » et « Tout accepter » (même
 // prééminence, exigence CNIL ; seule la couleur change) puis
-// « Personnaliser » (même gris que « Tout refuser »), qui ouvre le choix par
-// finalité et cède sa place à « Enregistrer mes choix », même style.
+// « Réglages des cookies » (même gris que « Tout refuser »), qui ouvre le choix
+// par catégorie et cède sa place à « Enregistrer mes choix », même style.
 // Chaque finalité est un interrupteur (case native, role="switch").
 // Sur mobile et en paysage (variante `wide` de global.css), bandeau compact
 // (boutons plus bas) pour masquer le moins possible le hero.
@@ -22,15 +23,19 @@ const purposes = [
     },
     {
         name: "ads",
-        label: "Publicité",
+        label: "Suivi publicitaire",
         description: "Google Ads : contacts issus des annonces, sans pub personnalisée.",
     },
 ];
+
+// Pas de mesure Rybbit ici : si elle est activée un jour, l'exemption CNIL
+// impose de pouvoir s'y opposer, donc une ligne à part, pas « Toujours actifs ».
+const essentialsDescription = "Fonctionnement du site et mémorisation de votre choix.";
 ---
 
 <div
     id="cookie-banner"
-    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-[13px] wide:p-5 wide:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] wide:right-auto wide:bottom-4 wide:left-4 wide:max-w-sm"
+    class="fixed inset-x-3 max-h-[calc(100dvh-1rem)] overflow-y-auto wide:max-h-[calc(100dvh-2rem)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-[13px] wide:p-5 wide:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] wide:right-auto wide:bottom-4 wide:left-4 wide:max-w-sm"
     role="dialog"
     aria-modal="false"
     aria-labelledby="cookie-banner-title"
@@ -40,7 +45,7 @@ const purposes = [
     transition:persist
 >
     {/* Titre masqué visuellement sur mobile (bandeau plus bas), toujours lu. */}
-    <h2 id="cookie-banner-title" class="sr-only text-sm font-semibold wide:not-sr-only wide:text-base wide:leading-6">Cookies</h2>
+    <h2 id="cookie-banner-title" class="sr-only text-sm font-semibold wide:not-sr-only wide:text-base wide:leading-6" data-cookie-title>Cookies</h2>
     <p id="cookie-banner-text" class="leading-[1.45] text-gray-700 wide:mt-1 wide:leading-normal">
         <span aria-hidden="true" class="font-semibold text-gray-900 wide:hidden">Cookies&nbsp;:{" "}</span>
         <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, des
@@ -57,7 +62,32 @@ const purposes = [
         data-cookie-purposes
         hidden
     >
-        <legend class="sr-only">Choisir les cookies</legend>
+        <legend class="sr-only">Catégories de cookies</legend>
+        <div class="flex items-center gap-6 py-3">
+            <span class="grid min-w-0 flex-1 gap-0.5">
+                <span id="cookie-essentials-label" class="text-sm leading-5 font-medium text-gray-900">Essentiels</span>
+                <span id="cookie-essentials-description" class="text-xs leading-4 text-pretty text-gray-600 wide:text-[13px] wide:leading-[1.125rem]">{essentialsDescription}</span>
+            </span>
+            <span class="flex shrink-0 items-center gap-2">
+                <span id="cookie-essentials-state" class="text-xs leading-4 font-medium text-gray-600">Toujours actifs</span>
+                {/* Interrupteur verrouillé : coché, désactivé, annoncé « Toujours actifs ». */}
+                <span class="grid items-center">
+                    <input
+                        class="peer col-start-1 row-start-1 h-5 w-9 cursor-not-allowed appearance-none rounded-full bg-coffee-300 opacity-60"
+                        type="checkbox"
+                        role="switch"
+                        checked
+                        disabled
+                        aria-labelledby="cookie-essentials-label"
+                        aria-describedby="cookie-essentials-state cookie-essentials-description"
+                    />
+                    <span
+                        class="pointer-events-none col-start-1 row-start-1 ml-0.5 size-4 translate-x-4 rounded-full bg-snow-50 shadow-sm"
+                        aria-hidden="true"
+                    />
+                </span>
+            </span>
+        </div>
         {
             purposes.map(({ name, label, description }) => (
                 <label class="group flex cursor-pointer items-center gap-6 py-3 last:pb-0">
@@ -105,7 +135,7 @@ const purposes = [
             aria-controls="cookie-purposes"
             data-cookie-customize
         >
-            Personnaliser
+            Réglages des cookies
         </button>
         <button
             class:list={[choiceClass, "hero-button--secondary"]}
@@ -151,12 +181,14 @@ const purposes = [
         const save = element.querySelector<HTMLElement>('[data-cookie-choice="custom"]');
         if (fieldset) fieldset.hidden = !customizing;
         if (save) save.hidden = !customizing;
-        // « Personnaliser » cède sa place à « Enregistrer mes choix » une fois
+        // « Réglages des cookies » cède sa place à « Enregistrer mes choix » une fois
         // le détail ouvert (le focus passe au premier interrupteur).
         if (toggle) {
             toggle.hidden = customizing;
             toggle.setAttribute("aria-expanded", String(customizing));
         }
+        const title = element.querySelector<HTMLElement>("[data-cookie-title]");
+        if (title) title.textContent = customizing ? "Réglages des cookies" : "Cookies";
         if (!customizing) return;
         const current = readConsent();
         for (const input of purposeInputs(element)) {
@@ -211,8 +243,8 @@ const purposes = [
                 return;
             }
 
-            // « Gérer les cookies » : rouvre le bandeau avec le détail ouvert,
-            // pour pouvoir retirer une seule finalité.
+            // Lien du pied de page : rouvre le bandeau sur les réglages, pour
+            // pouvoir retirer une seule catégorie.
             const opener = target.closest<HTMLElement>("[data-cookie-settings]");
             if (!opener) return;
             returnFocus = opener;
@@ -223,6 +255,16 @@ const purposes = [
 
         // Se déclenche aussi au premier chargement ; ré-affiche le bandeau si
         // le choix a expiré pendant la navigation.
+        // Échap ferme le bandeau rouvert depuis le pied de page, sans rien
+        // enregistrer. Sans choix enregistré, il ne ferme rien (pas de
+        // fermeture sans choix).
+        document.addEventListener("keydown", (event) => {
+            if (event.key !== "Escape") return;
+            const element = banner();
+            if (!element || element.hidden || !readConsent()) return;
+            close(element);
+        });
+
         document.addEventListener("astro:page-load", () => {
             const element = banner();
             if (element && !readConsent()) element.hidden = false;
