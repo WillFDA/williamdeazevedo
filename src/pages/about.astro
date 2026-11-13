@@ -108,7 +108,7 @@ const clientAngles: ClientAngle[] = [
     description="Développeur front-end avec une approche design et produit pour créer des sites clairs, rapides, accessibles et crédibles."
 >
     <div class="mx-auto flex w-full max-w-5xl flex-col gap-12 px-4 py-12 md:gap-16 md:py-16">
-        <section class="flex flex-col gap-6" data-section-reveal="false">
+        <section class="flex flex-col gap-6">
             <h1 class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl">
                 {
                     aboutHeroTitleWords.map((word, index) => (
@@ -125,7 +125,7 @@ const clientAngles: ClientAngle[] = [
                     ))
                 }
             </h1>
-            <FadeReveal delay={0.1} fade={false}>
+            <FadeReveal delay={0.32}>
                 <p class="page-subheading max-w-sm sm:max-w-lg">
                     Mon rôle : repérer ce qui brouille la compréhension, rendre
                     l'interface plus lisible, puis développer une base rapide,
@@ -135,13 +135,8 @@ const clientAngles: ClientAngle[] = [
             <Marquee />
         </section>
 
-        {/* Glissement sans fondu : sur mobile, ce paragraphe est visible au
-            premier écran et c'est l'élément LCP. */}
-        <FadeReveal delay={0.18} fade={false}>
-            <section
-                class="mx-auto flex w-full max-w-2xl flex-col gap-4 text-center"
-                data-section-reveal="false"
-            >
+        <FadeRevealOnScroll>
+            <section class="mx-auto flex w-full max-w-2xl flex-col gap-4 text-center">
                 <h2 class="text-base font-medium text-blue-500">Parcours</h2>
                 <div class="flex flex-col gap-4 text-base font-normal leading-relaxed text-gray-600">
                     <p>
@@ -167,7 +162,7 @@ const clientAngles: ClientAngle[] = [
                     </p>
                 </div>
             </section>
-        </FadeReveal>
+        </FadeRevealOnScroll>
 
         <section class="grid gap-4 md:grid-cols-3">
             {
@@ -245,17 +240,23 @@ const clientAngles: ClientAngle[] = [
 
 <style>
     .about-hero-title-word {
-        animation: about-hero-title-word 320ms cubic-bezier(0.16, 1, 0.3, 1)
+        animation: about-hero-title-word 1100ms cubic-bezier(0.16, 1, 0.3, 1)
             backwards;
-        /* 13 mots : titre en place en 500 ms. */
-        animation-delay: calc(var(--about-hero-word-index, 0) * 15ms);
+        animation-delay: calc(var(--about-hero-word-index, 0) * 65ms);
         display: inline-block;
     }
 
-    /* Glissement seul, comme AnimatedHeading : le titre compte pour le LCP. */
     @keyframes about-hero-title-word {
         from {
-            transform: translateY(-0.32em);
+            filter: blur(10px);
+            opacity: 0;
+            transform: translateY(-0.65em);
+        }
+
+        to {
+            filter: none;
+            opacity: 1;
+            transform: none;
         }
     }
 
@@ -270,6 +271,9 @@ const clientAngles: ClientAngle[] = [
     @media (prefers-reduced-motion: reduce) {
         .about-hero-title-word {
             animation: none;
+            filter: none;
+            opacity: 1;
+            transform: none;
         }
     }
 </style>

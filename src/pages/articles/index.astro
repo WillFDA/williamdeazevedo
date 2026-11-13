@@ -35,7 +35,7 @@ const PAGE_SIZE = 6;
             class="mx-auto flex w-full max-w-5xl flex-col items-center text-center"
             data-section-reveal="false"
         >
-            <FadeReveal delay={0.1} fade={false}>
+            <FadeReveal delay={0.1}>
                 <h1
                     class="page-heading flex w-full max-w-sm flex-wrap justify-center gap-x-[0.18em] px-2 sm:max-w-4xl md:max-w-5xl"
                     aria-label="Ce que j'apprends en créant des sites."
@@ -49,7 +49,7 @@ const PAGE_SIZE = 6;
                     }
                 </h1>
             </FadeReveal>
-            <FadeReveal delay={0.2} fade={false}>
+            <FadeReveal delay={0.2}>
                 <p class="page-subheading mt-6 max-w-sm sm:max-w-2xl">
                     Des retours d'expérience concrets sur les messages flous, les
                     parcours qui bloquent, la performance, le SEO et les choix
@@ -165,7 +165,7 @@ const PAGE_SIZE = 6;
 
 <style>
     .article-list-item {
-        animation: article-slide-in 520ms cubic-bezier(0.2, 0, 0, 1) backwards;
+        animation: article-fade-in 520ms cubic-bezier(0.2, 0, 0, 1) backwards;
         animation-delay: calc(var(--article-index, 0) * 70ms);
     }
 
@@ -189,11 +189,16 @@ const PAGE_SIZE = 6;
         }
     }
 
-    /* Glissement seul : la première rangée est visible au premier écran et son
-       image est l'élément LCP. */
-    @keyframes article-slide-in {
+    @keyframes article-fade-in {
         from {
+            filter: blur(2px);
+            opacity: 0;
             transform: translate3d(0, 0.75rem, 0);
+        }
+        to {
+            filter: none;
+            opacity: 1;
+            transform: none;
         }
     }
 
@@ -201,6 +206,9 @@ const PAGE_SIZE = 6;
         .article-list-item,
         .article-list-item.is-filtered-in {
             animation: none;
+            filter: none;
+            opacity: 1;
+            transform: none;
         }
     }
 </style>

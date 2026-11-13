@@ -17,10 +17,6 @@ const Tag = as;
 
 const isMultiWordPill = (part: AnimatedHeadingPart) =>
     part.pill === true && /\s/.test(part.text.trim());
-
-// Décalage réparti sur 180 ms quelle que soit la longueur du titre : avec les
-// 320 ms de l'animation, le titre est en place en 500 ms.
-const wordDelay = (index: number) => Math.round((index / parts.length) * 180);
 ---
 
 <Tag {...attributes} class={className}>
@@ -33,7 +29,7 @@ const wordDelay = (index: number) => Math.round((index / parts.length) * 180);
                         part.pill && "title-pill",
                         isMultiWordPill(part) && "animated-heading__pill-group",
                     ]}
-                    style={`--animated-heading-delay: ${wordDelay(index)}ms`}
+                    style={`--animated-heading-index: ${index}`}
                 >
                     {isMultiWordPill(part)
                         ? part.text.split(/\s+/).map((word, wordIndex, words) => (
@@ -54,8 +50,9 @@ const wordDelay = (index: number) => Math.round((index / parts.length) * 180);
 
 <style>
     .animated-heading__word {
-        animation: animated-heading-word 320ms cubic-bezier(0.16, 1, 0.3, 1)
-            var(--animated-heading-delay, 0ms) backwards;
+        animation: animated-heading-word 880ms cubic-bezier(0.16, 1, 0.3, 1)
+            backwards;
+        animation-delay: calc(var(--animated-heading-index, 0) * 48ms);
         display: inline-block;
     }
 
@@ -85,17 +82,26 @@ const wordDelay = (index: number) => Math.round((index / parts.length) * 180);
         }
     }
 
-    /* Glissement seul : un mot à opacité 0 n'est compté dans le LCP qu'à la
-       fin de son animation. */
     @keyframes animated-heading-word {
         from {
+            filter: blur(3px);
+            opacity: 0;
             transform: translateY(0.32em);
+        }
+
+        to {
+            filter: none;
+            opacity: 1;
+            transform: none;
         }
     }
 
     @media (prefers-reduced-motion: reduce) {
         .animated-heading__word {
             animation: none;
+            filter: none;
+            opacity: 1;
+            transform: none;
         }
     }
 </style>

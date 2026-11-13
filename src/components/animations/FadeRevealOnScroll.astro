@@ -32,25 +32,32 @@ const {
 <style>
     .fade-reveal-on-scroll {
         transition:
-            opacity 500ms cubic-bezier(0.2, 0, 0, 1),
-            transform 500ms cubic-bezier(0.2, 0, 0, 1);
+            opacity 650ms cubic-bezier(0.2, 0, 0, 1),
+            transform 650ms cubic-bezier(0.2, 0, 0, 1),
+            filter 650ms cubic-bezier(0.2, 0, 0, 1);
         transition-delay: var(--fade-delay, 0s);
     }
 
     .fade-reveal-on-scroll.is-reveal-ready {
+        filter: blur(2px);
         opacity: 0;
-        transform: translate3d(0, 0.7rem, 0);
+        transform: translate3d(0, 1rem, 0);
+        will-change: opacity, transform, filter;
     }
 
     .fade-reveal-on-scroll.is-reveal-ready.is-visible {
+        filter: none;
         opacity: 1;
         transform: none;
+        will-change: auto;
     }
 
     .fade-reveal-on-scroll.is-reveal-complete {
+        filter: none;
         opacity: 1;
         transform: none;
         transition: none;
+        will-change: auto;
     }
 
     @media (scripting: none), (prefers-reduced-motion: reduce), print {
@@ -58,9 +65,11 @@ const {
         .fade-reveal-on-scroll.is-reveal-ready,
         .fade-reveal-on-scroll.is-reveal-ready.is-visible,
         .fade-reveal-on-scroll.is-reveal-complete {
+            filter: none;
             opacity: 1;
             transform: none;
             transition: none;
+            will-change: auto;
         }
     }
 </style>
