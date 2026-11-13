@@ -54,9 +54,9 @@ const hasPhone = Boolean(phoneDisplay && phoneHref);
 <style>
     .contact-banner {
         background: var(--color-blue-500);
-        border-bottom: 1px solid var(--color-blue-600);
+        /* Filet en ombre interne : la barre reste à 44 px, hauteur des cibles. */
+        box-shadow: inset 0 -1px 0 var(--color-blue-600);
         color: var(--color-snow-50);
-        min-height: 2.25rem;
         position: relative;
         z-index: 60;
     }
@@ -68,8 +68,8 @@ const hasPhone = Boolean(phoneDisplay && phoneHref);
         justify-content: center;
         margin-inline: auto;
         max-width: 72rem;
-        min-height: 2.25rem;
-        padding: 0.4rem 1rem;
+        min-height: 2.75rem;
+        padding: 0 1rem;
     }
 
     .contact-banner__message {
@@ -113,6 +113,11 @@ const hasPhone = Boolean(phoneDisplay && phoneHref);
         outline-offset: 2px;
     }
 
+    /* Cible haute comme la barre : l'anneau reste à l'intérieur. */
+    .contact-banner__cta:focus-visible {
+        outline-offset: -2px;
+    }
+
     .contact-banner__detail {
         font-weight: 350;
     }
@@ -121,9 +126,11 @@ const hasPhone = Boolean(phoneDisplay && phoneHref);
         align-items: center;
         display: inline-flex;
         flex: 0 0 auto;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         gap: 0.35rem;
         line-height: 1;
+        min-height: 2.75rem;
+        padding-inline: 0.5rem;
         white-space: nowrap;
     }
 
@@ -159,9 +166,20 @@ const hasPhone = Boolean(phoneDisplay && phoneHref);
             display: none;
         }
 
+        .contact-banner__phone {
+            align-items: center;
+            display: inline-flex;
+            min-height: 2.75rem;
+            padding-inline: 0.5rem;
+        }
+
+        .contact-banner__phone:focus-visible {
+            outline-offset: -2px;
+        }
+
         .contact-banner__phone,
         .contact-banner__cta {
-            font-size: 0.68rem;
+            font-size: 0.8125rem;
         }
 
         .contact-banner--no-phone .contact-banner__inner {

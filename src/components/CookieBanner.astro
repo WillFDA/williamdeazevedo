@@ -3,16 +3,17 @@
 // GTM n'est chargé qu'après un accord (src/scripts/consent.ts). Deux
 // finalités séparées : mesure d'audience et publicité.
 
-// Trois boutons empilés, pleine largeur, de même taille et de même forme à
-// toutes les tailles : « Tout refuser » et « Tout accepter » (même
-// prééminence, exigence CNIL ; seule la couleur change) puis
-// « Personnaliser » (même gris que « Tout refuser »), qui ouvre le choix par
-// finalité et cède sa place à « Enregistrer mes choix », même style.
-// Chaque finalité est un interrupteur (case native, role="switch").
-// Sur mobile et en paysage (variante `wide` de global.css), bandeau compact
-// (boutons plus bas) pour masquer le moins possible le hero.
+// « Tout refuser » et « Tout accepter » côte à côte, à toutes les tailles,
+// de même taille et de même forme (même prééminence, exigence CNIL ; seule
+// la couleur change). Dessous, « Personnaliser » en lien texte ouvre le choix
+// par finalité et cède sa place à « Enregistrer mes choix », bouton gris
+// pleine largeur. Chaque finalité est un interrupteur (case native,
+// role="switch").
+// Sous la variante `wide` de global.css (mobile, paysage), bandeau compact
+// pleine largeur qui laisse visible le CTA du hero ; au-delà, carte en bas à
+// gauche.
 const choiceClass =
-    "hero-button flex min-h-10 w-full cursor-pointer whitespace-nowrap items-center justify-center rounded-xl px-3 py-2 text-sm font-normal wide:min-h-14 wide:px-8 wide:py-3 wide:text-base";
+    "hero-button flex min-h-10 w-full cursor-pointer whitespace-nowrap items-center justify-center rounded-xl px-3 py-2 text-sm font-normal wide:min-h-12 wide:px-4 wide:text-base";
 
 const purposes = [
     {
@@ -30,7 +31,7 @@ const purposes = [
 
 <div
     id="cookie-banner"
-    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 p-4 text-[13px] wide:p-5 wide:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] wide:right-auto wide:bottom-4 wide:left-4 wide:max-w-sm"
+    class="fixed inset-x-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 bottom-2 z-50 rounded-2xl border border-gray-200 bg-snow-50 px-4 pt-3 pb-1.5 text-[13px] wide:p-5 wide:pb-3 wide:text-sm text-gray-900 shadow-[0_24px_46px_-22px_rgba(14,23,37,0.45)] wide:right-auto wide:bottom-4 wide:left-4 wide:max-w-sm"
     role="dialog"
     aria-modal="false"
     aria-labelledby="cookie-banner-title"
@@ -41,7 +42,7 @@ const purposes = [
 >
     {/* Titre masqué visuellement sur mobile (bandeau plus bas), toujours lu. */}
     <h2 id="cookie-banner-title" class="sr-only text-sm font-semibold wide:not-sr-only wide:text-base wide:leading-6">Cookies</h2>
-    <p id="cookie-banner-text" class="leading-[1.45] text-gray-700 wide:mt-1 wide:leading-normal">
+    <p id="cookie-banner-text" class="leading-[1.4] text-gray-700 wide:mt-1 wide:leading-normal">
         <span aria-hidden="true" class="font-semibold text-gray-900 wide:hidden">Cookies&nbsp;:{" "}</span>
         <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, des
         cookies Google mesurent l'audience et les contacts issus de nos
@@ -83,7 +84,7 @@ const purposes = [
             ))
         }
     </fieldset>
-    <div class="mt-4 grid grid-cols-1 gap-2 wide:mt-5 wide:gap-3">
+    <div class="mt-2 grid grid-cols-2 gap-x-2 wide:mt-4 wide:gap-x-3">
         <button
             class:list={[choiceClass, "hero-button--secondary"]}
             type="button"
@@ -99,7 +100,7 @@ const purposes = [
             Tout accepter
         </button>
         <button
-            class:list={[choiceClass, "hero-button--secondary"]}
+            class="col-span-2 inline-flex min-h-7 cursor-pointer items-center justify-self-center rounded-md px-2 text-gray-700 underline underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 wide:min-h-8"
             type="button"
             aria-expanded="false"
             aria-controls="cookie-purposes"
@@ -108,7 +109,7 @@ const purposes = [
             Personnaliser
         </button>
         <button
-            class:list={[choiceClass, "hero-button--secondary"]}
+            class:list={[choiceClass, "hero-button--secondary col-span-2 mt-2 mb-1.5 wide:mt-3 wide:mb-2"]}
             type="button"
             data-cookie-choice="custom"
             hidden
@@ -122,7 +123,14 @@ const purposes = [
     /* Tant que le bandeau est affiché, le défilement au clavier garde
        l'élément focalisé au-dessus de lui (WCAG 2.4.11). */
     html:has(#cookie-banner:not([hidden])) {
-        scroll-padding-bottom: 12rem;
+        scroll-padding-bottom: 10.5rem;
+    }
+
+    /* Même condition que la variante `wide` (carte en bas à gauche). */
+    @media (width >= 40rem) and (height >= 32rem) {
+        html:has(#cookie-banner:not([hidden])) {
+            scroll-padding-bottom: 15.5rem;
+        }
     }
 </style>
 

@@ -1,4 +1,7 @@
 ---
+import ChevronUp from "./icons/nucleo/chevron-up-fill.svg";
+import TableOfContentsList from "./TableOfContentsList.astro";
+
 export type TableOfContentsItem = {
     depth: number;
     slug: string;
@@ -6,47 +9,35 @@ export type TableOfContentsItem = {
 };
 
 interface Props {
-    class?: string;
     items: TableOfContentsItem[];
     title?: string;
 }
 
-const {
-    class: className = "",
-    items,
-    title = "Table des matières",
-} = Astro.props;
+const { items, title = "Table des matières" } = Astro.props;
 const visibleItems = items.filter((item) => item.slug && item.text);
 ---
 
+{/* Sous lg, sommaire replié par défaut (<details> natif, sans JS) ; dès lg,
+    colonne latérale. Une seule des deux navs est affichée à chaque largeur. */}
 {
     visibleItems.length > 0 && (
-        <nav
-            aria-label={title}
-            class:list={["page-toc", className]}
-            data-page-toc
-        >
-            <p class="page-toc__title">{title}</p>
-            <ol class="page-toc__list">
-                {visibleItems.map((item) => (
-                    <li
-                        class:list={[
-                            "page-toc__item",
-                            item.depth > 2 && "page-toc__item--nested",
-                        ]}
-                    >
-                        <a
-                            class="page-toc__link"
-                            href={`#${item.slug}`}
-                            data-page-toc-link
-                            data-page-toc-target={item.slug}
-                        >
-                            {item.text}
-                        </a>
-                    </li>
-                ))}
-            </ol>
-        </nav>
+        <>
+            <details class="page-toc-details">
+                <summary class="page-toc-details__summary">
+                    Sommaire
+                    <span class="page-toc-details__icon" aria-hidden="true">
+                        <ChevronUp class="size-3.5" />
+                    </span>
+                </summary>
+                <nav aria-label={title} class="page-toc">
+                    <TableOfContentsList items={visibleItems} />
+                </nav>
+            </details>
+            <nav aria-label={title} class="page-toc page-toc--sidebar">
+                <p class="page-toc__title">{title}</p>
+                <TableOfContentsList items={visibleItems} />
+            </nav>
+        </>
     )
 }
 
@@ -55,57 +46,61 @@ const visibleItems = items.filter((item) => item.slug && item.text);
         __wuiPageTocReady?: boolean;
     };
 
-    const updatePageTocs = () => {
-        document.querySelectorAll<HTMLElement>("[data-page-toc]").forEach((toc) => {
-            const links = Array.from(
-                toc.querySelectorAll<HTMLAnchorElement>("[data-page-toc-link]"),
-            );
+    // Liens des deux sommaires et titres ciblés (ordre du document), relus à
+    // chaque page.
+    let links: HTMLAnchorElement[] = [];
+    let headings: HTMLElement[] = [];
+    let frame = 0;
 
-            if (links.length === 0) return;
-
-            const sections: {
-                id: string;
-                link: HTMLAnchorElement;
-                section: HTMLElement;
-            }[] = [];
-
-            links.forEach((link) => {
-                const id = link.dataset.pageTocTarget;
-                const section = id ? document.getElementById(id) : null;
-
-                if (id && section) {
-                    sections.push({ id, link, section });
-                }
-            });
-
-            if (sections.length === 0) return;
-
-            const activationY = Math.min(window.innerHeight * 0.36, 240);
-            let activeId = sections[0]?.id;
-
-            for (const item of sections) {
-                if (item.section.getBoundingClientRect().top <= activationY) {
-                    activeId = item.id;
-                } else {
-                    break;
-                }
-            }
-
-            links.forEach((link) => {
-                const isActive = link.dataset.pageTocTarget === activeId;
-                link.toggleAttribute("aria-current", isActive);
-            });
+    const collectPageToc = () => {
+        links = Array.from(
+            document.querySelectorAll<HTMLAnchorElement>("[data-page-toc-link]"),
+        );
+        const ids = new Set(links.map((link) => link.dataset.pageTocTarget));
+        headings = [...ids].flatMap((id) => {
+            const heading = id ? document.getElementById(id) : null;
+            return heading ? [heading] : [];
         });
+    };
+
+    // Une passe par frame : toutes les lectures de position d'abord, puis les
+    // écritures, pour ne forcer qu'une mise en page.
+    const updatePageToc = () => {
+        frame = 0;
+        const activationY = Math.min(window.innerHeight * 0.36, 240);
+        let activeId = headings[0]?.id;
+
+        for (const heading of headings) {
+            if (heading.getBoundingClientRect().top > activationY) break;
+            activeId = heading.id;
+        }
+
+        for (const link of links) {
+            link.toggleAttribute(
+                "aria-current",
+                link.dataset.pageTocTarget === activeId,
+            );
+        }
+    };
+
+    const schedulePageToc = () => {
+        if (frame || links.length === 0) return;
+        frame = requestAnimationFrame(updatePageToc);
+    };
+
+    const setupPageToc = () => {
+        collectPageToc();
+        schedulePageToc();
     };
 
     if (!pageTocWindow.__wuiPageTocReady) {
         pageTocWindow.__wuiPageTocReady = true;
-        window.addEventListener("scroll", updatePageTocs, { passive: true });
-        window.addEventListener("resize", updatePageTocs);
-        document.addEventListener("astro:page-load", updatePageTocs);
+        window.addEventListener("scroll", schedulePageToc, { passive: true });
+        window.addEventListener("resize", schedulePageToc);
+        document.addEventListener("astro:page-load", setupPageToc);
     }
 
-    updatePageTocs();
+    setupPageToc();
 </script>
 
 <style>
@@ -123,69 +118,64 @@ const visibleItems = items.filter((item) => item.slug && item.text);
         text-transform: uppercase;
     }
 
-    .page-toc__list {
-        border-left: 1px solid var(--color-gray-200);
-        display: grid;
-        gap: 0.72rem;
+    .page-toc-details {
+        background: var(--color-surface-muted);
+        border-radius: 1rem;
+    }
+
+    .page-toc-details__summary {
+        align-items: center;
+        border-radius: inherit;
+        color: var(--color-gray-900);
+        cursor: pointer;
+        display: flex;
+        font-weight: 500;
+        gap: 1rem;
+        justify-content: space-between;
+        line-height: 1.5rem;
         list-style: none;
-        margin: 0;
-        padding: 0 0 0 1.1rem;
+        padding: 1rem 1.25rem;
     }
 
-    .page-toc__item {
-        margin: 0;
-        position: relative;
+    .page-toc-details__summary::-webkit-details-marker {
+        display: none;
     }
 
-    .page-toc__item::before {
-        background: var(--color-gray-200);
-        content: "";
-        height: 1px;
-        left: -1.1rem;
-        position: absolute;
-        top: 0.72em;
-        transition: background-color 180ms ease;
-        width: 0.72rem;
+    .page-toc-details__summary:focus-visible {
+        outline: 2px solid var(--color-blue-500);
+        outline-offset: 2px;
     }
 
-    .page-toc__item:has(.page-toc__link[aria-current])::before {
-        background: var(--color-blue-500);
-    }
-
-    .page-toc__item--nested {
-        padding-left: 0.8rem;
-    }
-
-    .page-toc__link {
-        color: inherit;
+    .page-toc-details__icon {
         display: inline-flex;
-        font-weight: 400;
-        line-height: 1.35;
-        max-width: 13rem;
-        text-decoration: none;
-        transition:
-            color 180ms ease,
-            transform 180ms ease;
+        transform: rotate(180deg);
+        transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .page-toc__item--nested .page-toc__link {
-        font-size: 0.82rem;
+    .page-toc-details[open] .page-toc-details__icon {
+        transform: none;
     }
 
-    .page-toc__link[aria-current] {
-        color: var(--color-blue-500);
-        transform: translateX(0.18rem);
+    .page-toc-details .page-toc {
+        padding: 0 1.25rem 1.25rem;
     }
 
-    @media (hover: hover) {
-        .page-toc__link:hover {
-            color: var(--color-gray-900);
+    .page-toc--sidebar {
+        display: none;
+    }
+
+    @media (min-width: 1024px) {
+        .page-toc-details {
+            display: none;
+        }
+
+        .page-toc--sidebar {
+            display: block;
         }
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .page-toc__link,
-        .page-toc__item::before {
+        .page-toc-details__icon {
             transition: none;
         }
     }

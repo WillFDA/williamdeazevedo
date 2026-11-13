@@ -1,0 +1,106 @@
+---
+import type { TableOfContentsItem } from "./TableOfContents.astro";
+
+interface Props {
+    items: TableOfContentsItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<ol class="page-toc__list">
+    {
+        items.map((item) => (
+            <li
+                class:list={[
+                    "page-toc__item",
+                    item.depth > 2 && "page-toc__item--nested",
+                ]}
+            >
+                <a
+                    class="page-toc__link"
+                    href={`#${item.slug}`}
+                    data-page-toc-link
+                    data-page-toc-target={item.slug}
+                >
+                    {item.text}
+                </a>
+            </li>
+        ))
+    }
+</ol>
+
+<style>
+    .page-toc__list {
+        border-left: 1px solid var(--color-gray-200);
+        display: grid;
+        gap: 0.72rem;
+        list-style: none;
+        margin: 0;
+        padding: 0 0 0 1.1rem;
+    }
+
+    .page-toc__item {
+        margin: 0;
+        position: relative;
+    }
+
+    .page-toc__item::before {
+        background: var(--color-gray-200);
+        content: "";
+        height: 1px;
+        left: -1.1rem;
+        position: absolute;
+        top: 0.72em;
+        transition: background-color 180ms ease;
+        width: 0.72rem;
+    }
+
+    .page-toc__item:has(.page-toc__link[aria-current])::before {
+        background: var(--color-blue-500);
+    }
+
+    .page-toc__item--nested {
+        padding-left: 0.8rem;
+    }
+
+    .page-toc__link {
+        color: inherit;
+        display: inline-flex;
+        font-weight: 400;
+        line-height: 1.35;
+        text-decoration: none;
+        transition:
+            color 180ms ease,
+            transform 180ms ease;
+    }
+
+    /* Colonne latérale étroite ; le sommaire replié prend toute la largeur. */
+    @media (min-width: 1024px) {
+        .page-toc__link {
+            max-width: 13rem;
+        }
+    }
+
+    .page-toc__item--nested .page-toc__link {
+        font-size: 0.82rem;
+    }
+
+    .page-toc__link[aria-current] {
+        color: var(--color-blue-500);
+        transform: translateX(0.18rem);
+    }
+
+    @media (hover: hover) {
+        .page-toc__link:hover {
+            color: var(--color-gray-900);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .page-toc__link,
+        .page-toc__item::before {
+            transition: none;
+        }
+    }
+</style>

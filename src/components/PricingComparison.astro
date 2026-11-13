@@ -499,9 +499,10 @@ const checkIcon = "size-3.5 [&_g]:stroke-[1.75]";
     }
 
     /* Staggered row reveal, driven by the FadeRevealOnScroll wrapper state.
-       Gated on (scripting: enabled) so rows stay visible without JS and in
-       browsers that do not support the scripting media feature. */
-    @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+       Gated on screen and (scripting: enabled) so rows stay visible without
+       JS, in print, and in browsers that do not support the scripting media
+       feature. */
+    @media screen and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
         .comparison-row {
             transition: opacity 700ms cubic-bezier(0.2, 0, 0, 1);
             transition-delay: calc(var(--row-index, 0) * 55ms);

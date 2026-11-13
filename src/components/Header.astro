@@ -70,12 +70,7 @@ const items = navItems.map((item) => {
 ---
 
 <header class="site-header sticky top-0 z-50 w-full" data-site-header>
-    <div class="header-bg" aria-hidden="true">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
+    <div class="header-bg" aria-hidden="true"></div>
     <nav
         aria-label="Navigation principale"
         class="relative mx-auto flex max-w-6xl flex-col items-center gap-0 px-3 py-2 lg:grid lg:min-h-10 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-5 lg:p-4"
@@ -311,9 +306,11 @@ const items = navItems.map((item) => {
         position: sticky;
     }
 
+    /* Voile du menu mobile : pas de backdrop-filter tant qu'il est fermé, pour
+       que .header-bg reste la seule couche floutée pendant le défilement. */
     .site-header::after {
-        -webkit-backdrop-filter: blur(0);
-        backdrop-filter: blur(0);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
         content: "";
         inset: 0;
         opacity: 0;
@@ -331,9 +328,18 @@ const items = navItems.map((item) => {
         opacity: 1;
     }
 
+    /* Le fond déborde de 45 % au-dessus et au-dessous du header : en partant
+       du bas, le bord inférieur du header est à 24 % du dégradé.
+       Sous 1024 px, pas de backdrop-filter (coûteux à chaque frame de
+       défilement sur mobile) : voile neige presque opaque sur tout le header,
+       fondu seulement dans le débord. Dès 1024 px, une seule couche floutée,
+       fondue vers le bas. */
     .header-bg {
+        background-color: color-mix(in srgb, var(--color-snow-500) 94%, transparent);
         height: 190%;
         left: 0;
+        -webkit-mask: linear-gradient(to top, transparent 0%, #000 24%);
+        mask: linear-gradient(to top, transparent 0%, #000 24%);
         pointer-events: none;
         position: absolute;
         top: -45%;
@@ -345,93 +351,28 @@ const items = navItems.map((item) => {
         z-index: 0;
     }
 
+    @media (min-width: 1024px) {
+        .header-bg {
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            background-color: transparent;
+            -webkit-mask: linear-gradient(
+                to top,
+                transparent 0%,
+                rgb(0 0 0 / 0.3) 25%,
+                #000 60%
+            );
+            mask: linear-gradient(
+                to top,
+                transparent 0%,
+                rgb(0 0 0 / 0.3) 25%,
+                #000 60%
+            );
+        }
+    }
+
     .site-header[data-scrolled] .header-bg {
         transform: scaleY(1) translateY(0);
-    }
-
-    .header-bg > div {
-        inset: 0;
-        position: absolute;
-    }
-
-    .header-bg > div:nth-child(1) {
-        -webkit-backdrop-filter: blur(1px);
-        backdrop-filter: blur(1px);
-        -webkit-mask: linear-gradient(
-            to top,
-            transparent 0%,
-            #fff 12.5%,
-            #fff 37.5%,
-            transparent 50%
-        );
-        mask: linear-gradient(
-            to top,
-            transparent 0%,
-            #fff 12.5%,
-            #fff 37.5%,
-            transparent 50%
-        );
-        z-index: 2;
-    }
-
-    .header-bg > div:nth-child(2) {
-        -webkit-backdrop-filter: blur(2px);
-        backdrop-filter: blur(2px);
-        -webkit-mask: linear-gradient(
-            to top,
-            transparent 12.5%,
-            #fff 37.5%,
-            #fff 50%,
-            transparent 62.5%
-        );
-        mask: linear-gradient(
-            to top,
-            transparent 12.5%,
-            #fff 37.5%,
-            #fff 50%,
-            transparent 62.5%
-        );
-        z-index: 3;
-    }
-
-    .header-bg > div:nth-child(3) {
-        -webkit-backdrop-filter: blur(5px);
-        backdrop-filter: blur(5px);
-        -webkit-mask: linear-gradient(
-            to top,
-            transparent 37.5%,
-            #fff 50%,
-            #fff 62.5%,
-            transparent 75%
-        );
-        mask: linear-gradient(
-            to top,
-            transparent 37.5%,
-            #fff 50%,
-            #fff 62.5%,
-            transparent 75%
-        );
-        z-index: 4;
-    }
-
-    .header-bg > div:nth-child(4) {
-        -webkit-backdrop-filter: blur(6px);
-        backdrop-filter: blur(6px);
-        -webkit-mask: linear-gradient(
-            to top,
-            transparent 50%,
-            #fff 62.5%,
-            #fff 75%,
-            transparent 87.5%
-        );
-        mask: linear-gradient(
-            to top,
-            transparent 50%,
-            #fff 62.5%,
-            #fff 75%,
-            transparent 87.5%
-        );
-        z-index: 5;
     }
 
     .site-header > nav {
@@ -949,8 +890,18 @@ const items = navItems.map((item) => {
         });
     };
 
+    let headerBgFrame = 0;
+
+    const scheduleHeaderBgSync = () => {
+        if (headerBgFrame) return;
+        headerBgFrame = window.requestAnimationFrame(() => {
+            headerBgFrame = 0;
+            syncHeaderBg();
+        });
+    };
+
     if (!windowWithHeaderBg.__wuiHeaderBgReady) {
-        window.addEventListener("scroll", syncHeaderBg, { passive: true });
+        window.addEventListener("scroll", scheduleHeaderBgSync, { passive: true });
         document.addEventListener("astro:page-load", syncHeaderBg);
         windowWithHeaderBg.__wuiHeaderBgReady = true;
     }

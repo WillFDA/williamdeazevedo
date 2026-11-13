@@ -44,10 +44,20 @@ const { label = "Progression de lecture" } = Astro.props;
             });
     };
 
+    let readingProgressFrame = 0;
+
+    const scheduleReadingProgress = () => {
+        if (readingProgressFrame) return;
+        readingProgressFrame = window.requestAnimationFrame(() => {
+            readingProgressFrame = 0;
+            updateReadingProgress();
+        });
+    };
+
     if (!readingProgressWindow.__wuiReadingProgressReady) {
         readingProgressWindow.__wuiReadingProgressReady = true;
-        window.addEventListener("scroll", updateReadingProgress, { passive: true });
-        window.addEventListener("resize", updateReadingProgress);
+        window.addEventListener("scroll", scheduleReadingProgress, { passive: true });
+        window.addEventListener("resize", scheduleReadingProgress);
         document.addEventListener("astro:page-load", updateReadingProgress);
     }
 
