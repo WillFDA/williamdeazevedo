@@ -34,6 +34,7 @@ const slugs = [
   "site-non-securise",
   "site-pas-sur-google",
   "site-responsive",
+  "adresse-mail-professionnelle",
   "wix-ou-wordpress",
   "site-one-page",
   "charte-graphique-entreprise",

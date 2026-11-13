@@ -89,6 +89,7 @@ export const serviceReadings: Record<string, ServiceReading> = {
 };
 
 export const articleServices: Record<string, string[]> = {
+  "adresse-mail-professionnelle": ["creation-site-internet-professionnel"],
   "application-metier-sur-mesure-btp": [
     "developpement-sur-mesure",
     "developpeur-web-freelance",
