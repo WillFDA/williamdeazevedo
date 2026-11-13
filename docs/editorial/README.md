@@ -17,6 +17,15 @@ Le frontmatter contient le titre, la description SEO, la date, les tags, l'auteu
 
 `tester-accessibilite-site-web` est publié le 28 septembre 2026 et `mentions-legales-site-internet-professionnel` le 2 octobre 2026. Les neuf autres articles sont en `draft: true` et restent hors du site. Pour publier l'un d'eux : passer `draft` à `false`, mettre sa `pubDate` au jour de publication et retirer une `updatedDate` antérieure à cette date. Le site est reconstruit à chaque push sur `2026`. Éviter des liens vers des articles encore masqués.
 
+## FAQ d'un article
+
+Une section `## Questions fréquentes` suivie de questions en `###` est mise en page comme la FAQ de l'accueil, et son JSON-LD `FAQPage` est généré à partir du texte affiché. Il n'y a rien à recopier dans le frontmatter.
+
+- Une question de FAQ ne repose jamais une question à laquelle le corps de l'article répond déjà. Elle traite ce que le lecteur se demande encore après lecture.
+- Une réponse tient en un paragraphe autonome, sans renvoi du type « plus haut ».
+- Un lien n'y figure que s'il approfondit cette question précise.
+- Un prix se donne en fourchette, avec la date du relevé et ses sources dans la liste en fin d'article.
+
 ## Ciblage
 
 Volumes estimés mensuels France/français provenant de la recherche OpenSEO réalisée dans cette conversation. Ce ne sont ni des promesses de trafic ni des données Search Console : cette dernière n'était pas connectée au projet. Ne pas additionner les variantes proches. Une difficulté basse fournie par un outil ne suffit pas à prévoir un classement.

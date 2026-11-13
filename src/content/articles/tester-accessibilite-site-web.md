@@ -3,6 +3,7 @@ title: "Tester l’accessibilité d’un site web : un premier contrôle concret
 seoTitle: "Tester l’accessibilité d’un site web"
 description: "Clavier, formulaires, contrastes, zoom : repérez les obstacles de votre site et distinguez un contrôle rapide d’un véritable audit d’accessibilité."
 pubDate: 2026-09-28
+updatedDate: 2026-11-12
 author: "William De Azevedo"
 draft: false
 tags: ["accessibilité", "site vitrine"]
@@ -89,3 +90,32 @@ Traitez d’abord les obstacles empêchant une action : menu inaccessible, impos
 Conservez ce relevé et recommencez après les modifications importantes. N’annoncez pas une conformité générale sur la seule base de ce contrôle : une évaluation formelle nécessite un périmètre, une méthode et des compétences adaptés. Les obligations applicables en France dépendent notamment de l’organisme et du service concerné ; elles doivent être examinées séparément. Le [champ d’application présenté sur le site officiel du RGAA](https://accessibilite.numerique.gouv.fr/obligations/champ-application/) constitue un point de départ pour l’article 47 de la loi de 2005, pas une réponse exhaustive à toutes les réglementations sectorielles.
 
 Si ces obstacles s’accumulent dans votre site actuel, préparez votre [projet de refonte](/refonte-site-internet/) avec les adresses et les étapes qui posent problème. Cette liste permettra de distinguer les corrections ciblées d’une reconstruction réellement nécessaire.
+
+## Questions fréquentes
+
+### L’accessibilité d’un site web est-elle obligatoire pour une entreprise ?
+
+Cela dépend de l’entreprise et de ce que fait le site. Depuis le 28 juin 2025, certains services doivent être accessibles, dont le commerce électronique, la banque et le transport. Les prestataires de services de moins de 10 salariés, avec un chiffre d’affaires ou un bilan inférieur à 2 millions d’euros, en sont dispensés. Un site vitrine sans vente en ligne ne figure pas dans cette liste. La loi de 2005 vise, elle, les organismes publics et les entreprises à partir de 250 millions d’euros de chiffre d’affaires.
+
+### Quelle différence entre le RGAA et les WCAG ?
+
+Les WCAG sont les règles internationales d’accessibilité publiées par le W3C. Le RGAA est la méthode française qui permet de vérifier qu’une page les respecte : 106 critères de contrôle, avec des tests détaillés, pour les 50 critères de succès des niveaux A et AA des WCAG 2.1 retenus par la norme européenne. Les WCAG disent quoi atteindre, le RGAA précise comment le contrôler. Une version 5 du RGAA est en cours de rédaction, annoncée pour fin 2026.
+
+### Combien coûte un audit d’accessibilité RGAA ?
+
+Un audit de conformité RGAA coûte en général entre 2 000 et 5 000 € HT pour un site vitrine (relevé en novembre 2026). Le prix dépend du nombre de pages à tester, des composants, comme les menus, les formulaires ou les carrousels, et des parcours à suivre de bout en bout, comme une prise de rendez-vous. Un site avec espace client ou une application mobile coûte davantage. L’audit mesure le niveau d’accessibilité : les corrections se chiffrent à part.
+
+### Existe-t-il un test d’accessibilité gratuit en ligne ?
+
+Oui. [PageSpeed Insights](https://pagespeed.web.dev/), l’outil gratuit de Google, affiche un score « Accessibilité » calculé par Lighthouse : il suffit de saisir l’adresse d’une page. [WAVE](https://wave.webaim.org/), de l’organisme WebAIM, analyse aussi une page à partir de son adresse. Ces tests repèrent des erreurs techniques, comme un bouton ou un lien sans intitulé. Mais les vérifications manuelles ne comptent pas dans le score de Lighthouse : un bon score ne prouve pas que le site est utilisable.
+
+## Sources
+
+- [DGCCRF : la directive européenne « Accessibilité »](https://www.economie.gouv.fr/dgccrf/les-fiches-pratiques/la-nouvelle-directive-europeenne-accessibilite-pour-des-produits-et-des-services-accessibles-aux-personnes-en-situation) : produits et services concernés depuis le 28 juin 2025, exemption des entreprises de moins de 10 salariés et 2 millions d’euros.
+- [Service Public : directive « Accessibilité », demander une exemption en ligne](https://entreprendre.service-public.gouv.fr/actualites/A18669) (publié le 27 novembre 2025) : services concernés et cas d’exemption.
+- [RGAA : rappel du champ d’application](https://accessibilite.numerique.gouv.fr/obligations/champ-application/) : organismes visés par l’article 47 de la loi de 2005, dont les entreprises à partir de 250 millions d’euros de chiffre d’affaires.
+- [RGAA : introduction à la méthode technique](https://accessibilite.numerique.gouv.fr/methode/introduction/) : 106 critères, correspondance avec les WCAG 2.1 niveaux A et AA, RGAA 5 en préparation.
+- [Chrome for Developers : score d’accessibilité Lighthouse](https://developer.chrome.com/docs/lighthouse/accessibility/scoring?hl=fr) : calcul du score, audits manuels exclus.
+- [Google : à propos de PageSpeed Insights](https://developers.google.com/speed/docs/insights/v5/about?hl=fr) : catégorie Accessibilité analysée avec Lighthouse.
+- [WebAIM : WAVE](https://wave.webaim.org/) : test en ligne à partir de l’adresse d’une page, en anglais.
+- Repères de prix (relevés le 12/11/2026) : [DesignGouv, prestations accessibilité numérique](https://design.numerique.gouv.fr/accessibilite-numerique/prestations-accessibilite-numerique/) (page de l’État, non datée : audit RGAA entre 2 000 et 5 000 € HT), [Allyos, audit RGAA](https://allyos.fr/audit-accessibilite-numerique) (octobre 2026 : dès 3 500 € HT pour un site de contenu, dès 6 000 € HT avec espace connecté), [WebGazelle, audit RGAA](https://www.webgazelle.net/audit-rgaa.php) (2025 : 1 990 € HT), [RGAA Audit, test de l’accessibilité RGAA](https://www.rgaa-audit.com/test-accessibilite-rgaa-site-web) (2025 : dès 1 300 € HT), [RGAA Checker, prix d’un audit RGAA](https://rgaa-checker.com/prix-audit-rgaa) (tarifs 2026 : 1 500 à 5 000 € pour un freelance).

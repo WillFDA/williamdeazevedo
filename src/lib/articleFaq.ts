@@ -51,6 +51,37 @@ const findSectionEnd = (html: string, start: number) => {
   throw new Error("Article FAQ: unclosed section.");
 };
 
+const ENTITIES: Record<string, string> = {
+  "&#39;": "'",
+  "&#x27;": "'",
+  "&amp;": "&",
+  "&gt;": ">",
+  "&lt;": "<",
+  "&nbsp;": " ",
+  "&quot;": '"',
+};
+
+const toText = (html: string) =>
+  html
+    .replaceAll(/<[^>]+>/g, "")
+    .replaceAll(
+      /&(?:#39|#x27|amp|gt|lt|nbsp|quot);/g,
+      (entity) => ENTITIES[entity]
+    )
+    .replaceAll(/\s+/g, " ")
+    .trim();
+
+/** FAQPage JSON-LD built from the visible FAQ, so the two cannot drift. */
+export const articleFaqJsonLd = (faq: ArticleFaq) => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.items.map(({ answerHtml, questionHtml }) => ({
+    "@type": "Question",
+    name: toText(questionHtml),
+    acceptedAnswer: { "@type": "Answer", text: toText(answerHtml) },
+  })),
+});
+
 /** Splits an article's HTML around its FAQ; `faq` is absent when it has none. */
 export const splitArticleFaq = (html: string): ArticleBodyParts => {
   const opening = SECTION_START.exec(html);

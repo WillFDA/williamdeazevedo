@@ -6,8 +6,9 @@
  *   publiés sont affichés (les brouillons apparaîtront d'eux-mêmes une fois
  *   publiés). Si moins de 2 articles sont disponibles, le bloc complète avec
  *   des articles qui partagent un des `fallbackTags`.
- * - `articleServices` : service mis en avant dans l'encart en bas d'un
- *   article, par ordre de priorité (le premier service existant est utilisé).
+ * - `articleServices` : service placé en tête du bento en bas d'un article,
+ *   par ordre de priorité (le premier service existant est utilisé). Le bento
+ *   est complété par les `relatedServices` de ce service.
  */
 export type ServiceReading = {
   articles: string[];
@@ -94,6 +95,7 @@ export const articleServices: Record<string, string[]> = {
     "developpement-sur-mesure",
     "developpeur-web-freelance",
   ],
+  "arborescence-site-web": ["creation-site-vitrine"],
   "audit-seo": ["creation-site-vitrine"],
   "cahier-des-charges-site-internet": ["creation-site-vitrine"],
   "changer-prestataire-web": ["refonte-site-internet"],
@@ -105,6 +107,7 @@ export const articleServices: Record<string, string[]> = {
   "fiche-google-my-business-artisan": ["creation-site-internet-artisan"],
   "hebergement-site-vitrine": ["creation-site-vitrine"],
   "landing-page": ["creation-site-vitrine"],
+  "maintenance-site-web": ["refonte-site-internet"],
   "maquette-site-web": ["creation-site-vitrine"],
   "mentions-legales-site-internet-professionnel": [
     "creation-site-internet-professionnel",
@@ -113,6 +116,7 @@ export const articleServices: Record<string, string[]> = {
   "prix-site-vitrine": ["creation-site-vitrine"],
   "referencement-chatgpt": ["refonte-site-internet"],
   "refonte-seo": ["refonte-site-internet"],
+  "rgpd-formulaire-de-contact": ["refonte-site-internet"],
   "seo-local": ["creation-site-internet-artisan"],
   "site-600-euros-vs-site-2000-euros": ["creation-site-vitrine"],
   "site-non-securise": ["refonte-site-internet"],

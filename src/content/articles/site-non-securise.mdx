@@ -6,21 +6,9 @@ image:
   src: "/articles/site-non-securise/cover.webp"
   alt: "Quatre cartes : repérer l’alerte « Non sécurisé » du navigateur, vérifier les quatre causes possibles, confier la correction à la bonne personne et prévenir pour que ça ne revienne pas."
 pubDate: 2026-10-20
+updatedDate: 2026-11-12
 author: "William De Azevedo"
 draft: false
-faq:
-  - question: "Mon site affiche « Non sécurisé » : que faire en premier ?"
-    answer: "Cliquez sur l’icône à gauche de l’adresse et regardez le certificat : absent, expiré ou valide. Puis envoyez à votre hébergeur ou à votre prestataire le message de trois lignes proposé plus haut, avec une capture d’écran."
-  - question: "Un certificat SSL est-il obligatoire pour un site vitrine ?"
-    answer: "Aucune loi ne l’impose en toutes lettres à tous les sites, mais la CNIL recommande le chiffrement sur tous les sites et demande de le rendre obligatoire sur les pages qui transmettent des données personnelles, comme un formulaire de contact. Et sans lui, les navigateurs affichent « Non sécurisé », et Chrome avertit même avant d’ouvrir le site."
-  - question: "Peut-on avoir un certificat SSL gratuit ?"
-    answer: "Oui. Let’s Encrypt délivre gratuitement des certificats reconnus par la plupart des navigateurs, et beaucoup d’hébergeurs les intègrent à leurs offres. Pour un site vitrine, un certificat gratuit offre la même connexion sécurisée qu’un certificat payant."
-  - question: "Mon site est en https mais affiche quand même « Non sécurisé » : pourquoi ?"
-    answer: "Le plus souvent, le certificat a expiré ou ne couvre pas la bonne adresse (avec ou sans www) : le détail du certificat, dans le navigateur, permet de faire le tri. Un élément encore appelé en http, ce qu’on appelle du contenu mixte, se voit plutôt à une page qui s’affiche mal."
-  - question: "Le message « Non sécurisé » fait-il baisser mon référencement Google ?"
-    answer: "Pas directement. En 2014, Google a présenté le https comme un signal de classement très léger ; sa documentation actuelle précise que les critères d’expérience sur la page, dont le https, ne contribuent pas directement au classement, hormis les Core Web Vitals. Le vrai risque est ailleurs : des visiteurs qui repartent, et un site qui existe en plusieurs versions, http et https, pour Google."
-  - question: "Mon certificat a expiré : combien de temps pour le renouveler ?"
-    answer: "L’émission d’un certificat gratuit est automatisée : le délai dépend surtout de la réactivité de votre hébergeur ou de votre prestataire. Demandez-lui aussi de réparer le renouvellement automatique, sinon le problème reviendra."
 tags: ["sécurité", "site vitrine", "maintenance", "tpe"]
 ---
 
@@ -159,29 +147,21 @@ Votre site affiche « Non sécurisé » et vous ne savez pas qui contacter, ou v
 
 ## Questions fréquentes
 
-### Mon site affiche « Non sécurisé » : que faire en premier ?
-
-Cliquez sur l’icône à gauche de l’adresse et regardez le certificat : absent, expiré ou valide. Puis envoyez à votre hébergeur ou à votre prestataire le message de trois lignes proposé plus haut, avec une capture d’écran.
-
 ### Un certificat SSL est-il obligatoire pour un site vitrine ?
 
-Aucune loi ne l’impose en toutes lettres à tous les sites, mais la CNIL recommande le chiffrement sur tous les sites et demande de le rendre obligatoire sur les pages qui transmettent des données personnelles, comme un formulaire de contact. Et sans lui, les navigateurs affichent « Non sécurisé », et Chrome avertit même avant d’ouvrir le site.
+Aucune loi ne l’impose en toutes lettres à tous les sites. Mais le RGPD cite le chiffrement parmi les mesures de sécurité possibles pour protéger des données personnelles, et la CNIL demande de le rendre obligatoire sur les pages qui en transmettent, comme un formulaire de contact. Sans certificat, les navigateurs affichent aussi « Non sécurisé », et Chrome avertit même avant d’ouvrir le site.
 
-### Peut-on avoir un certificat SSL gratuit ?
+### Combien coûte un certificat SSL ?
 
-Oui. Let’s Encrypt délivre gratuitement des certificats reconnus par la plupart des navigateurs, et beaucoup d’hébergeurs les intègrent à leurs offres. Pour un site vitrine, un certificat gratuit offre la même connexion sécurisée qu’un certificat payant.
+Souvent rien, et en général entre 25 et 280 € HT par an pour un certificat payant, d’après les tarifs de trois vendeurs relevés en novembre 2026. Le certificat gratuit Let’s Encrypt est inclus chez de nombreux hébergeurs, parfois installé par défaut. Le prix d’un certificat payant monte avec le niveau de vérification : le domaine seul, puis l’existence de l’entreprise, puis une validation étendue. Pour le visiteur, la connexion chiffrée reste la même. Si un prestataire vous en facture un, demandez ce qu’il apporte de plus.
 
-### Mon site est en https mais affiche quand même « Non sécurisé » : pourquoi ?
+### Mon site affiche « Non sécurisé » : a-t-il été piraté ?
 
-Le plus souvent, le certificat a expiré ou ne couvre pas la bonne adresse (avec ou sans www) : le détail du certificat, dans le navigateur, permet de faire le tri. Un élément encore appelé en http, ce qu’on appelle du contenu mixte, se voit plutôt à une page qui s’affiche mal.
+Non, pas en soi : « Non sécurisé » signale une connexion non chiffrée, pas un piratage. Quand la navigation sécurisée de Google repère un site dangereux, Chrome affiche « Dangereux » ou une page d’avertissement rouge. Pour vérifier, cherchez votre adresse dans l’outil « État du site » de la navigation sécurisée de Google, ou ouvrez le rapport « Problèmes de sécurité » de la Search Console. Google le présente comme la source fiable pour savoir si un site a un problème de sécurité ou s’il est corrigé.
 
-### Le message « Non sécurisé » fait-il baisser mon référencement Google ?
+### Un site en https est-il forcément sécurisé ?
 
-Pas directement. En 2014, Google a présenté le https comme un signal de classement très léger ; sa documentation actuelle précise que les critères d’expérience sur la page, dont le https, ne contribuent pas directement au classement, hormis les Core Web Vitals. Le vrai risque est ailleurs : des visiteurs qui repartent, et un site qui existe en plusieurs versions, http et https, pour Google.
-
-### Mon certificat a expiré : combien de temps pour le renouveler ?
-
-L’émission d’un certificat gratuit est automatisée : le délai dépend surtout de la réactivité de votre hébergeur ou de votre prestataire. Demandez-lui aussi de réparer le renouvellement automatique, sinon le problème reviendra.
+Non. Le https chiffre les échanges entre le visiteur et votre site, pour que personne ne puisse les lire en chemin. Il ne protège pas le site lui-même contre une faille ou un piratage. Chrome le rappelle : même sur un site sécurisé, restez prudent avec vos informations personnelles. La CNIL ajoute d’autres précautions, comme limiter les composants installés et les mettre à jour, ce qui relève de la [maintenance de site web](/articles/maintenance-site-web/).
 
 ## Sources officielles
 
@@ -192,8 +172,12 @@ L’émission d’un certificat gratuit est automatisée : le délai dépend sur
 - [Google Security Blog : HTTPS by default (2025, en anglais)](https://security.googleblog.com/2025/10/https-by-default.html)
 - [Chromium Blog : Towards HTTPS by default (2023, en anglais)](https://blog.chromium.org/2023/08/towards-https-by-default.html)
 - [CNIL : sécuriser les sites web](https://www.cnil.fr/fr/securite-securiser-les-sites-web)
+- [CNIL : RGPD, article 32](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre4#Article32)
+- [Google : état du site selon la navigation sécurisée](https://transparencyreport.google.com/safe-browsing/search?hl=fr)
+- [Search Console : rapport sur les problèmes de sécurité](https://support.google.com/webmasters/answer/9044101?hl=fr)
 - [Google Search Central : le protocole HTTPS en tant qu’indicateur de classement (2014)](https://developers.google.com/search/blog/2014/08/https-as-ranking-signal?hl=fr)
 - [Google Search Central : comprendre l’expérience sur la page](https://developers.google.com/search/docs/appearance/page-experience?hl=fr)
 - [Let’s Encrypt : à propos](https://letsencrypt.org/fr/about/) et [FAQ](https://letsencrypt.org/fr/docs/faq/) ; [fin des e-mails d’expiration](https://letsencrypt.org/2025/06/26/expiration-notification-service-has-ended/) et [passage à des certificats plus courts](https://letsencrypt.org/2025/12/02/from-90-to-45/) (en anglais)
 - [CA/Browser Forum : exigences de base (durée des certificats)](https://cabforum.org/working-groups/server/baseline-requirements/requirements/)
 - [MDN : contenu mixte](https://developer.mozilla.org/fr/docs/Web/Security/Defenses/Mixed_content)
+- Repères de prix (relevés le 12/11/2026) : [OVHcloud, certificats SSL](https://www.ovhcloud.com/fr/web-hosting/options/ssl/), [Gandi, certificats SSL](https://www.gandi.net/fr/security), [Certificats-SSL.com, comparatif des certificats](https://www.certificats-ssl.com/certificats/comparatif/).

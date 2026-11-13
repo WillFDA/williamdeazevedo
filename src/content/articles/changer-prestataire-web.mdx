@@ -3,6 +3,7 @@ title: "Changer de prestataire web : reprendre votre site, votre domaine et vos 
 seoTitle: "Changer de prestataire web : checklist"
 description: "Changer de prestataire web : domaine, DNS, hébergement, e-mails, sauvegardes et contrat. Les étapes pour reprendre votre site dans le bon ordre."
 pubDate: 2026-10-01
+updatedDate: 2026-11-12
 author: "William De Azevedo"
 draft: false
 tags: ["site vitrine", "refonte", "tpe"]
@@ -125,30 +126,24 @@ Je reprends des sites existants et j’accompagne les refontes : je regarde ce q
 
 ## Questions fréquentes
 
-### Faut-il refaire son site pour changer de prestataire ?
+### Mon nom de domaine est au nom de mon ancien prestataire : comment le récupérer ?
 
-Non. Un nouveau prestataire peut reprendre un site existant s’il obtient les accès, une sauvegarde complète et les informations sur les services reliés. La refonte est une décision séparée, à prendre selon l’état du site.
-
-### Mon ancien prestataire peut-il garder mon nom de domaine ?
-
-Tout dépend de qui est enregistré comme titulaire. Vérifiez-le auprès du bureau d’enregistrement et relisez le contrat. Si le domaine est à votre nom, la procédure de transfert de l’extension s’applique ; s’il est au nom du prestataire, réglez la question avec lui avant toute bascule.
-
-### Mes e-mails risquent-ils d’être coupés ?
-
-Oui, si la zone DNS est modifiée sans reproduire les réglages de la messagerie. Gardez une copie de la zone actuelle, préparez la nouvelle avant de changer de serveurs DNS et testez l’envoi et la réception après la bascule.
+Demandez-lui par écrit de céder le nom de domaine à votre entreprise. Pour un .fr, seul le titulaire enregistré peut le transmettre, et votre bureau d’enregistrement se charge ensuite du changement de titulaire. Si le prestataire refuse, l’Afnic propose pour les .fr une médiation gratuite, puis une procédure de résolution des litiges, Syreli, si vous estimez que cet enregistrement porte atteinte à vos droits. Les autres extensions ont leurs propres règles : renseignez-vous auprès de votre bureau d’enregistrement.
 
 ### Combien de temps prévoir pour changer de prestataire web ?
 
-Cela dépend des accès disponibles, de la réactivité de l’ancien prestataire, d’un éventuel transfert de domaine et du travail à faire sur le site. Prévoyez une période de transition pendant laquelle l’ancien hébergement reste actif, plutôt qu’une date de coupure serrée.
+Cela dépend des accès disponibles, de la réactivité de l’ancien prestataire, d’un éventuel transfert de domaine et du travail à faire sur le site. Si les DNS doivent changer, Google conseille de réduire leur durée de mise en cache, le TTL, au moins une semaine avant la bascule. Gardez ensuite l’ancien hébergement actif jusqu’à ce qu’il ne reçoive plus aucune visite, plutôt que de fixer une date de coupure serrée.
 
-### Que faire si l’ancien prestataire ne répond plus ?
+### Changer de prestataire web fait-il perdre son référencement Google ?
 
-Rassemblez le contrat, les factures et les informations sur le titulaire du domaine, puis contactez le bureau d’enregistrement et l’hébergeur. Ils vous indiqueront la procédure applicable à votre situation.
+Le risque tient surtout aux adresses des pages. Si elles restent identiques et que seul l’hébergement change, Google indique que son robot explore d’abord le site un peu moins vite, puis reprend son rythme dans les jours suivants. Si elles changent, lors d’une refonte par exemple, Google demande une redirection permanente de chaque ancienne page vers la nouvelle, à garder au moins un an, et prévient que le classement peut fluctuer pendant quelques semaines.
 
 ## Sources de référence
 
 - [Afnic — Gérer son nom de domaine](https://www.afnic.fr/noms-de-domaine/tout-savoir/gerer-son-nom-de-domaine/) et [FAQ sur les noms de domaine](https://www.afnic.fr/noms-de-domaine/faq/) : procédures pour les extensions gérées par l’Afnic.
+- [Afnic : Syreli, résolution des litiges](https://www.syreli.fr/) : procédure de récupération d’un nom de domaine, précédée d’une médiation gratuite possible.
 - [ICANN — Inter-Registrar Transfer Policy](https://www.icann.org/en/contracted-parties/accredited-registrars/resources/domain-name-transfers/policy) : politique de transfert entre registrars accrédités, dans son champ d’application.
+- [Google Search Central : changement d’hébergement](https://developers.google.com/search/docs/crawling-indexing/site-move-no-url-changes?hl=fr) et [migrer un site](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes?hl=fr) : TTL réduit avant la bascule, redirections permanentes conservées au moins un an.
 - [OVHcloud — Éditer une zone DNS](https://docs.ovhcloud.com/fr/guides/web-cloud/domains/dns-zone-edit) : exemple de configuration propre à OVHcloud.
 - [WordPress.org — Backups](https://developer.wordpress.org/advanced-administration/security/backup/) : documentation spécifique aux sauvegardes WordPress.
 - [ANSSI — Gestion des identités, ReCyF en pratique](https://messervices.cyber.gouv.fr/documents-guides/Fiche_Gestion-des-identites_Protection_VF.pdf) : fiche non prescriptive à portée déterminée.
