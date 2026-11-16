@@ -149,7 +149,6 @@ const purposes = [
         saveConsent,
         type ConsentChoice,
     } from "../scripts/consent";
-    import { isAudienceMeasurementLoaded } from "../scripts/analytics";
 
     const bannerWindow = window as Window & {
         __wuiCookieBannerReady?: boolean;
@@ -179,10 +178,9 @@ const purposes = [
         const current = readConsent();
         for (const input of purposeInputs(element)) {
             const purpose = input.dataset.cookiePurpose as keyof ConsentChoice;
-            // Sans choix, l'interrupteur reflète l'état réel : en exemption,
-            // la mesure d'audience Rybbit tourne déjà.
-            input.checked =
-                current?.[purpose] ?? (purpose === "analytics" && isAudienceMeasurementLoaded());
+            // Sans choix, rien n'est coché : une case pré-cochée ne vaut pas
+            // consentement (même en exemption, où Rybbit tourne déjà).
+            input.checked = current?.[purpose] ?? false;
         }
     };
 
