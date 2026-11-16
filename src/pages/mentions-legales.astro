@@ -8,9 +8,11 @@ import Layout from "../layout/Layout.astro";
 // (docs/confidentialite-deploiement.md). Ce qui n'a pas été vérifié n'est pas
 // affirmé ci-dessous.
 // oxlint-disable-next-line no-warning-comments -- informations manquantes, à compléter par William (liste reprise dans docs/confidentialite-deploiement.md).
-/* TODO(William): durée de conservation Rybbit, hébergeur et pays du serveur
-   analytics, réglages IP et captures automatiques : voir la liste
-   « À compléter » de docs/confidentialite-deploiement.md. */
+/* TODO(William): pays d'hébergement du serveur Rybbit (texte « à préciser »
+   ci-dessous), réglages IP et captures automatiques : voir la liste
+   « À compléter » de docs/confidentialite-deploiement.md. Conservation : si
+   une durée est fixée sur le serveur (TTL ClickHouse), remplacer le
+   paragraphe « Durée de conservation ». */
 const rybbitLoading = isAudienceExempt
     ? "Rybbit est chargé dès votre arrivée sur le site, sans attendre votre accord : cette mesure d'audience relève de l'exemption de consentement prévue par l'article 82 de la loi Informatique et Libertés, dans les conditions fixées par la CNIL, et repose sur l'intérêt légitime à connaître la fréquentation du site. Vous pouvez vous y opposer à tout moment, comme indiqué en fin de section."
     : "Rybbit n'est chargé qu'après votre accord pour la finalité « Mesure d'audience » du bandeau cookies, et cette mesure repose sur ce consentement. Sans accord, aucune requête n'est envoyée à analytics.williamdeazevedo.fr.";
@@ -93,11 +95,11 @@ const sections = [
         id: "mesure-audience",
         title: "Mesure d'audience",
         paragraphs: [
-            "Ce site mesure son audience avec Rybbit, un outil auto-hébergé : votre navigateur envoie les statistiques uniquement à l'instance du site, à l'adresse analytics.williamdeazevedo.fr, et non à un service en ligne de l'éditeur de Rybbit. Cette mesure sert à connaître la fréquentation des pages et à améliorer les contenus et la navigation, sans personnalisation publicitaire. La provenance des visites inclut les paramètres de campagne présents dans l'adresse (utm, gclid). Les requêtes vers cette adresse passent par Cloudflare.",
+            "Ce site mesure son audience avec Rybbit, un logiciel libre de mesure d'audience. Il est auto-hébergé : William Ferreira De Azevedo l'installe et l'administre lui-même sur son serveur personnel, à l'adresse analytics.williamdeazevedo.fr. Votre navigateur envoie les statistiques uniquement à ce serveur, et non à un service en ligne de l'éditeur du logiciel Rybbit. Cette mesure sert à connaître la fréquentation des pages et à améliorer les contenus et la navigation, sans personnalisation publicitaire. La provenance des visites inclut les paramètres de campagne présents dans l'adresse (utm, gclid). Les requêtes vers cette adresse passent par Cloudflare.",
             rybbitLoading,
             "Données envoyées à Rybbit : adresse de la page consultée (chemin, titre et paramètres d'URL ; la recherche saisie sur la page Articles n'est jamais placée dans l'adresse), page de provenance, taille de l'écran, langue, navigateur et système d'exploitation. Avec la configuration actuelle de Rybbit, s'y ajoutent les clics sur les boutons et les liens vers d'autres sites, le texte que vous copiez sur le site, l'envoi des formulaires et le nom des champs modifiés (pas ce que vous y saisissez), les erreurs techniques de la page, ainsi que les événements du site décrits ci-dessous (clics sur les moyens de contact, les réseaux sociaux et les liens vers d'autres sites, ouverture et réussite d'une réservation). Le script calcule aussi un indice à partir de caractéristiques techniques du navigateur, pour écarter les robots.",
             `Votre adresse IP sert à déduire une localisation approximative (pays, région, parfois ville). Rybbit enregistre dans le stockage local de votre navigateur un identifiant aléatoire, sous la clé rybbit-visitor-id, pour reconnaître les visites d'un même navigateur ; son script ne lui fixe pas de durée de vie. ${rybbitIdentifierDeletion} Côté serveur, Rybbit calcule aussi un identifiant à partir de l'adresse IP et du navigateur.`,
-            "La durée de conservation des statistiques sur le serveur Rybbit n'est pas encore indiquée sur cette page. Vous pouvez la demander à william.deazevedopro@gmail.com.",
+            "Durée de conservation : le logiciel Rybbit ne supprime pas automatiquement les statistiques de visite, et aucune durée de suppression automatique n'a été fixée à ce jour sur le serveur. Les statistiques sont donc conservées jusqu'à ce que William Ferreira De Azevedo les supprime ; elles ne servent qu'à mesurer l'audience du site. Vous pouvez demander à tout moment l'effacement des données liées à votre navigateur à william.deazevedopro@gmail.com.",
             "Les clics sur les liens de contact ne prouvent pas qu'un email a été envoyé ou qu'un appel a abouti. Le contenu des emails et les coordonnées saisies pour un rendez-vous ne sont pas transmis par les événements de mesure du site.",
             "Google Analytics (mesure d'audience) et Google Ads (mesure des contacts issus des annonces : rendez-vous, clics sur l'email ou le téléphone) sont chargés par Google Tag Manager, et seulement pour les finalités que vous acceptez dans le bandeau. Sans accord, aucun script Google n'est chargé. Google Search Console est un service distinct, décrit ci-dessous.",
             "Pour retirer votre accord ou vous opposer à la mesure d'audience, ouvrez vos préférences avec le bouton ci-dessous ou le lien « Gérer les cookies » en bas de page, puis désactivez « Mesure d'audience ». Le site efface alors l'identifiant Rybbit et enregistre la clé disable-rybbit dans le stockage local, pour que Rybbit ne se charge plus. Si Rybbit était actif, la page se recharge. La clé disable-rybbit est retirée si vous acceptez de nouveau la mesure d'audience.",
@@ -133,7 +135,7 @@ const sections = [
         id: "prestataires",
         title: "Prestataires et transferts",
         paragraphs: [
-            "Le recours à Google, Cloudflare et Cal.com peut entraîner des traitements en dehors de l'Union européenne. Les garanties applicables et les durées de conservation propres aux services doivent être examinées dans les contrats et politiques des prestataires. Le nom de domaine du serveur Rybbit ne permet pas, à lui seul, de déterminer son lieu d'hébergement.",
+            "Le recours à Google, Cloudflare et Cal.com peut entraîner des traitements en dehors de l'Union européenne. Les garanties applicables et les durées de conservation propres aux services doivent être examinées dans les contrats et politiques des prestataires. Le serveur Rybbit est le serveur personnel de l'éditeur, qui l'administre lui-même, sans prestataire de mesure d'audience ; les requêtes y passent par Cloudflare. Pays d'hébergement de ce serveur : à préciser.",
             "Informations des prestataires : https://www.cloudflare.com/privacypolicy/, https://policies.google.com/privacy et https://cal.com/privacy. Pour obtenir des précisions sur les traitements de ce site ou exercer vos droits, contactez William Ferreira De Azevedo.",
         ],
     },
