@@ -60,12 +60,38 @@ Le drapeau n'est ni une certification ni une preuve d'exemption. D'après l'anal
 
 Activation : définir `PUBLIC_RYBBIT_EXEMPT_AUDIENCE` à `true` dans les variables de build Cloudflare Workers Builds de la branche `2026`, puis relancer un build. Un redéploiement sans build ne suffit pas. En local, utiliser un fichier `.env` (ignoré par git).
 
+## Conservation et hébergement de Rybbit (relevé du 16/11/2026)
+
+### Conservation
+
+Instance : `GET https://analytics.williamdeazevedo.fr/api/version` renvoie `{"version":"2.9.0"}` (endpoint public). Code lu : dépôt [rybbit-io/rybbit](https://github.com/rybbit-io/rybbit), tag `v2.9.0` et `main` du 13/11/2026 (`840369a`), même résultat.
+
+| Table ClickHouse | Contenu | Suppression automatique (TTL) |
+| --- | --- | --- |
+| `events` | pages vues, événements, identifiants, localisation, IP si « Track IP Address » | **aucune** (`server/src/db/clickhouse/schema/core.ts`, `CREATE TABLE IF NOT EXISTS events … ENGINE = MergeTree() PARTITION BY toYYYYMM(timestamp)`, sans `TTL`) |
+| `bot_events` | trafic classé robot | 3 mois (`TTL timestamp + INTERVAL 3 MONTH`) |
+| `bot_observations` | observations de détection des robots | 30 jours |
+| `session_replay_*` | enregistrements de session (désactivés ici) | 30 jours |
+| agrégats `*_mv_target` (tableau de bord léger) | compteurs horaires | aucune |
+| `system.query_log` | journal des requêtes ClickHouse | 7 jours (`clickhouse/docker-compose.clickhouse.yml`) |
+
+- Aucune variable d'environnement de conservation n'existe dans `docker-compose.yml` ni dans la doc d'auto-hébergement (`self-hosting-advanced.mdx`).
+- La politique de confidentialité de Rybbit le confirme : « For self-hosted instances, data retention is configurable by the administrator » (https://rybbit.com/privacy, « Data Retention »). Les durées de 3 et 5 ans ne concernent que les offres cloud.
+- Défauts du code : `saltUserIds` et `trackIp` valent `false` (`server/src/db/postgres/schema.ts`). L'état réel de l'instance n'est pas vérifié, faute d'accès au tableau de bord.
+
+En pratique, les statistiques sont conservées sans limite tant qu'aucune `TTL` n'est ajoutée sur le serveur. `/mentions-legales/` le dit tel quel. Recommandation (non appliquée, le serveur n'est pas touché depuis le dépôt) : ajouter une `TTL` de 13 à 25 mois sur `events` (par exemple `ALTER TABLE events MODIFY TTL timestamp + INTERVAL 25 MONTH`) et sur les agrégats, vérifier la purge, puis indiquer la durée dans les mentions. Une mise à jour de Rybbit qui recréerait la table ne conserve pas forcément une `TTL` ajoutée à la main : la revérifier après chaque mise à jour.
+
+### Hébergement
+
+- Rybbit est auto-hébergé par William Ferreira De Azevedo sur son serveur personnel.
+- `analytics.williamdeazevedo.fr` résout vers `104.21.7.53` et `172.67.135.198` (IPv6 `2606:4700:3030::6815:735` et `2606:4700:3031::ac43:87c6`). Ces adresses appartiennent à Cloudflare (RDAP ARIN : `CLOUDFLARENET`), et les réponses portent `server: cloudflare`. Le serveur d'origine est masqué par le proxy : son pays n'est pas vérifiable par une recherche publique. Les mentions écrivent « Pays d'hébergement de ce serveur : à préciser ».
+
 ## À compléter (informations manquantes dans les mentions)
 
-Ces points n'étaient pas vérifiés le 16/11/2026. `/mentions-legales/` ne les affirme donc pas (le commentaire `TODO(William)` du source renvoie ici) :
+Ces points n'étaient pas vérifiés ou pas fixés le 16/11/2026. `/mentions-legales/` ne les affirme donc pas (le commentaire `TODO(William)` du source renvoie ici) :
 
-- la durée de conservation des statistiques sur le serveur Rybbit ;
-- l'hébergeur et le pays du serveur `analytics.williamdeazevedo.fr` ;
+- le pays d'hébergement du serveur personnel qui héberge Rybbit ;
+- une durée de conservation, si une `TTL` est ajoutée sur le serveur (voir plus haut) ;
 - l'état de « User ID Salting » et de « Track IP Address », donc ce qui est conservé de l'adresse IP ;
 - la liste des captures automatiques, à mettre à jour si la configuration de Rybbit change ;
 - avant l'exemption : la relecture des textes du mode exemption et une durée de vie pour `rybbit-visitor-id`.
