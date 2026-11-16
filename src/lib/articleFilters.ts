@@ -37,9 +37,10 @@ export const readFiltersFromUrl = (
 
 export const writeFiltersToUrl = (href: string, state: ArticleFilterState) => {
   const url = new URL(href);
-  const query = state.search.trim();
-  if (query) url.searchParams.set("search", query);
-  else url.searchParams.delete("search");
+  // La saisie libre ne va jamais dans l'URL : la mesure d'audience (Rybbit)
+  // envoie la chaîne de requête avec chaque événement. Un ancien lien
+  // `?search=` est lu par readFiltersFromUrl, puis retiré ici.
+  url.searchParams.delete("search");
   if (state.tag === ALL_VALUE) url.searchParams.delete("tag");
   else url.searchParams.set("tag", state.tag);
   // Ancien filtre par année, retiré : on nettoie les vieux liens.

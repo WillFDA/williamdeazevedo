@@ -49,15 +49,16 @@ const purposes = [
         {
             isAudienceExempt ? (
                 <Fragment>
-                    Rybbit mesure l'audience, sauf si vous la refusez. Avec
-                    votre accord, des cookies Google mesurent aussi l'audience
-                    et les contacts issus de nos annonces.
+                    Rybbit mesure l'audience, sauf si vous refusez cette
+                    mesure. Avec votre accord, Google Analytics mesure aussi
+                    l'audience, et Google Ads les contacts issus de nos
+                    annonces.
                 </Fragment>
             ) : (
                 <Fragment>
                     <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, Rybbit
-                    et des cookies Google mesurent l'audience et les contacts
-                    issus de nos annonces.
+                    et Google Analytics mesurent l'audience, et Google Ads les
+                    contacts issus de nos annonces.
                 </Fragment>
             )
         }
@@ -148,6 +149,7 @@ const purposes = [
         saveConsent,
         type ConsentChoice,
     } from "../scripts/consent";
+    import { isAudienceMeasurementLoaded } from "../scripts/analytics";
 
     const bannerWindow = window as Window & {
         __wuiCookieBannerReady?: boolean;
@@ -177,7 +179,10 @@ const purposes = [
         const current = readConsent();
         for (const input of purposeInputs(element)) {
             const purpose = input.dataset.cookiePurpose as keyof ConsentChoice;
-            input.checked = current?.[purpose] ?? false;
+            // Sans choix, l'interrupteur reflète l'état réel : en exemption,
+            // la mesure d'audience Rybbit tourne déjà.
+            input.checked =
+                current?.[purpose] ?? (purpose === "analytics" && isAudienceMeasurementLoaded());
         }
     };
 

@@ -14,6 +14,8 @@ type AnalyticsWindow = Window & {
    * issue d'un nouveau déploiement apporte une autre copie de ce module.
    */
   __wuiRybbitLoaded?: boolean;
+  /** Filtre de history.replaceState installé dans ce document. */
+  __wuiReplaceStateFiltered?: boolean;
 };
 
 // Exemption de consentement (CNIL) : ne l'activer qu'après avoir documenté que
@@ -86,6 +88,11 @@ const changesPath = (url: string | URL | null | undefined) => {
  * précédente : la chaîne reste complète pour les vrais changements de page.
  */
 const forwardOnlyPathChanges = () => {
+  const analyticsWindow = getAnalyticsWindow();
+  // Une seule couche par document, même après un échec de chargement suivi
+  // d'un nouvel accord.
+  if (analyticsWindow.__wuiReplaceStateFiltered) return;
+  analyticsWindow.__wuiReplaceStateFiltered = true;
   const original = history.replaceState;
   const filtered =
     (next: History["replaceState"]): History["replaceState"] =>
@@ -153,6 +160,14 @@ const forgetRybbit = (refused: boolean) => {
   }
 };
 
+const hasOptOut = () => {
+  try {
+    return localStorage.getItem(OPT_OUT_KEY) !== null;
+  } catch {
+    return false;
+  }
+};
+
 const removeOwnOptOut = () => {
   try {
     if (localStorage.getItem(OPT_OUT_KEY) === OPT_OUT_VALUE)
@@ -173,10 +188,14 @@ export const isAudienceMeasurementLoaded = () =>
  * applyConsent recharge la page.
  */
 export const syncAudienceMeasurement = (analyticsChoice: boolean | null) => {
-  const allowed = analyticsChoice ?? isAudienceExempt;
+  // Seul un accord explicite retire notre désinscription : en exemption, une
+  // opposition survit à l'expiration du choix (6 mois).
+  if (analyticsChoice === true) removeOwnOptOut();
+  const allowed =
+    analyticsChoice === true ||
+    (analyticsChoice === null && isAudienceExempt && !hasOptOut());
   getAnalyticsWindow().__wuiAudienceAllowed = allowed;
   if (allowed) {
-    removeOwnOptOut();
     loadRybbit();
     return;
   }

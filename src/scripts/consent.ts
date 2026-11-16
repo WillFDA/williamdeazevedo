@@ -263,4 +263,16 @@ export const syncConsentAcrossTabs = () => {
     const choice = parseStoredConsent(event.newValue);
     applyConsent(choice ?? { analytics: false, ads: false });
   });
+  // Page restaurée depuis le cache de navigation (bfcache) : elle n'a pas
+  // reçu les choix faits entre-temps dans un autre onglet.
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+    const choice = readConsent();
+    const current = gtagWindow().__wuiConsent;
+    if (
+      choice &&
+      (choice.analytics !== current?.analytics || choice.ads !== current?.ads)
+    )
+      applyConsent(choice);
+  });
 };
