@@ -31,5 +31,10 @@ jobs:
       - run: bun run lint
       - run: bun run format:check
       - run: bun run typecheck
+      # Mode exemption Rybbit : ses textes et son chargement doivent aussi
+      # compiler. Le build normal passe ensuite, pour check:editorial.
+      - run: bun run build
+        env:
+          PUBLIC_RYBBIT_EXEMPT_AUDIENCE: "true"
       - run: bun run build
       - run: bun run check:editorial

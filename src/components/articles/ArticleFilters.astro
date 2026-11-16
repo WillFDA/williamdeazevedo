@@ -183,9 +183,14 @@ const hiddenTagCount = Math.max(0, tags.length - COLLAPSED_TAG_COUNT);
         };
 
         const syncFromUrl = () => {
-            Object.assign(state, readFiltersFromUrl(window.location.search, tags));
+            const fromUrl = readFiltersFromUrl(window.location.search, tags);
+            // La recherche n'est plus dans l'URL (sauf ancien lien) : un retour
+            // arrière garde la saisie en cours.
+            Object.assign(state, { tag: fromUrl.tag, search: fromUrl.search || state.search });
             search.value = state.search;
             apply();
+            // Ancien lien `?search=` : retiré de l'URL tout de suite.
+            syncUrl();
         };
 
         form.addEventListener("submit", (event) => event.preventDefault());

@@ -4,6 +4,12 @@
 // part vers Google.
 // Docs : https://developers.google.com/tag-platform/security/concepts/consent-mode
 // (« Basic consent mode : Google tags are blocked until user interaction »).
+// La finalité « Mesure d'audience » pilote aussi Rybbit (src/scripts/analytics.ts).
+
+import {
+  isAudienceMeasurementLoaded,
+  syncAudienceMeasurement,
+} from "./analytics";
 
 export const CONSENT_STORAGE_KEY = "wui-consent";
 export const CONSENT_DURATION_MONTHS = 6;
@@ -206,17 +212,33 @@ export const hasConsentFor = (purpose: keyof ConsentChoice) => {
  */
 export const applyConsent = (choice: ConsentChoice): boolean => {
   const w = gtagWindow();
-  const withdrawn = w.__wuiGtmLoaded && isWithdrawal(w.__wuiConsent, choice);
+  // Rybbit peut tourner sans accord préalable (exemption) : tout refus de la
+  // mesure d'audience l'arrête, même sans accord à retirer.
+  const withdrawn =
+    (w.__wuiGtmLoaded && isWithdrawal(w.__wuiConsent, choice)) ||
+    (isAudienceMeasurementLoaded() && !choice.analytics);
   w.__wuiConsent = { ...choice };
   if (w.__wuiGtmLoaded)
     w.gtag?.("consent", "update", toConsentModeUpdate(choice));
   else if (choice.analytics || choice.ads) loadGoogleTagManager(choice);
   if (!choice.analytics) clearCookies(/^(?:_ga|_gid|_gat)/);
   if (!choice.ads) clearCookies(/^(?:_gcl|_gac)/);
-  // Retrait après un accord dans le même document : rechargement complet pour
-  // décharger GTM (sinon GA4 / Ads continueraient d'envoyer des pings).
+  syncAudienceMeasurement(choice.analytics);
+  // Retrait dans un document où GTM ou Rybbit tourne : rechargement complet
+  // pour les décharger (sinon GA4 / Ads / Rybbit continueraient d'envoyer des
+  // pings). Au rechargement, rien n'est encore chargé : pas de second retrait.
   if (withdrawn) window.location.reload();
   return Boolean(withdrawn);
+};
+
+/**
+ * Au chargement de la page : choix mémorisé, ou, sans choix, ni Google ni
+ * Rybbit (sauf exemption de la mesure d'audience).
+ */
+export const restoreConsent = () => {
+  const choice = readConsent();
+  if (choice) applyConsent(choice);
+  else syncAudienceMeasurement(null);
 };
 
 export const saveConsent = (choice: ConsentChoice) => {
@@ -231,13 +253,26 @@ export const saveConsent = (choice: ConsentChoice) => {
 };
 
 /**
- * Choix modifié dans un autre onglet : on l'applique ici aussi (un retrait
- * recharge la page, donc décharge GTM dans cet onglet également).
+ * Choix modifié dans un autre onglet : on l'applique ici aussi (un accord
+ * charge GTM et Rybbit sans rechargement ; un retrait recharge la page, donc
+ * les décharge dans cet onglet également).
  */
 export const syncConsentAcrossTabs = () => {
   window.addEventListener("storage", (event) => {
     if (event.key !== CONSENT_STORAGE_KEY) return;
     const choice = parseStoredConsent(event.newValue);
     applyConsent(choice ?? { analytics: false, ads: false });
+  });
+  // Page restaurée depuis le cache de navigation (bfcache) : elle n'a pas
+  // reçu les choix faits entre-temps dans un autre onglet.
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+    const choice = readConsent();
+    const current = gtagWindow().__wuiConsent;
+    if (
+      choice &&
+      (choice.analytics !== current?.analytics || choice.ads !== current?.ads)
+    )
+      applyConsent(choice);
   });
 };

@@ -246,13 +246,10 @@ const websiteJsonLd = {
                 resetFadeInAnimations,
             } from "../scripts/animations/fadeIn";
             import {
-                initAnalytics,
                 trackAnalytics,
                 type TrackingProperties,
             } from "../scripts/analytics";
             import { initMobileFooterBoundary } from "../scripts/mobileFooterBoundary";
-
-            initAnalytics();
 
             const windowWithSectionReveal = window as Window & {
                 __wuiContactClickTrackingReady?: boolean;

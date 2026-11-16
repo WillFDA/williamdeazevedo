@@ -1,7 +1,10 @@
 ---
 // Bandeau de consentement (CNIL) branché sur Consent Mode v2, mode basique :
 // GTM n'est chargé qu'après un accord (src/scripts/consent.ts). Deux
-// finalités séparées : mesure d'audience et publicité.
+// finalités séparées : mesure d'audience (Rybbit et Google Analytics) et
+// publicité. En exemption (PUBLIC_RYBBIT_EXEMPT_AUDIENCE), Rybbit se charge
+// avant tout choix et s'arrête si la mesure d'audience est refusée.
+import { isAudienceExempt } from "../scripts/analytics";
 
 // Trois boutons empilés, pleine largeur, de même taille et de même forme à
 // toutes les tailles : « Tout refuser » et « Tout accepter » (même
@@ -18,7 +21,7 @@ const purposes = [
     {
         name: "analytics",
         label: "Mesure d'audience",
-        description: "Google Analytics : pages vues et provenance.",
+        description: "Rybbit et Google Analytics : pages vues, provenance et interactions.",
     },
     {
         name: "ads",
@@ -43,9 +46,23 @@ const purposes = [
     <h2 id="cookie-banner-title" class="sr-only text-sm font-semibold wide:not-sr-only wide:text-base wide:leading-6">Cookies</h2>
     <p id="cookie-banner-text" class="leading-[1.45] text-gray-700 wide:mt-1 wide:leading-normal">
         <span aria-hidden="true" class="font-semibold text-gray-900 wide:hidden">Cookies&nbsp;:{" "}</span>
-        <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, des
-        cookies Google mesurent l'audience et les contacts issus de nos
-        annonces. Modifiable à tout moment.{" "}
+        {
+            isAudienceExempt ? (
+                <Fragment>
+                    Rybbit mesure l'audience, sauf si vous refusez cette
+                    mesure. Avec votre accord, Google Analytics mesure aussi
+                    l'audience, et Google Ads les contacts issus de nos
+                    annonces.
+                </Fragment>
+            ) : (
+                <Fragment>
+                    <span class="wide:hidden">avec</span><span class="hidden wide:inline">Avec</span> votre accord, Rybbit
+                    et Google Analytics mesurent l'audience, et Google Ads les
+                    contacts issus de nos annonces.
+                </Fragment>
+            )
+        }
+        Modifiable à tout moment.{" "}
         <a
             class="underline underline-offset-2 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             href="/mentions-legales/#cookies">En savoir plus</a
@@ -132,6 +149,7 @@ const purposes = [
         saveConsent,
         type ConsentChoice,
     } from "../scripts/consent";
+    import { isAudienceMeasurementLoaded } from "../scripts/analytics";
 
     const bannerWindow = window as Window & {
         __wuiCookieBannerReady?: boolean;
@@ -161,7 +179,10 @@ const purposes = [
         const current = readConsent();
         for (const input of purposeInputs(element)) {
             const purpose = input.dataset.cookiePurpose as keyof ConsentChoice;
-            input.checked = current?.[purpose] ?? false;
+            // Sans choix, l'interrupteur reflète l'état réel : en exemption,
+            // la mesure d'audience Rybbit tourne déjà.
+            input.checked =
+                current?.[purpose] ?? (purpose === "analytics" && isAudienceMeasurementLoaded());
         }
     };
 
