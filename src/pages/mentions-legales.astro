@@ -1,8 +1,35 @@
 ---
 import FadeReveal from "@/components/animations/FadeReveal.astro";
+import { isAudienceExempt } from "@/scripts/analytics";
 import Layout from "../layout/Layout.astro";
 
-const audienceEnabled = import.meta.env.PUBLIC_RYBBIT_EXEMPT_AUDIENCE === "true";
+// Mesure d'audience Rybbit : données d'après la configuration publique de
+// l'instance et le script servi, relevés le 16/11/2026
+// (docs/confidentialite-deploiement.md). Ce qui n'a pas été vérifié n'est pas
+// affirmé ci-dessous.
+// oxlint-disable-next-line no-warning-comments -- informations manquantes, à compléter par William (liste reprise dans docs/confidentialite-deploiement.md).
+/* TODO(William): vérifier, puis compléter cette page :
+   - durée de conservation des statistiques sur le serveur Rybbit (réglage de
+     l'instance, purge effective), à la place de « n'est pas encore indiquée » ;
+   - hébergeur et pays du serveur analytics.williamdeazevedo.fr, à la place de
+     la dernière phrase de « Prestataires et transferts » ;
+   - « User ID Salting » et « Track IP Address » dans Rybbit : préciser ce qui
+     est conservé de l'adresse IP ;
+   - trackUrlParams, trackButtonClicks, trackCopy, trackFormInteractions et
+     trackErrors : retirer de la liste les données désactivées dans Rybbit ;
+   - avant d'activer PUBLIC_RYBBIT_EXEMPT_AUDIENCE : relire les textes du mode
+     exemption (intérêt légitime) et fixer une durée de vie à
+     rybbit-visitor-id. */
+const rybbitLoading = isAudienceExempt
+    ? "Rybbit est chargé dès votre arrivée sur le site, sans attendre votre accord : cette mesure d'audience relève de l'exemption de consentement prévue par la CNIL et repose sur l'intérêt légitime à connaître la fréquentation du site. Vous pouvez vous y opposer à tout moment, comme indiqué en fin de section."
+    : "Rybbit n'est chargé qu'après votre accord pour la finalité « Mesure d'audience » du bandeau cookies, et cette mesure repose sur ce consentement. Sans accord, aucune requête n'est envoyée à analytics.williamdeazevedo.fr.";
+const rybbitIdentifierDeletion = isAudienceExempt
+    ? "Le site efface cet identifiant si vous vous opposez à la mesure d'audience."
+    : "Le site efface cet identifiant si vous refusez ou retirez la mesure d'audience, ainsi qu'à votre première visite après l'expiration de votre choix (6 mois).";
+const rybbitCookieRule = isAudienceExempt
+    ? "Rybbit, l'outil de mesure d'audience du site, est chargé sans attendre votre accord (voir « Mesure d'audience ») ; refuser la mesure d'audience l'arrête."
+    : "Rybbit, l'outil de mesure d'audience du site, suit la même règle : il n'est chargé qu'après votre accord pour la mesure d'audience.";
+
 const sections = [
     {
         id: "editeur",
@@ -75,19 +102,23 @@ const sections = [
         id: "mesure-audience",
         title: "Mesure d'audience",
         paragraphs: [
-            audienceEnabled
-                ? "Rybbit est utilisé pour mesurer l'audience du site : pages consultées, provenance des visites et caractéristiques techniques nécessaires aux statistiques. Cette mesure sert à améliorer les contenus et la navigation. Elle doit rester limitée aux statistiques d'audience du site, sans suivi publicitaire ni recoupement entre sites."
-                : "La mesure d'audience Rybbit est désactivée dans cette version du site. Elle pourra être activée après vérification de sa configuration et mise à jour des informations de confidentialité correspondantes.",
+            "Ce site mesure son audience avec Rybbit, un outil auto-hébergé : votre navigateur envoie les statistiques uniquement à l'instance du site, à l'adresse analytics.williamdeazevedo.fr, et non à un service en ligne de l'éditeur de Rybbit. Cette mesure sert à connaître la fréquentation des pages et à améliorer les contenus et la navigation, sans suivi publicitaire. Les requêtes vers cette adresse passent par Cloudflare.",
+            rybbitLoading,
+            "Données envoyées à Rybbit : adresse de la page consultée (chemin, titre et paramètres d'URL), page de provenance, taille de l'écran, langue, navigateur et système d'exploitation. Avec la configuration actuelle de Rybbit, s'y ajoutent les clics sur les boutons et les liens vers d'autres sites, le texte que vous copiez sur le site, l'envoi des formulaires et le nom des champs modifiés (pas ce que vous y saisissez), les erreurs techniques de la page, ainsi que les événements du site décrits ci-dessous (clics sur les moyens de contact, ouverture et réussite d'une réservation). Le script calcule aussi un indice à partir de caractéristiques techniques du navigateur, pour écarter les robots.",
+            `Votre adresse IP sert à déduire une localisation approximative (pays, région, parfois ville). Rybbit enregistre dans le stockage local de votre navigateur un identifiant aléatoire, sous la clé rybbit-visitor-id, pour reconnaître les visites d'un même navigateur ; son script ne lui fixe pas de durée de vie. ${rybbitIdentifierDeletion} Côté serveur, Rybbit calcule aussi un identifiant à partir de l'adresse IP et du navigateur.`,
+            "La durée de conservation des statistiques sur le serveur Rybbit n'est pas encore indiquée sur cette page. Vous pouvez la demander à william.deazevedopro@gmail.com.",
             "Les clics sur les liens de contact ne prouvent pas qu'un email a été envoyé ou qu'un appel a abouti. Le contenu des emails et les coordonnées saisies pour un rendez-vous ne sont pas transmis par les événements de mesure du site.",
             "Google Analytics (mesure d'audience) et Google Ads (mesure des contacts issus des annonces : rendez-vous, clics sur l'email ou le téléphone) sont chargés par Google Tag Manager, et seulement pour les finalités que vous acceptez dans le bandeau. Sans accord, aucun script Google n'est chargé. Google Search Console est un service distinct, décrit ci-dessous.",
+            "Pour retirer votre accord ou vous opposer à la mesure d'audience, ouvrez vos préférences avec le bouton ci-dessous ou le lien « Gérer les cookies » en bas de page, puis désactivez « Mesure d'audience ». Le site efface alors l'identifiant Rybbit et enregistre la clé disable-rybbit dans le stockage local, pour que Rybbit ne se charge plus. Si Rybbit était actif, la page se recharge. La clé disable-rybbit est retirée si vous acceptez de nouveau la mesure d'audience.",
         ],
+        cookieSettings: true,
     },
     {
         id: "cookies",
         title: "Cookies et autres traceurs",
         paragraphs: [
-            "Google Tag Manager, et avec lui les cookies Google de mesure d'audience (Google Analytics) et de publicité (Google Ads), n'est chargé qu'après votre accord, donné via le bandeau de consentement. Vous pouvez accepter ou refuser chaque finalité séparément, et refuser est aussi simple qu'accepter. Votre choix est enregistré dans le stockage local du navigateur pendant 6 mois, puis redemandé. Vous pouvez le modifier à tout moment avec le lien « Gérer les cookies » en bas de page.",
-            "Traceurs utilisés, seulement après accord pour la finalité concernée : mesure d'audience (Google Analytics), cookies _ga et _ga_<identifiant>, conservés jusqu'à 2 ans (durée par défaut de Google Analytics) ; publicité (Google Ads), cookies _gcl_au et _gcl_aw, conservés 90 jours. Aucune personnalisation des annonces (remarketing) n'est activée. Le choix lui-même est enregistré sous la clé wui-consent du stockage local, pendant 6 mois ; il ne sert qu'à mémoriser votre décision. Retirer une finalité efface ses cookies et recharge la page.",
+            `Google Tag Manager, et avec lui les cookies Google de mesure d'audience (Google Analytics) et de publicité (Google Ads), n'est chargé qu'après votre accord, donné via le bandeau de consentement. ${rybbitCookieRule} Vous pouvez accepter ou refuser chaque finalité séparément, et refuser est aussi simple qu'accepter. Votre choix est enregistré dans le stockage local du navigateur pendant 6 mois, puis redemandé. Vous pouvez le modifier à tout moment avec le lien « Gérer les cookies » en bas de page.`,
+            "Traceurs Google, seulement après accord pour la finalité concernée : mesure d'audience (Google Analytics), cookies _ga et _ga_<identifiant>, conservés jusqu'à 2 ans (durée par défaut de Google Analytics) ; publicité (Google Ads), cookies _gcl_au et _gcl_aw, conservés 90 jours. Aucune personnalisation des annonces (remarketing) n'est activée. Rybbit utilise l'identifiant rybbit-visitor-id du stockage local, décrit dans la section « Mesure d'audience ». Le choix lui-même est enregistré sous la clé wui-consent du stockage local, pendant 6 mois ; il ne sert qu'à mémoriser votre décision. Si vous refusez la mesure d'audience, la clé disable-rybbit y est aussi enregistrée, jusqu'à ce que vous l'acceptiez de nouveau, pour que Rybbit ne se charge pas. Retirer une finalité efface ses cookies et identifiants, puis recharge la page.",
             "Le code du site ne conserve aucune file d'événements de mesure dans le stockage local ou de session. Les événements en attente, lorsque la mesure est activée, sont gardés uniquement en mémoire pendant la page courante.",
             "Cloudflare fournit l'hébergement et la protection du site ; des informations techniques de connexion peuvent être traitées pour ces finalités. Les liens vers les réseaux sociaux ouvrent des sites tiers, dont les propres règles de confidentialité s'appliquent après votre navigation.",
         ],
@@ -135,7 +166,7 @@ const sections = [
                 </p>
             </div>
         </FadeReveal>
-        <p class="text-sm text-gray-600">Mise à jour : 24 octobre 2026.</p>
+        <p class="text-sm text-gray-600">Mise à jour : 16 novembre 2026.</p>
         <nav aria-label="Références de confidentialité" class="flex flex-wrap gap-4 text-sm underline">
             <a href="https://www.cnil.fr/fr/plaintes">CNIL et réclamations</a>
             <a href="https://cal.com/privacy">Confidentialité Cal.com</a>
@@ -158,6 +189,17 @@ const sections = [
                                     {paragraph}
                                 </p>
                             ))}
+                            {/* Rouvre le bandeau (CookieBanner.astro), comme « Gérer les cookies » en pied de page. */}
+                            {section.cookieSettings && (
+                                <button
+                                    class="hero-button hero-button--secondary flex min-h-10 w-fit cursor-pointer items-center justify-center rounded-xl px-4 py-2 text-sm font-normal"
+                                    aria-controls="cookie-banner"
+                                    data-cookie-settings
+                                    type="button"
+                                >
+                                    Gérer les cookies
+                                </button>
+                            )}
                         </div>
                     </section>
                 ))

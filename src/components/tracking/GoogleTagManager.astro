@@ -7,16 +7,15 @@
 // Zaraz (Cloudflare) n'est PAS touché ici : il est géré côté dashboard.
 ---
 
-{/* 1. Choix mémorisé : recharge GTM seulement si une finalité est acceptée. */}
+{/* 1. Choix mémorisé : recharge GTM seulement si une finalité est acceptée,
+    et Rybbit selon la mesure d'audience (ou son exemption, sans choix). */}
 <script>
     import {
-        applyConsent,
-        readConsent,
+        restoreConsent,
         syncConsentAcrossTabs,
     } from "../../scripts/consent";
 
-    const choice = readConsent();
-    if (choice) applyConsent(choice);
+    restoreConsent();
     syncConsentAcrossTabs();
 </script>
 
