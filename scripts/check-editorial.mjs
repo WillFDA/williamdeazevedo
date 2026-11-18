@@ -38,6 +38,7 @@ const slugs = [
   "wix-ou-wordpress",
   "site-one-page",
   "charte-graphique-entreprise",
+  "redirection-301",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
