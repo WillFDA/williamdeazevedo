@@ -84,13 +84,12 @@ En pratique, les statistiques sont conservées sans limite tant qu'aucune `TTL` 
 ### Hébergement
 
 - Rybbit est auto-hébergé par William Ferreira De Azevedo sur son serveur personnel.
-- `analytics.williamdeazevedo.fr` résout vers `104.21.7.53` et `172.67.135.198` (IPv6 `2606:4700:3030::6815:735` et `2606:4700:3031::ac43:87c6`). Ces adresses appartiennent à Cloudflare (RDAP ARIN : `CLOUDFLARENET`), et les réponses portent `server: cloudflare`. Le serveur d'origine est masqué par le proxy : son pays n'est pas vérifiable par une recherche publique. Les mentions écrivent « Pays d'hébergement de ce serveur : à préciser ».
+- `analytics.williamdeazevedo.fr` résout vers `104.21.7.53` et `172.67.135.198` (IPv6 `2606:4700:3030::6815:735` et `2606:4700:3031::ac43:87c6`). Ces adresses appartiennent à Cloudflare (RDAP ARIN : `CLOUDFLARENET`), et les réponses portent `server: cloudflare`. Le serveur d'origine est masqué par le proxy : son pays n'est pas vérifiable par une recherche publique. William a confirmé le 16/11/2026 que le serveur est en France ; les mentions l'indiquent.
 
 ## À compléter (informations manquantes dans les mentions)
 
 Ces points n'étaient pas vérifiés ou pas fixés le 16/11/2026. `/mentions-legales/` ne les affirme donc pas (le commentaire `TODO(William)` du source renvoie ici) :
 
-- le pays d'hébergement du serveur personnel qui héberge Rybbit ;
 - une durée de conservation, si une `TTL` est ajoutée sur le serveur (voir plus haut) ;
 - l'état de « User ID Salting » et de « Track IP Address », donc ce qui est conservé de l'adresse IP ;
 - la liste des captures automatiques, à mettre à jour si la configuration de Rybbit change ;

@@ -21,7 +21,9 @@ export type ConsentChoice = {
   ads: boolean;
 };
 
-type StoredConsent = ConsentChoice & { at: string };
+const CONSENT_VERSION = 2;
+
+type StoredConsent = ConsentChoice & { at: string; v: number };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
@@ -53,8 +55,16 @@ export const parseStoredConsent = (
   expiry.setMonth(expiry.getMonth() + CONSENT_DURATION_MONTHS);
   if (now >= expiry.getTime()) return null;
 
-  if (typeof parsed.analytics === "boolean" && typeof parsed.ads === "boolean")
+  if (
+    typeof parsed.analytics === "boolean" &&
+    typeof parsed.ads === "boolean"
+  ) {
+    // Un accord « mesure d'audience » enregistré avant la version 2 portait sur
+    // Google Analytics seul (bandeau d'alors) : il ne couvre pas Rybbit, donc
+    // il est redemandé. Un refus, et un choix publicitaire, restent valables.
+    if (parsed.analytics && parsed.v !== CONSENT_VERSION) return null;
     return { analytics: parsed.analytics, ads: parsed.ads };
+  }
 
   if (parsed.value === "denied") return { analytics: false, ads: false };
   return null;
@@ -68,6 +78,7 @@ export const serializeConsent = (
     analytics: choice.analytics,
     ads: choice.ads,
     at: at.toISOString(),
+    v: CONSENT_VERSION,
   } satisfies StoredConsent);
 
 const state = (granted: boolean) => (granted ? "granted" : "denied");
