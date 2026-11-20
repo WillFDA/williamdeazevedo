@@ -114,6 +114,7 @@ export const articleServices: Record<string, string[]> = {
   ],
   "prix-refonte-site-internet": ["refonte-site-internet"],
   "prix-site-vitrine": ["creation-site-vitrine"],
+  "redirection-301": ["refonte-site-internet"],
   "referencement-chatgpt": ["refonte-site-internet"],
   "refonte-seo": ["refonte-site-internet"],
   "rgpd-formulaire-de-contact": ["refonte-site-internet"],

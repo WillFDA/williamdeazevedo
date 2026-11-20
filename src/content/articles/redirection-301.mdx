@@ -1,0 +1,183 @@
+---
+title: "Redirection 301 : à quoi elle sert et comment vérifier qu’elle est en place"
+seoTitle: "Redirection 301 : le guide sans code"
+description: "Redirection 301 : ce que c’est, quand elle est nécessaire (refonte, nouveau domaine), les erreurs à éviter et comment la vérifier, sans toucher au code."
+image:
+  src: "/articles/redirection-301/cover.webp"
+  alt: "Trois cartes. Le trajet : une ancienne adresse, votresite.fr/nos-travaux/, renvoie en 301 vers la nouvelle, votresite.fr/realisations/, avec le message « déplacée définitivement ». Les cas : refonte, nouveau domaine, http vers https, pages fusionnées. Les contrôles : une seule étape, côté serveur, pas tout vers l’accueil, redirections gardées au moins un an, permanente (301) et non temporaire (302)."
+pubDate: 2026-11-17
+author: "William De Azevedo"
+draft: false
+tags: ["refonte", "site vitrine", "tpe"]
+---
+
+**Une redirection 301 est un renvoi automatique et permanent : quand quelqu’un ouvre l’ancienne adresse d’une page, il arrive directement sur la nouvelle, et Google comprend que la page a changé d’adresse pour de bon. Vous en avez besoin dès qu’une adresse change : refonte du site, nouveau nom de domaine, passage en https, page fusionnée ou renommée.** Sans elle, vos anciens liens mènent à une erreur, et c’est un client qui la voit.
+
+Un site neuf peut être très réussi et faire perdre des visiteurs dès sa mise en ligne : si les adresses ont changé sans renvoi, les résultats Google, les annuaires et vos liens partagés pointent vers des pages qui n’existent plus. Le risque grandit quand le site est refait vite, à partir d’un modèle ou d’un outil d’IA, sans que personne ne se demande ce que devient l’ancien.
+
+Je suis développeur web et designer freelance à Achères (78). Cet article s’adresse à vous, dirigeant, artisan ou indépendant : pas de code ici, seulement ce qu’il faut comprendre, demander et vérifier.
+
+## Redirection 301 : de quoi parle-t-on ?
+
+Chaque page de votre site a une adresse, que l’on appelle aussi **URL** : par exemple `votresite.fr/nos-travaux/`. Cette adresse est enregistrée à des endroits que vous ne maîtrisez pas : Google, les liens d’autres sites, les favoris, vos documents imprimés. Quand elle change, l’ancienne ne disparaît pas de ces endroits. Une redirection est l’équivalent de la **réexpédition du courrier** après un déménagement : quelqu’un qui écrit à l’ancienne adresse voit son courrier arriver à la nouvelle. Techniquement, c’est le serveur du site qui répond à la demande : « cette page a été déplacée définitivement, elle est maintenant ici ». Le navigateur suit l’indication tout seul, et le visiteur n’a rien à faire.
+
+Le numéro **301** est le code de cette réponse. La documentation de Mozilla (MDN) le décrit ainsi : la ressource a été définitivement déplacée vers la nouvelle adresse, et les moteurs de recherche attribuent les liens de l’adresse d’origine à la page de destination.
+
+Vous croiserez peut-être aussi le code **308**, que Google traite comme la 301 : pour vous, retenez « redirection permanente ».
+
+## Quand une redirection 301 est nécessaire
+
+Dès que l’adresse d’une page change durablement, ou que plusieurs adresses mènent à la même page. Google cite ces situations dans sa documentation, et elles correspondent à la vie d’un site de TPE :
+
+| Situation | Exemple | Ce qu’il faut rediriger |
+| --- | --- | --- |
+| Refonte avec nouvelles adresses | `/nos-travaux/` devient `/realisations/` | Chaque ancienne page vers sa page équivalente |
+| Changement de nom de domaine | `ancien-nom.fr` devient `nouveau-nom.fr` | Chaque page de l’ancien domaine vers la même page du nouveau |
+| Passage de http à https | Le site s’ouvrait en `http://` | Toutes les adresses http vers leur version https |
+| Avec ou sans www | `www.votresite.fr` et `votresite.fr` répondent tous les deux | Une version vers l’autre, toujours la même |
+| Pages fusionnées | Trois pages de services regroupées en une | Les trois anciennes vers la nouvelle |
+
+La règle est toujours la même : **une ancienne adresse, une nouvelle adresse équivalente**. Si vous changez aussi de prestataire, suivez [la checklist pour reprendre votre site, votre domaine et vos accès](/articles/changer-prestataire-web/).
+
+Si vous changez de nom de domaine, la redirection n’est qu’une étape : Google conseille aussi une « demande de changement d’adresse » pour l’ancien domaine, à faire dans la Search Console, son outil gratuit de suivi. Elle n’est pas nécessaire pour passer de http à https, ni pour choisir entre avec et sans `www`.
+
+## Ce qui se passe quand la redirection manque
+
+Sans redirection, l’ancienne adresse n’a plus de page : le visiteur voit une **erreur 404**, « page introuvable ». Cela vaut pour chaque lien vers une ancienne page : résultat Google, annuaire, site partenaire, favori, devis envoyé. Votre fiche Google aussi, si son lien pointe vers une adresse qui a changé.
+
+Un client qui clique sur un ancien lien et tombe sur une erreur ne pense pas « le site a été refait » : il se demande si l’entreprise est encore fiable. Votre site est votre carte de visite, et une carte avec une mauvaise adresse ne sert plus à rien.
+
+Pour savoir ce que Google connaît déjà de votre site, voyez [la méthode d’audit SEO](/articles/audit-seo/) : les adresses qui reçoivent des visites sont celles à ne pas casser.
+
+## Redirection 301 ou 302 : permanente ou temporaire ?
+
+Il existe deux grandes familles de redirections, et elles ne disent pas la même chose à Google.
+
+|  | Redirection permanente (301, 308) | Redirection temporaire (302, 307) |
+| --- | --- | --- |
+| Message envoyé | « Cette page a déménagé définitivement » | « Cette page est ailleurs pour quelque temps » |
+| Adresse affichée par Google | La nouvelle | L’ancienne |
+| Quand l’utiliser | Refonte, nouveau domaine, https, fusion de pages | Page remplacée puis rétablie : congés, offre en pause |
+
+Google l’explique ainsi : une redirection permanente affiche la nouvelle cible dans les résultats ; une redirection temporaire affiche la page source. Il conseille la permanente lorsque vous êtes certain qu’elle ne sera pas annulée. Pour une adresse qui a changé et ne reviendra pas, la 302 est donc la mauvaise réponse : l’ancienne adresse reste mise en avant.
+
+Cette erreur n’est pas théorique : lors de l’audit de mon propre site, l’ancienne adresse `/about` renvoyait une redirection temporaire ; elle redirige désormais en 301. Le visiteur ne voit aucune différence ; seul un contrôle le révèle.
+
+## Comment la redirection se met en place, sans toucher au code
+
+Vous n’avez pas à écrire la règle vous-même, mais vous devez savoir **qui la pose** et **à partir de quoi**.
+
+### Qui la pose
+
+Sur WordPress ou un créateur de site en ligne, la redirection se pose souvent dans l’administration du site, avec une option ou une extension dédiée. Sinon, elle s’écrit dans la configuration du serveur, par exemple un fichier nommé `.htaccess` sur de nombreux hébergements : c’est le travail de votre prestataire.
+
+Google recommande des redirections « côté serveur » dès que c’est possible, car c’est la méthode que le moteur comprend le mieux. Un renvoi en JavaScript n’est qu’un dernier recours : Google risque de ne pas le voir. Pour savoir qui détient le compte d’hébergement, consultez [l’hébergement d’un site vitrine](/articles/hebergement-site-vitrine/).
+
+### À partir de quoi : le plan de redirection
+
+Avant la mise en ligne, un bon prestataire établit un **plan de redirection** : un tableau qui associe chaque ancienne adresse à sa nouvelle. Google parle de « mappage » entre les adresses actuelles et le nouveau format. Voici à quoi il ressemble, pour un exemple fictif :
+
+| Ancienne adresse | Nouvelle adresse | Redirection |
+| --- | --- | --- |
+| `/nos-travaux/` | `/realisations/` | 301 |
+| `/cuisine-sur-mesure-2019/` | `/realisations/cuisines/` | 301 |
+| `/contact.html` | `/contact/` | 301 |
+| `/promotion-printemps/` | Aucune page équivalente | Pas de redirection : page d’erreur claire |
+
+Il se construit à partir de la liste des pages existantes. Pour la nouvelle structure, voyez [l’arborescence d’un site web](/articles/arborescence-site-web/) : on décide d’abord des pages, puis on relie l’ancien au nouveau.
+
+## Les erreurs à éviter
+
+Rediriger ne suffit pas : il faut rediriger **au bon endroit**.
+
+| Erreur | Pourquoi c’est un problème | Ce qui est attendu |
+| --- | --- | --- |
+| Tout renvoyer vers la page d’accueil | Le visiteur ne trouve pas ce qu’il cherchait ; Google le déconseille et peut traiter ces renvois comme des pages introuvables (« soft 404 ») | Chaque ancienne page vers son équivalent le plus proche |
+| Des redirections en chaîne | Ancienne page, puis une étape intermédiaire, puis la nouvelle : le chargement ralentit | Un seul saut, directement vers la destination finale |
+| Une redirection vers une page qui n’existe plus | Google signale ce cas fréquent après une migration : le visiteur est bien renvoyé, mais vers une erreur | Contrôler la destination avant de publier |
+
+Sur les chaînes, Google indique que son robot peut suivre jusqu’à dix sauts, mais recommande de rediriger directement vers la destination finale et, à défaut, idéalement pas plus de trois sauts. Une chaîne apparaît facilement quand un site a été refait plusieurs fois.
+
+Certaines pages n’ont aucun équivalent : une promotion terminée, un service arrêté. Google conseille alors une réponse 404, ou 410 pour « supprimée définitivement », plutôt qu’une redirection sans raison. Prévoyez une page d’erreur claire, avec un lien vers vos pages utiles.
+
+## Vérifier vos redirections
+
+Vous pouvez contrôler vous-même l’essentiel, sans outil technique.
+
+1. **Listez dix adresses importantes de l’ancien site** : accueil, services principaux, contact, pages les plus visitées.
+2. **Tapez chaque ancienne adresse dans une fenêtre de navigation privée**, qui ne réutilise pas ce que votre navigateur a gardé de vos visites. Vous devez arriver sur la page équivalente du nouveau site, pas sur l’accueil et pas sur une erreur.
+3. **Cliquez dans la barre d’adresse à l’arrivée** pour voir l’adresse complète : la nouvelle, en `https`, avec ou sans `www` de façon identique partout. Pour une adresse en `http`, ce test ne prouve pas la redirection vers `https` : les navigateurs récents y passent souvent d’eux-mêmes. Si le navigateur affiche « Non sécurisé », voyez [pourquoi votre site n’est pas en https](/articles/site-non-securise/).
+4. **Testez le lien de votre [fiche Google](/articles/fiche-google-my-business-artisan/)**, celui de votre signature d’e-mail et ceux de vos réseaux sociaux.
+5. **Demandez à votre prestataire le relevé de ses tests** : pour chaque ancienne adresse, le code obtenu (301 ou 308, pas 302) et la page d’arrivée. À l’écran, une 301 et une 302 se ressemblent : ce relevé est votre preuve.
+6. **Surveillez la Search Console pendant quelques semaines** : pour chaque adresse classée « Introuvable (404) », vérifiez s’il s’agit d’une page supprimée volontairement ou d’une redirection oubliée.
+
+Une redirection manquante se corrige vite ; l’important est de la voir avant vos clients. Si votre site n’apparaît plus du tout sur Google, lisez [pourquoi votre site n’apparaît pas sur Google](/articles/site-pas-sur-google/).
+
+## Combien de temps garder une redirection 301
+
+Plus longtemps qu’on ne le pense. Google recommande de conserver les redirections « aussi longtemps que possible, généralement au moins un an », le temps que tous les signaux soient transférés vers les nouvelles adresses. Du point de vue des visiteurs, Google suggère d’envisager de les conserver indéfiniment.
+
+Deux réflexes : **ne pas les supprimer lors d’un nettoyage**, car une redirection qui paraît inutile protège un lien posé par quelqu’un d’autre ; et **mettre à jour vos propres liens** (fiche Google, réseaux, signature, annuaires) pour ne pas dépendre du renvoi.
+
+## Exemple fictif : un menuisier refait son site
+
+Voici un exemple **fictif** : il ne décrit aucun client réel et sert seulement à illustrer la méthode. Imaginons un menuisier installé à Conflans-Sainte-Honorine. Son site a six ans. Il le fait refaire, avec de nouvelles pages et de nouvelles adresses : `/nos-travaux/` devient `/realisations/`, `/contact.html` devient `/contact/`.
+
+- **Le problème** : le nouveau site est mis en ligne un vendredi, sans plan de redirection. Le lundi, le lien d’un annuaire d’artisans et celui d’un devis envoyé la semaine précédente mènent à une erreur.
+- **Le contrôle** : le menuisier tape l’ancienne adresse de ses réalisations dans une fenêtre privée. Il voit une erreur 404 et réclame un plan de redirection.
+- **La correction** : le prestataire liste les 22 adresses de l’ancien site, cherche pour chacune sa nouvelle page et pose des redirections permanentes côté serveur. Les pages sans équivalent renvoient une page d’erreur claire.
+- **Le suivi** : le menuisier teste ses dix pages principales et met à jour ses liens (fiche, annuaires, signature), puis surveille la Search Console quelques semaines. Les redirections sont conservées au moins un an.
+
+C’est ce travail qui décide si le nouveau site prolonge la réputation de l’ancien ou en perd une partie.
+
+## Que demander à votre prestataire
+
+Avant de signer ou de valider une mise en ligne, posez ces questions :
+
+- Quelles sont les adresses de l’ancien site, et où est le plan de redirection qui les associe aux nouvelles ?
+- Les redirections sont-elles permanentes (301 ou 308), et faites côté serveur ?
+- Que deviennent les pages sans équivalent, et y a-t-il une seule étape entre chaque ancienne adresse et sa destination ?
+- Les versions http et https, avec et sans `www`, renvoient-elles toutes vers une seule adresse ?
+- Qui garde les redirections après la livraison, et pendant combien de temps ?
+
+Un prestataire qui répond sans hésiter a pensé à ce que devient votre ancien site.
+
+## Vos adresses changent : parlons-en
+
+Une refonte réussie se prépare avant la mise en ligne. Je crée et je refais des sites pour des artisans, des TPE et des indépendants à Achères, Poissy, Saint-Germain-en-Laye, Conflans-Sainte-Honorine et dans le reste des Yvelines, et aussi à distance. Lors d’une refonte, je liste les pages qui existent déjà et celles qui reçoivent des visites, je prépare les redirections, puis je les teste après la mise en ligne : ce travail est décrit dans la page [refonte de site internet](/refonte-site-internet/).
+
+Un site refait vite, sans cette préparation, peut être joli et ne rien rapporter : c’est [ce qui distingue un site générique d’un site travaillé](/articles/site-600-euros-vs-site-2000-euros/).
+
+Vous préparez un nouveau site ? Voyez la [création de site vitrine](/creation-site-vitrine/). Vous venez d’en changer et un doute vous reste ? Envoyez-moi l’adresse de votre ancien site : on regarde ensemble quelles adresses conserver.
+
+## Questions fréquentes
+
+### Mon nouveau site est en ligne sans redirections : est-il trop tard ?
+
+Non. Tant que Google et vos clients connaissent les anciennes adresses, une redirection posée aujourd’hui les ramène vers la bonne page. Plus vous attendez, plus de visiteurs tombent sur une erreur : demandez les redirections à votre prestataire.
+
+### Comment retrouver les anciennes adresses si je n’ai pas de liste ?
+
+Dans la Search Console, les adresses classées « Introuvable (404) » sont celles que Google a essayé d’ouvrir sans succès : souvent vos anciennes pages. Tapez aussi dans Google `site:` suivi de votre nom de domaine : il affiche une partie des pages qu’il connaît encore. Enfin, votre ancien prestataire peut vous remettre l’ancien sitemap, la liste des pages que l’ancien site déclarait à Google.
+
+### Faut-il des redirections si je change seulement d’hébergeur ou de prestataire ?
+
+Non, si les adresses de vos pages restent exactement les mêmes : une redirection ne sert que lorsqu’une adresse change. En revanche, les redirections déjà en place doivent suivre le site chez le nouvel hébergeur, sinon les vieux liens recommencent à mener à une erreur.
+
+### Faut-il garder l’ancien nom de domaine après en avoir changé ?
+
+Oui. Les redirections partent de l’ancien domaine : elles ne fonctionnent que tant qu’il est renouvelé et relié au site. S’il expire, tous les anciens liens mènent à une erreur. Gardez-le au moins aussi longtemps que les redirections, et vérifiez qu’il est à votre nom.
+
+### Pourquoi Google affiche-t-il encore mes anciennes adresses ?
+
+Parce qu’il doit repasser sur chacune pour découvrir la redirection. Google prévient qu’après une migration, le classement peut fluctuer quelques semaines ou plus, et qu’après un changement de nom de domaine il peut continuer un moment à afficher les anciennes adresses. Ce n’est pas un problème tant qu’un clic sur l’ancienne adresse mène à la bonne page.
+
+### Faut-il prévenir Google après une refonte ?
+
+Il n’y a pas de demande à faire si le nom de domaine ne change pas : Google découvre les redirections en repassant sur les anciennes adresses. Il recommande en revanche de mettre à jour le sitemap, la liste des pages que le site lui déclare. C’est à prévoir avec votre prestataire au moment de la mise en ligne.
+
+## Sources officielles
+
+- [Google Search Central : la recherche Google et les redirections d’URL](https://developers.google.com/search/docs/crawling-indexing/301-redirects?hl=fr) : redirections permanentes et temporaires, côté serveur, cas d’usage, lu le 17/11/2026
+- [Google Search Central : migrer un site](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes?hl=fr) : mappage des adresses, chaînes, redirections vers l’accueil, erreurs fréquentes, durée de conservation, changement de domaine, lu le 17/11/2026
+- [MDN : 301 Moved Permanently](https://developer.mozilla.org/fr/docs/Web/HTTP/Reference/Status/301) : définition du code de réponse, lu le 17/11/2026
