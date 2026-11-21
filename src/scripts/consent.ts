@@ -61,7 +61,8 @@ export const parseStoredConsent = (
   ) {
     // Un accord « mesure d'audience » enregistré avant la version 2 portait sur
     // Google Analytics seul (bandeau d'alors) : il ne couvre pas Rybbit, donc
-    // il est redemandé. Un refus, et un choix publicitaire, restent valables.
+    // tout le choix est redemandé (publicité comprise). Un choix v1 sans accord
+    // de mesure d'audience reste valable, avec son choix publicitaire.
     if (parsed.analytics && parsed.v !== CONSENT_VERSION) return null;
     return { analytics: parsed.analytics, ads: parsed.ads };
   }

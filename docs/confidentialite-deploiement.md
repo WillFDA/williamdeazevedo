@@ -4,7 +4,7 @@ Ce document décrit ce que le site charge selon le choix du visiteur, le drapeau
 
 ## Fonctionnement
 
-Le bandeau (`src/components/CookieBanner.astro`) propose deux finalités : « Mesure d'audience » (Rybbit et Google Analytics) et « Publicité » (Google Ads). Le choix est enregistré sous la clé `wui-consent` du `localStorage`, pendant 6 mois. « Gérer les cookies » (pied de page et `/mentions-legales/#mesure-audience`) rouvre le bandeau.
+Le bandeau (`src/components/CookieBanner.astro`) propose « Tout refuser », « Tout accepter » et « Réglages des cookies » : « Essentiels » (toujours actifs, sans interrupteur actionnable), puis deux catégories, « Mesure d'audience » (Rybbit et Google Analytics) et « Suivi publicitaire » (Google Ads). Le choix est enregistré sous la clé `wui-consent` du `localStorage` (version `v: 2` ; un accord de mesure d'audience antérieur est redemandé), pendant 6 mois. « Gérer les cookies » (pied de page et `/mentions-legales/#mesure-audience`) rouvre le bandeau.
 
 - Google Tag Manager (`src/scripts/consent.ts`) n'est chargé qu'après un accord pour au moins une finalité (Consent Mode v2, mode basique).
 - Rybbit (`src/scripts/analytics.ts`) est l'instance auto-hébergée `https://analytics.williamdeazevedo.fr/api/script.js`, site `9713c4825fc7`. Par défaut, il n'est chargé qu'après un accord pour la mesure d'audience.
