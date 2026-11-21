@@ -321,6 +321,68 @@ const breadcrumbJsonLd = {
         }
 
         {
+            service.localArea && (
+                <section
+                    class="grid gap-6 md:grid-cols-[0.95fr_1.05fr] md:items-start md:gap-12"
+                    aria-labelledby={`${service.slug}-local-area`}
+                >
+                    <div class="flex flex-col gap-4">
+                        <h2
+                            class="section-heading text-left"
+                            id={`${service.slug}-local-area`}
+                        >
+                            {service.localArea.title}
+                        </h2>
+                        <p class="text-base font-normal leading-relaxed text-gray-600">
+                            {service.localArea.description}
+                        </p>
+                        {service.localArea.googleProfile && (
+                            <a
+                                class="inline-flex w-fit text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                data-analytics-label="fiche-google"
+                                data-analytics-location={`service-${service.slug}-local-area`}
+                                href={service.localArea.googleProfile.href}
+                                rel="noreferrer"
+                                target="_blank"
+                            >
+                                {service.localArea.googleProfile.label}
+                                <span class="sr-only"> (nouvel onglet)</span>
+                            </a>
+                        )}
+                    </div>
+                    <ul class="flex flex-wrap gap-3">
+                        {service.localArea.places.map((place) => (
+                            <li class="rounded-xl bg-gray-100 px-4 py-3 text-base font-normal leading-relaxed text-gray-800 ring-1 ring-gray-200">
+                                {place}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )
+        }
+
+        {
+            service.localArea?.why && (
+                <section
+                    class="flex max-w-3xl flex-col gap-4"
+                    aria-labelledby={`${service.slug}-local-why`}
+                >
+                    <h2
+                        class="section-heading text-left"
+                        id={`${service.slug}-local-why`}
+                    >
+                        {service.localArea.why.title}
+                    </h2>
+                    {service.localArea.why.paragraphs.map((paragraph) => (
+                        <p class="text-base font-normal leading-relaxed text-gray-600">
+                            {paragraph}
+                        </p>
+                    ))}
+                </section>
+            )
+        }
+
+        {
             project && (
                 <section>
                     <ProjectListItem
