@@ -329,8 +329,56 @@ const breadcrumbJsonLd = {
                         detailsLabel="Lire l'étude de cas"
                         siteLabel="Voir le site"
                     />
+                    {service.proof.article && (
+                        <p class="mt-6 text-base font-normal leading-relaxed text-gray-600">
+                            <a
+                                class="inline-flex text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                href={service.proof.article.href}
+                            >
+                                {service.proof.article.label}
+                            </a>
+                        </p>
+                    )}
                 </section>
             )
+        }
+
+        {
+            service.sections?.map((section, index) => (
+                <section
+                    class="flex max-w-3xl flex-col gap-4"
+                    aria-labelledby={`${service.slug}-section-${index}`}
+                >
+                    <h2
+                        class="section-heading text-left"
+                        id={`${service.slug}-section-${index}`}
+                    >
+                        {section.title}
+                    </h2>
+                    {section.paragraphs.map((paragraph) => (
+                        <p class="text-base font-normal leading-relaxed text-gray-600">
+                            {paragraph}
+                        </p>
+                    ))}
+                    {section.items && (
+                        <ul class="grid gap-3">
+                            {section.items.map((item) => (
+                                <li class="rounded-xl bg-gray-100 px-4 py-3 text-base font-normal leading-relaxed text-gray-800 ring-1 ring-gray-200">
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                    {section.link && (
+                        <a
+                            class="inline-flex w-fit text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:decoration-gray-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                            href={section.link.href}
+                        >
+                            {section.link.label}
+                        </a>
+                    )}
+                </section>
+            ))
         }
 
         <DiagnosticCta
