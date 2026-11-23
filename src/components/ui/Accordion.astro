@@ -211,3 +211,64 @@ const getContent = (item: AccordionItem) => item.content ?? item.answer ?? "";
         }
     }
 </style>
+
+<script>
+    const accordionWindow = window as Window & {
+        __wuiAccordionHashReady?: boolean;
+    };
+
+    const openAccordionForHash = (rawHash: string) => {
+        const trimmed = rawHash.replace(/^#/, "");
+        if (!trimmed) return;
+
+        let targetId: string;
+        try {
+            targetId = decodeURIComponent(trimmed);
+        } catch {
+            targetId = trimmed;
+        }
+
+        const target = document.getElementById(targetId);
+        const details = target?.closest<HTMLDetailsElement>(
+            "details.accordion__item",
+        );
+        if (details) {
+            details.open = true;
+        }
+    };
+
+    const openAccordionFromLocation = () => {
+        openAccordionForHash(window.location.hash);
+    };
+
+    const handleHashLinkClick = (event: MouseEvent) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const link = target.closest<HTMLAnchorElement>('a[href*="#"]');
+        if (!link) return;
+
+        try {
+            const url = new URL(link.href, window.location.href);
+            if (
+                url.origin === window.location.origin &&
+                url.pathname === window.location.pathname &&
+                url.hash
+            ) {
+                openAccordionForHash(url.hash);
+            }
+        } catch {
+            // Ignore malformed hrefs.
+        }
+    };
+
+    if (!accordionWindow.__wuiAccordionHashReady) {
+        accordionWindow.__wuiAccordionHashReady = true;
+        window.addEventListener("hashchange", openAccordionFromLocation);
+        document.addEventListener("click", handleHashLinkClick, {
+            capture: true,
+        });
+        document.addEventListener("astro:page-load", openAccordionFromLocation);
+    }
+
+    openAccordionFromLocation();
+</script>

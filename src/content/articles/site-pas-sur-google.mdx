@@ -6,7 +6,7 @@ image:
   src: "/articles/site-pas-sur-google/cover.webp"
   alt: "Le diagnostic en quatre cartes : la recherche site: dans Google, l’inspection d’URL dans Search Console, les blocages techniques à vérifier, et les liens qui mènent Google jusqu’à vos pages."
 pubDate: 2026-10-20
-updatedDate: 2026-11-12
+updatedDate: 2026-11-23
 author: "William De Azevedo"
 draft: false
 tags: ["SEO", "indexation", "Search Console", "tpe"]
@@ -115,14 +115,14 @@ Mon propre site, williamdeazevedo.fr, a ce problème. Voici l’état relevé da
 
 **La cause probable.** La page qui liste mes articles, `/articles/`, n’avait pas été explorée depuis le 26 septembre. Or, en dehors du sitemap, c’est par elle et par les liens entre articles que Google pouvait découvrir les nouveaux. La page d’accueil, elle, avait été explorée le jour même, mais elle ne contenait aucun lien vers un article. Autrement dit : Google passait bien, mais il ne descendait pas jusqu’aux articles. Exactement le cas des sites « peu reliés » décrit plus haut.
 
-**Ce que je prévois de corriger.** Au moment où j’écris, ces corrections ne sont pas encore en ligne :
+**Ce que je prévois de corriger.** Au moment du relevé, ces corrections n’étaient pas encore en ligne :
 
 - un bloc « Derniers articles » sur la page d’accueil, pour que cette page, que Google explore souvent, mène directement aux articles ;
 - davantage de liens depuis mes pages de services vers les articles qui en reçoivent peu ;
 - des demandes d’indexation dans Search Console pour une dizaine d’adresses prioritaires, dont la liste des articles ;
 - des pages de réalisations plus complètes, avant d’en demander l’indexation.
 
-Je ne peux donc pas encore vous dire combien de pages ces corrections feront indexer, ni en combien de temps. La leçon est déjà claire : un site techniquement propre peut rester à moitié invisible si ses nouvelles pages ne sont reliées à rien que Google visite souvent.
+Un bloc d’articles récents sur l’accueil et un bloc « À lire aussi » en bas d’article ont depuis été mis en ligne. Sans nouveau relevé complet dans Search Console, je ne peux pas encore vous dire combien de pages ces corrections feront indexer, ni en combien de temps. La leçon est déjà claire : un site techniquement propre peut rester à moitié invisible si ses nouvelles pages ne sont reliées à rien que Google visite souvent.
 
 ## Combien de temps attendre, et quand demander de l’aide
 
@@ -175,7 +175,7 @@ Non. Référencer son site sur Google ne coûte rien : Google n’accepte aucun 
 
 ### Mon site a disparu de Google du jour au lendemain : que faire ?
 
-Ouvrez d’abord le rapport « Actions manuelles » de Search Console. S’il signale une action, un examinateur de Google a jugé que des pages enfreignent ses règles contre le spam, et le site ne s’affiche plus, en tout ou en partie. Corrigez chaque problème listé, puis demandez un réexamen, qui prend souvent plusieurs jours, voire plusieurs semaines. Sans action manuelle, inspectez la page d’accueil : une balise `noindex` ou un robots.txt modifié lors d’une mise à jour peut suffire à tout faire disparaître.
+Ouvrez d’abord le rapport « Actions manuelles » de Search Console. S’il signale une action, un examinateur de Google a jugé que des pages enfreignent ses règles contre le spam, et le site ne s’affiche plus, en tout ou en partie. Corrigez chaque problème listé, puis demandez un réexamen, qui prend souvent plusieurs jours, voire plusieurs semaines. Sans action manuelle, inspectez la page d’accueil : une balise `noindex` ou un `robots.txt` modifié lors d’une mise à jour peut suffire à tout faire disparaître. Enfin, si `site:votredomaine.fr` montre que vos pages restent indexées mais que vous avez chuté sur vos recherches habituelles, vérifiez sur le [tableau de bord d’état de la recherche Google](https://status.search.google.com/) si une mise à jour majeure (_Core Update_) ou anti-spam vient d’avoir lieu : Google conseille d’attendre une semaine complète après la fin du déploiement avant d’analyser l’écart dans Search Console.
 
 ### Un site Wix ou WordPress est-il moins bien référencé ?
 
@@ -194,4 +194,6 @@ Pas en soi. Google indique que, dans la plupart des cas, une plateforme héberg�
 - [Google : présentation du fichier robots.txt](https://developers.google.com/search/docs/crawling-indexing/robots/intro?hl=fr)
 - [Google : choix de l’URL canonique](https://developers.google.com/search/docs/crawling-indexing/canonicalization?hl=fr)
 - [Google : bien débuter en SEO](https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=fr)
+- [Google Search Central : mises à jour principales et votre site](https://developers.google.com/search/docs/appearance/core-updates?hl=fr) : attendre au moins une semaine après la fin d’une Core Update (lu le 23/11/2026)
+- [Google Search Status Dashboard](https://status.search.google.com/) (en anglais) : suivi des Core Updates et Spam Updates (lu le 23/11/2026)
 - [WordPress : réglages de lecture](https://wordpress.org/documentation/article/settings-reading-screen/)
