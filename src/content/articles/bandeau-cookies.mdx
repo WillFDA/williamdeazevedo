@@ -1,0 +1,180 @@
+---
+title: "Bandeau cookies : quand il est obligatoire et comment le rendre conforme"
+seoTitle: "Bandeau cookies : quand est-il obligatoire ?"
+description: "Bandeau cookies obligatoire ou non, règles CNIL (« Tout refuser », 6 mois, retrait), texte exemple et contrôles sans code pour le site d’une TPE."
+image:
+  src: "/articles/bandeau-cookies/cover.webp"
+  alt: "Trois cartes. Le choix : aperçu d’un bandeau cookies présentant mesure d’audience et publicité, avec les boutons Tout refuser, Personnaliser et Tout accepter au même niveau. Les cas : session et sécurité exemptés, audience anonyme sous conditions CNIL, Google Analytics, publicité et vidéos soumis à accord. Les règles : rien avant le clic, refuser en un clic, choix par finalité, conservé six mois, modifiable en bas de page."
+pubDate: 2026-11-25
+author: "William De Azevedo"
+draft: false
+tags: ["RGPD", "conformité", "site vitrine", "tpe"]
+---
+
+**Un bandeau cookies n’est pas obligatoire sur tous les sites : il l’est uniquement si votre site dépose ou lit des traceurs qui ne sont pas strictement nécessaires au service demandé (Google Analytics, suivi publicitaire, boutons de partage social, vidéos ou cartes tierces). Si vous devez afficher une bannière cookies, la CNIL exige qu’aucun traceur soumis à accord ne se charge avant le clic, que « Tout refuser » soit aussi simple que « Tout accepter », et que le visiteur puisse changer d’avis à tout moment.**
+
+Beaucoup de sites de TPE affichent un bandeau inutile alors qu’ils n’ont aucun suivi — ou, à l’inverse, un bandeau purement décoratif qui laisse tourner les scripts en arrière-plan. Ce guide vous donne les règles pratiques, un modèle de texte à adapter et une vérification en cinq minutes, sans toucher au code.
+
+> **À savoir :** cet article est une explication pratique, pas un conseil juridique. Il s’appuie sur les textes et guides de la CNIL cités en fin d’article. Pour un cas particulier ou une activité réglementée, faites valider votre configuration par un juriste.
+
+Je suis développeur web et designer freelance à Achères (78). Je mets régulièrement au propre les bandeaux de consentement sur les sites de TPE, d’artisans et d’indépendants — à commencer par le mien.
+
+## Bandeau cookies : est-il toujours obligatoire ?
+
+Non. La loi n’impose pas un bandeau pour le principe : elle impose un **consentement préalable** avant d’écrire ou de lire certains traceurs sur l’appareil du visiteur. Ce cadre vient de la directive européenne ePrivacy, transposée en France à l’**article 82 de la loi Informatique et Libertés**, et le consentement obéit aux critères du RGPD (libre, spécifique, éclairé et univoque).
+
+Deux situations se présentent pour un site vitrine :
+
+- **Votre site n’utilise que des traceurs techniques strictement nécessaires** (et, éventuellement, une mesure d’audience configurée pour répondre aux conditions strictes d’exemption de la CNIL) : vous n’avez pas besoin de bandeau de consentement. Une information claire dans votre politique de confidentialité suffit.
+- **Votre site charge au moins un outil soumis à accord** (Google Analytics, suivi Google Ads, pixel Meta, vidéo YouTube intégrée, bouton de partage social, module tiers avec traceurs publicitaires) : le bandeau est obligatoire, et ces outils doivent rester bloqués tant que le visiteur n’a pas dit oui.
+
+Un détail que les propriétaires de sites découvrent souvent tard : la CNIL ne parle pas seulement de « cookies », mais de **traceurs**. Le terme couvre aussi le stockage local du navigateur (`localStorage`), les pixels invisibles et le calcul d’empreinte du navigateur (_fingerprinting_). Un outil qui se dit « sans cookie » peut donc tout de même exiger un accord s’il écrit ou lit un identifiant dans le terminal du visiteur hors exemption.
+
+## Quels cookies demandent un accord, et lesquels en sont dispensés
+
+La frontière est simple dans son principe : est dispensé ce qui est **strictement nécessaire** à la fourniture du service expressément demandé par le visiteur ou à la transmission de la communication. Tout ce qui relève du suivi marketing, de la publicité ou de l’analyse non exemptée demande un accord préalable.
+
+| Catégorie | Exemples concrets sur un site de TPE | Accord préalable requis ? |
+| --- | --- | --- |
+| Fonctionnement et sécurité | Maintien de session connecté, panier d’achat, choix de langue, répartition de charge, protection d’une authentification | Non (exempté) |
+| Mémorisation du choix cookies | Traceur qui enregistre si le visiteur a accepté ou refusé le bandeau | Non (exempté) |
+| Mesure d’audience strictement encadrée | Statistiques anonymes pour le compte exclusif de l’éditeur, sans recoupement ni suivi entre sites (traceur 13 mois max, données 25 mois max) | Non, **uniquement** si tous les critères CNIL sont remplis |
+| Mesure d’audience standard | Google Analytics ou outil qui réutilise les données ou transfère des identifiants à des tiers | **Oui** |
+| Suivi publicitaire | Google Ads, pixel Meta, LinkedIn Insight Tag, publicité ciblée ou mesure publicitaire | **Oui** |
+| Contenus et modules tiers | Boutons de partage social, lecteur YouTube standard, carte intégrée ou [widget d’avis Google](/articles/widget-avis-google/) déposant des traceurs | **Oui** (sauf chargement déclenché par un clic explicite ou alternative sans traceur) |
+
+Sur la **mesure d’audience exemptée**, la CNIL appelle à la prudence : un outil n’est jamais « certifié CNIL » par défaut. L’exemption dépend de sa configuration réelle (aucun recoupement avec d’autres traitements, pas de suivi d’un site à l’autre, durée de vie du traceur limitée à 13 mois sans prolongation automatique, conservation des données limitée à 25 mois et information des visiteurs). La CNIL met d’ailleurs à disposition un outil d’auto-évaluation pour vérifier ces critères. En cas de doute sur la configuration, il reste plus prudent de placer la mesure d’audience derrière le bandeau.
+
+## Les six règles CNIL pour un bandeau cookies conforme
+
+Si votre site a besoin d’une bannière cookies, six exigences ressortent des lignes directrices et de la recommandation de la CNIL.
+
+### 1. Aucun traceur soumis à consentement avant le choix
+
+Tant que le visiteur n’a pas cliqué sur un bouton d’accord, **aucun script soumis à consentement ne doit s’exécuter**. C’est le défaut numéro un des bandeaux installés à la va-vite : la fenêtre s’affiche en bas d’écran, mais Google Analytics et les balises publicitaires sont déjà chargés depuis la première seconde.
+
+### 2. « Tout refuser » aussi simple que « Tout accepter »
+
+Le visiteur doit pouvoir refuser aussi facilement qu’il accepte, dès le premier écran du bandeau. La CNIL recommande de placer deux boutons au même niveau et dans un format comparable — par exemple **« Tout accepter »** et **« Tout refuser »** — sans design trompeur (pas de bouton d’accord très contrasté face à un refus pâle ou minuscule).
+
+Le silence ne vaut jamais accord : fermer le bandeau sans choisir ou continuer à parcourir la page doit être traité comme un refus.
+
+### 3. Un choix indépendant par finalité
+
+Le visiteur doit pouvoir accepter une catégorie et en refuser une autre, par exemple autoriser la mesure d’audience mais refuser le suivi publicitaire. Les boutons globaux « Tout accepter » et « Tout refuser » sont possibles uniquement si l’ensemble des finalités est présenté avant le choix. Dans le panneau de réglage, les cases ou interrupteurs doivent être **désactivés par défaut**.
+
+### 4. Une information claire en deux niveaux
+
+Au premier niveau (le bandeau lui-même), décrivez brièvement à quoi servent les traceurs en français courant, sans jargon juridique. Donnez accès, directement ou par un lien « En savoir plus », à la description détaillée des finalités et à la **liste à jour des responsables de traitement** qui reçoivent les données.
+
+### 5. Un choix conservé pendant une durée raisonnable
+
+Une fois que le visiteur a accepté ou refusé, le site doit enregistrer sa décision pour ne pas lui réafficher le bandeau à chaque page ni à chaque visite. La CNIL indique qu’une durée de **six mois**, aussi bien pour l’accord que pour le refus, est en général appropriée.
+
+### 6. Un retrait possible à tout moment
+
+Retirer son accord doit être aussi simple que de le donner. La solution la plus lisible est un lien permanent en pied de page — par exemple **« Gérer les cookies »** — qui rouvre le bandeau à tout moment.
+
+Sur ce site (`williamdeazevedo.fr`), le bandeau propose « Tout refuser », « Réglages des cookies » et « Tout accepter » au premier niveau, avec deux catégories séparées (mesure d’audience et suivi publicitaire). Google Analytics et Google Ads ne sont chargés qu’après accord pour leur catégorie, le choix est gardé six mois, et le lien « Gérer les cookies » en pied de page permet de tout modifier ou retirer — ce qui efface les traceurs concernés et recharge la page.
+
+## Exemple de texte de bandeau cookies (à adapter)
+
+Voici une formulation courte et directe pour un site vitrine qui utilise un outil de mesure d’audience et un suivi de campagnes publicitaires :
+
+```text
+Gestion des cookies
+
+Ce site utilise des traceurs essentiels à son fonctionnement. Avec votre accord, nous utilisons aussi des outils de mesure d’audience (pour connaître les pages consultées) et de suivi publicitaire (pour mesurer les contacts issus de nos annonces). Vous pouvez tout accepter, tout refuser ou choisir par catégorie, et modifier votre choix à tout moment depuis le pied de page.
+
+[Tout refuser]  [Personnaliser]  [Tout accepter]
+En savoir plus sur notre gestion des cookies et nos partenaires
+```
+
+Adaptez chaque mot à la réalité de votre site : si vous n’avez pas de publicité, retirez la mention du suivi publicitaire ; si vous intégrez des vidéos YouTube ou une carte tierce, ajoutez la finalité « Contenus embarqués ». Reliez la dernière ligne à la section cookies de vos [mentions légales](/articles/mentions-legales-site-internet-professionnel/) ou à votre politique de confidentialité.
+
+## Les erreurs les plus fréquentes sur un site de TPE
+
+Sur les sites de petites entreprises que j’audite, les mêmes écarts reviennent presque systématiquement :
+
+| Erreur fréquente | Pourquoi elle pose problème | Ce qu’il faut faire à la place |
+| --- | --- | --- |
+| Bandeau purement décoratif | Les scripts Google ou Meta se déclenchent dès l’ouverture de la page, avant tout clic | Brancher réellement le déclenchement des scripts au choix du visiteur |
+| « En poursuivant votre navigation, vous acceptez… » | La CNIL précise que poursuivre la navigation ne vaut plus accord, mais refus | Remplacer par un acte positif clair avec boutons explicites |
+| Refus caché derrière « Paramétrer » | Refuser demande plus d’étapes qu’accepter, ce qui rompt la symétrie exigée | Afficher « Tout refuser » au premier écran, au même niveau que « Tout accepter » |
+| Refus oublié à la visite suivante | Le bandeau revient chaque jour pour pousser le visiteur à céder | Enregistrer le refus pour la même durée que l’accord (six mois recommandés) |
+| Contenus embarqués oubliés | Une vidéo YouTube, une carte Google Maps ou un reCAPTCHA peut déposer des traceurs hors du bandeau | Bloquer ces chargements avant accord, ou remplacer par un aperçu activé au clic |
+| Extension installée sans réglage | Sur WordPress ou Wix, installer un module ne bloque pas automatiquement les scripts ajoutés ailleurs | Faire l’inventaire des outils actifs et tester le site après installation |
+
+Si votre site tourne sous WordPress ou un éditeur en ligne, gardez en tête que chaque nouvelle extension (chat en direct, prise de rendez-vous, statistiques, carte) peut ajouter ses propres traceurs : voyez le comparatif [Wix, WordPress ou sur mesure](/articles/wix-ou-wordpress/) pour mesurer le poids de ces modules dans le temps.
+
+## Vérifier votre bandeau cookies en cinq minutes, sans toucher au code
+
+Vous pouvez déjà détecter la plupart des défauts depuis votre téléphone ou votre ordinateur, sans outil technique :
+
+- [ ] **Ouvrez votre site en navigation privée** : le bandeau s’affiche-t-il proprement sur mobile sans cacher toute la page ni bloquer les boutons ?
+- [ ] **Comparez les boutons du premier écran** : voyez-vous « Tout refuser » aussi clairement que « Tout accepter », sans devoir cliquer d’abord sur « Paramétrer » ?
+- [ ] **Ouvrez le réglage par catégorie** : les interrupteurs des traceurs non essentiels sont-ils bien désactivés par défaut ?
+- [ ] **Cliquez sur « Tout refuser », puis naviguez sur deux autres pages et rechargez** : le bandeau reste-t-il fermé (preuve que le refus est bien mémorisé) ?
+- [ ] **Regardez le pied de page** : un lien « Gérer les cookies » (ou équivalent) est-il visible sur toutes les pages et rouvre-t-il vraiment le choix ?
+- [ ] **Repérez les blocs externes** : avez-vous une carte, une vidéo, un chat ou un [formulaire avec anti-spam](/articles/rgpd-formulaire-de-contact/) qui s’affiche déjà alors que vous venez de tout refuser ?
+
+Ce contrôle visuel repère les erreurs d’interface. Pour le dernier point — vérifier qu’aucun traceur ne part sur le réseau avant votre clic — demandez un contrôle technique à votre prestataire (ou vérifiez avec lui dans les outils du navigateur).
+
+## Exemple fictif : une ostéopathe met son site vitrine au clair
+
+Voici un cas **fictif**, imaginé pour illustrer la méthode : aucune praticienne réelle n’est visée. Claire, ostéopathe installée à Poissy, a un site vitrine de cinq pages créé il y a quatre ans.
+
+- **Avant :** un vieux bandeau en bas d’écran affiche « En poursuivant votre navigation, vous acceptez les cookies » avec un seul bouton « OK ». Google Analytics se charge dès l’arrivée sur le site, et la page Contact embarque une carte Google Maps interactive. Aucun lien en pied de page ne permet de modifier son choix.
+- **Le tri :** Claire regarde ce qui lui sert vraiment. Elle ne fait pas de publicité en ligne et n’ouvre presque jamais Google Analytics. Sur la page Contact, un plan statique avec un lien « Ouvrir l’itinéraire » suffit à ses patients.
+- **Après :** elle retire Google Analytics et remplace la carte interactive par une image légère reliée à l’itinéraire. Son site ne dépose plus que des cookies techniques nécessaires à son fonctionnement : elle peut supprimer le bandeau devenu inutile, et sa page de confidentialité explique simplement qu’aucun traceur publicitaire ni d’audience n’est déposé.
+
+La meilleure façon de simplifier un bandeau cookies est souvent de **retirer les traceurs dont vous ne vous servez pas**.
+
+## Que demander à votre prestataire web
+
+Avant une mise en ligne ou une refonte, posez cinq questions simples à la personne qui gère votre site :
+
+- Quels outils de mesure, de publicité ou de contenus tiers sont réellement installés sur le site ?
+- Lesquels sont exemptés de consentement, et lesquels sont bloqués tant que le visiteur n’a pas cliqué sur « Accepter » ?
+- Pouvez-vous me montrer que, dans une fenêtre privée et avant tout clic, aucun script Google, Meta ou tiers soumis à accord ne se déclenche ?
+- Le refus est-il bien conservé (six mois recommandés) et un lien en pied de page permet-il de modifier ce choix à tout moment ?
+- Où figure la liste à jour des outils et des responsables de traitement reliée au bandeau ?
+
+Un prestataire sérieux sait répondre précisément à ces cinq points, sans vous renvoyer vers une extension générique laissée avec ses réglages d’usine.
+
+## Un doute sur les traceurs de votre site ? Parlons-en
+
+Un site propre, rapide et respectueux des visiteurs demande peu d’outils — seulement ceux dont vous avez vraiment besoin, bien réglés. Je conçois et je refais des sites pour des TPE, des artisans et des indépendants à Achères, Poissy, Saint-Germain-en-Laye, Conflans-Sainte-Honorine et dans le reste des Yvelines, ainsi qu’à distance.
+
+Si vous créez un nouveau site, la gestion des traceurs se prévoit dès le départ dans une [création de site internet professionnel](/creation-site-internet-professionnel/) ou une [création de site vitrine](/creation-site-vitrine/). Si votre site existe déjà et accumule des scripts mal branchés, nous pouvons faire le point lors d’un [audit de site](/articles/audit-seo/) ou d’une [refonte de site internet](/refonte-site-internet/). Envoyez-moi simplement l’adresse de votre site pour en discuter.
+
+## Questions fréquentes
+
+### Une bannière cookies payante (CMP) est-elle obligatoire pour une TPE ?
+
+Non. La loi n’impose aucun logiciel particulier ni aucun abonnement mensuel. Une plateforme de gestion du consentement (CMP) est surtout utile quand un site travaille avec des dizaines de partenaires publicitaires à mettre à jour en permanence. Pour un site vitrine de TPE qui n’a qu’un ou deux outils (par exemple une mesure d’audience et un suivi Google Ads), un bandeau léger développé proprement et relié directement aux scripts suffit, à condition de respecter les règles de la CNIL et de pouvoir en montrer le fonctionnement.
+
+### Comment prouver à la CNIL que le consentement a bien été recueilli ?
+
+La CNIL rappelle que chaque responsable de traitement doit pouvoir démontrer que son mécanisme de consentement fonctionne correctement. Elle cite plusieurs preuves possibles, non exclusives : conserver des captures d’écran horodatées du bandeau sur ordinateur et sur mobile pour chaque version du site, archiver de façon horodatée les réglages successifs de votre outil de gestion du consentement, réaliser des audits réguliers, ou conserver une empreinte horodatée (ou mise sous séquestre) du code qui recueille l’accord.
+
+### Peut-on bloquer l’accès au site si le visiteur refuse les cookies (« cookie wall ») ?
+
+Pas librement. Le RGPD exige que le consentement reste libre, et la CNIL précise que les « cookie walls » (bloquer l’accès à un contenu tant que le visiteur n’accepte pas les traceurs) doivent être évalués au cas par cas, en vérifiant notamment s’il existe une alternative réelle et équitable sans suivi. Pour un site vitrine de TPE ou d’artisan dont le but est de présenter vos services et de recevoir des demandes de devis, bloquer un visiteur qui refuse les cookies fait perdre des clients sans aucun bénéfice.
+
+### Faut-il redemander le consentement si j’ajoute un nouvel outil sur mon site ?
+
+Oui, dès que ce nouvel outil ajoute une finalité soumise à consentement qui n’existait pas encore. Par exemple, si vos visiteurs avaient uniquement accepté la mesure d’audience et que vous installez un suivi publicitaire quelques mois plus tard, leur ancien accord ne couvre pas ce nouveau suivi. La CNIL demande alors de recueillir leur choix pour cette nouvelle finalité et de mettre à jour la liste des responsables de traitement accessible depuis le bandeau.
+
+### Quelles sanctions en cas de bandeau cookies non conforme ?
+
+La CNIL ne fonctionne pas avec une amende automatique à tarif unique : elle peut d’abord adresser un rappel ou une mise en demeure de corriger le site dans un délai donné. Pour les dossiers simples traités en procédure simplifiée, l’amende est plafonnée à 20 000 € pour une entreprise réalisant moins de 50 millions d’euros de chiffre d’affaires, sans publication de la décision. En procédure ordinaire, pour les manquements graves ou répétés, le plafond peut atteindre 20 millions d’euros ou 4 % du chiffre d’affaires annuel mondial.
+
+## Sources officielles
+
+- [CNIL : Cookies et traceurs, que dit la loi ?](https://www.cnil.fr/fr/cookies-et-autres-traceurs/que-dit-la-loi) : article 82 de la loi Informatique et Libertés, directive ePrivacy, traceurs exemptés ou soumis à accord, preuve du consentement, lu le 25/11/2026
+- [CNIL : Cookies et traceurs, comment mettre mon site web en conformité ?](https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/comment-mettre-mon-site-web-en-conformite) : définition des traceurs, symétrie « Tout accepter » / « Tout refuser », choix par finalité, conservation 6 mois, retrait à tout moment, lu le 25/11/2026
+- [CNIL : Questions-réponses sur les lignes directrices et la recommandation cookies](https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/FAQ) : fin du consentement par poursuite de navigation, précisions pratiques sur le recueil et le refus, lu le 25/11/2026
+- [CNIL : Cookies, solutions pour les outils de mesure d’audience](https://www.cnil.fr/fr/cookies-solutions-pour-les-outils-de-mesure-daudience) : conditions d’exemption (13 mois / 25 mois), outil d’auto-évaluation et absence de certification CNIL, lu le 25/11/2026
+- [CNIL : Cookie walls, premiers critères d’évaluation](https://www.cnil.fr/fr/cookie-walls-la-cnil-publie-des-premiers-criteres-devaluation) : évaluation au cas par cas de la liberté du consentement, lu le 25/11/2026
+- [CNIL : La procédure de sanction simplifiée](https://www.cnil.fr/fr/la-procedure-de-sanction-simplifiee) : plafond de 20 000 € pour les entreprises de moins de 50 millions d’euros de chiffre d’affaires, lu le 25/11/2026

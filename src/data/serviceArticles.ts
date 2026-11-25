@@ -97,6 +97,7 @@ export const articleServices: Record<string, string[]> = {
   ],
   "arborescence-site-web": ["creation-site-vitrine"],
   "audit-seo": ["creation-site-vitrine"],
+  "bandeau-cookies": ["creation-site-internet-professionnel"],
   "cahier-des-charges-site-internet": ["creation-site-vitrine"],
   "changer-prestataire-web": ["refonte-site-internet"],
   "charte-graphique-entreprise": ["creation-site-internet-professionnel"],
