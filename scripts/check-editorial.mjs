@@ -39,6 +39,7 @@ const slugs = [
   "site-one-page",
   "charte-graphique-entreprise",
   "redirection-301",
+  "bandeau-cookies",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
