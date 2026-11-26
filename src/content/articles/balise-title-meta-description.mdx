@@ -1,0 +1,189 @@
+---
+title: "Meta description et balise title : comment bien les rédiger"
+seoTitle: "Meta description et title : exemples"
+description: "Meta description et balise title : la bonne longueur, 3 exemples avant/après pour artisans et TPE, et une vérification gratuite en 5 minutes."
+image:
+  src: "/articles/balise-title-meta-description/cover.webp"
+  alt: "Trois cartes. Le résultat : aperçu d’un résultat Google pour un plombier à Poissy, avec le title cliquable en bleu (compréhension du sujet et clic) et la meta description en gris (clic seulement). Les longueurs : title d’environ 55 caractères, description d’environ 150 caractères, aucune limite officielle, coupure selon l’écran. Les règles : un title différent par page, la recherche en premier, une promesse concrète, pas de liste de mots-clés, title et H1 cohérents."
+pubDate: 2026-11-26
+author: "William De Azevedo"
+draft: false
+tags: ["SEO", "site vitrine", "tpe"]
+---
+
+**La balise title est le titre cliquable de votre page dans Google ; la meta description est un court résumé que Google peut afficher juste en dessous, s’il le juge plus fidèle que le texte de la page. Google analyse le title pour comprendre le sujet de la page, et c’est souvent sur lui que l’internaute décide de cliquer. La meta description, elle, ne compte pas dans le classement, mais elle peut convaincre de cliquer. Pour une TPE, il suffit d’un title propre à chaque page, d’environ 55 caractères, qui commence par ce que recherche le client, et d’une description d’environ 150 caractères qui promet un bénéfice concret.**
+
+Ce sont les deux lignes que votre futur client lit avant même d’entrer sur votre site. Elles se modifient en quelques minutes, sans refonte et sans budget, et c’est pourtant l’un des défauts que je rencontre le plus souvent en auditant des sites de TPE : titles identiques sur toutes les pages, « Accueil » tout seul, descriptions vides ou recopiées d’une page à l’autre.
+
+Je suis développeur web et designer freelance à Achères (78). J’écris les titles et les descriptions de chaque page des sites que je livre, et je les retravaille lors des refontes. Ce guide reprend la méthode que j’applique, appuyée sur la documentation officielle de Google citée en fin d’article.
+
+## Balise title et meta description : à quoi servent-elles ?
+
+Les deux balises se placent dans l’en-tête du code de la page (la partie `<head>`). La meta description n’est jamais visible sur la page elle-même ; le title, lui, apparaît aussi dans l’onglet du navigateur. Elles ressemblent à ceci :
+
+```html
+<title>Plombier à Poissy, dépannage sous 24 h | Martin Plomberie</title>
+<meta
+  name="description"
+  content="Fuite, chauffe-eau, débouchage : plombier à Poissy et dans les alentours, intervention sous 24 h et devis gratuit par téléphone."
+/>
+```
+
+Leur rôle n’est pas le même :
+
+|  | Balise title | Meta description |
+| --- | --- | --- |
+| Où on la voit | Titre cliquable bleu dans Google, onglet du navigateur, favoris | Texte gris sous le titre dans Google, quand Google la retient |
+| Effet sur le classement | Oui, indirectement : Google analyse le title pour comprendre le sujet de la page | Non : Google indique ne pas l’utiliser pour classer les pages |
+| Effet sur le clic | Fort : c’est souvent l’information principale pour décider de cliquer | Réel : elle peut donner envie de cliquer, ou pas |
+| Reprise par Google | Dans la grande majorité des cas, parfois réécrite | Seulement si elle décrit mieux la page que son contenu |
+| Longueur limite | Aucune, mais coupure à l’affichage | Aucune, mais coupure à l’affichage |
+
+Une meta description travaillée ne vous fera donc pas gagner de place dans Google. Elle peut en revanche faire gagner des clics à place égale, et c’est le clic qui amène le client.
+
+## Quelle longueur pour un title et une meta description ?
+
+Google n’impose aucune limite de caractères. Sa documentation précise que le titre et l’extrait sont **tronqués si nécessaire, généralement selon la largeur de l’écran** de l’appareil. La coupure se fait donc en pixels, pas en caractères : une ligne pleine de « m » et de « W » se coupe plus tôt qu’une ligne de « i » et de « l ».
+
+En pratique, les repères suivants évitent la plupart des coupures :
+
+| Élément | Repère pratique | Pourquoi |
+| --- | --- | --- |
+| Balise title | 50 à 60 caractères, espaces compris | Au-delà, la fin risque d’être remplacée par « … » |
+| Meta description | 120 à 155 caractères, l’essentiel dans les 120 premiers | Assez pour une information utile ; sur mobile, la fin peut être coupée plus tôt |
+| Début du title | Les premiers mots | C’est ce qui reste lisible si la fin est coupée, et dans un onglet étroit |
+
+Ces chiffres sont des conventions issues de l’observation des résultats, pas une règle de Google. Ne sacrifiez pas une formulation claire pour gagner trois caractères : un title de 62 caractères parfaitement compréhensible vaut mieux qu’un title de 55 caractères illisible.
+
+## Comment rédiger une balise title efficace
+
+Google résume ses recommandations en une phrase : un title doit être **propre à la page, clair et concis, et décrire précisément son contenu**. Voici comment je le traduis pour un site de TPE.
+
+### 1. Un title différent pour chaque page
+
+Chaque page répond à une recherche différente. Si votre page d’accueil, votre page de services et votre page de contact s’appellent toutes « Martin Plomberie », l’internaute ne peut pas distinguer vos pages dans les résultats, et Google risque de remplacer ces titles par un autre texte : il cite les titles répétés d’une page à l’autre parmi les raisons de les réécrire. Si votre site tient sur une seule page, vous n’avez qu’un title : c’est l’une des limites d’un [site one page](/articles/site-one-page/).
+
+### 2. La recherche de votre client en premier
+
+Commencez par ce que tape votre client, pas par votre nom : « Plombier à Poissy » plutôt que « Martin Plomberie – Bienvenue sur notre site ». Google accepte le nom de l’entreprise au début ou à la fin, séparé par un tiret, une barre verticale ou deux-points ; je le place à la fin pour garder le début à la recherche.
+
+Google affiche d’ailleurs souvent lui-même le nom du site au-dessus du résultat : si le title devient trop long, c’est le nom qu’il faut raccourcir en premier. Son guide de démarrage cite aussi l’adresse de l’entreprise parmi les informations utiles d’un title. Si une ville compte vraiment pour votre clientèle, intégrez-la dans le title de la page concernée, comme je l’explique dans le guide du [SEO local](/articles/seo-local/).
+
+### 3. Une promesse concrète plutôt qu’un slogan
+
+« Dépannage sous 24 h », « devis gratuit », « depuis 1998 », « prix et délais » : une précision vérifiable donne une raison de cliquer sur votre résultat plutôt que sur celui du voisin. Évitez les promesses que la page ne tient pas : Google peut remplacer un title qui ne reflète pas le contenu.
+
+### 4. Pas de liste de mots-clés
+
+« Plombier Poissy, plombier pas cher, plomberie Poissy, chauffagiste » ne trompe plus personne. Google rappelle que l’accumulation de mots-clés est pénible pour les lecteurs et contraire à ses règles contre le spam. Une formulation naturelle suffit : Google comprend les synonymes et les variantes.
+
+### 5. Un title et un titre visible qui racontent la même chose
+
+Le title (dans le code) et le grand titre affiché en haut de la page (le H1) n’ont pas besoin d’être identiques : le title est souvent plus court et se termine par le nom de l’entreprise, le H1 peut être plus explicatif. Mais ils doivent traiter du même sujet. Un title qui ne reflète pas le contenu, ou une page avec plusieurs grands titres de même taille sans titre principal clair, font partie des cas où Google préfère afficher un autre texte.
+
+## Comment rédiger une meta description qui donne envie de cliquer
+
+La meta description fonctionne comme une petite annonce. Google la décrit comme un résumé court et pertinent, une sorte d’argumentaire pour montrer que la page correspond à la recherche.
+
+### Une structure simple en quatre points
+
+Pour un site vitrine, je suis cette structure :
+
+1. **Ce que propose la page**, avec les mots de la recherche : « Fuite, chauffe-eau, débouchage ».
+2. **Le lieu ou le public**, quand c’est utile : « plombier à Poissy et dans les alentours ».
+3. **La preuve ou le bénéfice** qui vous distingue : « intervention sous 24 h », « ouvert le samedi », « 4,9/5 sur 120 avis » (seulement si c’est vrai et à jour).
+4. **L’action attendue** : « devis gratuit par téléphone », « réservation en ligne », « envoyez vos photos ».
+
+Elle n’a pas besoin d’être une phrase complète : Google précise qu’une meta description peut regrouper des informations clés bien séparées (prestations, zone, horaires, prix).
+
+### Faut-il une description sur chaque page ?
+
+L’idéal, oui, avec une description propre à chaque page. Si vous manquez de temps, Google conseille de prioriser : rédigez au moins celle des pages principales, comme la page d’accueil et les pages les plus visitées. Sur un site vitrine, ce sont en général l’accueil, les pages de prestations et la page contact.
+
+### Les erreurs à éviter
+
+- **La même description sur toutes les pages.** Selon Google, des descriptions identiques ou similaires sont peu utiles quand plusieurs pages du site s’affichent dans les résultats. À mon avis, mieux vaut laisser une page secondaire sans description qu’y recopier celle de l’accueil : Google construira l’extrait à partir du texte de la page.
+- **Une suite de mots-clés répétés.** Elle n’apprend rien à l’internaute, et Google indique qu’elle a peu de chances d’être affichée.
+- **Une description qui ne correspond plus à la page.** Un tarif modifié, une offre terminée ou un service arrêté qui reste dans la description crée une déception au clic, et Google risque de l’ignorer.
+
+## Exemples avant / après pour un site de TPE
+
+Les trois exemples ci-dessous sont **fictifs**, mais ils reprennent des défauts que je vois réellement sur des sites d’artisans et d’indépendants des Yvelines.
+
+| Page | Avant | Après |
+| --- | --- | --- |
+| Accueil d’un plombier | Title : « Accueil » | Title : « Plombier à Poissy, dépannage sous 24 h \| Martin Plomberie » |
+| Accueil d’un plombier | Description : vide | Description : « Fuite, chauffe-eau, débouchage : plombier à Poissy et dans les alentours, intervention sous 24 h et devis gratuit par téléphone. » |
+| Prestations d’une esthéticienne | Title : « Nos prestations – Institut Belle Peau – Soins – Beauté – Épilation » | Title : « Soins du visage et épilation à Achères \| Institut Belle Peau » |
+| Prestations d’une esthéticienne | Description : copie de celle de l’accueil | Description : « Soins du visage, épilation et beauté des mains à Achères. Tarifs affichés en ligne, réservation en 2 clics, ouvert le samedi. » |
+| Page contact d’un menuisier | Title : « Contact » | Title : « Contacter un menuisier à Saint-Germain-en-Laye \| Bois & Fils » |
+| Page contact d’un menuisier | Description : « Contactez-nous. » | Description : « Un projet de cuisine, d’escalier ou de placard sur mesure ? Appelez l’atelier ou envoyez vos photos : réponse et rendez-vous sous 48 h. » |
+
+Sur mon propre site, j’applique la même règle aux articles. Ce guide, par exemple, a pour title « Meta description et title : exemples - William De Azevedo », soit 57 caractères : la recherche d’abord, le nom ensuite, ajouté automatiquement par le site.
+
+## Pourquoi Google réécrit votre title ou votre description
+
+Vous avez soigné vos balises, et Google affiche autre chose ? C’est normal et documenté. Pour le **title**, Google indique utiliser la balise title dans la grande majorité des cas (environ 87 % selon son annonce de 2021). Sinon, il puise dans d’autres sources : le titre principal visible, les autres intertitres, la balise `og:title`, le texte des liens qui pointent vers la page, etc. Il le fait le plus souvent quand le title présente l’un de ces défauts :
+
+- title à moitié vide (« | Martin Plomberie ») ;
+- title obsolète, par exemple avec une année dépassée ;
+- title qui ne décrit pas le contenu réel de la page ;
+- titles quasi identiques sur plusieurs pages ;
+- plusieurs grands titres de même taille sur la page, sans titre principal clair ;
+- langue du title différente de celle de la page, par exemple un « Home » laissé par défaut par un thème sur un site en français.
+
+Pour la **description**, Google construit l’extrait d’abord à partir du contenu de la page. Il ne reprend la meta description que s’il estime qu’elle décrit mieux la page pour la recherche tapée. Le même résultat peut donc afficher votre description pour une recherche et un passage du texte pour une autre. Ce n’est pas une sanction.
+
+Si votre title présente l’un de ces défauts, corrigez-le, puis patientez : Google doit explorer la page à nouveau, ce qui prend selon lui de quelques jours à quelques semaines. Vous pouvez demander une nouvelle exploration depuis la Search Console. Si aucun défaut ne s’applique, Google suggère de vous demander si le titre qu’il affiche n’est pas mieux adapté à la recherche. Google précise aussi qu’il ne modifie jamais un titre à la main pour un site particulier : inutile de le lui demander.
+
+## Vérifier vos balises en cinq minutes, sans outil payant
+
+- [ ] **Tapez `site:votresite.fr` dans Google** : lisez la liste des résultats. Repérez les titles identiques, coupés trop tôt ou réduits à « Accueil ». Cette commande ne liste pas forcément toutes vos pages, et l’extrait affiché peut différer de celui d’une vraie recherche : elle sert de premier aperçu.
+- [ ] **Affichez le code de la page** (Ctrl + U sur Windows, Cmd + Option + U sur Mac) et cherchez `<title>` puis `name="description"` : chaque page a-t-elle les siens ?
+- [ ] **Ouvrez la Search Console**, rapport Performances, onglet Pages : une page qui a beaucoup d’impressions mais très peu de clics, alors qu’elle est déjà en première page (position moyenne inférieure à 10), mérite souvent un title et une description plus engageants.
+- [ ] **Comptez les caractères** de vos titles principaux : au-delà de 60 environ, vérifiez que le début reste compréhensible seul.
+- [ ] **Relisez chaque description** comme un client pressé : donne-t-elle une raison précise de cliquer ?
+
+Si votre site n’apparaît pas du tout dans la commande `site:`, le problème est ailleurs : commencez par le guide [site pas sur Google](/articles/site-pas-sur-google/). Pour une vérification plus large (indexation, vitesse, contenus, liens), suivez la méthode de l’[audit SEO d’un site vitrine](/articles/audit-seo/).
+
+## Où modifier le title et la meta description de votre site
+
+Tout dépend de l’outil qui fait tourner votre site :
+
+- **WordPress** : le thème remplit souvent le title automatiquement à partir du titre de la page. Les extensions SEO (Yoast SEO, Rank Math…) ajoutent sous l’éditeur un bloc pour saisir un title et une description propres à chaque page, avec un aperçu du résultat et une jauge de longueur.
+- **Wix, Squarespace, Shopify et les autres créateurs de sites** : chaque page a ses propres réglages SEO, où l’on saisit le titre et la description affichés dans les résultats de recherche. Si vous hésitez encore entre ces outils, mon comparatif [Wix ou WordPress](/articles/wix-ou-wordpress/) peut aider.
+- **Site sur mesure** : le title et la description sont définis dans le code ou dans les fichiers de contenu de chaque page. C’est le cas sur mon site, où chaque article a un champ dédié. Demandez à votre prestataire de vous montrer où ils se trouvent, ou de vous envoyer la liste complète pour relecture.
+
+Le nom des champs varie d’un outil à l’autre : « Titre SEO » et « Méta description » dans Yoast SEO, « Titre de la page » et « Méta-description » dans Shopify, « balise title » et « meta description » dans l’aide de Wix.
+
+## Besoin d’un coup de main sur les titles de votre site ?
+
+Réécrire les titles et les descriptions d’un site vitrine est un travail court, à condition de savoir quelles recherches viser pour chaque page. Je le fais pour des TPE, des artisans et des indépendants à Achères, Poissy, Saint-Germain-en-Laye, Conflans-Sainte-Honorine et dans le reste des Yvelines, ainsi qu’à distance.
+
+Si votre site existe déjà, une réécriture suffit souvent : je la fais lors d’un [audit de site](/articles/audit-seo/). Une [refonte de site internet](/refonte-site-internet/) ne se justifie que si la structure même du site ne tient plus. Pour un nouveau site, ces balises sont rédigées page par page dans chaque [création de site vitrine](/creation-site-vitrine/). Envoyez-moi l’adresse de votre site pour un premier avis.
+
+## Questions fréquentes
+
+### Pourquoi l’aperçu sur Facebook ou WhatsApp affiche-t-il un autre titre que Google ?
+
+Les réseaux sociaux et les messageries lisent en priorité d’autres balises, celles du protocole Open Graph : `og:title`, `og:description` et `og:image`. Si elles diffèrent de votre title et de votre meta description, l’aperçu partagé ne ressemble pas au résultat Google. Si elles manquent, chaque plateforme devine elle-même le titre, la description et l’image ; Meta le précise pour Facebook. Sur un site vitrine, le plus simple est de reprendre le title sans le nom du site (Meta le recommande pour `og:title`), la même description, et d’ajouter une image adaptée au partage.
+
+### Mettre des emojis ou des majuscules dans un title, est-ce une bonne idée ?
+
+Mieux vaut s’en passer sur un site professionnel. Un emoji prend de la place sans rien dire de la page, et un title tout en majuscules se lit mal et paraît agressif. Une capitale en début de phrase et sur les noms propres suffit.
+
+### Faut-il optimiser son title et sa meta description pour les réponses des IA ?
+
+Pas spécialement. Google indique qu’aucune exigence supplémentaire ni optimisation spéciale n’est requise pour apparaître dans ses Aperçus IA ou son Mode IA : la page doit simplement être indexée et pouvoir s’afficher dans la recherche avec un extrait. D’après ce que j’observe, les outils d’IA qui citent leurs sources affichent généralement le titre de la page, souvent repris de son title : un title clair rend donc votre page plus reconnaissable quand elle est citée. Mais c’est d’abord le contenu de la page qui la fait citer.
+
+## Sources
+
+- [Google Search Central : Influencer vos liens de titre dans les résultats de recherche](https://developers.google.com/search/docs/appearance/title-link?hl=fr) : absence de limite de longueur et coupure selon la largeur de l’écran, sources utilisées par Google pour le titre, cas de réécriture, séparateurs, délai de nouvelle exploration, lu le 26/11/2026
+- [Google Search Central : Contrôler vos extraits dans les résultats de recherche](https://developers.google.com/search/docs/appearance/snippet?hl=fr) : extrait construit d’abord à partir du contenu, usage de la meta description, descriptions uniques et priorisation des pages principales, format libre, listes de mots-clés, lu le 26/11/2026
+- [Google Search Central : Bien débuter en référencement naturel (SEO)](https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=fr) : titres propres à la page, clairs et concis, adresse de l’entreprise dans le title, accumulation de mots-clés contraire aux règles, lu le 26/11/2026
+- [Google Search Central : Guide détaillé de la recherche Google](https://developers.google.com/search/docs/fundamentals/how-search-works?hl=fr) : l’indexation analyse les éléments `<title>`, lu le 26/11/2026
+- [Google Search Central : Noms de sites dans la recherche Google](https://developers.google.com/search/docs/appearance/site-names?hl=fr) : nom du site affiché séparément du titre de la page, lu le 26/11/2026
+- [Google Search Central : Fonctionnalités d’IA et votre site Web](https://developers.google.com/search/docs/appearance/ai-features?hl=fr) : aucune optimisation spéciale pour les Aperçus IA et le Mode IA, page indexée avec un extrait, lu le 26/11/2026
+- [Meta for Developers : A Guide to Sharing for Webmasters](https://developers.facebook.com/docs/sharing/webmasters/) : sans balises Open Graph, Facebook devine titre, description et image ; `og:title` sans le nom du site, lu le 26/11/2026
+- [Google Search Central Blog : More information on how Google generates titles for web page results (2021)](https://developers.google.com/search/blog/2021/09/more-info-about-titles) : balise title utilisée dans environ 87 % des cas, lu le 26/11/2026
+- [Google Search Central Blog : Google does not use the keywords meta tag in web ranking (2009)](https://developers.google.com/search/blog/2009/09/google-does-not-use-keywords-meta-tag) : la meta description sert parfois d’extrait mais n’est pas utilisée pour le classement, lu le 26/11/2026
