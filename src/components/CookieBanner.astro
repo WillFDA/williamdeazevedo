@@ -272,8 +272,6 @@ const essentialsDescription = "Fonctionnement du site et mémorisation de votre 
             element.focus();
         });
 
-        // Se déclenche aussi au premier chargement ; ré-affiche le bandeau si
-        // le choix a expiré pendant la navigation.
         // Échap ferme le bandeau rouvert depuis le pied de page, sans rien
         // enregistrer. Sans choix enregistré, il ne ferme rien (pas de
         // fermeture sans choix).
@@ -281,9 +279,14 @@ const essentialsDescription = "Fonctionnement du site et mémorisation de votre 
             if (event.key !== "Escape") return;
             const element = banner();
             if (!element || element.hidden || !readConsent()) return;
+            // Bandeau non modal : Échap ne le ferme que si le focus y est (pas
+            // quand il sert à fermer un sous-menu du header, par exemple).
+            if (event.defaultPrevented || !element.contains(document.activeElement)) return;
             close(element);
         });
 
+        // Se déclenche aussi au premier chargement ; ré-affiche le bandeau si
+        // le choix a expiré pendant la navigation.
         document.addEventListener("astro:page-load", () => {
             const element = banner();
             if (element && !readConsent()) element.hidden = false;
