@@ -1,0 +1,79 @@
+---
+import { Image } from "astro:assets";
+import williamPortrait from "@/assets/williamdeazevedo.webp";
+import ArrowRight from "@/components/icons/nucleo/arrow-right-fill.svg";
+
+interface Props {
+    author: string;
+}
+
+const { author } = Astro.props;
+const isWilliam = author === "William De Azevedo";
+---
+
+{
+    isWilliam && (
+        <aside
+            aria-labelledby="article-author-heading"
+            class="mx-auto mt-4 max-w-6xl"
+        >
+            <div class="mx-auto max-w-[42rem] rounded-3xl bg-surface-muted p-6 sm:p-8">
+                <h2
+                    id="article-author-heading"
+                    class="text-xs font-medium uppercase tracking-widest text-gray-600"
+                >
+                    À propos de l’auteur
+                </h2>
+                <div class="mt-4 flex flex-col gap-5 sm:flex-row sm:items-start">
+                    <Image
+                        class="size-16 shrink-0 rounded-2xl object-cover"
+                        src={williamPortrait}
+                        alt=""
+                        width={128}
+                        height={128}
+                        loading="lazy"
+                    />
+                    <div class="min-w-0 flex-1">
+                        <p class="text-lg font-medium leading-tight text-gray-900">
+                            William De Azevedo
+                        </p>
+                        <p class="mt-1 text-sm font-normal text-gray-600">
+                            Développeur front-end freelance{" "}
+                            <span aria-hidden="true">·</span> Achères (78)
+                        </p>
+                        <p class="mt-3 text-sm font-normal leading-relaxed text-gray-600">
+                            Issu de l’infographie et du motion design,
+                            reconverti dans le développement web en 2022,
+                            j’accompagne les indépendants, artisans, TPE et
+                            équipes produit pour rendre leurs sites plus clairs,
+                            rapides, accessibles et crédibles.
+                        </p>
+                        <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-gray-900">
+                            <a
+                                class="inline-flex items-center gap-1.5 underline decoration-gray-300 underline-offset-4 transition-colors hover:text-blue-500 hover:decoration-blue-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                href="/about/"
+                                rel="author"
+                            >
+                                Voir mon parcours
+                                <ArrowRight
+                                    class="size-3.5"
+                                    aria-hidden="true"
+                                />
+                            </a>
+                            <a
+                                class="inline-flex items-center gap-1.5 underline decoration-gray-300 underline-offset-4 transition-colors hover:text-blue-500 hover:decoration-blue-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                href="/realisations/"
+                            >
+                                Voir mes réalisations
+                                <ArrowRight
+                                    class="size-3.5"
+                                    aria-hidden="true"
+                                />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    )
+}

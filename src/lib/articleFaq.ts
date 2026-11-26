@@ -2,6 +2,9 @@
 // scripts/hast-article-faq.mjs marks in an article's rendered HTML, so the
 // article page can render it with FaqSection, outside the reading column.
 
+// Must match FAQ_TITLE in scripts/hast-article-faq.mjs.
+export const FAQ_SECTION_TITLE = "Questions fréquentes";
+
 export type ArticleFaqItem = {
   answerHtml: string;
   questionHtml: string;

@@ -1,33 +1,67 @@
 ---
 import { Image } from "astro:assets";
 import { render } from "astro:content";
+import ArticleAuthorBox from "@/components/articles/ArticleAuthorBox.astro";
 import ArticleBody from "@/components/articles/ArticleBody.astro";
 import ArticleImage from "@/components/articles/ArticleImage.astro";
+import RelatedArticles from "@/components/articles/RelatedArticles.astro";
+import ServiceCallout from "@/components/articles/ServiceCallout.astro";
 import ChevronLeft from "@/components/icons/nucleo/chevron-left-fill.svg";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
 import ReadingProgress from "@/components/ReadingProgress.astro";
 import ArticleTag from "@/components/articles/ArticleTag.astro";
 import williamPortrait from "@/assets/williamdeazevedo.webp";
-import Layout from "@/layout/Layout.astro";
-import { type Article, formatArticleDate, getVisibleArticles } from "@/lib/articles";
+import Layout, { DEFAULT_OG_IMAGE } from "@/layout/Layout.astro";
+import { FAQ_SECTION_TITLE } from "@/lib/articleFaq";
+import {
+    type Article,
+    formatArticleDate,
+    getArticleReadingTimeMinutes,
+    getArticleWordCount,
+    getRelatedArticles,
+    getVisibleArticles,
+} from "@/lib/articles";
 
 export async function getStaticPaths() {
     const articles = await getVisibleArticles();
     return articles.map((article) => ({
         params: { slug: article.id },
-        props: { article },
+        props: {
+            article,
+            relatedArticles: getRelatedArticles(article, articles, 3),
+        },
     }));
 }
 
 interface Props {
     article: Article;
+    relatedArticles: Article[];
 }
 
-const { article } = Astro.props;
+const { article, relatedArticles } = Astro.props;
 const { Content, headings } = await render(article);
 const { author, description, image, pubDate, seoTitle, tags, title, updatedDate } =
     article.data;
-const tocItems = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+
+// Garde les H2 et H3 du corps dans le sommaire, mais exclut les questions H3
+// de la section « Questions fréquentes » (rendues en accordéon plus bas) pour
+// éviter un sommaire interminable sur mobile comme sur ordinateur.
+const tocItems: typeof headings = [];
+let inFaqSection = false;
+for (const heading of headings) {
+    if (heading.depth === 2) {
+        inFaqSection = heading.text.trim() === FAQ_SECTION_TITLE;
+        tocItems.push(heading);
+    } else if (heading.depth === 3 && !inFaqSection) {
+        tocItems.push(heading);
+    }
+}
+
+const wordCount = getArticleWordCount(article.body);
+const readingMinutes = getArticleReadingTimeMinutes(wordCount);
+const showUpdatedDate =
+    updatedDate !== undefined && updatedDate.getTime() > pubDate.getTime();
+const isWilliam = author === "William De Azevedo";
 
 const articleTitleBreak = "2 000 euros";
 const shouldSplitArticleTitle =
@@ -38,10 +72,24 @@ const [articleTitleStart, articleTitleEnd = ""] = shouldSplitArticleTitle
     : [title, ""];
 
 const siteUrl = Astro.site ?? new URL(Astro.url.origin);
-// Même @id que le nœud Person du Layout, pour que Google relie les entités.
+// Même @id et même url (/about/) que le nœud Person du Layout, pour relier
+// proprement les entités sans contradiction.
 const personId = new URL("/#person", siteUrl).href;
+const personUrl = new URL("/about/", siteUrl).href;
+const authorNode = isWilliam
+    ? {
+          "@type": "Person",
+          "@id": personId,
+          name: author,
+          url: personUrl,
+      }
+    : {
+          "@type": "Person",
+          name: author,
+          url: siteUrl.href,
+      };
 const canonicalUrl = new URL(`/articles/${article.id}/`, siteUrl);
-const ogImage = new URL(image?.src ?? "/pictures/william-low.png", siteUrl);
+const ogImage = new URL(image?.src ?? DEFAULT_OG_IMAGE, siteUrl);
 
 const jsonLd = {
     "@context": "https://schema.org",
@@ -54,19 +102,11 @@ const jsonLd = {
     image: ogImage.href,
     url: canonicalUrl.href,
     mainEntityOfPage: canonicalUrl.href,
+    ...(tags[0] && { articleSection: tags[0] }),
+    ...(wordCount > 0 && { wordCount }),
     keywords: tags,
-    author: {
-        "@type": "Person",
-        ...(author === "William De Azevedo" && { "@id": personId }),
-        name: author,
-        url: siteUrl.href,
-    },
-    publisher: {
-        "@type": "Person",
-        ...(author === "William De Azevedo" && { "@id": personId }),
-        name: author,
-        url: siteUrl.href,
-    },
+    author: authorNode,
+    publisher: authorNode,
 };
 
 const breadcrumbJsonLd = {
@@ -123,7 +163,7 @@ const breadcrumbJsonLd = {
     />
 
     <article
-        class="mx-auto w-full max-w-6xl px-4 py-12 md:px-6 md:py-16"
+        class="mx-auto w-full max-w-6xl px-4 pt-12 pb-4 md:px-6 md:pt-16 md:pb-6"
         data-reading-progress-root
     >
         {/* Glissement sans fondu : le titre peut être l'élément LCP (mobile, article sans couverture). */}
@@ -157,21 +197,53 @@ const breadcrumbJsonLd = {
                 )}
                 <div class="mt-6 flex items-center justify-center gap-3">
                     <Image
-                        class="size-9 rounded-full"
+                        class="size-10 shrink-0 rounded-full object-cover"
                         src={williamPortrait}
-                        alt={`Photo de ${author}`}
-                        width={36}
-                        height={36}
+                        alt=""
+                        width={80}
+                        height={80}
                         loading="eager"
                     />
                     <div class="text-left text-sm">
-                        <p class="font-medium text-gray-900">{author}</p>
-                        <time
-                            class="font-normal text-gray-600"
-                            datetime={pubDate.toISOString()}
-                        >
-                            {formatArticleDate(pubDate)}
-                        </time>
+                        <p class="font-medium text-gray-900">
+                            {isWilliam ? (
+                                <a
+                                    class="no-underline transition-colors hover:text-blue-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+                                    href="/about/"
+                                    rel="author"
+                                >
+                                    {author}
+                                </a>
+                            ) : (
+                                author
+                            )}
+                            {isWilliam && (
+                                <span class="font-normal text-gray-600">
+                                    {" "}<span aria-hidden="true">·</span>{" "}
+                                    Développeur front-end freelance
+                                </span>
+                            )}
+                        </p>
+                        <p class="flex flex-wrap items-center gap-x-1.5 font-normal text-gray-600">
+                            <time datetime={pubDate.toISOString()}>
+                                {formatArticleDate(pubDate)}
+                            </time>
+                            {showUpdatedDate && updatedDate && (
+                                <>
+                                    <span aria-hidden="true">·</span>
+                                    <span>
+                                        Mis à jour le{" "}
+                                        <time
+                                            datetime={updatedDate.toISOString()}
+                                        >
+                                            {formatArticleDate(updatedDate)}
+                                        </time>
+                                    </span>
+                                </>
+                            )}
+                            <span aria-hidden="true">·</span>
+                            <span>{readingMinutes} min de lecture</span>
+                        </p>
                     </div>
                 </div>
             </header>
@@ -198,6 +270,14 @@ const breadcrumbJsonLd = {
             <Content />
         </ArticleBody>
     </article>
+
+    {/* Blocs complémentaires hors <article> pour distinguer le contenu
+        principal de l'article des éléments de navigation et de présentation. */}
+    <div class="mx-auto w-full max-w-6xl px-4 pb-12 md:px-6 md:pb-16">
+        <ArticleAuthorBox author={author} />
+        <RelatedArticles articles={relatedArticles} />
+        <ServiceCallout articleId={article.id} />
+    </div>
 </Layout>
 
 <style is:global>
@@ -207,7 +287,12 @@ const breadcrumbJsonLd = {
 
     @media (min-width: 1024px) {
         .article-toc-column {
+            max-height: calc(100dvh - 8.5rem);
+            overflow-y: auto;
+            padding-right: 0.35rem;
             position: sticky;
+            scrollbar-color: var(--color-gray-300) transparent;
+            scrollbar-width: thin;
             top: 7.5rem;
         }
     }

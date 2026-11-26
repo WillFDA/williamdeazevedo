@@ -2,6 +2,7 @@
 // question up to the next h2) so the article page can render it like the
 // homepage FAQ. src/lib/articleFaq.ts reads these data-article-faq markers back.
 // Sätteri hast plugin, limited to the articles collection.
+// Must match FAQ_SECTION_TITLE in src/lib/articleFaq.ts.
 const FAQ_TITLE = "Questions fréquentes";
 
 const isElement = (node, tagName) =>

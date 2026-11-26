@@ -162,6 +162,19 @@ for (const slug of slugs) {
     person?.image.endsWith("/pictures/william-low.png"),
     `${slug}: portrait must not become article cover`
   );
+  // Every schema node sharing /#person must declare the exact same canonical url.
+  const personId = "https://williamdeazevedo.fr/#person";
+  const samePersonNodes = [person, article.author, article.publisher].filter(
+    (node) => node?.["@id"] === personId
+  );
+  const personUrls = new Set(
+    samePersonNodes.map((node) => node.url).filter(Boolean)
+  );
+  assert.equal(
+    personUrls.size,
+    1,
+    `${slug}: conflicting urls for ${personId}: ${[...personUrls].join(", ")}`
+  );
 
   for (const [, attribute, target] of html.matchAll(
     /\b(?<attribute>href|src)="(?<target>[^"\s]+)"/g

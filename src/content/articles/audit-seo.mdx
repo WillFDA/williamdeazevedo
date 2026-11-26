@@ -3,7 +3,7 @@ title: "Audit SEO d’un site vitrine : la méthode pour le faire soi-même"
 seoTitle: "Audit SEO d’un site vitrine en 1 heure"
 description: "Audit SEO d’un site vitrine : indexation, titles, vitesse, contenus, liens et IA. La méthode pas à pas avec des outils gratuits, et quand payer."
 pubDate: 2026-10-08
-updatedDate: 2026-11-12
+updatedDate: 2026-11-23
 author: "William De Azevedo"
 draft: false
 tags: ["SEO", "site vitrine", "tpe"]
@@ -96,6 +96,10 @@ Pour chacune, ouvrez la page qui se positionne et demandez-vous :
 
 Vérifiez aussi l’inverse : deux de vos pages qui apparaissent sur la même recherche. Dans ce cas, choisissez celle qui doit répondre et faites un lien vers elle depuis l’autre.
 
+Dans sa documentation sur les contenus utiles mise à jour en octobre 2026, Google indique que les évaluateurs de la qualité (_Search Quality raters_) — dont les notes n’influencent pas directement le classement, mais servent à évaluer les systèmes automatisés — sont formés pour examiner quatre attributs du contenu principal d’une page : **l’effort** (le travail humain réellement investi, par opposition à une production automatisée sans supervision), **l’originalité** (vos cas concrets, vos photos, votre angle), **le savoir-faire ou la compétence** (clarté, maîtrise du sujet quand elle est requise) et **l’exactitude factuelle**. Indiquez aussi clairement **qui écrit** (vrai nom, rôle, lien vers votre page « À propos ») : Google avertit explicitement que les profils d’auteurs inventés ou trompeurs sont un signal de faible qualité.
+
+Si vos visites chutent d’un coup sans erreur technique, vérifiez sur le [tableau de bord d’état de la recherche Google](https://status.search.google.com/) si une mise à jour majeure (_Core Update_) ou anti-spam vient d’avoir lieu. Dans sa documentation sur les mises à jour principales, Google recommande d’attendre **une semaine complète après la fin du déploiement** avant de comparer vos données dans Search Console, plutôt que de tout réécrire dans l’urgence.
+
 ## Étape 5 : popularité, liens entrants et fiche Google
 
 Google tient compte des autres sites qui parlent de vous. Dans Search Console, le rapport **Liens** montre les principaux sites qui pointent vers le vôtre. Pour un site vitrine, quelques liens locaux et sectoriels valent mieux que des dizaines de liens sans rapport : annuaire de votre chambre de métiers, fédération professionnelle, fournisseurs, partenaires, presse locale.
@@ -106,17 +110,23 @@ N’achetez pas de liens. Google le considère comme du spam, et un site vitrine
 
 ## Étape 6 : être lisible par ChatGPT et les IA
 
-Vos clients posent aussi leurs questions à ChatGPT, Perplexity ou aux Aperçus IA de Google. La bonne nouvelle : ce qui marche pour Google marche en grande partie pour ces outils. Google indique dans sa page [Fonctionnalités d’IA et votre site Web](https://developers.google.com/search/docs/appearance/ai-features?hl=fr) qu’une page doit être indexée et affichable avec un extrait pour être citée dans les Aperçus IA, sans exigence technique supplémentaire.
+Vos clients posent aussi leurs questions à ChatGPT, Perplexity ou aux fonctionnalités d’IA générative de Google (Aperçus IA / _AI Overviews_ et _Mode IA_). La bonne nouvelle : ce qui marche pour Google marche en grande partie pour ces outils. Google indique dans sa page [Fonctionnalités d’IA et votre site Web](https://developers.google.com/search/docs/appearance/ai-features?hl=fr) qu’une page doit être indexée et affichable avec un extrait pour être citée dans les Aperçus IA ou le Mode IA, sans exigence technique supplémentaire.
 
 Trois vérifications concrètes :
 
 - **les robots de recherche des IA ne sont pas bloqués**. OpenAI distingue, dans sa [documentation sur ses robots](https://platform.openai.com/docs/bots), OAI-SearchBot (qui alimente la recherche de ChatGPT) et GPTBot (qui collecte des contenus pour entraîner ses modèles). Bloquer GPTBot n’empêche pas d’être cité ; bloquer OAI-SearchBot retire vos pages des réponses de recherche de ChatGPT. Regardez votre robots.txt, mais aussi les réglages de votre hébergeur ou de votre pare-feu, qui peuvent bloquer certains robots sans que vous le sachiez ;
-- **les réponses sont directes** : une question en intertitre, une réponse claire dans les deux premières phrases, puis le détail. C’est le format que les IA reprennent le plus facilement ;
-- **les données structurées décrivent votre activité** : nom, métier, zone, coordonnées. Le [test des résultats enrichis](https://search.google.com/test/rich-results) de Google vérifie qu’elles sont lues sans erreur.
+- **les réponses sont directes et sourcées** : une question en intertitre, une réponse claire dans les deux premières phrases, puis le détail et des faits vérifiés. C’est le format que les IA reprennent le plus facilement ;
+- **les données structurées correspondent au contenu visible** : nom, métier, zone, coordonnées, auteur. Le [test des résultats enrichis](https://search.google.com/test/rich-results) de Google vérifie qu’elles sont lues sans erreur.
+
+### Suivre sa visibilité IA et visuelle dans Search Console
+
+Déployés mondialement le 31 août 2026, les **rapports de performances IA générative** dans Search Console (pour la recherche et Discover) indiquent, quand un site cumule assez d’impressions, combien de fois ses pages sont apparues dans les Aperçus IA et le Mode IA, par page, pays, appareil et date — sans les clics pour l’instant. Ils se lisent donc comme un repère de visibilité, en parallèle de vos visites et demandes réelles. Un paramètre dédié dans Search Console (**Paramètres > IA générative dans la Recherche**, également déployé mondialement le 31 août 2026) permet d’inclure ou d’exclure les liens et le contenu d’un site des Aperçus IA, du Mode IA et des fonctionnalités IA de Discover : Google précise que ce choix n’est pas utilisé comme signal de classement ou d’inclusion dans les autres parties de la Recherche, et qu’il reste indépendant de l’entraînement des modèles (géré via `Google-Extended`).
+
+Dans le rapport Performances classique, Google propose aussi un filtre **Multimodal** (sous « Web ») pour isoler les recherches lancées à partir d’une image ou d’une photo (Google Lens, Entourer pour chercher, import d’image), avec le détail par page mais sans requête textuelle.
 
 ## Exemple réel : l’audit de mon propre site
 
-J’ai appliqué cette méthode à williamdeazevedo.fr, un site de 19 pages. Voici ce qui était en ordre, et ce que j’ai trouvé.
+Pour préparer cet article (publié en octobre 2026), j’ai appliqué cette méthode à williamdeazevedo.fr, qui comptait alors 19 pages. Voici ce qui était en ordre, et ce que j’ai trouvé.
 
 **Ce qui allait bien.** Le sitemap listait les bonnes pages, le fichier robots.txt ne bloquait rien d’important, une adresse inexistante renvoyait bien une erreur 404 et chaque page déclarait la bonne URL canonique.
 
@@ -182,5 +192,10 @@ Un audit complet par an suffit pour un site vitrine stable. Jetez un œil au rap
 ## Sources
 
 - [Google Search Central : bien débuter en SEO](https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=fr) : délai avant qu’une modification prenne effet.
-- [Search Console : rapport sur les performances](https://support.google.com/webmasters/answer/7576553?hl=fr) : clics, position, résultats variables selon le lieu et l’appareil.
+- [Google Search Central : créer des contenus utiles, fiables et axés sur l’humain](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) (en anglais, mis à jour le 05/10/2026, lu le 23/11/2026) : attributs du contenu principal examinés par les évaluateurs de la qualité (effort, originalité, savoir-faire/compétence, exactitude) et transparence sur l’auteur.
+- [Google Search Central : mises à jour principales et votre site](https://developers.google.com/search/docs/appearance/core-updates?hl=fr) (lu le 23/11/2026) : attendre au moins une semaine après la fin d’une Core Update avant d’analyser les données Search Console.
+- [Google Search Central Blog : rapports de performances IA générative dans Search Console](https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports) (en anglais, annoncé le 03/06/2026, déployé mondialement le 31/08/2026, lu le 23/11/2026) : impressions dans AI Overviews, AI Mode et Discover.
+- [Aide Search Console : contrôle de l’IA générative dans la Recherche](https://support.google.com/webmasters/answer/16908024?hl=fr) (déployé mondialement le 31/08/2026, lu le 23/11/2026) : inclusion ou exclusion des fonctions IA de la Recherche, portée du paramètre et distinction avec `Google-Extended`.
+- [Search Console : rapport sur les performances](https://support.google.com/webmasters/answer/7576553?hl=fr) (lu le 23/11/2026) : clics, position, filtre multimodal, résultats variables selon le lieu et l’appareil.
+- [Google Search Status Dashboard](https://status.search.google.com/) (en anglais) : suivi officiel des Core Updates et Spam Updates.
 - Repères de prix (relevés le 12/11/2026) : [Sandra Doucet, prix d’un audit SEO](https://freelance-sandra-doucet.fr/audit-tarifaire-seo/), [Claire Cursoux, tarif d’un consultant SEO](https://www.clairecursoux.com/blog/tarif-consultant-seo), [Burguin Digital, prix d’un audit SEO](https://burguindigital.com/prix-audit-seo/).

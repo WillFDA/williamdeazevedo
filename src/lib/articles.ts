@@ -40,3 +40,65 @@ export function formatArticleDate(date: Date): string {
     year: "numeric",
   });
 }
+
+const WORDS_PER_MINUTE = 220;
+
+export function getArticleWordCount(body: string | undefined): number {
+  if (!body) {
+    return 0;
+  }
+
+  const plainText = body
+    .replaceAll(/^import\s+.*$/gm, " ")
+    .replaceAll(/```[\s\S]*?```/g, " ")
+    .replaceAll(/<[A-Z][\w.-]*(?:\s[\s\S]*?)?\/>/g, " ")
+    .replaceAll(/<[^>]+>/g, " ")
+    .replaceAll(/^\|[\s:|-]+\|$/gm, " ")
+    .replaceAll(/!\[[^\]]*\]\([^)]+\)/g, " ")
+    .replaceAll(/\[(?<label>[^\]]+)\]\([^)]+\)/g, "$<label>");
+
+  return plainText.match(/[\p{L}\p{N}]+/gu)?.length ?? 0;
+}
+
+export function getArticleReadingTimeMinutes(wordCount: number): number {
+  return Math.max(1, Math.round(wordCount / WORDS_PER_MINUTE));
+}
+
+/**
+ * Picks up to `limit` published articles most relevant to `current`.
+ * Specific tags (rare across the corpus) weigh more than broad tags like "tpe"
+ * or "site vitrine", with recency as tie-breaker.
+ */
+export function getRelatedArticles(
+  current: Article,
+  allVisible: readonly Article[],
+  limit = 3
+): Article[] {
+  const tagCounts = new Map<string, number>();
+  for (const item of allVisible) {
+    for (const tag of item.data.tags) {
+      tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+    }
+  }
+
+  const currentTags = new Set(current.data.tags);
+
+  return allVisible
+    .filter((candidate) => candidate.id !== current.id)
+    .map((candidate) => {
+      let score = 0;
+      for (const tag of candidate.data.tags) {
+        if (currentTags.has(tag)) {
+          score += 1 / (tagCounts.get(tag) ?? 1);
+        }
+      }
+      return { candidate, score };
+    })
+    .toSorted(
+      (a, b) =>
+        b.score - a.score ||
+        b.candidate.data.pubDate.getTime() - a.candidate.data.pubDate.getTime()
+    )
+    .slice(0, limit)
+    .map(({ candidate }) => candidate);
+}

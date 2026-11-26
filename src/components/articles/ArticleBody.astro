@@ -1,10 +1,13 @@
 ---
 import type { ComponentProps } from "astro/types";
 import FadeReveal from "@/components/animations/FadeReveal.astro";
-import ServiceCallout from "@/components/articles/ServiceCallout.astro";
 import FaqSection from "@/components/FaqSection.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
-import { articleFaqJsonLd, splitArticleFaq } from "@/lib/articleFaq";
+import {
+    articleFaqJsonLd,
+    FAQ_SECTION_TITLE,
+    splitArticleFaq,
+} from "@/lib/articleFaq";
 
 interface Props {
     articleId: string;
@@ -23,15 +26,16 @@ const shellClass =
 ---
 
 <div class={shellClass}>
-    <div class="hidden lg:block" aria-hidden="true"></div>
-
-    <FadeReveal delay={0.3}>
-        <div class="article-prose min-w-0" set:html={before} />
-    </FadeReveal>
-
-    <aside class="article-toc-column order-first lg:order-none">
+    {/* L'aside est en premier dans le DOM pour que l'ordre du focus clavier
+        corresponde à l'ordre visuel sur mobile (WCAG 2.4.3), puis placé en
+        colonne 3 sur grand écran. */}
+    <aside class="article-toc-column lg:col-start-3 lg:row-start-1">
         <TableOfContents items={tocItems} />
     </aside>
+
+    <FadeReveal class="lg:col-start-2 lg:row-start-1" delay={0.3}>
+        <div class="article-prose min-w-0" set:html={before} />
+    </FadeReveal>
 </div>
 
 {
@@ -48,7 +52,7 @@ const shellClass =
                 headingLevel={3}
                 items={faq.items}
                 padded={false}
-                title="Questions fréquentes"
+                title={FAQ_SECTION_TITLE}
                 titleId={faq.titleId}
             />
             {after && (
@@ -60,5 +64,3 @@ const shellClass =
         </>
     )
 }
-
-<ServiceCallout articleId={articleId} />

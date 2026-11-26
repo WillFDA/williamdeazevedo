@@ -24,10 +24,12 @@ interface Props {
     };
 }
 
+export const DEFAULT_OG_IMAGE = "/pictures/william-low.png";
+
 const {
     title = "William De Azevedo - Développeur front-end freelance",
     description = "Développeur front-end freelance orienté design et produit, je rends les sites plus clairs, rapides, accessibles et crédibles.",
-    image = "/pictures/william-low.png",
+    image = DEFAULT_OG_IMAGE,
     imageAlt = "William De Azevedo, développeur front-end freelance",
     canonicalPath,
     ogType = "website",
@@ -45,6 +47,7 @@ const phoneValue = String(import.meta.env.PUBLIC_PHONE_HREF ?? phoneDisplay)
 const phoneHref = phoneValue ? `tel:${phoneValue}` : "";
 
 const personId = new URL("/#person", siteUrl).href;
+const personUrl = new URL("/about/", siteUrl).href;
 const businessId = new URL("/#business", siteUrl).href;
 
 const personJsonLd = {
@@ -52,8 +55,8 @@ const personJsonLd = {
     "@type": "Person",
     "@id": personId,
     name: "William De Azevedo",
-    url: siteUrl.href,
-    image: new URL("/pictures/william-low.png", siteUrl).href,
+    url: personUrl,
+    image: new URL(DEFAULT_OG_IMAGE, siteUrl).href,
     jobTitle: "Développeur front-end freelance",
     description:
         "Développeur front-end freelance orienté design et produit, je rends les sites plus clairs, rapides, accessibles et crédibles.",
@@ -91,7 +94,7 @@ const businessJsonLd = {
     "@id": businessId,
     name: "William De Azevedo — Développeur web freelance",
     url: siteUrl.href,
-    image: new URL("/pictures/william-low.png", siteUrl).href,
+    image: new URL(DEFAULT_OG_IMAGE, siteUrl).href,
     description:
         "Création de site vitrine, refonte de site internet et SEO technique pour indépendants, artisans et TPE.",
     founder: { "@id": personId },
@@ -190,7 +193,12 @@ const websiteJsonLd = {
                 </>
             )
         }
-        <meta name="twitter:card" content="summary" />
+        <meta
+            name="twitter:card"
+            content={ogType === "article" && image !== DEFAULT_OG_IMAGE
+                ? "summary_large_image"
+                : "summary"}
+        />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={imageUrl.href} />
