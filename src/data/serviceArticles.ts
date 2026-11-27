@@ -99,6 +99,7 @@ export const articleServices: Record<string, string[]> = {
   "audit-seo": ["creation-site-vitrine"],
   "bandeau-cookies": ["creation-site-internet-professionnel"],
   "cahier-des-charges-site-internet": ["creation-site-vitrine"],
+  "nom-de-domaine-gratuit": ["creation-site-vitrine"],
   "changer-prestataire-web": ["refonte-site-internet"],
   "charte-graphique-entreprise": ["creation-site-internet-professionnel"],
   "choisir-developpeur-web": ["creation-site-vitrine"],
