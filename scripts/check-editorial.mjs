@@ -40,6 +40,7 @@ const slugs = [
   "charte-graphique-entreprise",
   "redirection-301",
   "bandeau-cookies",
+  "nom-de-domaine-gratuit",
 ];
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
